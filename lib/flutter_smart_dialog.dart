@@ -1,4 +1,4 @@
-library flutter_smart_dialog;
+library smart_dialog;
 
 export 'src/smart_dialog.dart';
 export 'src/dialog.dart';
