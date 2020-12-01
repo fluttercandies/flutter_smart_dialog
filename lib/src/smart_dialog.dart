@@ -6,7 +6,13 @@ class SmartDialog {
   ///实现单例
   factory SmartDialog() => _getInstance();
 
+  ///提供全局单例
   static SmartDialog get instance => _getInstance();
+
+  ///提供新实例，获取的新实例可保存，eg：将loading类弹窗和常用交互弹窗区别开，可是使用此属性，
+  ///获取全新的实例，所有类型的弹窗都使用唯一单例，可能会存在问题，例如关闭loading弹窗时，
+  ///可能也会将自定义Toast关闭
+  static SmartDialog get newInstance => SmartDialog._internal();
   static SmartDialog _instance;
 
   static SmartDialog _getInstance() {
@@ -64,9 +70,7 @@ class SmartDialog {
     _rebuild();
   }
 
-  ///刷新重建
-  ///
-  /// 实际上是调用OverlayEntry中builder方法,重建布局
+  ///刷新重建，实际上是调用OverlayEntry中builder方法,重建布局
   void _rebuild() {
     overlayEntry.markNeedsBuild();
   }

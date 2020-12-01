@@ -13,6 +13,7 @@ class SmartDialogView extends StatefulWidget {
     this.isPenetrate = true,
     this.animationDuration = const Duration(milliseconds: 260),
     this.isUseAnimation = false,
+    this.isLoading = true,
   }) : super(key: key);
 
   ///内容widget
@@ -33,6 +34,10 @@ class SmartDialogView extends StatefulWidget {
   ///是否使用动画
   final bool isUseAnimation;
 
+  ///是否使用Loading情况；true:内容体使用渐隐动画  false：内容体使用缩放动画
+  ///仅仅针对中间位置的控件
+  final bool isLoading;
+
   @override
   SmartDialogViewState createState() => SmartDialogViewState();
 }
@@ -48,19 +53,18 @@ class SmartDialogViewState extends State<SmartDialogView>
 
   @override
   void initState() {
-    //处理背景动画
+    //处理背景动画和内容widget动画设置
     _opacity = widget.isUseAnimation ? 0.0 : 1.0;
-    Future.delayed(Duration(milliseconds: 10), () {
-      setState(() {
-        _opacity = 1.0;
-      });
-    });
-
-    //处理内容widget动画
     _controller =
         AnimationController(vsync: this, duration: widget.animationDuration);
     _controller.forward();
     _dealContentAnimate();
+
+    //开启背景动画的效果
+    Future.delayed(Duration(milliseconds: 10), () {
+      _opacity = 1.0;
+      setState(() {});
+    });
 
     super.initState();
   }
@@ -68,53 +72,61 @@ class SmartDialogViewState extends State<SmartDialogView>
   @override
   Widget build(BuildContext context) {
     return _buildBg(children: [
-      //背景
-      AnimatedOpacity(
-        duration: widget.animationDuration,
-        curve: Curves.linear,
-        opacity: _opacity,
-        child: Listener(
-          behavior: HitTestBehavior.translucent,
-          onPointerUp: (event) async {
-            if (widget.onBgTap != null) {
-              widget.onBgTap();
-            }
-          },
-          child: Container(
-            color: widget.isPenetrate ? null : Colors.black.withOpacity(0.3),
-          ),
-        ),
-      ),
+      //暗色背景widget动画
+      _buildBgAnimation(),
 
-      //内容Widget
-      Listener(
-        behavior: HitTestBehavior.translucent,
-        onPointerDown: (event) {},
-        child: Align(
-          alignment: widget.alignment,
-          child: widget.isUseAnimation
-              //是否使用动画
-              ? (widget.alignment == Alignment.center
-                  //中间弹窗是否使用缩放动画
-                  ? ScaleTransition(
-                      scale: CurvedAnimation(
-                        parent: _controller,
-                        curve: Curves.linear,
-                      ),
-                      child: widget.child,
-                    )
-                  //除了中间弹窗,其它的都使用位移动画
-                  : SlideTransition(
-                      position: Tween<Offset>(
-                        begin: _offset,
-                        end: Offset.zero,
-                      ).animate(_controller),
-                      child: widget.child,
-                    ))
-              : widget.child,
-        ),
+      //内容Widget动画
+      Align(
+        alignment: widget.alignment,
+        child: widget.isUseAnimation ? _buildBodyAnimation() : widget.child,
       ),
     ]);
+  }
+
+  AnimatedOpacity _buildBgAnimation() {
+    return AnimatedOpacity(
+      duration: widget.animationDuration,
+      curve: Curves.linear,
+      opacity: _opacity,
+      child: Listener(
+        behavior: HitTestBehavior.translucent,
+        onPointerUp: (event) async {
+          if (widget.onBgTap != null) {
+            widget.onBgTap();
+          }
+        },
+        child: Container(
+          color: widget.isPenetrate ? null : Colors.black.withOpacity(0.3),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBodyAnimation() {
+    return widget.alignment == Alignment.center
+        //中间弹窗动画的使用需要分情况 渐隐和缩放俩种
+        ? (widget.isLoading
+            ? AnimatedOpacity(
+                duration: widget.animationDuration,
+                curve: Curves.linear,
+                opacity: _opacity,
+                child: widget.child,
+              )
+            : ScaleTransition(
+                scale: CurvedAnimation(
+                  parent: _controller,
+                  curve: Curves.linear,
+                ),
+                child: widget.child,
+              ))
+        //除了中间弹窗,其它的都使用位移动画
+        : SlideTransition(
+            position: Tween<Offset>(
+              begin: _offset,
+              end: Offset.zero,
+            ).animate(_controller),
+            child: widget.child,
+          );
   }
 
   Widget _buildBg({List<Widget> children}) {
