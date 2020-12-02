@@ -9,11 +9,12 @@ class SmartDialogView extends StatefulWidget {
     Key key,
     @required this.child,
     this.onBgTap,
-    this.alignment = Alignment.bottomCenter,
+    this.alignment,
     this.isPenetrate = true,
-    this.animationDuration = const Duration(milliseconds: 260),
-    this.isUseAnimation = false,
-    this.isLoading = true,
+    this.animationDuration,
+    this.isUseAnimation,
+    this.isLoading,
+    this.maskColor,
   }) : super(key: key);
 
   ///内容widget
@@ -37,6 +38,9 @@ class SmartDialogView extends StatefulWidget {
   ///是否使用Loading情况；true:内容体使用渐隐动画  false：内容体使用缩放动画
   ///仅仅针对中间位置的控件
   final bool isLoading;
+
+  ///遮罩颜色
+  final Color maskColor;
 
   @override
   SmartDialogViewState createState() => SmartDialogViewState();
@@ -96,7 +100,7 @@ class SmartDialogViewState extends State<SmartDialogView>
           }
         },
         child: Container(
-          color: widget.isPenetrate ? null : Colors.black.withOpacity(0.3),
+          color: widget.isPenetrate ? null : widget.maskColor,
         ),
       ),
     );
