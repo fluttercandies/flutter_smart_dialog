@@ -118,9 +118,8 @@ class SmartDialog {
   ///提供toast示例
   void showToast(
     String msg, {
-    Duration time = const Duration(milliseconds: 2500),
+    Duration time = const Duration(milliseconds: 1500),
     alignment: Alignment.bottomCenter,
-    isUseExtraWidget: true,
   }) async {
     show(
       widget: ToastWidget(
