@@ -32,9 +32,6 @@ class SmartDialog {
   GlobalKey<SmartDialogViewState> _keyExtra;
   static SmartDialog _instance;
 
-  ///不允许自行创建实例
-  SmartDialog._();
-
   static SmartDialog _getInstance() {
     if (_instance == null) {
       _instance = SmartDialog._internal();
