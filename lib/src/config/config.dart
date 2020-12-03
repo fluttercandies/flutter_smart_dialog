@@ -25,6 +25,9 @@ class Config {
   ///仅仅针对中间位置的控件
   bool isLoading = true;
 
-  ///SmartDialog是否存在在界面上
+  ///主体SmartDialog是否存在在界面上
   bool isExist = false;
+
+  ///额外SmartDialog是否存在界面
+  bool isExistExtra = false;
 }

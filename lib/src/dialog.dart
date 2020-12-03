@@ -19,6 +19,9 @@ class FlutterSmartDialog extends StatelessWidget {
 
           //添加的控件,覆盖在主体布局上面
           SmartDialog.instance.overlayEntry,
+
+          //提供备用覆盖浮层
+          SmartDialog.instance.overlayEntryExtra,
         ],
       ),
     );

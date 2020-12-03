@@ -13,6 +13,9 @@ class SmartDialog {
   ///用户也可以用此控件自定义相关操作
   OverlayEntry overlayEntry;
 
+  ///Toast之类应该是和Dialog之类区分开,且能独立存在,提供备用覆盖浮层
+  OverlayEntry overlayEntryExtra;
+
   ///提供全局单例
   static SmartDialog get instance => _getInstance();
 
@@ -24,7 +27,9 @@ class SmartDialog {
   ///-------------------------私有类型，不对面提供修改----------------------
   ///呈现的Widget
   Widget _widget;
+  Widget _widgetExtra;
   GlobalKey<SmartDialogViewState> _key;
+  GlobalKey<SmartDialogViewState> _keyExtra;
   static SmartDialog _instance;
 
   ///不允许自行创建实例
@@ -39,9 +44,18 @@ class SmartDialog {
 
   SmartDialog._internal() {
     ///初始化一些参数
+
+    ///主体覆盖浮层
     overlayEntry = OverlayEntry(
       builder: (BuildContext context) {
         return SmartDialog.instance._widget ?? Container();
+      },
+    );
+
+    ///备用覆盖浮层
+    overlayEntryExtra = OverlayEntry(
+      builder: (BuildContext context) {
+        return SmartDialog.instance._widgetExtra ?? Container();
       },
     );
 
@@ -61,11 +75,13 @@ class SmartDialog {
     bool isLoadingTemp,
     Color maskColorTemp,
     bool clickBgDismissTemp,
+    //是否使用额外使用额外覆盖浮层,可与主浮层独立开
+    bool isUseExtraWidget = false,
   }) {
     //展示弹窗
-    _key = GlobalKey<SmartDialogViewState>();
-    _widget = SmartDialogView(
-      key: _key,
+    var globalKey = GlobalKey<SmartDialogViewState>();
+    Widget smartDialogView = SmartDialogView(
+      key: globalKey,
       alignment: alignmentTemp ?? config.alignment,
       isPenetrate: isPenetrateTemp ?? config.isPenetrate,
       isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
@@ -77,8 +93,17 @@ class SmartDialog {
       onBgTap: () => dismiss(),
     );
 
-    config.isExist = true;
-    _rebuild();
+    if (!isUseExtraWidget) {
+      _widget = smartDialogView;
+      config.isExist = true;
+      _key = globalKey;
+      _rebuild(buildType: 0);
+    } else {
+      _widgetExtra = smartDialogView;
+      config.isExistExtra = true;
+      _keyExtra = globalKey;
+      _rebuild(buildType: 1);
+    }
   }
 
   ///提供loading弹窗
@@ -93,8 +118,9 @@ class SmartDialog {
   ///提供toast示例
   void showToast(
     String msg, {
-    Duration time = const Duration(milliseconds: 1500),
+    Duration time = const Duration(milliseconds: 2500),
     alignment: Alignment.bottomCenter,
+    isUseExtraWidget: true,
   }) async {
     show(
       widget: ToastWidget(
@@ -102,25 +128,56 @@ class SmartDialog {
         alignment: alignment,
       ),
       isPenetrateTemp: true,
+      isUseExtraWidget: true,
     );
 
     await Future.delayed(time);
-    dismiss();
+    dismiss(closeType: 1);
   }
 
   ///关闭Dialog
-  Future<void> dismiss() async {
+  ///
+  /// closeType：关闭类型；0：仅关闭主体Overlay、1：仅关闭额外Overlay、2：俩者都关闭
+  ///
+  /// 如果不清楚使用,请查看showToast和showLoading
+  Future<void> dismiss({int closeType = 0}) async {
+    if (closeType == 0) {
+      await _dismissBody();
+    } else if (closeType == 1) {
+      await _dismissExtra();
+    } else if (closeType == 2) {
+      await _dismissBody();
+      await _dismissExtra();
+    }
+
+    _rebuild(buildType: closeType);
+  }
+
+  Future<void> _dismissBody() async {
     _widget = null;
     config.isExist = false;
+    var state = _key?.currentState;
+    await state?.dismiss();
+  }
 
-    SmartDialogViewState smartDialogViewState = _key?.currentState;
-    await smartDialogViewState?.dismiss();
-
-    _rebuild();
+  Future<void> _dismissExtra() async {
+    _widgetExtra = null;
+    config.isExistExtra = false;
+    var stateExtra = _keyExtra?.currentState;
+    await stateExtra?.dismiss();
   }
 
   ///刷新重建，实际上是调用OverlayEntry中builder方法,重建布局
-  void _rebuild() {
-    overlayEntry.markNeedsBuild();
+  ///
+  /// closeType：关闭类型；0：仅关闭主体Overlay、1：仅关闭额外Overlay、2：俩者都关闭
+  void _rebuild({int buildType}) {
+    if (buildType == 0) {
+      overlayEntry.markNeedsBuild();
+    } else if (buildType == 1) {
+      overlayEntryExtra.markNeedsBuild();
+    } else if (buildType == 2) {
+      overlayEntry.markNeedsBuild();
+      overlayEntryExtra.markNeedsBuild();
+    }
   }
 }
