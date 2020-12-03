@@ -168,7 +168,7 @@ class SmartDialog {
 
   ///刷新重建，实际上是调用OverlayEntry中builder方法,重建布局
   ///
-  /// closeType：关闭类型；0：仅关闭主体Overlay、1：仅关闭额外Overlay、2：俩者都关闭
+  /// buildType：刷新类型；0：仅刷新主体Overlay、1：仅刷新额外Overlay、2：俩者都刷新
   void _rebuild({int buildType}) {
     if (buildType == 0) {
       overlayEntry.markNeedsBuild();
