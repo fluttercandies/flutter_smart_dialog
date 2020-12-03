@@ -15,6 +15,7 @@ class SmartDialogView extends StatefulWidget {
     this.isUseAnimation,
     this.isLoading,
     this.maskColor,
+    this.clickBgDismiss,
   }) : super(key: key);
 
   ///内容widget
@@ -41,6 +42,9 @@ class SmartDialogView extends StatefulWidget {
 
   ///遮罩颜色
   final Color maskColor;
+
+  ///点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
+  final bool clickBgDismiss;
 
   @override
   SmartDialogViewState createState() => SmartDialogViewState();
@@ -95,7 +99,7 @@ class SmartDialogViewState extends State<SmartDialogView>
       child: Listener(
         behavior: HitTestBehavior.translucent,
         onPointerUp: (event) async {
-          if (widget.onBgTap != null) {
+          if (widget.onBgTap != null && widget.clickBgDismiss) {
             widget.onBgTap();
           }
         },
