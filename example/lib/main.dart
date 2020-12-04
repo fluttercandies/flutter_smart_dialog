@@ -127,31 +127,36 @@ class SmartDialogCubit extends Cubit<SmartDialogState> {
     double maxHeight = double.infinity,
   }) {
     return Container(
-      constraints: BoxConstraints(maxHeight: maxHeight, maxWidth: maxWidth),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(color: Colors.black12, blurRadius: 20, spreadRadius: 10)
-        ],
-      ),
-      child: ListView.builder(
-        itemCount: 30,
-        itemBuilder: (BuildContext context, int index) {
-          return Column(
-            children: [
-              //内容
-              ListTile(
-                leading: Icon(Icons.bubble_chart),
-                title: Text('标题---------------$index'),
-              ),
-
-              //分割线
-              Container(height: 1, color: Colors.black.withOpacity(0.1)),
-            ],
-          );
-        },
-      ),
+      color: Colors.blue,
+      height: 300,
     );
+
+    // return Container(
+    //   constraints: BoxConstraints(maxHeight: maxHeight, maxWidth: maxWidth),
+    //   decoration: BoxDecoration(
+    //     color: Colors.white,
+    //     boxShadow: [
+    //       BoxShadow(color: Colors.black12, blurRadius: 20, spreadRadius: 10)
+    //     ],
+    //   ),
+    //   child: ListView.builder(
+    //     itemCount: 30,
+    //     itemBuilder: (BuildContext context, int index) {
+    //       return Column(
+    //         children: [
+    //           //内容
+    //           ListTile(
+    //             leading: Icon(Icons.bubble_chart),
+    //             title: Text('标题---------------$index'),
+    //           ),
+    //
+    //           //分割线
+    //           Container(height: 1, color: Colors.black.withOpacity(0.1)),
+    //         ],
+    //       );
+    //     },
+    //   ),
+    // );
   }
 }
 
