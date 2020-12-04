@@ -117,15 +117,3 @@ SmartDialog.instance.show(
 | isLoading         | 默认：true；是否使用Loading动画；true:内容体使用渐隐动画  false：内容体使用缩放动画，仅仅针对中间位置的控件 |
 | isExist           | 默认：false；主体SmartDialog（OverlayEntry）是否存在在界面上 |
 | isExistExtra      | 默认：false；额外SmartDialog（OverlayEntry）是否存在在界面上 |
-
-|      |      |
-| ---- | ---- |
-|      |      |
-|      |      |
-|      |      |
-|      |      |
-|      |      |
-|      |      |
-|      |      |
-|      |      |
-|      |      |

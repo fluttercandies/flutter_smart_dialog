@@ -124,4 +124,4 @@ SmartDialog.instance.show(
 | isUseAnimation    | Default value: true. Specifies whether to use animation.     |
 | isLoading         | Default value: true; Whether to use the Loading animation; true: the content body uses the fade animation false: the content body uses the zoom animation, only for the control in the middle position |
 | isExist           | Default value: false; Whether the main body SmartDialog(OverlayEntry) exists on the interface |
-| isExistExtra      | Default value: false. Indicates whether the extra SmartDialog(OverlayEntry) exists on the interface. |
+| isExistExtra      | Default value: false. Indicates whether the extra SmartDialog(OverlayEntry) exists on the interface |
