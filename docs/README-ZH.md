@@ -1,58 +1,52 @@
 # flutter_smart_dialog
 
-Language: [English](https://github.com/fluttercandies/extended_image/blob/master/README.md) | [中文简体](https://github.com/fluttercandies/extended_image/blob/master/README-ZH.md)
+语言: [English](https://github.com/CNAD666/flutter_smart_dialog/blob/master/docs/README-ZH.md) | [中文简体](https://github.com/CNAD666/flutter_smart_dialog/blob/master/docs/README-ZH.md)
 
-An elegant Flutter Dialog solution.
+一个更优雅的Flutter Dialog解决方案
 
-# Preface
+# 前言
 
-The Dialog that comes with the system actually pushes a new page, which has many advantages, but there are also some difficult problems to solve.
+系统自带的Dialog实际上就是Push了一个新页面，这样存在很多好处，但是也存在一些很难解决的问题
 
-- **BuildContext is required.**
+- **必须传BuildContext**
+  - loading弹窗一般都封装在网络框架中，多传个context参数就很头疼；用fish_redux还好，effect层直接能拿到context，要是用bloc还得在view层把context传到bloc或者cubit里面。。。
+- **无法穿透暗色背景，点击dialog后面的控件**
+  - 这个是真头痛，想了很多办法都没在自带dialog上面解决
+- **系统自带Dialog写成的Loading弹窗，在网络请求和跳转页面的情况，会存在路由混乱的情况**
+  - 情景复盘：loading库封装在网络层，某个页面提交完表单，要跳转页面，提交操作完成，进行页面跳转，loading关闭是在异步回调中进行（onError或者onSuccess），会出现执行了跳转操作时，弹窗还未关闭，延时一小会关闭，因为用的都是pop页面方法，会把跳转的页面pop掉
+  - 上面是一种很常见的场景，涉及到复杂场景更加难以预测，解决方法也有：定位页面栈的栈顶是否是Loading弹窗，选择性Pop，实现麻烦
 
-- - loading pop-up windows are generally encapsulated in the network framework, so it is troublesome to pass more context parameters. It is good to use fish_redux, and the context can be directly obtained at the effect layer, if you use **, you must upload the context to** or cubit in the view layer...
+`上面这些痛点，简直个个致命`，当然，还存在一些其它的解决方案，例如：
 
-- **Unable to penetrate the dark background. Click the control behind the dialog box.**
+- 每个页面顶级使用Stack
+- 使用Overlay
 
-- - This is really a headache. I have thought a lot of ways and haven't solved it on my own dialog box.
+很明显，使用Overlay可移植性最好，目前很多Toast和dialog三方库便是使用该方案，使用了一些loading库，看了其中源码，穿透背景解决方案，和预期想要的效果大相径庭、一些dialog库自带toast显示，但是toast显示却又不能和dialog共存（toast属于特殊的信息展示，理应能独立存在），导致我需要多依赖一个Toast库
 
-- **The Loading pop-up window written by the system comes with a Dialog box. In the case of network requests and jump pages, routing confusion may occur.**
+# SmartDialog
 
-- - Scenario Replay: The loading Library is encapsulated in the network layer. After a form is submitted on a page, the page is redirected. After the submission is completed, the page is redirected, loading is closed in an asynchronous callback (onError or onSuccess). When a jump operation is performed, the pop-up window is not closed. The delay is a little while, because the pop-up method is used, will pop up the redirected page
-  - The above is a very common scenario, which is more difficult to predict when it comes to complex scenarios. The solution is as follows: locate whether the stack top of the page stack is a Loading Pop-up window, and select Pop-up, which is troublesome to implement.
+**基于上面那些难以解决的问题，只能自己去实现，花了一些时间，实现了一个Pub包，基本该解决的痛点都已解决了，用于实际业务没什么问题**
 
-`These pain points are all fatal`. Of course, there are other solutions, such:
+## 效果
 
-- Top-level Stack usage for each page
-- Use Overlay
-
-Obviously, using Overlay is the best portability. Currently, many Toast and dialog third-party libraries use this solution, using some loading libraries, looking at the source code, penetrating the background solution, different from the expected effect, some dialog libraries have their own toast display, but toast display cannot coexist with dialog (toast is a special information display and should exist independently), I need to rely on one more Toast Library.
-
-#  SmartDialog
-
-**Based on the above problems that are difficult to solve, we can only implement them ourselves. It took some time to implement a Pub package. Basically, the pain points that should be solved have been solved, and there is no problem in actual business.**
-
-##  Effect
-
-- [Let me experience it](https://cnad666.github.io/flutter_use/web/index.html#/smartDialog)
+- [点我体验一下](https://cnad666.github.io/flutter_use/web/index.html#/smartDialog)
 
 ![smartDialog](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20201204145311.gif)
 
-##  Introduced
+## 引入
 
-```
+```dart
 dependencies:
   flutter_smart_dialog: ^0.1.6
 ```
 
-##  Use
+## 使用
 
-- Main portal configuration
+- 主入口配置
+  - 在主入口这地方需要配置，这样就可以不传BuildContext使用Dialog
+  - 只需要在MaterialApp的builder参数处配置下即可
 
-- - You need to configure it at the main entrance so that you can use Dialog without passing BuildContext.
-  - You only need to configure the builder parameter of MaterialApp
-
-```
+```dart
 void main() {
   runApp(MyApp());
 }
@@ -73,22 +67,21 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-Use `FlutterSmartDialog` Wrap the child, and then you can use SmartDialog happily.
+使用`FlutterSmartDialog`包裹下child即可，下面就可以愉快的使用SmartDialog了
 
-- Use Toast
+- 使用Toast
+  - msg：必传信息
+  - time：可选，Duration类型
+  - alignment：可控制toast位置
+  - 如果想使用花里花哨的Toast效果，使用show方法定制就行了，炒鸡简单喔，懒得写，抄下我的ToastWidget，改下属性即可
 
-- - msg: required information
-  - time: Optional. The Duration type.
-  - alignment: the toast position can be controlled.
-  - If you want to use the fancy Toast effect in flowers, you can use the show method to customize it. It is easy to fry chicken. I am too lazy to write it. Copy my ToastWidget and change the properties.
-
-```
+```dart
 SmartDialog.instance.showToast('test toast');
 ```
 
-- Use Loading
+- 使用Loading
 
-```
+```dart
 //open loading
 SmartDialog.instance.showLoading();
 
@@ -97,11 +90,10 @@ await Future.delayed(Duration(seconds: 2));
 SmartDialog.instance.dismiss();
 ```
 
-- Custom dialog box
+- 自定义dialog
+  - 使用SmartDialog.instance.show()方法即可，里面含有众多'Temp'为后缀的参数，和下述无'Temp'为后缀的参数功能一致
 
-- - Use the SmartDialog.instance.show() method, which contains many parameters with the suffix 'Temp', which is consistent with the following parameters without the suffix 'Temp '.
-
-```
+```dart
 SmartDialog.instance.show(
     alignmentTemp: Alignment.bottomCenter,
     clickBgDismissTemp: true,
@@ -112,16 +104,28 @@ SmartDialog.instance.show(
 );
 ```
 
-- SmartDialog configuration parameters
+- SmartDialog配置参数说明
 
-| Parameter         | Description                                                  |
+| 参数              | 功能说明                                                     |
 | ----------------- | ------------------------------------------------------------ |
-| Alignment         | Controls the Alignment of custom controls on the screen. center: The custom control is located in the middle of the screen, and the animation defaults to fade and zoom. You can use isLoading to select animation Alignment.bottomCenter, Alignment.bottomLeft, Alignment.bottomRight: The custom control is located at the bottom of the screen. The animation defaults to displacement animation. From bottom to top, you can use animationDuration to set animation time Alignment.topCenter, Alignment.topLeft, Alignment.topRight: The custom control is located at the top of the screen. The animation defaults to displacement animation. From top to bottom, you can use animationDuration to set animation time Alignment.centerLeft: The custom control is located on the left side of the screen. By default, the animation is a displacement animation from left to right. You can use animationDuration to set the animation time Alignment.centerRight: The custom control is located on the left side of the screen. By default, the animation is a displacement animation from right to left. You can use animationDuration to set the animation time. |
-| isPenetrate       | Default value: false; Specifies whether to penetrate the background of the mask. The control after the interaction mask. true: click to penetrate the background. false: cannot penetrate. Set the penetration mask to true, the background mask is automatically transparent (required) |
-| clickBgDismiss    | Default value: false; Click mask to close the dialog --- true: click mask to close the dialog. false: Do not close the dialog. |
-| maskColor         | Mask color                                                   |
-| animationDuration | Animation time                                               |
-| isUseAnimation    | Default value: true. Specifies whether to use animation.     |
-| isLoading         | Default value: true; Whether to use the Loading animation; true: the content body uses the fade animation false: the content body uses the zoom animation, only for the control in the middle position |
-| isExist           | Default value: false; Whether the main body SmartDialog(OverlayEntry) exists on the interface |
-| isExistExtra      | Default value: false. Indicates whether the extra SmartDialog(OverlayEntry) exists on the interface. |
+| alignment         | 控制自定义控件位于屏幕的位置                                                                                                                                                                         Alignment.center: 自定义控件位于屏幕中间，且是动画默认为：渐隐和缩放，可使用isLoading选择动画                              Alignment.bottomCenter、Alignment.bottomLeft、Alignment.bottomRight：自定义控件位于屏幕底部，动画默认为位移动画，自下而上，可使用animationDuration设置动画时间                                                                                                                                                                                 Alignment.topCenter、Alignment.topLeft、Alignment.topRight：自定义控件位于屏幕顶部，动画默认为位移动画，自上而下，可使用animationDuration设置动画时间                                                                                                                                                      Alignment.centerLeft：自定义控件位于屏幕左边，动画默认为位移动画，自左而右，可使用animationDuration设置动画时间   Alignment.centerRight：自定义控件位于屏幕左边，动画默认为位移动画，自右而左，可使用animationDuration设置动画时间 |
+| isPenetrate       | 默认:false；是否穿透遮罩背景,交互遮罩之后控件，true：点击能穿透背景，false：不能穿透；穿透遮罩设置为true，背景遮罩会自动变成透明（必须） |
+| clickBgDismiss    | 默认：false；点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭 |
+| maskColor         | 遮罩颜色                                                     |
+| animationDuration | 动画时间                                                     |
+| isUseAnimation    | 默认：true；是否使用动画                                     |
+| isLoading         | 默认：true；是否使用Loading动画；true:内容体使用渐隐动画  false：内容体使用缩放动画，仅仅针对中间位置的控件 |
+| isExist           | 默认：false；主体SmartDialog（OverlayEntry）是否存在在界面上 |
+| isExistExtra      | 默认：false；额外SmartDialog（OverlayEntry）是否存在在界面上 |
+
+|      |      |
+| ---- | ---- |
+|      |      |
+|      |      |
+|      |      |
+|      |      |
+|      |      |
+|      |      |
+|      |      |
+|      |      |
+|      |      |
