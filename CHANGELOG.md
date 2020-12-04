@@ -1,5 +1,11 @@
-# [0.1.1]
+# [0.1.3]
 
+- adjust code of example
+
+# [0.1.2]
+- add example
+
+# [0.1.1]
 - remove some constructors
 
 # [0.1.0]
