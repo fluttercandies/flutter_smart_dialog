@@ -1,6 +1,8 @@
 # flutter_smart_dialog
 
-语言: [English](https://github.com/CNAD666/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://github.com/CNAD666/flutter_smart_dialog/blob/master/docs/README-ZH.md)
+语言: [English](https://github.com/CNAD666/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://github.com/CNAD666/flutter_smart_dialog/blob/master/doc/README-ZH.md)
+
+Pub：[flutter_smart_dialog](https://pub.dev/packages/flutter_smart_dialog)
 
 一个更优雅的Flutter Dialog解决方案
 
@@ -105,6 +107,7 @@ SmartDialog.instance.show(
 ```
 
 - SmartDialog配置参数说明
+  - 为了避免`instance`里面暴露过多属性，导致使用不便，此处诸多参数使用`instance`中的`config`属性管理
 
 | 参数              | 功能说明                                                     |
 | ----------------- | ------------------------------------------------------------ |
@@ -117,3 +120,149 @@ SmartDialog.instance.show(
 | isLoading         | 默认：true；是否使用Loading动画；true:内容体使用渐隐动画  false：内容体使用缩放动画，仅仅针对中间位置的控件 |
 | isExist           | 默认：false；主体SmartDialog（OverlayEntry）是否存在在界面上 |
 | isExistExtra      | 默认：false；额外SmartDialog（OverlayEntry）是否存在在界面上 |
+
+- **返回事件，关闭弹窗解决方案**
+
+使用Overlay的依赖库，基本都存在一个问题，难以对返回事件的监听，导致触犯返回事件难以关闭弹窗布局之类，想了很多办法，没办法在依赖库中解决该问题，此处提供一个`BaseScaffold`，在每个页面使用`BaseScaffold`，便能解决返回事件关闭Dialog问题
+
+```dart
+typedef ScaffoldParamVoidCallback = void Function();
+
+class BaseScaffold extends StatefulWidget {
+    const BaseScaffold({
+        Key key,
+        this.appBar,
+        this.body,
+        this.floatingActionButton,
+        this.floatingActionButtonLocation,
+        this.floatingActionButtonAnimator,
+        this.persistentFooterButtons,
+        this.drawer,
+        this.endDrawer,
+        this.bottomNavigationBar,
+        this.bottomSheet,
+        this.backgroundColor,
+        this.resizeToAvoidBottomPadding,
+        this.resizeToAvoidBottomInset,
+        this.primary = true,
+        this.drawerDragStartBehavior = DragStartBehavior.start,
+        this.extendBody = false,
+        this.extendBodyBehindAppBar = false,
+        this.drawerScrimColor,
+        this.drawerEdgeDragWidth,
+        this.drawerEnableOpenDragGesture = true,
+        this.endDrawerEnableOpenDragGesture = true,
+        this.isTwiceBack = false,
+        this.isCanBack = true,
+        this.onBack,
+    })  : assert(primary != null),
+    assert(extendBody != null),
+    assert(extendBodyBehindAppBar != null),
+    assert(drawerDragStartBehavior != null),
+    super(key: key);
+
+    ///系统Scaffold的属性
+    final bool extendBody;
+    final bool extendBodyBehindAppBar;
+    final PreferredSizeWidget appBar;
+    final Widget body;
+    final Widget floatingActionButton;
+    final FloatingActionButtonLocation floatingActionButtonLocation;
+    final FloatingActionButtonAnimator floatingActionButtonAnimator;
+    final List<Widget> persistentFooterButtons;
+    final Widget drawer;
+    final Widget endDrawer;
+    final Color drawerScrimColor;
+    final Color backgroundColor;
+    final Widget bottomNavigationBar;
+    final Widget bottomSheet;
+    final bool resizeToAvoidBottomPadding;
+    final bool resizeToAvoidBottomInset;
+    final bool primary;
+    final DragStartBehavior drawerDragStartBehavior;
+    final double drawerEdgeDragWidth;
+    final bool drawerEnableOpenDragGesture;
+    final bool endDrawerEnableOpenDragGesture;
+
+    ///增加的属性
+    ///点击返回按钮提示是否退出页面,快速点击俩次才会退出页面
+    final bool isTwiceBack;
+
+    ///是否可以返回
+    final bool isCanBack;
+
+    ///监听返回事件
+    final ScaffoldParamVoidCallback onBack;
+
+    @override
+    _BaseScaffoldState createState() => _BaseScaffoldState();
+}
+
+class _BaseScaffoldState extends State<BaseScaffold> {
+    //上次点击时间
+    DateTime _lastPressedAt; 
+
+    @override
+    Widget build(BuildContext context) {
+        return WillPopScope(
+            child: Scaffold(
+                appBar: widget.appBar,
+                body: widget.body,
+                floatingActionButton: widget.floatingActionButton,
+                floatingActionButtonLocation: widget.floatingActionButtonLocation,
+                floatingActionButtonAnimator: widget.floatingActionButtonAnimator,
+                persistentFooterButtons: widget.persistentFooterButtons,
+                drawer: widget.drawer,
+                endDrawer: widget.endDrawer,
+                bottomNavigationBar: widget.bottomNavigationBar,
+                bottomSheet: widget.bottomSheet,
+                backgroundColor: widget.backgroundColor,
+                resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
+                resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+                primary: widget.primary,
+                drawerDragStartBehavior: widget.drawerDragStartBehavior,
+                extendBody: widget.extendBody,
+                extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+                drawerScrimColor: widget.drawerScrimColor,
+                drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
+                drawerEnableOpenDragGesture: widget.drawerEnableOpenDragGesture,
+                endDrawerEnableOpenDragGesture: widget.endDrawerEnableOpenDragGesture,
+            ),
+            onWillPop: dealWillPop,
+        );
+    }
+
+    ///控件返回按钮
+    Future<bool> dealWillPop() async {
+        if (widget.onBack != null) {
+            widget.onBack();
+        }
+
+        //处理弹窗问题
+        if (SmartDialog.instance.config.isExist) {
+            SmartDialog.instance.dismiss();
+            return false;
+        }
+
+        //如果不能返回，后面的逻辑就不走了
+        if (!widget.isCanBack) {
+            return false;
+        }
+
+        if (widget.isTwiceBack) {
+            if (_lastPressedAt == null ||
+                DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
+                //两次点击间隔超过1秒则重新计时
+                _lastPressedAt = DateTime.now();
+
+                //弹窗提示
+                SmartDialog.instance.showToast("再点一次退出");
+                return false;
+            }
+            return true;
+        } else {
+            return true;
+        }
+    }
+}
+```

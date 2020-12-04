@@ -1,6 +1,11 @@
+# [1.0.1]
+
+- perfect some function
+
+# [0.1.7]
+- perfect description
 
 # [0.1.6]
-
 - short descriptio
 
 # [0.1.5]

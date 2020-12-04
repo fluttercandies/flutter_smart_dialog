@@ -1,6 +1,8 @@
 # flutter_smart_dialog
 
-Language: [English](https://github.com/CNAD666/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://github.com/CNAD666/flutter_smart_dialog/blob/master/docs/README-ZH.md)
+Language: [English](https://github.com/CNAD666/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://github.com/CNAD666/flutter_smart_dialog/blob/master/doc/README-ZH.md)
+
+Pub：[flutter_smart_dialog](https://pub.dev/packages/flutter_smart_dialog)
 
 An elegant Flutter Dialog solution.
 
@@ -112,6 +114,7 @@ SmartDialog.instance.show(
 ```
 
 - SmartDialog configuration parameters
+  - In order to avoid exposing too many attributes in `instance`, causing inconvenience to use, many parameters here are managed by the `config ` attribute in `instance`
 
 | Parameter         | Description                                                  |
 | ----------------- | ------------------------------------------------------------ |
@@ -124,3 +127,138 @@ SmartDialog.instance.show(
 | isLoading         | Default value: true; Whether to use the Loading animation; true: the content body uses the fade animation false: the content body uses the zoom animation, only for the control in the middle position |
 | isExist           | Default value: false; Whether the main body SmartDialog(OverlayEntry) exists on the interface |
 | isExistExtra      | Default value: false. Indicates whether the extra SmartDialog(OverlayEntry) exists on the interface. |
+
+- **Return to the event, close the pop-up window solution**
+
+There is basically a problem when using Overlay's dependency library. It is difficult to monitor the return event, which makes it difficult to close the pop-up window layout when the return event is violated. After thinking of many ways, there is no way to solve the problem in the dependency library. Here is one `BaseScaffold`, using `BaseScaffold `on each page can solve the problem of closing Dialog in return event
+
+```dart
+typedef ScaffoldParamVoidCallback = void Function();
+
+class BaseScaffold extends StatefulWidget {
+    const BaseScaffold({
+        Key key,
+        this.appBar,
+        this.body,
+        this.floatingActionButton,
+        this.floatingActionButtonLocation,
+        this.floatingActionButtonAnimator,
+        this.persistentFooterButtons,
+        this.drawer,
+        this.endDrawer,
+        this.bottomNavigationBar,
+        this.bottomSheet,
+        this.backgroundColor,
+        this.resizeToAvoidBottomPadding,
+        this.resizeToAvoidBottomInset,
+        this.primary = true,
+        this.drawerDragStartBehavior = DragStartBehavior.start,
+        this.extendBody = false,
+        this.extendBodyBehindAppBar = false,
+        this.drawerScrimColor,
+        this.drawerEdgeDragWidth,
+        this.drawerEnableOpenDragGesture = true,
+        this.endDrawerEnableOpenDragGesture = true,
+        this.isTwiceBack = false,
+        this.isCanBack = true,
+        this.onBack,
+    })  : assert(primary != null),
+    assert(extendBody != null),
+    assert(extendBodyBehindAppBar != null),
+    assert(drawerDragStartBehavior != null),
+    super(key: key);
+
+    final bool extendBody;
+    final bool extendBodyBehindAppBar;
+    final PreferredSizeWidget appBar;
+    final Widget body;
+    final Widget floatingActionButton;
+    final FloatingActionButtonLocation floatingActionButtonLocation;
+    final FloatingActionButtonAnimator floatingActionButtonAnimator;
+    final List<Widget> persistentFooterButtons;
+    final Widget drawer;
+    final Widget endDrawer;
+    final Color drawerScrimColor;
+    final Color backgroundColor;
+    final Widget bottomNavigationBar;
+    final Widget bottomSheet;
+    final bool resizeToAvoidBottomPadding;
+    final bool resizeToAvoidBottomInset;
+    final bool primary;
+    final DragStartBehavior drawerDragStartBehavior;
+    final double drawerEdgeDragWidth;
+    final bool drawerEnableOpenDragGesture;
+    final bool endDrawerEnableOpenDragGesture;
+
+    final bool isTwiceBack;
+
+    final bool isCanBack;
+
+    final ScaffoldParamVoidCallback onBack;
+
+    @override
+    _BaseScaffoldState createState() => _BaseScaffoldState();
+}
+
+class _BaseScaffoldState extends State<BaseScaffold> {
+    DateTime _lastPressedAt; 
+
+    @override
+    Widget build(BuildContext context) {
+        return WillPopScope(
+            child: Scaffold(
+                appBar: widget.appBar,
+                body: widget.body,
+                floatingActionButton: widget.floatingActionButton,
+                floatingActionButtonLocation: widget.floatingActionButtonLocation,
+                floatingActionButtonAnimator: widget.floatingActionButtonAnimator,
+                persistentFooterButtons: widget.persistentFooterButtons,
+                drawer: widget.drawer,
+                endDrawer: widget.endDrawer,
+                bottomNavigationBar: widget.bottomNavigationBar,
+                bottomSheet: widget.bottomSheet,
+                backgroundColor: widget.backgroundColor,
+                resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
+                resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+                primary: widget.primary,
+                drawerDragStartBehavior: widget.drawerDragStartBehavior,
+                extendBody: widget.extendBody,
+                extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+                drawerScrimColor: widget.drawerScrimColor,
+                drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
+                drawerEnableOpenDragGesture: widget.drawerEnableOpenDragGesture,
+                endDrawerEnableOpenDragGesture: widget.endDrawerEnableOpenDragGesture,
+            ),
+            onWillPop: dealWillPop,
+        );
+    }
+
+    Future<bool> dealWillPop() async {
+        if (widget.onBack != null) {
+            widget.onBack();
+        }
+
+        if (SmartDialog.instance.config.isExist) {
+            SmartDialog.instance.dismiss();
+            return false;
+        }
+
+        if (!widget.isCanBack) {
+            return false;
+        }
+
+        if (widget.isTwiceBack) {
+            if (_lastPressedAt == null ||
+                DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
+                _lastPressedAt = DateTime.now();
+                SmartDialog.instance.showToast("click again to exit");
+                return false;
+            }
+            return true;
+        } else {
+            return true;
+        }
+    }
+}
+```
+
