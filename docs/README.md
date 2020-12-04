@@ -1,6 +1,6 @@
 # flutter_smart_dialog
 
-Language:[English](https://github.com/CNAD666/flutter_smart_dialog/blob/master/docs/README.md) | [中文简体](https://github.com/CNAD666/flutter_smart_dialog/blob/master/docs/README-ZH.md)
+Language: [English](https://github.com/CNAD666/flutter_smart_dialog/blob/master/docs/README.md) | [中文简体](https://github.com/CNAD666/flutter_smart_dialog/blob/master/docs/README-ZH.md)
 
 An elegant Flutter Dialog solution.
 
@@ -10,15 +10,14 @@ The Dialog that comes with the system actually pushes a new page, which has many
 
 - **BuildContext is required.**
 
-- - loading pop-up windows are generally encapsulated in the network framework, so it is troublesome to pass more context parameters. It is good to use fish_redux, and the context can be directly obtained at the effect layer, if you use **, you must upload the context to** or cubit in the view layer...
+  - loading pop-up windows are generally encapsulated in the network framework, so it is troublesome to pass more context parameters. It is good to use fish_redux, and the context can be directly obtained at the effect layer, if you use **, you must upload the context to** or cubit in the view layer...
 
 - **Unable to penetrate the dark background. Click the control behind the dialog box.**
-
-- - This is really a headache. I have thought a lot of ways and haven't solved it on my own dialog box.
+  - This is really a headache. I have thought a lot of ways and haven't solved it on my own dialog box.
 
 - **The Loading pop-up window written by the system comes with a Dialog box. In the case of network requests and jump pages, routing confusion may occur.**
 
-- - Scenario Replay: The loading Library is encapsulated in the network layer. After a form is submitted on a page, the page is redirected. After the submission is completed, the page is redirected, loading is closed in an asynchronous callback (onError or onSuccess). When a jump operation is performed, the pop-up window is not closed. The delay is a little while, because the pop-up method is used, will pop up the redirected page
+  - Scenario Replay: The loading Library is encapsulated in the network layer. After a form is submitted on a page, the page is redirected. After the submission is completed, the page is redirected, loading is closed in an asynchronous callback (onError or onSuccess). When a jump operation is performed, the pop-up window is not closed. The delay is a little while, because the pop-up method is used, will pop up the redirected page
   - The above is a very common scenario, which is more difficult to predict when it comes to complex scenarios. The solution is as follows: locate whether the stack top of the page stack is a Loading Pop-up window, and select Pop-up, which is troublesome to implement.
 
 `These pain points are all fatal`. Of course, there are other solutions, such:
@@ -49,7 +48,7 @@ dependencies:
 
 - Main portal configuration
 
-- - You need to configure it at the main entrance so that you can use Dialog without passing BuildContext.
+  - You need to configure it at the main entrance so that you can use Dialog without passing BuildContext.
   - You only need to configure the builder parameter of MaterialApp
 
 ```
@@ -77,7 +76,7 @@ Use `FlutterSmartDialog` Wrap the child, and then you can use SmartDialog happil
 
 - Use Toast
 
-- - msg: required information
+  - msg: required information
   - time: Optional. The Duration type.
   - alignment: the toast position can be controlled.
   - If you want to use the fancy Toast effect in flowers, you can use the show method to customize it. It is easy to fry chicken. I am too lazy to write it. Copy my ToastWidget and change the properties.
@@ -99,7 +98,7 @@ SmartDialog.instance.dismiss();
 
 - Custom dialog box
 
-- - Use the SmartDialog.instance.show() method, which contains many parameters with the suffix 'Temp', which is consistent with the following parameters without the suffix 'Temp '.
+  - Use the SmartDialog.instance.show() method, which contains many parameters with the suffix 'Temp', which is consistent with the following parameters without the suffix 'Temp '.
 
 ```
 SmartDialog.instance.show(
@@ -124,4 +123,4 @@ SmartDialog.instance.show(
 | isUseAnimation    | Default value: true. Specifies whether to use animation.     |
 | isLoading         | Default value: true; Whether to use the Loading animation; true: the content body uses the fade animation false: the content body uses the zoom animation, only for the control in the middle position |
 | isExist           | Default value: false; Whether the main body SmartDialog(OverlayEntry) exists on the interface |
-| isExistExtra      | Default value: false. Indicates whether the extra SmartDialog(OverlayEntry) exists on the interface |
+| isExistExtra      | Default value: false. Indicates whether the extra SmartDialog(OverlayEntry) exists on the interface. |
