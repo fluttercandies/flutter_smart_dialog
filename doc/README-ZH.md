@@ -402,5 +402,5 @@ FlutterSmartDialog一些信息
 
 - Github：[flutter_smart_dialog](https://github.com/CNAD666/flutter_smart_dialog)
 
-- Pub：[flutter_smart_dialog](https://pub.dev/packages/flutter_smart_dialog)
+- Pub：[flutter_smart_dialog](https://pub.flutter-io.cn/packages/flutter_smart_dialog)
 - 使用效果体验：[点我](https://cnad666.github.io/flutter_use/web/index.html#/smartDialog)
