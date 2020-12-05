@@ -80,7 +80,7 @@ class MyApp extends StatelessWidget {
   - 如果想使用花里胡哨的Toast效果，使用show方法定制就行了，炒鸡简单喔，懒得自己写的，抄下我的ToastWidget，改下属性就行了哈
 
 ```dart
-SmartDialog.instance.showToast('test toast');
+SmartDialog.showToast('test toast');
 ```
 
 - 使用Loading
@@ -88,11 +88,11 @@ SmartDialog.instance.showToast('test toast');
 
 ```dart
 //open loading
-SmartDialog.instance.showLoading();
+SmartDialog.showLoading();
 
 //delay off
 await Future.delayed(Duration(seconds: 2));
-SmartDialog.instance.dismiss();
+SmartDialog.dismiss();
 ```
 
 - 自定义dialog
@@ -100,7 +100,7 @@ SmartDialog.instance.dismiss();
   - 特殊属性`isUseExtraWidget`：是否使用额外覆盖浮层，可与主浮层独立开；可与loading，dialog之类独立开，自带的showToast便是开启了该配置，可与loading共存
 
 ```dart
-SmartDialog.instance.show(
+SmartDialog.show(
     alignmentTemp: Alignment.bottomCenter,
     clickBgDismissTemp: true,
     widget: Container(
@@ -244,7 +244,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
 
         //处理弹窗问题
         if (SmartDialog.instance.config.isExist) {
-            SmartDialog.instance.dismiss();
+            SmartDialog.dismiss();
             return false;
         }
 
@@ -260,7 +260,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                 _lastPressedAt = DateTime.now();
 
                 //弹窗提示
-                SmartDialog.instance.showToast("再点一次退出");
+                SmartDialog.showToast("再点一次退出");
                 return false;
             }
             return true;
