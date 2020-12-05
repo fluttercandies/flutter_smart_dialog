@@ -41,10 +41,7 @@ Obviously, using Overlay is the best portability. Currently, many Toast and dial
 
 ##  Introduced
 
-```
-dependencies:
-  flutter_smart_dialog: ^0.1.6
-```
+Pub:[view version](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install)
 
 ##  Use
 

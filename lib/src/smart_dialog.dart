@@ -72,7 +72,7 @@ class SmartDialog {
     bool isLoadingTemp,
     Color maskColorTemp,
     bool clickBgDismissTemp,
-    //是否使用额外使用额外覆盖浮层,可与主浮层独立开
+    //是否使用额外覆盖浮层,可与主浮层独立开
     bool isUseExtraWidget = false,
   }) {
     //展示弹窗
