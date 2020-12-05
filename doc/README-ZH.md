@@ -232,12 +232,12 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                 drawerEnableOpenDragGesture: widget.drawerEnableOpenDragGesture,
                 endDrawerEnableOpenDragGesture: widget.endDrawerEnableOpenDragGesture,
             ),
-            onWillPop: dealWillPop,
+            onWillPop: _dealWillPop,
         );
     }
 
     ///控件返回按钮
-    Future<bool> dealWillPop() async {
+    Future<bool> _dealWillPop() async {
         if (widget.onBack != null) {
             widget.onBack();
         }
