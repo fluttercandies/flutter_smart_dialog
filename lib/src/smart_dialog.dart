@@ -148,14 +148,14 @@ class SmartDialog {
       _key = globalKey;
       _rebuild(buildType: 0);
       _completer = Completer();
-      return !_completer.isCompleted ? _completer.future : null;
+      return _completer.future;
     } else {
       _widgetExtra = smartDialogView;
       config.isExistExtra = true;
       _keyExtra = globalKey;
       _rebuild(buildType: 1);
       _completerExtra = Completer();
-      return !_completerExtra.isCompleted ? _completerExtra.future : null;
+      return _completerExtra.future;
     }
   }
 
