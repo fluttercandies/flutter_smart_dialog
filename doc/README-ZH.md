@@ -96,7 +96,7 @@ SmartDialog.dismiss();
 ```
 
 - 自定义dialog
-  - 使用SmartDialog.instance.show()方法即可，里面含有众多'Temp'为后缀的参数，和下述无'Temp'为后缀的参数功能一致
+  - 使用SmartDialog.show()方法即可，里面含有众多'Temp'为后缀的参数，和下述无'Temp'为后缀的参数功能一致
   - 特殊属性`isUseExtraWidget`：是否使用额外覆盖浮层，可与主浮层独立开；可与loading，dialog之类独立开，自带的showToast便是开启了该配置，可与loading共存
 
 ```dart

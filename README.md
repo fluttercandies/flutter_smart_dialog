@@ -97,7 +97,7 @@ SmartDialog.instance.dismiss();
 
 - Custom dialog box
 
-  - Use the SmartDialog.instance.show() method, which contains many parameters with the suffix 'Temp', which is consistent with the following parameters without the suffix 'Temp '.
+  - Use the SmartDialog.show() method, which contains many parameters with the suffix 'Temp', which is consistent with the following parameters without the suffix 'Temp '.
 
 ```
 SmartDialog.show(
