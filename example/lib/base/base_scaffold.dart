@@ -115,7 +115,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
 
     //处理弹窗问题
     if (SmartDialog.instance.config.isExist) {
-      SmartDialog.instance.dismiss();
+      SmartDialog.dismiss();
       return false;
     }
 
@@ -131,7 +131,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
         _lastPressedAt = DateTime.now();
 
         //弹窗提示
-        SmartDialog.instance.showToast("再点一次退出");
+        SmartDialog.showToast("再点一次退出");
         return false;
       }
       return true;

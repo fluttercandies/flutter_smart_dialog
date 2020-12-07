@@ -41,10 +41,7 @@ Obviously, using Overlay is the best portability. Currently, many Toast and dial
 
 ##  Introduced
 
-```
-dependencies:
-  flutter_smart_dialog: ^0.1.6
-```
+Pub: [view version](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install)
 
 ##  Use
 
@@ -84,14 +81,14 @@ Use `FlutterSmartDialog` Wrap the child, and then you can use SmartDialog happil
   - If you want to use the fancy Toast effect in flowers, you can use the show method to customize it. It is easy to fry chicken. I am too lazy to write it. Copy my ToastWidget and change the properties.
 
 ```
-SmartDialog.instance.showToast('test toast');
+SmartDialog.showToast('test toast');
 ```
 
 - Use Loading
 
 ```
 //open loading
-SmartDialog.instance.showLoading();
+SmartDialog.showLoading();
 
 //delay off
 await Future.delayed(Duration(seconds: 2));
@@ -103,7 +100,7 @@ SmartDialog.instance.dismiss();
   - Use the SmartDialog.instance.show() method, which contains many parameters with the suffix 'Temp', which is consistent with the following parameters without the suffix 'Temp '.
 
 ```
-SmartDialog.instance.show(
+SmartDialog.show(
     alignmentTemp: Alignment.bottomCenter,
     clickBgDismissTemp: true,
     widget: Container(
@@ -229,17 +226,17 @@ class _BaseScaffoldState extends State<BaseScaffold> {
                 drawerEnableOpenDragGesture: widget.drawerEnableOpenDragGesture,
                 endDrawerEnableOpenDragGesture: widget.endDrawerEnableOpenDragGesture,
             ),
-            onWillPop: dealWillPop,
+            onWillPop: _dealWillPop,
         );
     }
 
-    Future<bool> dealWillPop() async {
+    Future<bool> _dealWillPop() async {
         if (widget.onBack != null) {
             widget.onBack();
         }
 
         if (SmartDialog.instance.config.isExist) {
-            SmartDialog.instance.dismiss();
+            SmartDialog.dismiss();
             return false;
         }
 
@@ -251,7 +248,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
             if (_lastPressedAt == null ||
                 DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
                 _lastPressedAt = DateTime.now();
-                SmartDialog.instance.showToast("click again to exit");
+                SmartDialog.showToast("click again to exit");
                 return false;
             }
             return true;

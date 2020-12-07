@@ -13,43 +13,43 @@ class SmartDialogCubit extends Cubit<SmartDialogState> {
   void showFun(context, tag) async {
     switch (tag) {
       case 'showToast':
-        SmartDialog.instance.showToast('toast弹窗测试toast弹窗测试toast');
+        SmartDialog.showToast('toast弹窗测试toast弹窗测试toast');
         break;
       case 'showLoading':
-        SmartDialog.instance.showLoading();
+        SmartDialog.showLoading();
         await Future.delayed(Duration(seconds: 2));
-        SmartDialog.instance.dismiss();
+        SmartDialog.dismiss();
         break;
       case 'bottomDialog':
-        SmartDialog.instance.show(
+        SmartDialog.show(
           alignmentTemp: Alignment.bottomCenter,
           clickBgDismissTemp: true,
           widget: _contentWidget(maxHeight: 400),
         );
         break;
       case 'topDialog':
-        SmartDialog.instance.show(
+        SmartDialog.show(
           alignmentTemp: Alignment.topCenter,
           clickBgDismissTemp: true,
           widget: _contentWidget(maxHeight: 300),
         );
         break;
       case 'leftDialog':
-        SmartDialog.instance.show(
+        SmartDialog.show(
           alignmentTemp: Alignment.centerLeft,
           clickBgDismissTemp: true,
           widget: _contentWidget(maxWidth: 260),
         );
         break;
       case 'rightDialog':
-        SmartDialog.instance.show(
+        SmartDialog.show(
           alignmentTemp: Alignment.centerRight,
           clickBgDismissTemp: true,
           widget: _contentWidget(maxWidth: 260),
         );
         break;
       case 'penetrateDialog':
-        SmartDialog.instance.show(
+        SmartDialog.show(
           alignmentTemp: Alignment.bottomCenter,
           clickBgDismissTemp: true,
           isPenetrateTemp: true,

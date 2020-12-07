@@ -76,43 +76,43 @@ class SmartDialogCubit extends Cubit<SmartDialogState> {
   void showFun(context, tag) async {
     switch (tag) {
       case 'showToast':
-        SmartDialog.instance.showToast('toast弹窗测试toast弹窗测试toast');
+        SmartDialog.showToast('toast弹窗测试toast弹窗测试toast');
         break;
       case 'showLoading':
-        SmartDialog.instance.showLoading();
+        SmartDialog.showLoading();
         await Future.delayed(Duration(seconds: 2));
-        SmartDialog.instance.dismiss();
+        SmartDialog.dismiss();
         break;
       case 'bottomDialog':
-        SmartDialog.instance.show(
+        SmartDialog.show(
           alignmentTemp: Alignment.bottomCenter,
           clickBgDismissTemp: true,
           widget: _contentWidget(maxHeight: 400),
         );
         break;
       case 'topDialog':
-        SmartDialog.instance.show(
+        SmartDialog.show(
           alignmentTemp: Alignment.topCenter,
           clickBgDismissTemp: true,
           widget: _contentWidget(maxHeight: 300),
         );
         break;
       case 'leftDialog':
-        SmartDialog.instance.show(
+        SmartDialog.show(
           alignmentTemp: Alignment.centerLeft,
           clickBgDismissTemp: true,
           widget: _contentWidget(maxWidth: 260),
         );
         break;
       case 'rightDialog':
-        SmartDialog.instance.show(
+        SmartDialog.show(
           alignmentTemp: Alignment.centerRight,
           clickBgDismissTemp: true,
           widget: _contentWidget(maxWidth: 260),
         );
         break;
       case 'penetrateDialog':
-        SmartDialog.instance.show(
+        SmartDialog.show(
           alignmentTemp: Alignment.bottomCenter,
           clickBgDismissTemp: true,
           isPenetrateTemp: true,
@@ -390,7 +390,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
 
     //处理弹窗问题
     if (SmartDialog.instance.config.isExist) {
-      SmartDialog.instance.dismiss();
+      SmartDialog.dismiss();
       return false;
     }
 
@@ -406,7 +406,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
         _lastPressedAt = DateTime.now();
 
         //弹窗提示
-        SmartDialog.instance.showToast("再点一次退出");
+        SmartDialog.showToast("再点一次退出");
         return false;
       }
       return true;
