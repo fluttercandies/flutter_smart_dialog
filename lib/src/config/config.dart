@@ -23,8 +23,8 @@ class Config {
   ///穿透遮罩设置为true，背景遮罩会自动变成透明（必须）
   bool isPenetrate = false;
 
-  ///默认：false；点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
-  bool clickBgDismiss = false;
+  ///默认：true；点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
+  bool clickBgDismiss = true;
 
   ///遮罩颜色
   Color maskColor = Colors.black.withOpacity(0.3);

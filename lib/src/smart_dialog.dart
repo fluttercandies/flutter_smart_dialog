@@ -92,7 +92,7 @@ class SmartDialog {
   static Future<void> showLoading({String msg = '加载中...'}) {
     return show(
       widget: LoadingWidget(msg: msg),
-      alignmentTemp: Alignment.center,
+      clickBgDismissTemp: false,
       isLoadingTemp: true,
     );
   }
@@ -109,6 +109,7 @@ class SmartDialog {
         alignment: alignment,
       ),
       isPenetrateTemp: true,
+      clickBgDismissTemp: false,
       isUseExtraWidget: true,
     );
 
@@ -139,7 +140,7 @@ class SmartDialog {
       maskColor: maskColorTemp ?? config.maskColor,
       clickBgDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
       child: widget,
-      onBgTap: () => dismiss(),
+      onBgTap: () => dismiss(closeType: !isUseExtraWidget ? 0 : 1),
     );
 
     if (!isUseExtraWidget) {
@@ -186,8 +187,8 @@ class SmartDialog {
     config.isExist = false;
     var state = _key?.currentState;
     await state?.dismiss();
-    if (!_completer.isCompleted) {
-      _completer?.complete();
+    if (!(_completer?.isCompleted ?? true)) {
+      _completer.complete();
     }
   }
 
@@ -196,8 +197,8 @@ class SmartDialog {
     config.isExistExtra = false;
     var stateExtra = _keyExtra?.currentState;
     await stateExtra?.dismiss();
-    if (!_completerExtra.isCompleted) {
-      _completerExtra?.complete();
+    if (!(_completerExtra?.isCompleted ?? true)) {
+      _completerExtra.complete();
     }
   }
 

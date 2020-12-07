@@ -118,7 +118,7 @@ SmartDialog.show(
 | ----------------- | ------------------------------------------------------------ |
 | alignment         | 控制自定义控件位于屏幕的位置<br/>**Alignment.center**: 自定义控件位于屏幕中间，且是动画默认为：渐隐和缩放，可使用isLoading选择动画<br/>**Alignment.bottomCenter、Alignment.bottomLeft、Alignment.bottomRight**：自定义控件位于屏幕底部，动画默认为位移动画，自下而上，可使用animationDuration设置动画时间<br/>**Alignment.topCenter、Alignment.topLeft、Alignment.topRight**：自定义控件位于屏幕顶部，动画默认为位移动画，自上而下，可使用animationDuration设置动画时间<br/>**Alignment.centerLeft**：自定义控件位于屏幕左边，动画默认为位移动画，自左而右，可使用animationDuration设置动画时间<br/> **Alignment.centerRight**：自定义控件位于屏幕左边，动画默认为位移动画，自右而左，可使用animationDuration设置动画时间 |
 | isPenetrate       | 默认:false；是否穿透遮罩背景,交互遮罩之后控件，true：点击能穿透背景，false：不能穿透；穿透遮罩设置为true，背景遮罩会自动变成透明（必须） |
-| clickBgDismiss    | 默认：false；点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭 |
+| clickBgDismiss    | 默认：true；点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭 |
 | maskColor         | 遮罩颜色                                                     |
 | animationDuration | 动画时间                                                     |
 | isUseAnimation    | 默认：true；是否使用动画                                     |
