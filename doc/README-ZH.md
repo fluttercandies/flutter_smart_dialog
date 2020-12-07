@@ -2,7 +2,7 @@
 
 语言: [English](https://github.com/CNAD666/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://github.com/CNAD666/flutter_smart_dialog/blob/master/doc/README-ZH.md)
 
-Pub：[flutter_smart_dialog](https://pub.dev/packages/flutter_smart_dialog)
+Pub：[flutter_smart_dialog](https://pub.flutter-io.cn/packages/flutter_smart_dialog)
 
 一个更优雅的Flutter Dialog解决方案
 
