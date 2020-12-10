@@ -1,4 +1,4 @@
-# [1.1.3]
+# [1.1.3] [1.1.5]
 
 - fix bug, adjust the default value of clickBgDismiss attribute to true
 
