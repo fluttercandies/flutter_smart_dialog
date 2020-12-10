@@ -162,7 +162,7 @@ class SmartDialog {
 
   ///关闭Dialog
   ///
-  /// closeType：关闭类型；0：仅关闭主体Overlay、1：仅关闭额外Overlay、2：俩者都关闭
+  /// closeType：关闭类型；0：仅关闭主体OverlayEntry、1：仅关闭额外OverlayEntry、2：俩者都关闭
   ///
   /// 如果不清楚使用,请查看showToast和showLoading
   static Future<void> dismiss({int closeType = 0}) async {
