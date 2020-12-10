@@ -90,7 +90,7 @@ class SmartDialog {
 
   ///提供loading弹窗
   static Future<void> showLoading({String msg = '加载中...'}) {
-    return show(
+    return instance._show(
       widget: LoadingWidget(msg: msg),
       clickBgDismissTemp: false,
       isLoadingTemp: true,
@@ -103,7 +103,7 @@ class SmartDialog {
     Duration time = const Duration(milliseconds: 1500),
     alignment: Alignment.bottomCenter,
   }) async {
-    show(
+    instance._show(
       widget: ToastWidget(
         msg: msg,
         alignment: alignment,
