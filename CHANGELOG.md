@@ -1,10 +1,7 @@
-# [1.1.3] [1.1.5]
+# [1.1.x] 
 
-- fix bug, adjust the default value of clickBgDismiss attribute to true
-
-
-# [1.1.0] [1.1.2]
 - simplified use
+- fix bug, adjust the default value of clickBgDismiss attribute to true
 
 # [1.0.3] [1.0.5]
 - improve the usage details in the document
