@@ -13,10 +13,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: SmartDialogPage(),
       builder: (BuildContext context, Widget child) {
-        return Material(
-          type: MaterialType.transparency,
-          child: FlutterSmartDialog(child: child),
-        );
+        return FlutterSmartDialog(child: child);
       },
     );
   }
