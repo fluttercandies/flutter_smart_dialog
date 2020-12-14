@@ -89,7 +89,7 @@ SmartDialog.showLoading();
 
 //delay off
 await Future.delayed(Duration(seconds: 2));
-SmartDialog.instance.dismiss();
+SmartDialog.dismiss();
 ```
 
 - Custom dialog box
