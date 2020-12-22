@@ -10,7 +10,7 @@ class SmartDialogView extends StatefulWidget {
     @required this.child,
     this.onBgTap,
     this.alignment,
-    this.isPenetrate = true,
+    this.isPenetrate,
     this.animationDuration,
     this.isUseAnimation,
     this.isLoading,
@@ -145,7 +145,7 @@ class SmartDialogViewState extends State<SmartDialogView>
     );
   }
 
-  //处理下内容widget动画方向
+  ///处理下内容widget动画方向
   void _dealContentAnimate() {
     AlignmentGeometry alignment = widget.alignment;
     _offset = Offset(0, 0);
@@ -167,7 +167,7 @@ class SmartDialogViewState extends State<SmartDialogView>
       //靠右
       _offset = Offset(1, 0);
     } else {
-      //居中使用缩放动画
+      //居中使用缩放动画,空结构体,不需要操作
     }
   }
 
