@@ -1,6 +1,6 @@
 # flutter_smart_dialog
 
-语言: [English](https://github.com/CNAD666/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://github.com/CNAD666/flutter_smart_dialog/blob/master/doc/README-ZH.md)
+语言: [English](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/doc/README-ZH.md)
 
 Pub：[flutter_smart_dialog](https://pub.flutter-io.cn/packages/flutter_smart_dialog)
 
@@ -414,7 +414,7 @@ class TestLayoutPage extends StatelessWidget {
 
 FlutterSmartDialog一些信息
 
-- Github：[flutter_smart_dialog](https://github.com/CNAD666/flutter_smart_dialog)
+- Github：[flutter_smart_dialog](https://github.com/fluttercandies/flutter_smart_dialog)
 
 - Pub：[flutter_smart_dialog](https://pub.flutter-io.cn/packages/flutter_smart_dialog)
 - 使用效果体验：[点击体验一下](https://cnad666.github.io/flutter_use/web/index.html#/smartDialog)

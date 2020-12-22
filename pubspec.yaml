@@ -5,7 +5,7 @@ description:
   Make the use of the dialog box easier!
 version: 1.1.7
 #author:
-homepage: https://github.com/CNAD666/flutter_smart_dialog
+homepage: https://github.com/fluttercandies/flutter_smart_dialog
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
