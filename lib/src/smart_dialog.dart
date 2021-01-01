@@ -92,6 +92,7 @@ class SmartDialog {
   ///提供loading弹窗
   static Future<void> showLoading({
     String msg = '加载中...',
+    Color background  = Colors.black,
     bool clickBgDismissTemp = false,
     bool isLoadingTemp = true,
     bool isPenetrateTemp,
@@ -101,7 +102,10 @@ class SmartDialog {
     bool isUseExtraWidget = false,
   }) {
     return show(
-      widget: LoadingWidget(msg: msg),
+      widget: LoadingWidget(
+        msg: msg,
+        background: background,
+      ),
       clickBgDismissTemp: clickBgDismissTemp,
       isLoadingTemp: isLoadingTemp,
       maskColorTemp: maskColorTemp,

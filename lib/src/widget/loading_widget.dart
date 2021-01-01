@@ -5,10 +5,14 @@ class LoadingWidget extends StatelessWidget {
   LoadingWidget({
     Key key,
     this.msg,
+    this.background = Colors.black,
   }) : super(key: key);
 
   ///加载信息
   final String msg;
+
+  ///loading背景色
+  final Color background;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +35,7 @@ class LoadingWidget extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       decoration: BoxDecoration(
-        color: Colors.black,
+        color: background,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
