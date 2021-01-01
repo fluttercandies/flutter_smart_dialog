@@ -1,5 +1,9 @@
-# [1.1.x] 
+# [1.2.x]
 
+- loadingDialog perfect parameter settings
+- adjust and use show method
+
+# [1.1.x]
 - simplified use
 - fix bug, adjust the default value of clickBgDismiss attribute to true
 

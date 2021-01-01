@@ -77,23 +77,38 @@ class SmartDialog {
   }) {
     return instance._show(
       widget: widget,
-      alignmentTemp: alignmentTemp,
-      isPenetrateTemp: isPenetrateTemp,
-      isUseAnimationTemp: isUseAnimationTemp,
-      animationDurationTemp: animationDurationTemp,
-      isLoadingTemp: isLoadingTemp,
-      maskColorTemp: maskColorTemp,
-      clickBgDismissTemp: clickBgDismissTemp,
+      alignment: alignmentTemp ?? instance.config.alignment,
+      isPenetrate: isPenetrateTemp ?? instance.config.isPenetrate,
+      isUseAnimation: isUseAnimationTemp ?? instance.config.isUseAnimation,
+      animationDuration:
+          animationDurationTemp ?? instance.config.animationDuration,
+      isLoading: isLoadingTemp ?? instance.config.isLoading,
+      maskColor: maskColorTemp ?? instance.config.maskColor,
+      clickBgDismiss: clickBgDismissTemp ?? instance.config.clickBgDismiss,
       isUseExtraWidget: isUseExtraWidget,
     );
   }
 
   ///提供loading弹窗
-  static Future<void> showLoading({String msg = '加载中...'}) {
-    return instance._show(
+  static Future<void> showLoading({
+    String msg = '加载中...',
+    bool clickBgDismissTemp = false,
+    bool isLoadingTemp = true,
+    bool isPenetrateTemp,
+    bool isUseAnimationTemp,
+    Duration animationDurationTemp,
+    Color maskColorTemp,
+    bool isUseExtraWidget = false,
+  }) {
+    return show(
       widget: LoadingWidget(msg: msg),
-      clickBgDismissTemp: false,
-      isLoadingTemp: true,
+      clickBgDismissTemp: clickBgDismissTemp,
+      isLoadingTemp: isLoadingTemp,
+      maskColorTemp: maskColorTemp,
+      isPenetrateTemp: isPenetrateTemp,
+      isUseAnimationTemp: isUseAnimationTemp,
+      animationDurationTemp: animationDurationTemp,
+      isUseExtraWidget: isUseExtraWidget,
     );
   }
 
@@ -103,7 +118,7 @@ class SmartDialog {
     Duration time = const Duration(milliseconds: 1500),
     alignment: Alignment.bottomCenter,
   }) async {
-    instance._show(
+    show(
       widget: ToastWidget(
         msg: msg,
         alignment: alignment,
@@ -119,26 +134,26 @@ class SmartDialog {
 
   Future<void> _show({
     @required Widget widget,
-    AlignmentGeometry alignmentTemp,
-    bool isPenetrateTemp,
-    bool isUseAnimationTemp,
-    Duration animationDurationTemp,
-    bool isLoadingTemp,
-    Color maskColorTemp,
-    bool clickBgDismissTemp,
-    bool isUseExtraWidget = false,
+    AlignmentGeometry alignment,
+    bool isPenetrate,
+    bool isUseAnimation,
+    Duration animationDuration,
+    bool isLoading,
+    Color maskColor,
+    bool clickBgDismiss,
+    bool isUseExtraWidget,
   }) async {
     //展示弹窗
     var globalKey = GlobalKey<SmartDialogViewState>();
     Widget smartDialogView = SmartDialogView(
       key: globalKey,
-      alignment: alignmentTemp ?? config.alignment,
-      isPenetrate: isPenetrateTemp ?? config.isPenetrate,
-      isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
-      animationDuration: animationDurationTemp ?? config.animationDuration,
-      isLoading: isLoadingTemp ?? config.isLoading,
-      maskColor: maskColorTemp ?? config.maskColor,
-      clickBgDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
+      alignment: alignment,
+      isPenetrate: isPenetrate,
+      isUseAnimation: isUseAnimation,
+      animationDuration: animationDuration,
+      isLoading: isLoading,
+      maskColor: maskColor,
+      clickBgDismiss: clickBgDismiss,
       child: widget,
       onBgTap: () => dismiss(closeType: !isUseExtraWidget ? 0 : 1),
     );
