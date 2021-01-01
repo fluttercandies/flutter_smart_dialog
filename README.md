@@ -1,7 +1,6 @@
 # flutter_smart_dialog
 
-Language: [English](https://github.com/CNAD666/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://github.com/CNAD666/flutter_smart_dialog/blob/master/doc/README-ZH.md)
-
+语言: [English](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/doc/README-ZH.md)
 Pub：[flutter_smart_dialog](https://pub.dev/packages/flutter_smart_dialog)
 
 An elegant Flutter Dialog solution.
