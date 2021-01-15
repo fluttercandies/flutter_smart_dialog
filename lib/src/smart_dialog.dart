@@ -220,11 +220,13 @@ class SmartDialog {
     config.isExist = false;
     var state = _key?.currentState;
     await state?.dismiss();
-    if (!(_completer?.isCompleted ?? true)) {
-      _completer.complete();
-    }
+
     if(_onDismiss != null) {
       _onDismiss();
+    }
+
+    if (!(_completer?.isCompleted ?? true)) {
+      _completer.complete();
     }
   }
 
@@ -233,11 +235,13 @@ class SmartDialog {
     config.isExistExtra = false;
     var stateExtra = _keyExtra?.currentState;
     await stateExtra?.dismiss();
-    if (!(_completerExtra?.isCompleted ?? true)) {
-      _completerExtra.complete();
-    }
+
     if(_onExtraDismiss != null) {
       _onExtraDismiss();
+    }
+
+    if (!(_completerExtra?.isCompleted ?? true)) {
+      _completerExtra.complete();
     }
   }
 

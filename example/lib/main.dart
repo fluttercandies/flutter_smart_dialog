@@ -84,6 +84,9 @@ class SmartDialogCubit extends Cubit<SmartDialogState> {
         SmartDialog.show(
           alignmentTemp: Alignment.bottomCenter,
           clickBgDismissTemp: true,
+          onDismiss: (){
+            print('==============test callback==============');
+          },
           widget: _contentWidget(maxHeight: 400),
         );
         break;
