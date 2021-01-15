@@ -218,12 +218,12 @@ class SmartDialog {
   Future<void> _dismissBody() async {
     _widget = null;
     config.isExist = false;
-    var state = _key?.currentState;
-    await state?.dismiss();
-
     if(_onDismiss != null) {
       _onDismiss();
     }
+
+    var state = _key?.currentState;
+    await state?.dismiss();
 
     if (!(_completer?.isCompleted ?? true)) {
       _completer.complete();
@@ -233,13 +233,12 @@ class SmartDialog {
   Future<void> _dismissExtra() async {
     _widgetExtra = null;
     config.isExistExtra = false;
-    var stateExtra = _keyExtra?.currentState;
-    await stateExtra?.dismiss();
-
     if(_onExtraDismiss != null) {
       _onExtraDismiss();
     }
 
+    var stateExtra = _keyExtra?.currentState;
+    await stateExtra?.dismiss();
     if (!(_completerExtra?.isCompleted ?? true)) {
       _completerExtra.complete();
     }
