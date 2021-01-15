@@ -2,6 +2,7 @@
 
 - loadingDialog perfect parameter settings
 - adjust and use show method
+- add dismiss callback
 
 # [1.1.x]
 - simplified use

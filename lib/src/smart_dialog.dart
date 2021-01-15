@@ -30,6 +30,8 @@ class SmartDialog {
   Completer _completer;
   Completer _completerExtra;
   static SmartDialog _instance;
+  VoidCallback _onDismiss;
+  VoidCallback _onExtraDismiss;
 
   static SmartDialog _getInstance() {
     if (_instance == null) {
@@ -74,6 +76,10 @@ class SmartDialog {
     Color maskColorTemp,
     bool clickBgDismissTemp,
     bool isUseExtraWidget = false,
+    //overlay弹窗消失回调
+    VoidCallback onDismiss,
+    //额外overlay弹窗消失回调
+    VoidCallback onExtraDismiss,
   }) {
     return instance._show(
       widget: widget,
@@ -86,13 +92,15 @@ class SmartDialog {
       maskColor: maskColorTemp ?? instance.config.maskColor,
       clickBgDismiss: clickBgDismissTemp ?? instance.config.clickBgDismiss,
       isUseExtraWidget: isUseExtraWidget,
+      onDismiss: onDismiss,
+      onExtraDismiss: onExtraDismiss,
     );
   }
 
   ///提供loading弹窗
   static Future<void> showLoading({
     String msg = '加载中...',
-    Color background  = Colors.black,
+    Color background = Colors.black,
     bool clickBgDismissTemp = false,
     bool isLoadingTemp = true,
     bool isPenetrateTemp,
@@ -146,7 +154,13 @@ class SmartDialog {
     Color maskColor,
     bool clickBgDismiss,
     bool isUseExtraWidget,
+    VoidCallback onDismiss,
+    VoidCallback onExtraDismiss,
   }) async {
+    //处理下事件监听
+    _onDismiss = onDismiss;
+    _onExtraDismiss = onExtraDismiss;
+
     //展示弹窗
     var globalKey = GlobalKey<SmartDialogViewState>();
     Widget smartDialogView = SmartDialogView(
@@ -209,6 +223,9 @@ class SmartDialog {
     if (!(_completer?.isCompleted ?? true)) {
       _completer.complete();
     }
+    if(_onDismiss != null) {
+      _onDismiss();
+    }
   }
 
   Future<void> _dismissExtra() async {
@@ -218,6 +235,9 @@ class SmartDialog {
     await stateExtra?.dismiss();
     if (!(_completerExtra?.isCompleted ?? true)) {
       _completerExtra.complete();
+    }
+    if(_onExtraDismiss != null) {
+      _onExtraDismiss();
     }
   }
 
