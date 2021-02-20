@@ -68,7 +68,7 @@ class SmartLogic {
     bool isLoading,
     Color maskColor,
     bool clickBgDismiss,
-    bool isUseExtraWidget,
+    bool isUseExtraWidget  = false,
     VoidCallback onDismiss,
     VoidCallback onExtraDismiss,
   }) async {
@@ -80,13 +80,13 @@ class SmartLogic {
     var globalKey = GlobalKey<SmartDialogViewState>();
     Widget smartDialogView = SmartDialogView(
       key: globalKey,
-      alignment: alignment,
-      isPenetrate: isPenetrate,
-      isUseAnimation: isUseAnimation,
-      animationDuration: animationDuration,
-      isLoading: isLoading,
-      maskColor: maskColor,
-      clickBgDismiss: clickBgDismiss,
+      alignment: alignment ?? instance.config.alignment,
+      isPenetrate: isPenetrate ?? instance.config.isPenetrate,
+      isUseAnimation: isUseAnimation ?? instance.config.isUseAnimation,
+      animationDuration: animationDuration ?? instance.config.animationDuration,
+      isLoading: isLoading ?? instance.config.isLoading,
+      maskColor: maskColor ?? instance.config.maskColor,
+      clickBgDismiss: clickBgDismiss ?? instance.config.clickBgDismiss,
       child: widget,
       onBgTap: () => dismiss(closeType: !isUseExtraWidget ? 0 : 1),
     );
@@ -111,6 +111,7 @@ class SmartLogic {
   ///提供toast示例
   Future<void> showToast({
     Duration time = const Duration(milliseconds: 1500),
+    alignment: Alignment.bottomCenter,
     Widget widget,
   }) async {
     _toastList.add(
@@ -124,7 +125,7 @@ class SmartLogic {
     await Future.delayed(time);
     _toastList.removeLast();
     if (_toastList.length == 0) {
-      // await dismiss(closeType: 1);
+      await dismiss(closeType: 1);
     }
   }
 

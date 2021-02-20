@@ -114,10 +114,7 @@ class SmartDialog {
   }) async {
     SmartLogic.instance.showToast(
       time: time,
-      widget: widget ?? ToastWidget(
-        msg: msg,
-        alignment: alignment,
-      ),
+      widget: widget ?? ToastWidget(msg: msg, alignment: alignment),
     );
   }
 
