@@ -39,7 +39,7 @@ Obviously, the use of Overlay is the most portable. At present, many toast and d
 
 ```dart
 dependencies:
-  flutter_smart_dialog: lastVersion
+  flutter_smart_dialog: any
 ```
 
 ## Use
