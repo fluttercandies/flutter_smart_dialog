@@ -113,43 +113,34 @@ class SmartLogic {
     Duration time = const Duration(milliseconds: 1500),
     alignment: Alignment.bottomCenter,
     Widget widget,
+    //默认消失类型,类似android的toast,toast一个一个展示
+    //非默认消失类型,多次点击,后面toast会顶掉前者的toast显示
     bool isDefaultDismissType = true,
   }) async {
+    //处理默认类型逻辑
     if (isDefaultDismissType) {
-      //默认消失类型,类似android的toast,toast一个一个展示
       while (true) {
         if (_toastList.length == 0) {
           break;
         }
-        await Future.delayed(Duration(milliseconds: 200));
-      }
-      _toastList.add(
-        instance.show(
-          widget: widget,
-          isPenetrate: true,
-          clickBgDismiss: false,
-          isUseExtraWidget: true,
-        ),
-      );
-      await Future.delayed(time);
-      _toastList.removeLast();
-      await dismiss(closeType: 1);
-    } else {
-      //非默认消失类型,多次点击,后面toast会顶掉前者的toast显示
-      _toastList.add(
-        instance.show(
-          widget: widget,
-          isPenetrate: true,
-          clickBgDismiss: false,
-          isUseExtraWidget: true,
-        ),
-      );
-      await Future.delayed(time);
-      _toastList.removeLast();
-      if (_toastList.length == 0) {
-        await dismiss(closeType: 1);
+        await Future.delayed(Duration(milliseconds: 100));
       }
     }
+
+    //通用逻辑
+    _toastList.add(
+      instance.show(
+        widget: widget,
+        isPenetrate: true,
+        clickBgDismiss: false,
+        isUseExtraWidget: true,
+      ),
+    );
+    await Future.delayed(time);
+    if (_toastList.length == 1) {
+      await dismiss(closeType: 1);
+    }
+    _toastList.removeLast();
   }
 
   ///关闭Dialog
