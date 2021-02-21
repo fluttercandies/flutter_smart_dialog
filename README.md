@@ -25,7 +25,7 @@ Obviously, the use of Overlay is the most portable. At present, many toast and d
 
 # SmartDialog
 
-**Based on the above difficult problems, I can only implement it myself. It took some time to implement a Pub package. Basically, the pain points that should be solved have been solved, and there is no problem in actual business **
+**Based on the above difficult problems, I can only implement it myself. It took some time to implement a Pub package. Basically, the pain points that should be solved have been solved, and there is no problem in actual business**
 
 ## Effect
 
