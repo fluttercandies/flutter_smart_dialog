@@ -1,5 +1,9 @@
-# [1.2.x]
+# [1.3.x]
 
+- Improve toast display
+- Improve toast customization function
+
+# [1.2.x]
 - loadingDialog perfect parameter settings
 - adjust and use show method
 - add dismiss callback
