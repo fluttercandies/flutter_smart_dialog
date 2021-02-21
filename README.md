@@ -95,7 +95,7 @@ SmartDialog.dismiss();
 ```
 
 - Custom dialog
-  - Use the SmartDialog.show() method, which contains many parameters with a suffix of'Temp', which are consistent with the following parameters without the suffix of'Temp'
+  - Use the SmartDialog.show() method, which contains many parameters with a suffix of  `Temp`, which are consistent with the following parameters without the suffix of `Temp`
   - Special attribute `isUseExtraWidget`: whether to use an additional overlay floating layer, it can be separated from the main floating layer; it can be separated from loading, dialog, etc. The built-in showToast turns on this configuration and can coexist with loading
 
 ```dart
