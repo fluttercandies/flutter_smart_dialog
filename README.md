@@ -1,55 +1,54 @@
 # flutter_smart_dialog
 
-语言: [English](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/doc/README-ZH.md)
-Pub：[flutter_smart_dialog](https://pub.dev/packages/flutter_smart_dialog)
+语言: [English](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://juejin.cn/post/6902331428072390663)
 
 An elegant Flutter Dialog solution.
 
 # Preface
 
-The Dialog that comes with the system actually pushes a new page, which has many advantages, but there are also some difficult problems to solve.
+The Dialog that comes with the system actually pushes a new page, which has many benefits, but there are also some difficult problems to solve
 
-- **BuildContext is required.**
+- **Must pass BuildContext**
+  - Loading pop- ups are usually encapsulated in the network framework, and it is a headache to pass more context parameters; it is good to use fish_redux, the effect layer can directly get the context, if you use bloc, you have to pass the context to bloc or cubit in the view layer . . .
+- **Cannot penetrate dark background, click on the page behind dialog**
+  - This is a real headache. I have thought of a lot of ways, but failed to solve this problem on the built- in dialog.
+- **The loading pop- up window written by Dialog comes with the system. In the case of network requests and page jumps, there will be routing confusion **
+  - Scenario review: The loading library is generally encapsulated in the network layer. After a page is submitted, the page needs to be jumped. The submission operation is completed and the page jumps. The loading is closed in an asynchronous callback (onError or onSuccess), and it will appear When the jump operation is performed, the pop- up window has not been closed, and will be closed after a short delay, because the pop page method is used, and the jumped page will be popped.
+  - The above is a very common scenario. It is more difficult to predict when it comes to complex scenarios. There are also solutions: locate whether the top of the page stack is the Loading pop- up window, select Pop, and troublesome implementation
 
-  - loading pop-up windows are generally encapsulated in the network framework, so it is troublesome to pass more context parameters. It is good to use fish_redux, and the context can be directly obtained at the effect layer, if you use **, you must upload the context to** or cubit in the view layer...
+`The above pain points are all fatal`, of course, there are some other solutions, such as:
 
-- **Unable to penetrate the dark background. Click the control behind the dialog box.**
-  - This is really a headache. I have thought a lot of ways and haven't solved it on my own dialog box.
-
-- **The Loading pop-up window written by the system comes with a Dialog box. In the case of network requests and jump pages, routing confusion may occur.**
-
-  - Scenario Replay: The loading Library is encapsulated in the network layer. After a form is submitted on a page, the page is redirected. After the submission is completed, the page is redirected, loading is closed in an asynchronous callback (onError or onSuccess). When a jump operation is performed, the pop-up window is not closed. The delay is a little while, because the pop-up method is used, will pop up the redirected page
-  - The above is a very common scenario, which is more difficult to predict when it comes to complex scenarios. The solution is as follows: locate whether the stack top of the page stack is a Loading Pop-up window, and select Pop-up, which is troublesome to implement.
-
-`These pain points are all fatal`. Of course, there are other solutions, such:
-
-- Top-level Stack usage for each page
+- Use Stack at the top of the page
 - Use Overlay
 
-Obviously, using Overlay is the best portability. Currently, many Toast and dialog third-party libraries use this solution, using some loading libraries, looking at the source code, penetrating the background solution, different from the expected effect, some dialog libraries have their own toast display, but toast display cannot coexist with dialog (toast is a special information display and should exist independently), I need to rely on one more Toast Library.
+Obviously, the use of Overlay is the most portable. At present, many toast and dialog three- party libraries use this solution. Some loading libraries are used. After reading the source code, the penetration background solution is very different from the expected effect. The dialog library comes with toast display, but toast display cannot coexist with dialog (toast is a special information display and should be able to exist independently), so I need to rely on one more Toast library
 
-#  SmartDialog
+# SmartDialog
 
-**Based on the above problems that are difficult to solve, we can only implement them ourselves. It took some time to implement a Pub package. Basically, the pain points that should be solved have been solved, and there is no problem in actual business.**
+**Based on the above difficult problems, I can only implement it myself. It took some time to implement a Pub package. Basically, the pain points that should be solved have been solved, and there is no problem in actual business **
 
-##  Effect
+## Effect
 
-- [Let me experience it](https://cnad666.github.io/flutter_use/web/index.html#/smartDialog)
+- [Click me to experience it](https://cnad666.github.io/flutter_use/web/index.html#/smartDialog)
 
 ![smartDialog](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20201204145311.gif)
 
-##  Introduced
+## Introduction
 
-Pub: [view version](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install)
+- **Pub**: [View flutter_smart_dialog plug- in version](https://pub.flutter- io.cn/packages/flutter_smart_dialog/install)
 
-##  Use
-
-- Main portal configuration
-
-  - You need to configure it at the main entrance so that you can use Dialog without passing BuildContext.
-  - You only need to configure the builder parameter of MaterialApp
-
+```dart
+dependencies:
+  flutter_smart_dialog: lastVersion
 ```
+
+## Use
+
+- Main entrance configuration
+  - It needs to be configured in the main entrance, so that you can use Dialog without passing BuildContext
+  - You only need to configure it in the builder parameters of MaterialApp
+
+```dart
 void main() {
   runApp(MyApp());
 }
@@ -67,22 +66,26 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-Use `FlutterSmartDialog` Wrap the child, and then you can use SmartDialog happily.
+Use `FlutterSmartDialog` to wrap the child, and then you can use SmartDialog happily
 
-- Use Toast
+- Use Toast: Because of the special nature of toast, some optimizations have been made to toast separately here
+  - time: optional, Duration type, default 1500ms
+  - isDefaultDismissType: the type of toast disappearing, the default is true
+    - true: default disappearing type, similar to android toast, toast displayed one by one
+    - false: non- default disappearing type, multiple clicks, the toast will be displayed after the former toast
+  - widget: toast can be customized
+  - msg: mandatory message
+  - alignment: optional, control toast position
+  - If you want to use the fancy Toast effect, please use the showToast method to customize it. Fried chicken is simple, too lazy to write it yourself. Just copy my ToastWidget and change the attributes.
 
-  - msg: required information
-  - time: Optional. The Duration type.
-  - alignment: the toast position can be controlled.
-  - If you want to use the fancy Toast effect in flowers, you can use the show method to customize it. It is easy to fry chicken. I am too lazy to write it. Copy my ToastWidget and change the properties.
-
-```
+```dart
 SmartDialog.showToast('test toast');
 ```
 
-- Use Loading
+- Use Loading: Loading has many setting properties, please refer to the `SmartDialog configuration parameter description` below
+  - msg: optional, the text message below the loading animation (default: loading...)
 
-```
+```dart
 //open loading
 SmartDialog.showLoading();
 
@@ -91,11 +94,11 @@ await Future.delayed(Duration(seconds: 2));
 SmartDialog.dismiss();
 ```
 
-- Custom dialog box
+- Custom dialog
+  - Use the SmartDialog.show() method, which contains many parameters with a suffix of'Temp', which are consistent with the following parameters without the suffix of'Temp'
+  - Special attribute `isUseExtraWidget`: whether to use an additional overlay floating layer, it can be separated from the main floating layer; it can be separated from loading, dialog, etc. The built- in showToast turns on this configuration and can coexist with loading
 
-  - Use the SmartDialog.show() method, which contains many parameters with the suffix 'Temp', which is consistent with the following parameters without the suffix 'Temp '.
-
-```
+```dart
 SmartDialog.show(
     alignmentTemp: Alignment.bottomCenter,
     clickBgDismissTemp: true,
@@ -106,24 +109,39 @@ SmartDialog.show(
 );
 ```
 
-- SmartDialog configuration parameters
-  - In order to avoid exposing too many attributes in `instance`, causing inconvenience to use, many parameters here are managed by the `config ` attribute in `instance`
+- SmartDialog configuration parameter description
+  - In order to avoid exposing too many attributes in `instance`, causing inconvenience to use, many parameters here are managed by `config` attribute in `instance`
+  - The attributes set by config are global. Using Config to manage these attributes is to facilitate the modification and management of these attributes, and also to make the SmartDialog class easier to maintain
 
-| Parameter         | Description                                                  |
-| ----------------- | ------------------------------------------------------------ |
-| Alignment         | Controls the Alignment of custom controls on the screen.<br/>**Alignment.center**: The custom control is located in the middle of the screen, and the animation defaults to fade and zoom. You can use isLoading to select animation<br/>**Alignment.bottomCenter, Alignment.bottomLeft, Alignment.bottomRight**: The custom control is located at the bottom of the screen. The animation defaults to displacement animation. From bottom to top, you can use animationDuration to set animation time<br/>**Alignment.topCenter, Alignment.topLeft, Alignment.topRight**: The custom control is located at the top of the screen. The animation defaults to displacement animation. From top to bottom, you can use animationDuration to set animation time<br/>**Alignment.centerLeft**: The custom control is located on the left side of the screen. By default, the animation is a displacement animation from left to right. You can use animationDuration to set the animation time<br/>**Alignment.centerRight**: The custom control is located on the left side of the screen. By default, the animation is a displacement animation from right to left. You can use animationDuration to set the animation time. |
-| isPenetrate       | Default value: false; Specifies whether to penetrate the background of the mask. The control after the interaction mask. true: click to penetrate the background. false: cannot penetrate. Set the penetration mask to true, the background mask is automatically transparent (required) |
-| clickBgDismiss    | Default value: true; Click mask to close the dialog --- true: click mask to close the dialog. false: Do not close the dialog. |
-| maskColor         | Mask color                                                   |
-| animationDuration | Animation time                                               |
-| isUseAnimation    | Default value: true. Specifies whether to use animation.     |
-| isLoading         | Default value: true; Whether to use the Loading animation; true: the content body uses the fade animation false: the content body uses the zoom animation, only for the control in the middle position |
-| isExist           | Default value: false; Whether the main body SmartDialog(OverlayEntry) exists on the interface |
-| isExistExtra      | Default value: false. Indicates whether the extra SmartDialog(OverlayEntry) exists on the interface. |
+| Parameters | Function description |
+| - - - - - - - - - - - - - - - - -  | - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  |
+| alignment | Control the position of the custom control on the screen<br/>**Alignment.center**: The custom control is located in the middle of the screen, and the animation defaults to: fade and zoom, you can use isLoading to select the animation<br/> **Alignment.bottomCenter, Alignment.bottomLeft, Alignment.bottomRight**: The custom control is located at the bottom of the screen, the animation defaults to displacement animation, bottom- up, you can use animationDuration to set the animation time<br/>**Alignment.topCenter, Alignment.topLeft, Alignment.topRight**: The custom control is located at the top of the screen, and the animation defaults to displacement animation. From top to bottom, you can use animationDuration to set the animation time<br/>**Alignment.centerLeft**: The custom control is located at On the left side of the screen, the animation defaults to displacement animation, from left to right, you can use animationDuration to set the animation time<br/> **Alignment.centerRight**: The custom control is located on the left side of the screen, and the animation defaults to displacement animation, from right to left. You can use animationDuration to set the animation time |
+| isPenetrate | Default: false; whether to penetrate the background of the mask, control after interactive mask, true: click to penetrate the background, false: not penetrate; set the penetration mask to true, the background mask will automatically become transparent (Required) |
+| clickBgDismiss | Default: true; click the mask, whether to close the dialog- - - true: click the mask to close the dialog, false: not close |
+| maskColor | Mask color |
+| animationDuration | Animation time |
+| isUseAnimation | Default: true; whether to use animation |
+| isLoading | Default: true; whether to use Loading animation; true: use fade animation for content body false: use zoom animation for content body, only for the middle position control |
+| isExist | Default: false; Whether the main SmartDialog (OverlayEntry) exists on the interface |
+| isExistExtra | Default: false; whether additional SmartDialog (OverlayEntry) exists on the interface |
 
-- **Return to the event, close the pop-up window solution**
+- Use of Config attribute, for example
+  - The relevant attributes have been initialized internally; if you need to customize, you can initialize the attributes you want at the main entrance
 
-There is basically a problem when using Overlay's dependency library. It is difficult to monitor the return event, which makes it difficult to close the pop-up window layout when the return event is violated. After thinking of many ways, there is no way to solve the problem in the dependency library. Here is one `BaseScaffold`, using `BaseScaffold `on each page can solve the problem of closing Dialog in return event
+```dart
+SmartDialog.instance.config
+    ..clickBgDismiss = true
+    ..isLoading = true
+    ..isUseAnimation = true
+    ..animationDuration = Duration(milliseconds: 270)
+    ..isPenetrate = false
+    ..maskColor = Colors.black.withOpacity(0.1)
+    ..alignment = Alignment.center;
+```
+
+- **Return to the event, close the pop- up window solution**
+
+There is basically a problem when using Overlay's dependency library. It is difficult to monitor the return event, which makes it difficult to close the pop- up window layout when the return event is violated. After thinking of many ways, there is no way to solve the problem in the dependency library. Here is one `BaseScaffold`, use `BaseScaffold` on each page to solve the problem of closing Dialog in return event
 
 ```dart
 typedef ScaffoldParamVoidCallback = void Function();
@@ -155,12 +173,13 @@ class BaseScaffold extends StatefulWidget {
         this.isTwiceBack = false,
         this.isCanBack = true,
         this.onBack,
-    })  : assert(primary != null),
+    }): assert(primary != null),
     assert(extendBody != null),
     assert(extendBodyBehindAppBar != null),
     assert(drawerDragStartBehavior != null),
     super(key: key);
 
+    ///Properties of System Scaffold
     final bool extendBody;
     final bool extendBodyBehindAppBar;
     final PreferredSizeWidget appBar;
@@ -183,10 +202,14 @@ class BaseScaffold extends StatefulWidget {
     final bool drawerEnableOpenDragGesture;
     final bool endDrawerEnableOpenDragGesture;
 
+    ///Added attributes
+    ///Click the back button to prompt whether to exit the page, click twice quickly to exit the page
     final bool isTwiceBack;
 
+    ///Is it possible to return
     final bool isCanBack;
 
+    ///Monitor return event
     final ScaffoldParamVoidCallback onBack;
 
     @override
@@ -194,7 +217,8 @@ class BaseScaffold extends StatefulWidget {
 }
 
 class _BaseScaffoldState extends State<BaseScaffold> {
-    DateTime _lastPressedAt; 
+    //Last click time
+    DateTime _lastPressedAt;
 
     @override
     Widget build(BuildContext context) {
@@ -226,25 +250,31 @@ class _BaseScaffoldState extends State<BaseScaffold> {
         );
     }
 
+    ///Control back button
     Future<bool> _dealWillPop() async {
         if (widget.onBack != null) {
             widget.onBack();
         }
 
+        //Handle popup issues
         if (SmartDialog.instance.config.isExist) {
             SmartDialog.dismiss();
             return false;
         }
 
+        //If you can't return, the logic behind will not go
         if (!widget.isCanBack) {
             return false;
         }
 
         if (widget.isTwiceBack) {
             if (_lastPressedAt == null ||
-                DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
+                DateTime.now().difference(_lastPressedAt)> Duration(seconds: 1)) {
+                //The time between two clicks exceeds 1 second
                 _lastPressedAt = DateTime.now();
-                SmartDialog.showToast("click again to exit");
+
+                //Pop up prompt
+                SmartDialog.showToast("Click again to exit");
                 return false;
             }
             return true;
