@@ -12,7 +12,7 @@ The Dialog that comes with the system actually pushes a new page, which has many
   - Loading pop-ups are usually encapsulated in the network framework, and it is a headache to pass more context parameters; it is good to use fish_redux, the effect layer can directly get the context, if you use bloc, you have to pass the context to bloc or cubit in the view layer . . .
 - **Cannot penetrate dark background, click on the page behind dialog**
   - This is a real headache. I have thought of a lot of ways, but failed to solve this problem on the built-in dialog.
-- **The loading pop-up window written by Dialog comes with the system. In the case of network requests and page jumps, there will be routing confusion **
+- **The loading pop-up window written by Dialog comes with the system. In the case of network requests and page jumps, there will be routing confusion**
   - Scenario review: The loading library is generally encapsulated in the network layer. After a page is submitted, the page needs to be jumped. The submission operation is completed and the page jumps. The loading is closed in an asynchronous callback (onError or onSuccess), and it will appear When the jump operation is performed, the pop-up window has not been closed, and will be closed after a short delay, because the pop page method is used, and the jumped page will be popped.
   - The above is a very common scenario. It is more difficult to predict when it comes to complex scenarios. There are also solutions: locate whether the top of the page stack is the Loading pop-up window, select Pop, and troublesome implementation
 
