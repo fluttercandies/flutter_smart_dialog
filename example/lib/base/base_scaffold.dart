@@ -18,7 +18,6 @@ class BaseScaffold extends StatefulWidget {
     this.bottomNavigationBar,
     this.bottomSheet,
     this.backgroundColor,
-    this.resizeToAvoidBottomPadding,
     this.resizeToAvoidBottomInset,
     this.primary = true,
     this.drawerDragStartBehavior = DragStartBehavior.start,
@@ -52,7 +51,6 @@ class BaseScaffold extends StatefulWidget {
   final Color backgroundColor;
   final Widget bottomNavigationBar;
   final Widget bottomSheet;
-  final bool resizeToAvoidBottomPadding;
   final bool resizeToAvoidBottomInset;
   final bool primary;
   final DragStartBehavior drawerDragStartBehavior;
@@ -92,7 +90,6 @@ class _BaseScaffoldState extends State<BaseScaffold> {
         bottomNavigationBar: widget.bottomNavigationBar,
         bottomSheet: widget.bottomSheet,
         backgroundColor: widget.backgroundColor,
-        resizeToAvoidBottomPadding: widget.resizeToAvoidBottomPadding,
         resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
         primary: widget.primary,
         drawerDragStartBehavior: widget.drawerDragStartBehavior,

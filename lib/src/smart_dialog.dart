@@ -115,6 +115,7 @@ class SmartDialog {
     bool isDefaultDismissType = true,
     Widget widget,
   }) async {
+
     SmartLogic.instance.showToast(
       time: time,
       isDefaultDismissType: isDefaultDismissType,
