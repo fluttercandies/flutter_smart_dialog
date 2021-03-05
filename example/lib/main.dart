@@ -84,7 +84,7 @@ class SmartDialogCubit extends Cubit<SmartDialogState> {
         SmartDialog.show(
           alignmentTemp: Alignment.bottomCenter,
           clickBgDismissTemp: true,
-          onDismiss: (){
+          onDismiss: () {
             print('==============test callback==============');
           },
           widget: _contentWidget(maxHeight: 400),
@@ -212,34 +212,29 @@ class FunctionItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _function();
-  }
-
-  ///功能主体
-  Widget _function() {
     return _buildBg(
-      child: Wrap(
-        spacing: 20,
-        runSpacing: 20,
-        children: items.map((e) {
-          return btnFunction(
-            onItem: onItem,
-            data: e,
-            constraints: constraints,
-          );
-        }).toList(),
-      ),
+      children: items.map((e) {
+        return btnFunction(
+          onItem: onItem,
+          data: e,
+          constraints: constraints,
+        );
+      }).toList(),
     );
   }
 
   ///整体背景
-  Widget _buildBg({child}) {
+  Widget _buildBg({List<Widget> children}) {
     return Container(
       padding: padding,
       child: SingleChildScrollView(
         child: Material(
           color: Colors.white,
-          child: child,
+          child: Wrap(
+            spacing: 20,
+            runSpacing: 20,
+            children: children,
+          ),
         ),
       ),
     );
