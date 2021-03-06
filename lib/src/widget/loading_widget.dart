@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 class LoadingWidget extends StatelessWidget {
   LoadingWidget({
-    Key key,
-    this.msg,
+    Key? key,
+    required this.msg,
     this.background = Colors.black,
   }) : super(key: key);
 
@@ -31,7 +31,7 @@ class LoadingWidget extends StatelessWidget {
     ]);
   }
 
-  Widget _buildBg({List<Widget> children}) {
+  Widget _buildBg({required List<Widget> children}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
       decoration: BoxDecoration(

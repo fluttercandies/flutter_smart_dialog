@@ -1,5 +1,10 @@
-# [1.3.x]
+# [2.0.0]
 
+- migrate null-safety
+- adapt flutter 2.0
+
+
+# [1.3.x]
 - Improve toast display
 - Improve toast customization function
 

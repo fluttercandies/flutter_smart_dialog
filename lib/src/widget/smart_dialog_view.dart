@@ -6,16 +6,16 @@ typedef SmartDialogVoidCallBack = void Function();
 
 class SmartDialogView extends StatefulWidget {
   SmartDialogView({
-    Key key,
-    @required this.child,
-    this.onBgTap,
-    this.alignment,
-    this.isPenetrate,
-    this.animationDuration,
-    this.isUseAnimation,
-    this.isLoading,
-    this.maskColor,
-    this.clickBgDismiss,
+    Key? key,
+    required this.child,
+    required this.onBgTap,
+    required this.alignment,
+    required this.isPenetrate,
+    required this.animationDuration,
+    required this.isUseAnimation,
+    required this.isLoading,
+    required this.maskColor,
+    required this.clickBgDismiss,
   }) : super(key: key);
 
   ///内容widget
@@ -52,12 +52,12 @@ class SmartDialogView extends StatefulWidget {
 
 class SmartDialogViewState extends State<SmartDialogView>
     with SingleTickerProviderStateMixin {
-  double _opacity;
+  late double _opacity;
 
-  AnimationController _controller;
+  late AnimationController _controller;
 
   //处理下内容widget动画放心
-  Offset _offset;
+  Offset? _offset;
 
   @override
   void initState() {
@@ -99,7 +99,7 @@ class SmartDialogViewState extends State<SmartDialogView>
       child: Listener(
         behavior: HitTestBehavior.translucent,
         onPointerUp: (event) async {
-          if (widget.onBgTap != null && widget.clickBgDismiss) {
+          if (widget.clickBgDismiss) {
             widget.onBgTap();
           }
         },
@@ -137,7 +137,7 @@ class SmartDialogViewState extends State<SmartDialogView>
           );
   }
 
-  Widget _buildBg({List<Widget> children}) {
+  Widget _buildBg({required List<Widget> children}) {
     return Container(
       child: Stack(
         children: children,
@@ -147,7 +147,7 @@ class SmartDialogViewState extends State<SmartDialogView>
 
   ///处理下内容widget动画方向
   void _dealContentAnimate() {
-    AlignmentGeometry alignment = widget.alignment;
+    AlignmentGeometry? alignment = widget.alignment;
     _offset = Offset(0, 0);
 
     if (alignment == Alignment.bottomCenter ||

@@ -9,25 +9,25 @@ import 'widget/toast_widget.dart';
 
 class SmartDialog {
   ///SmartDialog相关配置,使用Config管理
-  Config config;
+  late Config? config;
 
   ///该控件是全局覆盖在app页面上的控件,该库dialog便是基于此实现;
   ///用户也可以用此控件自定义相关操作
-  OverlayEntry overlayEntry;
+  OverlayEntry? overlayEntry;
 
   ///Toast之类应该是和Dialog之类区分开,且能独立存在,提供备用覆盖浮层
-  OverlayEntry overlayEntryExtra;
+  OverlayEntry? overlayEntryExtra;
 
   ///-------------------------私有类型，不对面提供修改----------------------
   ///提供全局单例
   /// 工厂模式
-  factory SmartDialog() => _getInstance();
+  factory SmartDialog() => _getInstance()!;
 
-  static SmartDialog _instance;
+  static SmartDialog? _instance;
 
-  static SmartDialog get instance => _getInstance();
+  static SmartDialog? get instance => _getInstance();
 
-  static SmartDialog _getInstance() {
+  static SmartDialog? _getInstance() {
     if (_instance == null) {
       _instance = SmartDialog._internal();
     }
@@ -36,9 +36,9 @@ class SmartDialog {
 
   SmartDialog._internal() {
     ///初始化一些参数
-    config = SmartLogic.instance.config;
-    overlayEntry = SmartLogic.instance.overlayEntry;
-    overlayEntryExtra = SmartLogic.instance.overlayEntryExtra;
+    config = SmartLogic.instance!.config;
+    overlayEntry = SmartLogic.instance!.overlayEntry;
+    overlayEntryExtra = SmartLogic.instance!.overlayEntryExtra;
   }
 
   ///使用自定义布局
@@ -48,30 +48,30 @@ class SmartDialog {
   ///
   /// 特殊属性-isUseExtraWidget：是否使用额外覆盖浮层,可与主浮层独立开（默认：false）
   static Future<void> show({
-    @required Widget widget,
-    AlignmentGeometry alignmentTemp,
-    bool isPenetrateTemp,
-    bool isUseAnimationTemp,
-    Duration animationDurationTemp,
-    bool isLoadingTemp,
-    Color maskColorTemp,
-    bool clickBgDismissTemp,
+    required Widget widget,
+    AlignmentGeometry? alignmentTemp,
+    bool? isPenetrateTemp,
+    bool? isUseAnimationTemp,
+    Duration? animationDurationTemp,
+    bool? isLoadingTemp,
+    Color? maskColorTemp,
+    bool? clickBgDismissTemp,
     bool isUseExtraWidget = false,
     //overlay弹窗消失回调
-    VoidCallback onDismiss,
+    VoidCallback? onDismiss,
     //额外overlay弹窗消失回调
-    VoidCallback onExtraDismiss,
+    VoidCallback? onExtraDismiss,
   }) {
-    return SmartLogic.instance.show(
+    return SmartLogic.instance!.show(
       widget: widget,
-      alignment: alignmentTemp ?? instance.config.alignment,
-      isPenetrate: isPenetrateTemp ?? instance.config.isPenetrate,
-      isUseAnimation: isUseAnimationTemp ?? instance.config.isUseAnimation,
+      alignment: alignmentTemp ?? instance!.config!.alignment,
+      isPenetrate: isPenetrateTemp ?? instance!.config!.isPenetrate,
+      isUseAnimation: isUseAnimationTemp ?? instance!.config!.isUseAnimation,
       animationDuration:
-          animationDurationTemp ?? instance.config.animationDuration,
-      isLoading: isLoadingTemp ?? instance.config.isLoading,
-      maskColor: maskColorTemp ?? instance.config.maskColor,
-      clickBgDismiss: clickBgDismissTemp ?? instance.config.clickBgDismiss,
+          animationDurationTemp ?? instance!.config!.animationDuration,
+      isLoading: isLoadingTemp ?? instance!.config!.isLoading,
+      maskColor: maskColorTemp ?? instance!.config!.maskColor,
+      clickBgDismiss: clickBgDismissTemp ?? instance!.config!.clickBgDismiss,
       isUseExtraWidget: isUseExtraWidget,
       onDismiss: onDismiss,
       onExtraDismiss: onExtraDismiss,
@@ -80,14 +80,14 @@ class SmartDialog {
 
   ///提供loading弹窗
   static Future<void> showLoading({
-    String msg = '加载中...',
+    String msg = 'loading...',
     Color background = Colors.black,
     bool clickBgDismissTemp = false,
     bool isLoadingTemp = true,
-    bool isPenetrateTemp,
-    bool isUseAnimationTemp,
-    Duration animationDurationTemp,
-    Color maskColorTemp,
+    bool? isPenetrateTemp,
+    bool? isUseAnimationTemp,
+    Duration? animationDurationTemp,
+    Color? maskColorTemp,
     bool isUseExtraWidget = false,
   }) {
     return show(
@@ -113,10 +113,10 @@ class SmartDialog {
     //默认消失类型,类似android的toast,toast一个一个展示
     //非默认消失类型,多次点击,后面toast会顶掉前者的toast显示
     bool isDefaultDismissType = true,
-    Widget widget,
+    Widget? widget,
   }) async {
 
-    SmartLogic.instance.showToast(
+    SmartLogic.instance!.showToast(
       time: time,
       isDefaultDismissType: isDefaultDismissType,
       widget: widget ?? ToastWidget(msg: msg, alignment: alignment),

@@ -3,8 +3,8 @@ import 'smart_dialog.dart';
 
 class FlutterSmartDialog extends StatelessWidget {
   FlutterSmartDialog({
-    Key key,
-    @required this.child,
+    Key? key,
+    required this.child,
   }) : super(key: key);
 
   final Widget child;
@@ -18,10 +18,10 @@ class FlutterSmartDialog extends StatelessWidget {
           OverlayEntry(builder: (BuildContext context) => child),
 
           //添加的控件,覆盖在主体布局上面
-          SmartDialog.instance.overlayEntry,
+          SmartDialog.instance!.overlayEntry!,
 
           //提供备用覆盖浮层
-          SmartDialog.instance.overlayEntryExtra,
+          SmartDialog.instance!.overlayEntryExtra!,
         ],
       ),
     );

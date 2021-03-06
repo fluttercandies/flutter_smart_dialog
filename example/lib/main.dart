@@ -1,6 +1,5 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 void main() {
@@ -20,54 +19,31 @@ class MyApp extends StatelessWidget {
 }
 
 class SmartDialogPage extends StatelessWidget {
+  final List<BtnInfo> items = [
+    BtnInfo(title: 'showToast', tag: 'showToast'),
+    BtnInfo(title: 'showLoading', tag: 'showLoading'),
+    BtnInfo(title: '底部Dialog', tag: 'bottomDialog'),
+    BtnInfo(title: '顶部Dialog', tag: 'topDialog'),
+    BtnInfo(title: '靠左Dialog', tag: 'leftDialog'),
+    BtnInfo(title: '靠右Dialog', tag: 'rightDialog'),
+    BtnInfo(title: '穿透Dialog', tag: 'penetrateDialog'),
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => SmartDialogCubit(),
-      child:
-          BlocBuilder<SmartDialogCubit, SmartDialogState>(builder: _buildBody),
-    );
-  }
-
-  Widget _buildBody(BuildContext context, SmartDialogState state) {
     return BaseScaffold(
       isTwiceBack: true,
       backgroundColor: Colors.white,
       appBar: AppBar(title: Text('SmartDialog')),
       body: FunctionItems(
-        items: state.items,
+        items: items,
         constraints: BoxConstraints(minWidth: 100, minHeight: 36),
         onItem: (String tag) {
-          BlocProvider.of<SmartDialogCubit>(context).showFun(context, tag);
+          showFun(context, tag);
         },
       ),
     );
   }
-}
-
-class SmartDialogState {
-  List<BtnInfo> items;
-
-  SmartDialogState init() {
-    return SmartDialogState()
-      ..items = [
-        BtnInfo(title: 'showToast', tag: 'showToast'),
-        BtnInfo(title: 'showLoading', tag: 'showLoading'),
-        BtnInfo(title: '底部Dialog', tag: 'bottomDialog'),
-        BtnInfo(title: '顶部Dialog', tag: 'topDialog'),
-        BtnInfo(title: '靠左Dialog', tag: 'leftDialog'),
-        BtnInfo(title: '靠右Dialog', tag: 'rightDialog'),
-        BtnInfo(title: '穿透Dialog', tag: 'penetrateDialog'),
-      ];
-  }
-
-  SmartDialogState clone() {
-    return SmartDialogState()..items = items;
-  }
-}
-
-class SmartDialogCubit extends Cubit<SmartDialogState> {
-  SmartDialogCubit() : super(SmartDialogState().init());
 
   ///测试功能模块
   void showFun(context, tag) async {
@@ -137,18 +113,16 @@ class SmartDialogCubit extends Cubit<SmartDialogState> {
       child: ListView.builder(
         itemCount: 30,
         itemBuilder: (BuildContext context, int index) {
-          return Column(
-            children: [
-              //内容
-              ListTile(
-                leading: Icon(Icons.bubble_chart),
-                title: Text('标题---------------$index'),
-              ),
+          return Column(children: [
+            //内容
+            ListTile(
+              leading: Icon(Icons.bubble_chart),
+              title: Text('标题---------------$index'),
+            ),
 
-              //分割线
-              Container(height: 1, color: Colors.black.withOpacity(0.1)),
-            ],
-          );
+            //分割线
+            Container(height: 1, color: Colors.black.withOpacity(0.1)),
+          ]);
         },
       ),
     );
@@ -160,8 +134,6 @@ class BtnInfo {
   BtnInfo({
     this.title,
     this.tag,
-    this.icon,
-    this.bg,
   });
 
   ///按钮名称
@@ -169,26 +141,10 @@ class BtnInfo {
 
   ///按钮标识
   String tag;
-
-  ///正常情况图标
-  Icon icon;
-
-  ///背景
-  String bg;
-
-  /// jsonDecode(jsonStr) 方法中会调用实体类的这个方法。如果实体类中没有这个方法，会报错。
-  Map toJson() {
-    Map map = Map();
-    map["title"] = this.title;
-    map["tag"] = this.tag;
-    map["icon"] = this.icon;
-    map["bg"] = this.bg;
-    return map;
-  }
 }
 
 ///回调一个参数
-typedef ParamSingleCallback<D> = void Function(D data);
+typedef ParamSingleCallback = void Function(String data);
 
 class FunctionItems extends StatelessWidget {
   FunctionItems({
@@ -202,7 +158,7 @@ class FunctionItems extends StatelessWidget {
   final List<BtnInfo> items;
 
   ///监听点击的按钮
-  final ParamSingleCallback<String> onItem;
+  final ParamSingleCallback onItem;
 
   ///约束布局
   final BoxConstraints constraints;
@@ -243,7 +199,7 @@ class FunctionItems extends StatelessWidget {
 
 ///功能性按钮
 Widget btnFunction({
-  ParamSingleCallback<String> onItem,
+  ParamSingleCallback onItem,
   data,
   BoxConstraints constraints,
 }) {

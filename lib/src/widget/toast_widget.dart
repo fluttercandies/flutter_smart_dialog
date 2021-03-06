@@ -3,8 +3,8 @@ import 'package:flutter/rendering.dart';
 
 class ToastWidget extends StatelessWidget {
   ToastWidget({
-    Key key,
-    @required this.msg,
+    Key? key,
+    required this.msg,
     this.alignment = Alignment.bottomCenter,
   }) : super(key: key);
 
