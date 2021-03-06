@@ -1,4 +1,4 @@
-# [2.0.0]
+# [2.0.x]
 
 - migrate null-safety
 - adapt flutter 2.0
