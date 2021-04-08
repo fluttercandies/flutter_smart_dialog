@@ -2,7 +2,7 @@
 
 语言: [English](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://juejin.cn/post/6902331428072390663)
 
-An elegant Flutter Dialog solution.:happy:
+An elegant Flutter Dialog solution.:white_check_mark:
 
 # Preface
 
