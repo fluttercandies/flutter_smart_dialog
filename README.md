@@ -53,11 +53,25 @@ void main() {
   runApp(MyApp());
 }
 
+///flutter 2.0
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SmartDialogPage(),
+      home: Container(),
+      builder: (BuildContext context, Widget? child) {
+        return FlutterSmartDialog(child: child);
+      },
+    );
+  }
+}
+
+///flutter 1.x
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Container(),
       builder: (BuildContext context, Widget child) {
         return FlutterSmartDialog(child: child);
       },
