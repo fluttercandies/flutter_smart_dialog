@@ -7,17 +7,17 @@ import 'config.dart';
 
 class SmartLogic {
   ///SmartLogic相关配置,使用Config管理
-  Config? config;
+  late Config config;
 
   ///该控件是全局覆盖在app页面上的控件,该库dialog便是基于此实现;
   ///用户也可以用此控件自定义相关操作
-  OverlayEntry? overlayEntry;
+  late OverlayEntry overlayEntry;
 
   ///Toast之类应该是和Dialog之类区分开,且能独立存在,提供备用覆盖浮层
-  OverlayEntry? overlayEntryExtra;
+  late OverlayEntry overlayEntryExtra;
 
   ///提供全局单例
-  static SmartLogic? get instance => _getInstance();
+  static SmartLogic get instance => _getInstance();
 
   ///-------------------------私有类型，不对面提供修改----------------------
   ///呈现的Widget
@@ -32,11 +32,11 @@ class SmartLogic {
   VoidCallback? _onExtraDismiss;
   List _toastList = [];
 
-  static SmartLogic? _getInstance() {
+  static SmartLogic _getInstance() {
     if (_instance == null) {
       _instance = SmartLogic._internal();
     }
-    return _instance;
+    return _instance!;
   }
 
   SmartLogic._internal() {
@@ -45,14 +45,14 @@ class SmartLogic {
     ///主体覆盖浮层
     overlayEntry = OverlayEntry(
       builder: (BuildContext context) {
-        return SmartLogic.instance!._widget ?? Container();
+        return SmartLogic.instance._widget ?? Container();
       },
     );
 
     ///备用覆盖浮层
     overlayEntryExtra = OverlayEntry(
       builder: (BuildContext context) {
-        return SmartLogic.instance!._widgetExtra ?? Container();
+        return SmartLogic.instance._widgetExtra ?? Container();
       },
     );
 
@@ -80,28 +80,28 @@ class SmartLogic {
     var globalKey = GlobalKey<SmartDialogViewState>();
     Widget smartDialogView = SmartDialogView(
       key: globalKey,
-      alignment: alignment ?? instance!.config!.alignment,
-      isPenetrate: isPenetrate ?? instance!.config!.isPenetrate,
-      isUseAnimation: isUseAnimation ?? instance!.config!.isUseAnimation,
+      alignment: alignment ?? instance.config.alignment,
+      isPenetrate: isPenetrate ?? instance.config.isPenetrate,
+      isUseAnimation: isUseAnimation ?? instance.config.isUseAnimation,
       animationDuration:
-          animationDuration ?? instance!.config!.animationDuration,
-      isLoading: isLoading ?? instance!.config!.isLoading,
-      maskColor: maskColor ?? instance!.config!.maskColor,
-      clickBgDismiss: clickBgDismiss ?? instance!.config!.clickBgDismiss,
+          animationDuration ?? instance.config.animationDuration,
+      isLoading: isLoading ?? instance.config.isLoading,
+      maskColor: maskColor ?? instance.config.maskColor,
+      clickBgDismiss: clickBgDismiss ?? instance.config.clickBgDismiss,
       child: widget,
       onBgTap: () => dismiss(closeType: !isUseExtraWidget ? 0 : 1),
     );
 
     if (!isUseExtraWidget) {
       _widget = smartDialogView;
-      config!.isExist = true;
+      config.isExist = true;
       _key = globalKey;
       _rebuild(buildType: 0);
       _completer = Completer();
       return _completer!.future;
     } else {
       _widgetExtra = smartDialogView;
-      config!.isExistExtra = true;
+      config.isExistExtra = true;
       _keyExtra = globalKey;
       _rebuild(buildType: 1);
       _completerExtra = Completer();
@@ -130,7 +130,7 @@ class SmartLogic {
 
     //通用逻辑
     _toastList.add(
-      instance!.show(
+      instance.show(
         widget: widget,
         isPenetrate: true,
         clickBgDismiss: false,
@@ -150,7 +150,7 @@ class SmartLogic {
   ///
   /// 如果不清楚使用,请查看showToast和showLoading
   static Future<void> dismiss({int closeType = 0}) async {
-    return instance!._dismiss(closeType: closeType);
+    return instance._dismiss(closeType: closeType);
   }
 
   Future<void> _dismiss({int closeType = 0}) async {
@@ -168,7 +168,7 @@ class SmartLogic {
 
   Future<void> _dismissBody() async {
     _widget = null;
-    config!.isExist = false;
+    config.isExist = false;
     if (_onDismiss != null) {
       _onDismiss!();
     }
@@ -183,7 +183,7 @@ class SmartLogic {
 
   Future<void> _dismissExtra() async {
     _widgetExtra = null;
-    config!.isExistExtra = false;
+    config.isExistExtra = false;
     if (_onExtraDismiss != null) {
       _onExtraDismiss!();
     }
@@ -200,12 +200,12 @@ class SmartLogic {
   /// buildType：刷新类型；0：仅刷新主体Overlay、1：仅刷新额外Overlay、2：俩者都刷新
   void _rebuild({int? buildType}) {
     if (buildType == 0) {
-      overlayEntry!.markNeedsBuild();
+      overlayEntry.markNeedsBuild();
     } else if (buildType == 1) {
-      overlayEntryExtra!.markNeedsBuild();
+      overlayEntryExtra.markNeedsBuild();
     } else if (buildType == 2) {
-      overlayEntry!.markNeedsBuild();
-      overlayEntryExtra!.markNeedsBuild();
+      overlayEntry.markNeedsBuild();
+      overlayEntryExtra.markNeedsBuild();
     }
   }
 }

@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: SmartDialogPage(),
-      builder: (BuildContext context, Widget child) {
+      builder: (BuildContext context, Widget? child) {
         return FlutterSmartDialog(child: child);
       },
     );
@@ -137,10 +137,10 @@ class BtnInfo {
   });
 
   ///按钮名称
-  String title;
+  String? title;
 
   ///按钮标识
-  String tag;
+  String? tag;
 }
 
 ///回调一个参数
@@ -148,8 +148,8 @@ typedef ParamSingleCallback = void Function(String data);
 
 class FunctionItems extends StatelessWidget {
   FunctionItems({
-    this.items,
-    this.onItem,
+    required this.items,
+    required this.onItem,
     this.constraints = const BoxConstraints(minWidth: 150, minHeight: 36.0),
     this.padding = const EdgeInsets.all(30),
   });
@@ -180,7 +180,7 @@ class FunctionItems extends StatelessWidget {
   }
 
   ///整体背景
-  Widget _buildBg({List<Widget> children}) {
+  Widget _buildBg({required List<Widget> children}) {
     return Container(
       padding: padding,
       child: SingleChildScrollView(
@@ -199,9 +199,9 @@ class FunctionItems extends StatelessWidget {
 
 ///功能性按钮
 Widget btnFunction({
-  ParamSingleCallback onItem,
+  required ParamSingleCallback onItem,
   data,
-  BoxConstraints constraints,
+  required BoxConstraints constraints,
 }) {
   return Container(
     padding: EdgeInsets.all(15),
@@ -232,7 +232,7 @@ typedef ScaffoldParamVoidCallback = void Function();
 
 class BaseScaffold extends StatefulWidget {
   const BaseScaffold({
-    Key key,
+    Key? key,
     this.appBar,
     this.body,
     this.floatingActionButton,
@@ -265,22 +265,22 @@ class BaseScaffold extends StatefulWidget {
   ///系统Scaffold的属性
   final bool extendBody;
   final bool extendBodyBehindAppBar;
-  final PreferredSizeWidget appBar;
-  final Widget body;
-  final Widget floatingActionButton;
-  final FloatingActionButtonLocation floatingActionButtonLocation;
-  final FloatingActionButtonAnimator floatingActionButtonAnimator;
-  final List<Widget> persistentFooterButtons;
-  final Widget drawer;
-  final Widget endDrawer;
-  final Color drawerScrimColor;
-  final Color backgroundColor;
-  final Widget bottomNavigationBar;
-  final Widget bottomSheet;
-  final bool resizeToAvoidBottomInset;
+  final PreferredSizeWidget? appBar;
+  final Widget? body;
+  final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final FloatingActionButtonAnimator? floatingActionButtonAnimator;
+  final List<Widget>? persistentFooterButtons;
+  final Widget? drawer;
+  final Widget? endDrawer;
+  final Color? drawerScrimColor;
+  final Color? backgroundColor;
+  final Widget? bottomNavigationBar;
+  final Widget? bottomSheet;
+  final bool? resizeToAvoidBottomInset;
   final bool primary;
   final DragStartBehavior drawerDragStartBehavior;
-  final double drawerEdgeDragWidth;
+  final double? drawerEdgeDragWidth;
   final bool drawerEnableOpenDragGesture;
   final bool endDrawerEnableOpenDragGesture;
 
@@ -292,14 +292,14 @@ class BaseScaffold extends StatefulWidget {
   final bool isCanBack;
 
   ///监听返回事件
-  final ScaffoldParamVoidCallback onBack;
+  final ScaffoldParamVoidCallback? onBack;
 
   @override
   _BaseScaffoldState createState() => _BaseScaffoldState();
 }
 
 class _BaseScaffoldState extends State<BaseScaffold> {
-  DateTime _lastPressedAt; //上次点击时间
+  DateTime? _lastPressedAt; //上次点击时间
 
   @override
   Widget build(BuildContext context) {
@@ -333,7 +333,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
   ///控件返回按钮
   Future<bool> dealWillPop() async {
     if (widget.onBack != null) {
-      widget.onBack();
+      widget.onBack!();
     }
 
     //处理弹窗问题
@@ -349,7 +349,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
 
     if (widget.isTwiceBack) {
       if (_lastPressedAt == null ||
-          DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
+          DateTime.now().difference(_lastPressedAt!) > Duration(seconds: 1)) {
         //两次点击间隔超过1秒则重新计时
         _lastPressedAt = DateTime.now();
 
