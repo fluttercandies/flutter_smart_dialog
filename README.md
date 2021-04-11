@@ -157,6 +157,142 @@ SmartDialog.instance.config
 
 There is basically a problem when using Overlay's dependency library. It is difficult to monitor the return event, which makes it difficult to close the pop-up window layout when the return event is violated. After thinking of many ways, there is no way to solve the problem in the dependency library. Here is one `BaseScaffold`, use `BaseScaffold` on each page to solve the problem of closing Dialog in return event
 
+- Flutter 2.0
+
+```dart
+typedef ScaffoldParamVoidCallback = void Function();
+
+class BaseScaffold extends StatefulWidget {
+  const BaseScaffold({
+    Key? key,
+    this.appBar,
+    this.body,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
+    this.floatingActionButtonAnimator,
+    this.persistentFooterButtons,
+    this.drawer,
+    this.endDrawer,
+    this.bottomNavigationBar,
+    this.bottomSheet,
+    this.backgroundColor,
+    this.resizeToAvoidBottomInset,
+    this.primary = true,
+    this.drawerDragStartBehavior = DragStartBehavior.start,
+    this.extendBody = false,
+    this.extendBodyBehindAppBar = false,
+    this.drawerScrimColor,
+    this.drawerEdgeDragWidth,
+    this.drawerEnableOpenDragGesture = true,
+    this.endDrawerEnableOpenDragGesture = true,
+    this.isTwiceBack = false,
+    this.isCanBack = true,
+    this.onBack,
+  })  : assert(primary != null),
+        assert(extendBody != null),
+        assert(extendBodyBehindAppBar != null),
+        assert(drawerDragStartBehavior != null),
+        super(key: key);
+
+  final bool extendBody;
+  final bool extendBodyBehindAppBar;
+  final PreferredSizeWidget? appBar;
+  final Widget? body;
+  final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final FloatingActionButtonAnimator? floatingActionButtonAnimator;
+  final List<Widget>? persistentFooterButtons;
+  final Widget? drawer;
+  final Widget? endDrawer;
+  final Color? drawerScrimColor;
+  final Color? backgroundColor;
+  final Widget? bottomNavigationBar;
+  final Widget? bottomSheet;
+  final bool? resizeToAvoidBottomInset;
+  final bool primary;
+  final DragStartBehavior drawerDragStartBehavior;
+  final double? drawerEdgeDragWidth;
+  final bool drawerEnableOpenDragGesture;
+  final bool endDrawerEnableOpenDragGesture;
+
+  ///增加的属性
+  ///点击返回按钮提示是否退出页面,快速点击俩次才会退出页面
+  final bool isTwiceBack;
+
+  ///是否可以返回
+  final bool isCanBack;
+
+  ///监听返回事件
+  final ScaffoldParamVoidCallback? onBack;
+
+  @override
+  _BaseScaffoldState createState() => _BaseScaffoldState();
+}
+
+class _BaseScaffoldState extends State<BaseScaffold> {
+  DateTime? _lastPressedAt;
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      child: Scaffold(
+        appBar: widget.appBar,
+        body: widget.body,
+        floatingActionButton: widget.floatingActionButton,
+        floatingActionButtonLocation: widget.floatingActionButtonLocation,
+        floatingActionButtonAnimator: widget.floatingActionButtonAnimator,
+        persistentFooterButtons: widget.persistentFooterButtons,
+        drawer: widget.drawer,
+        endDrawer: widget.endDrawer,
+        bottomNavigationBar: widget.bottomNavigationBar,
+        bottomSheet: widget.bottomSheet,
+        backgroundColor: widget.backgroundColor,
+        resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
+        primary: widget.primary,
+        drawerDragStartBehavior: widget.drawerDragStartBehavior,
+        extendBody: widget.extendBody,
+        extendBodyBehindAppBar: widget.extendBodyBehindAppBar,
+        drawerScrimColor: widget.drawerScrimColor,
+        drawerEdgeDragWidth: widget.drawerEdgeDragWidth,
+        drawerEnableOpenDragGesture: widget.drawerEnableOpenDragGesture,
+        endDrawerEnableOpenDragGesture: widget.endDrawerEnableOpenDragGesture,
+      ),
+      onWillPop: dealWillPop,
+    );
+  }
+
+  Future<bool> dealWillPop() async {
+    if (widget.onBack != null) {
+      widget.onBack!();
+    }
+
+    if (SmartDialog.instance.config.isExist) {
+      SmartDialog.dismiss();
+      return false;
+    }
+
+    if (!widget.isCanBack) {
+      return false;
+    }
+
+    if (widget.isTwiceBack) {
+      if (_lastPressedAt == null ||
+          DateTime.now().difference(_lastPressedAt!) > Duration(seconds: 1)) {
+        _lastPressedAt = DateTime.now();
+
+        SmartDialog.showToast("Click again to exit");
+        return false;
+      }
+      return true;
+    } else {
+      return true;
+    }
+  }
+}
+```
+
+- Flutter 1.x
+
 ```dart
 typedef ScaffoldParamVoidCallback = void Function();
 
@@ -192,7 +328,6 @@ class BaseScaffold extends StatefulWidget {
         assert(drawerDragStartBehavior != null),
         super(key: key);
 
-  ///系统Scaffold的属性
   final bool extendBody;
   final bool extendBodyBehindAppBar;
   final PreferredSizeWidget appBar;
@@ -229,7 +364,7 @@ class BaseScaffold extends StatefulWidget {
 }
 
 class _BaseScaffoldState extends State<BaseScaffold> {
-  DateTime _lastPressedAt; //上次点击时间
+  DateTime _lastPressedAt;
 
   @override
   Widget build(BuildContext context) {
@@ -260,19 +395,16 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     );
   }
 
-  ///控件返回按钮
   Future<bool> dealWillPop() async {
     if (widget.onBack != null) {
       widget.onBack();
     }
 
-    //处理弹窗问题
     if (SmartDialog.instance.config.isExist) {
       SmartDialog.dismiss();
       return false;
     }
 
-    //如果不能返回，后面的逻辑就不走了
     if (!widget.isCanBack) {
       return false;
     }
@@ -280,33 +412,15 @@ class _BaseScaffoldState extends State<BaseScaffold> {
     if (widget.isTwiceBack) {
       if (_lastPressedAt == null ||
           DateTime.now().difference(_lastPressedAt) > Duration(seconds: 1)) {
-        //两次点击间隔超过1秒则重新计时
         _lastPressedAt = DateTime.now();
 
-        //弹窗提示
-        SmartDialog.showToast("再点一次退出");
+        SmartDialog.showToast("Click again to exit");
         return false;
       }
       return true;
     } else {
       return true;
     }
-  }
-
-  ///一些周期生命周期
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void deactivate() {
-    super.deactivate();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 }
 ```

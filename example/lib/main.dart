@@ -362,20 +362,4 @@ class _BaseScaffoldState extends State<BaseScaffold> {
       return true;
     }
   }
-
-  ///一些周期生命周期
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void deactivate() {
-    super.deactivate();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }
