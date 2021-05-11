@@ -13,6 +13,7 @@ class FlutterSmartDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.transparent,
       child: Overlay(
         initialEntries: [
           //主体布局
