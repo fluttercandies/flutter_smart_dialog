@@ -4,6 +4,15 @@
 
 An elegant Flutter Dialog solution.
 
+## Introduction
+
+- **Pub**: [View flutter_smart_dialog plug-in version](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install)
+
+```dart
+dependencies:
+  flutter_smart_dialog: any
+```
+
 # Preface
 
 The Dialog that comes with the system actually pushes a new page, which has many benefits, but there are also some difficult problems to solve
@@ -32,15 +41,6 @@ Obviously, the use of Overlay is the most portable. At present, many toast and d
 - [Click me to experience it](https://cnad666.github.io/flutter_use/web/index.html#/smartDialog)
 
 ![smartDialog](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20201204145311.gif)
-
-## Introduction
-
-- **Pub**: [View flutter_smart_dialog plug-in version](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install)
-
-```dart
-dependencies:
-  flutter_smart_dialog: any
-```
 
 ## Use
 
