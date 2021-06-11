@@ -37,7 +37,7 @@ class ToastStrategy extends DialogAction {
       }
     }
 
-    //通用逻辑
+    //锚定toast数量
     _toastList.add(
       _action.show(
         widget: widget,
