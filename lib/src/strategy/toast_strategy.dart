@@ -46,7 +46,10 @@ class ToastStrategy extends DialogAction {
       ),
     );
     await Future.delayed(time);
-    await dismiss();
+    //防止多个dismiss同时生效，只需要最后一个dismiss生效即可
+    if (_toastList.length == 1) {
+      await dismiss();
+    }
     _toastList.removeLast();
   }
 
