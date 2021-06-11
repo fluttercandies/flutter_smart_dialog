@@ -39,9 +39,10 @@ class Config {
   ///仅仅针对中间位置的控件
   bool isLoading = true;
 
-  ///默认：false；主体SmartDialog（OverlayEntry）是否存在在界面上
+  ///默认：false；loading 是否存在在界面上
   bool isExist = false;
 
-  ///默认：false；额外SmartDialog（OverlayEntry）是否存在在界面上
-  bool isExistExtra = false;
+  ///默认：false；主体 / toast 单独存在情况
+  bool isExistMain = false;
+  bool isExistToast = false;
 }

@@ -1,29 +1,32 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/strategy/dialog_strategy.dart';
+import 'package:flutter_smart_dialog/src/strategy/toast_strategy.dart';
 import 'package:flutter_smart_dialog/src/widget/loading_widget.dart';
 
-import 'logic/config.dart';
-import 'logic/smart_logic.dart';
+import 'config/config.dart';
+import 'strategy/action.dart';
+import 'strategy/loading_strategy.dart';
 import 'widget/toast_widget.dart';
 
 class SmartDialog {
   ///SmartDialog相关配置,使用Config管理
   late Config config;
 
-  ///该控件是全局覆盖在app页面上的控件,该库dialog便是基于此实现;
-  ///用户也可以用此控件自定义相关操作
-  late OverlayEntry overlayEntry;
-
-  ///Toast之类应该是和Dialog之类区分开,且能独立存在,提供备用覆盖浮层
-  late OverlayEntry overlayEntryExtra;
+  late OverlayEntry entryMain;
+  late OverlayEntry entryToast;
+  late OverlayEntry entryLoading;
 
   ///-------------------------私有类型，不对面提供修改----------------------
   ///提供全局单例
-  /// 工厂模式
+  ///工厂模式
   factory SmartDialog() => _getInstance();
 
   static SmartDialog? _instance;
+  static late DialogAction _actionMain;
+  static late DialogAction _actionToast;
+  static late DialogAction _actionLoading;
 
   static SmartDialog get instance => _getInstance();
 
@@ -36,17 +39,37 @@ class SmartDialog {
 
   SmartDialog._internal() {
     ///初始化一些参数
-    config = SmartLogic.instance.config;
-    overlayEntry = SmartLogic.instance.overlayEntry;
-    overlayEntryExtra = SmartLogic.instance.overlayEntryExtra;
+    config = Config();
+
+    entryMain = OverlayEntry(
+      builder: (BuildContext context) {
+        return _actionMain.getWidget();
+      },
+    );
+    entryLoading = OverlayEntry(
+      builder: (BuildContext context) {
+        return _actionLoading.getWidget();
+      },
+    );
+    entryToast = OverlayEntry(
+      builder: (BuildContext context) {
+        return _actionToast.getWidget();
+      },
+    );
+
+
+    _actionMain = DialogStrategy(config: config, overlayEntry: entryMain);
+    _actionLoading = LoadingStrategy(
+      config: config,
+      overlayEntry: entryLoading,
+    );
+    _actionToast = ToastStrategy(config: config, overlayEntry: entryToast);
   }
 
   ///使用自定义布局
   ///
   /// 使用'Temp'为后缀的属性，在此处设置，并不会影响全局的属性，未设置‘Temp’为后缀的属性，
   /// 则默认使用Config设置的全局属性
-  ///
-  /// 特殊属性-isUseExtraWidget：是否使用额外覆盖浮层,可与主浮层独立开（默认：false）
   static Future<void> show({
     required Widget widget,
     AlignmentGeometry? alignmentTemp,
@@ -56,13 +79,10 @@ class SmartDialog {
     bool? isLoadingTemp,
     Color? maskColorTemp,
     bool? clickBgDismissTemp,
-    bool isUseExtraWidget = false,
     //overlay弹窗消失回调
     VoidCallback? onDismiss,
-    //额外overlay弹窗消失回调
-    VoidCallback? onExtraDismiss,
   }) {
-    return SmartLogic.instance.show(
+    return _actionMain.show(
       widget: widget,
       alignment: alignmentTemp ?? instance.config.alignment,
       isPenetrate: isPenetrateTemp ?? instance.config.isPenetrate,
@@ -72,9 +92,7 @@ class SmartDialog {
       isLoading: isLoadingTemp ?? instance.config.isLoading,
       maskColor: maskColorTemp ?? instance.config.maskColor,
       clickBgDismiss: clickBgDismissTemp ?? instance.config.clickBgDismiss,
-      isUseExtraWidget: isUseExtraWidget,
       onDismiss: onDismiss,
-      onExtraDismiss: onExtraDismiss,
     );
   }
 
@@ -88,20 +106,16 @@ class SmartDialog {
     bool? isUseAnimationTemp,
     Duration? animationDurationTemp,
     Color? maskColorTemp,
-    bool isUseExtraWidget = false,
+    Widget? widget,
   }) {
-    return show(
-      widget: LoadingWidget(
-        msg: msg,
-        background: background,
-      ),
-      clickBgDismissTemp: clickBgDismissTemp,
-      isLoadingTemp: isLoadingTemp,
+    return _actionLoading.showLoading(
+      widget: widget ?? LoadingWidget(msg: msg, background: background),
+      clickBgDismiss: clickBgDismissTemp,
+      isLoading: isLoadingTemp,
       maskColorTemp: maskColorTemp,
       isPenetrateTemp: isPenetrateTemp,
       isUseAnimationTemp: isUseAnimationTemp,
       animationDurationTemp: animationDurationTemp,
-      isUseExtraWidget: isUseExtraWidget,
     );
   }
 
@@ -115,8 +129,7 @@ class SmartDialog {
     bool isDefaultDismissType = true,
     Widget? widget,
   }) async {
-
-    SmartLogic.instance.showToast(
+    _actionToast.showToast(
       time: time,
       isDefaultDismissType: isDefaultDismissType,
       widget: widget ?? ToastWidget(msg: msg, alignment: alignment),
@@ -125,10 +138,27 @@ class SmartDialog {
 
   ///关闭Dialog
   ///
-  /// closeType：关闭类型；0：仅关闭主体OverlayEntry、1：仅关闭额外OverlayEntry、2：俩者都关闭
+  /// closeType：关闭类型
   ///
-  /// 如果不清楚使用,请查看showToast和showLoading
+  /// 0：关闭主体OverlayEntry和loading
+  /// 1：仅关闭主体OverlayEntry
+  /// 2：仅关闭Toast
+  /// 3：仅关闭loading
+  /// 4：都关闭
   static Future<void> dismiss({int closeType = 0}) async {
-    return SmartLogic.dismiss(closeType: closeType);
+    if (closeType == 0) {
+      _actionMain.dismiss();
+      _actionLoading.dismiss();
+    } else if (closeType == 1) {
+      _actionMain.dismiss();
+    } else if (closeType == 2) {
+      _actionToast.dismiss();
+    } else if (closeType == 3) {
+      _actionLoading.dismiss();
+    } else {
+      _actionMain.dismiss();
+      _actionToast.dismiss();
+      _actionLoading.dismiss();
+    }
   }
 }
