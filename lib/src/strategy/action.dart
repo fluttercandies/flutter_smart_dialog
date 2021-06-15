@@ -13,7 +13,9 @@ abstract class DialogAction {
     Color? maskColor,
     bool? clickBgDismiss,
     VoidCallback? onDismiss,
-  }) async {}
+  }) async {
+    throw 'not implement show(...)';
+  }
 
   ///loading
   Future<void> showLoading({
@@ -24,7 +26,9 @@ abstract class DialogAction {
     bool? isUseAnimationTemp,
     Duration? animationDurationTemp,
     Color? maskColorTemp,
-  }) async {}
+  }) async {
+    throw 'not implement showLoading(...)';
+  }
 
   ///toast
   Future<void> showToast({
@@ -34,7 +38,9 @@ abstract class DialogAction {
     //true：类似android的toast，toast一个一个展示
     //false：多次点击,后面toast会顶掉前者的toast显示
     bool isDefaultDismissType = true,
-  }) async {}
+  }) async {
+    throw 'not implement showToast(...)';
+  }
 
   ///close dialog : must implement
   Future<void> dismiss();

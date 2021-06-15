@@ -24,9 +24,9 @@ class SmartDialog {
   factory SmartDialog() => _getInstance();
 
   static SmartDialog? _instance;
-  static late DialogAction _actionMain;
-  static late DialogAction _actionToast;
-  static late DialogAction _actionLoading;
+  static late DialogAction _mainAction;
+  static late DialogAction _toastAction;
+  static late DialogAction _loadingAction;
 
   static SmartDialog get instance => _getInstance();
 
@@ -43,27 +43,26 @@ class SmartDialog {
 
     entryMain = OverlayEntry(
       builder: (BuildContext context) {
-        return _actionMain.getWidget();
+        return _mainAction.getWidget();
       },
     );
     entryLoading = OverlayEntry(
       builder: (BuildContext context) {
-        return _actionLoading.getWidget();
+        return _loadingAction.getWidget();
       },
     );
     entryToast = OverlayEntry(
       builder: (BuildContext context) {
-        return _actionToast.getWidget();
+        return _toastAction.getWidget();
       },
     );
 
-
-    _actionMain = DialogStrategy(config: config, overlayEntry: entryMain);
-    _actionLoading = LoadingStrategy(
+    _mainAction = DialogStrategy(config: config, overlayEntry: entryMain);
+    _loadingAction = LoadingStrategy(
       config: config,
       overlayEntry: entryLoading,
     );
-    _actionToast = ToastStrategy(config: config, overlayEntry: entryToast);
+    _toastAction = ToastStrategy(config: config, overlayEntry: entryToast);
   }
 
   ///使用自定义布局
@@ -82,7 +81,7 @@ class SmartDialog {
     //overlay弹窗消失回调
     VoidCallback? onDismiss,
   }) {
-    return _actionMain.show(
+    return _mainAction.show(
       widget: widget,
       alignment: alignmentTemp ?? instance.config.alignment,
       isPenetrate: isPenetrateTemp ?? instance.config.isPenetrate,
@@ -108,7 +107,7 @@ class SmartDialog {
     Color? maskColorTemp,
     Widget? widget,
   }) {
-    return _actionLoading.showLoading(
+    return _loadingAction.showLoading(
       widget: widget ?? LoadingWidget(msg: msg, background: background),
       clickBgDismiss: clickBgDismissTemp,
       isLoading: isLoadingTemp,
@@ -129,7 +128,7 @@ class SmartDialog {
     bool isDefaultDismissType = true,
     Widget? widget,
   }) async {
-    _actionToast.showToast(
+    _toastAction.showToast(
       time: time,
       isDefaultDismissType: isDefaultDismissType,
       widget: widget ?? ToastWidget(msg: msg, alignment: alignment),
@@ -147,18 +146,18 @@ class SmartDialog {
   /// 4：都关闭
   static Future<void> dismiss({int closeType = 0}) async {
     if (closeType == 0) {
-      _actionMain.dismiss();
-      _actionLoading.dismiss();
+      _mainAction.dismiss();
+      _loadingAction.dismiss();
     } else if (closeType == 1) {
-      _actionMain.dismiss();
+      _mainAction.dismiss();
     } else if (closeType == 2) {
-      _actionToast.dismiss();
+      _toastAction.dismiss();
     } else if (closeType == 3) {
-      _actionLoading.dismiss();
+      _loadingAction.dismiss();
     } else {
-      _actionMain.dismiss();
-      _actionToast.dismiss();
-      _actionLoading.dismiss();
+      _mainAction.dismiss();
+      _toastAction.dismiss();
+      _loadingAction.dismiss();
     }
   }
 }
