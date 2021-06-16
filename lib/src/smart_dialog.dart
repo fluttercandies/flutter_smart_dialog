@@ -19,23 +19,14 @@ class SmartDialog {
   late OverlayEntry entryLoading;
 
   ///-------------------------私有类型，不对面提供修改----------------------
-  ///提供全局单例
-  ///工厂模式
-  factory SmartDialog() => _getInstance();
-
-  static SmartDialog? _instance;
   static late DialogAction _mainAction;
   static late DialogAction _toastAction;
   static late DialogAction _loadingAction;
+  static SmartDialog? _instance;
 
-  static SmartDialog get instance => _getInstance();
+  factory SmartDialog() => instance;
 
-  static SmartDialog _getInstance() {
-    if (_instance == null) {
-      _instance = SmartDialog._internal();
-    }
-    return _instance!;
-  }
+  static SmartDialog get instance => _instance ??= SmartDialog._internal();
 
   SmartDialog._internal() {
     ///初始化一些参数
