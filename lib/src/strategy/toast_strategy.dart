@@ -20,7 +20,7 @@ class ToastStrategy extends DialogAction {
 
   @override
   Future<void> showToast({
-    Duration time = const Duration(milliseconds: 1500),
+    Duration time = const Duration(milliseconds: 2000),
     alignment: Alignment.bottomCenter,
     required Widget widget,
     bool isDefaultDismissType = true,

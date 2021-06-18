@@ -1,5 +1,6 @@
 # [2.1.x]
 - reconstruction of the underlying logic
+- adjust toast default duration
 
 # [2.0.x]
 

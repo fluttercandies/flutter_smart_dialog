@@ -33,7 +33,7 @@ abstract class DialogAction {
   ///toast
   Future<void> showToast({
     required Widget widget,
-    Duration time = const Duration(milliseconds: 1500),
+    Duration time = const Duration(milliseconds: 2000),
     alignment: Alignment.bottomCenter,
     //true：类似android的toast，toast一个一个展示
     //false：多次点击,后面toast会顶掉前者的toast显示
