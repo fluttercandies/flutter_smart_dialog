@@ -29,6 +29,7 @@ class LoadingStrategy extends DialogAction {
     bool? isUseAnimationTemp,
     Duration? animationDurationTemp,
     Color? maskColorTemp,
+    Widget? maskWidgetTemp,
   }) async {
     config.isExist = true;
     return _action.show(
@@ -36,6 +37,7 @@ class LoadingStrategy extends DialogAction {
       clickBgDismiss: clickBgDismiss,
       isLoading: isLoading,
       maskColor: maskColorTemp,
+      maskWidget: maskWidgetTemp,
       isPenetrate: isPenetrateTemp,
       isUseAnimation: isUseAnimationTemp,
       animationDuration: animationDurationTemp,

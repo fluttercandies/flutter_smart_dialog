@@ -32,6 +32,7 @@ class DialogStrategy extends DialogAction {
     Duration? animationDuration,
     bool? isLoading,
     Color? maskColor,
+    Widget? maskWidget,
     bool? clickBgDismiss,
     VoidCallback? onDismiss,
   }) async {
@@ -46,6 +47,7 @@ class DialogStrategy extends DialogAction {
       animationDuration: animationDuration ?? config.animationDuration,
       isLoading: isLoading ?? config.isLoading,
       maskColor: maskColor ?? config.maskColor,
+      maskWidget: maskWidget ?? config.maskWidget,
       clickBgDismiss: clickBgDismiss ?? config.clickBgDismiss,
       child: widget,
       onBgTap: () => dismiss(),

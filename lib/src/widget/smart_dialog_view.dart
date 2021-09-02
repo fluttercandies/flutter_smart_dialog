@@ -16,6 +16,7 @@ class SmartDialogView extends StatefulWidget {
     required this.isLoading,
     required this.maskColor,
     required this.clickBgDismiss,
+    this.maskWidget,
   }) : super(key: key);
 
   ///内容widget
@@ -42,6 +43,9 @@ class SmartDialogView extends StatefulWidget {
 
   ///遮罩颜色
   final Color maskColor;
+
+  ///自定义遮罩Widget
+  final Widget? maskWidget;
 
   ///点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
   final bool clickBgDismiss;
@@ -79,33 +83,35 @@ class SmartDialogViewState extends State<SmartDialogView>
 
   @override
   Widget build(BuildContext context) {
-    return _buildBg(children: [
+    return Stack(children: [
       //暗色背景widget动画
-      _buildBgAnimation(),
+      _buildBgAnimation(
+        onPointerUp: widget.clickBgDismiss ? widget.onBgTap : null,
+        child: (widget.maskWidget != null && !widget.isPenetrate)
+            ? widget.maskWidget
+            : Container(color: widget.isPenetrate ? null : widget.maskColor),
+      ),
 
       //内容Widget动画
-      Align(
+      Container(
         alignment: widget.alignment,
         child: widget.isUseAnimation ? _buildBodyAnimation() : widget.child,
       ),
     ]);
   }
 
-  AnimatedOpacity _buildBgAnimation() {
+  AnimatedOpacity _buildBgAnimation({
+    required void Function()? onPointerUp,
+    required Widget? child,
+  }) {
     return AnimatedOpacity(
       duration: widget.animationDuration,
       curve: Curves.linear,
       opacity: _opacity,
       child: Listener(
         behavior: HitTestBehavior.translucent,
-        onPointerUp: (event) async {
-          if (widget.clickBgDismiss) {
-            widget.onBgTap();
-          }
-        },
-        child: Container(
-          color: widget.isPenetrate ? null : widget.maskColor,
-        ),
+        onPointerUp: (event) => onPointerUp?.call(),
+        child: child,
       ),
     );
   }
@@ -135,14 +141,6 @@ class SmartDialogViewState extends State<SmartDialogView>
             ).animate(_controller),
             child: widget.child,
           );
-  }
-
-  Widget _buildBg({required List<Widget> children}) {
-    return Container(
-      child: Stack(
-        children: children,
-      ),
-    );
   }
 
   ///处理下内容widget动画方向

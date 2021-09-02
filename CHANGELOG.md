@@ -1,6 +1,7 @@
 # [2.1.x]
 - reconstruction of the underlying logic
 - adjust toast default duration
+- add maskWidget param
 
 # [2.0.x]
 

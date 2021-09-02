@@ -81,9 +81,20 @@ class SmartDialogPage extends StatelessWidget {
         );
         break;
       case 'rightDialog':
+        var mask = Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+              Colors.lightGreenAccent.withOpacity(0.4),
+              Colors.deepOrange.withOpacity(0.4),
+            ]),
+          ),
+        );
+
         SmartDialog.show(
           alignmentTemp: Alignment.centerRight,
           clickBgDismissTemp: true,
+          maskWidgetTemp: mask,
+          animationDurationTemp: Duration(milliseconds: 500),
           widget: _contentWidget(maxWidth: 260),
         );
         break;
@@ -186,11 +197,7 @@ class FunctionItems extends StatelessWidget {
       child: SingleChildScrollView(
         child: Material(
           color: Colors.white,
-          child: Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            children: children,
-          ),
+          child: Wrap(spacing: 20, runSpacing: 20, children: children),
         ),
       ),
     );

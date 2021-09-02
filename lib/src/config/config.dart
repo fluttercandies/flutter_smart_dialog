@@ -27,7 +27,12 @@ class Config {
   bool clickBgDismiss = true;
 
   ///遮罩颜色
+  ///isPenetrate设置为true，该参数失效
   Color maskColor = Colors.black.withOpacity(0.3);
+
+  ///遮罩Widget，可高度自定义你自己的遮罩背景
+  ///isPenetrate设置为true，该参数失效
+  Widget? maskWidget;
 
   ///动画时间
   Duration animationDuration = Duration(milliseconds: 260);

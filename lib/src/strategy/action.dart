@@ -11,6 +11,7 @@ abstract class DialogAction {
     Duration? animationDuration,
     bool? isLoading,
     Color? maskColor,
+    Widget? maskWidget,
     bool? clickBgDismiss,
     VoidCallback? onDismiss,
   }) async {
@@ -26,6 +27,7 @@ abstract class DialogAction {
     bool? isUseAnimationTemp,
     Duration? animationDurationTemp,
     Color? maskColorTemp,
+    Widget? maskWidgetTemp,
   }) async {
     throw 'not implement showLoading(...)';
   }

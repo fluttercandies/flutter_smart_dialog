@@ -68,6 +68,7 @@ class SmartDialog {
     Duration? animationDurationTemp,
     bool? isLoadingTemp,
     Color? maskColorTemp,
+    Widget? maskWidgetTemp,
     bool? clickBgDismissTemp,
     //overlay弹窗消失回调
     VoidCallback? onDismiss,
@@ -81,6 +82,7 @@ class SmartDialog {
           animationDurationTemp ?? instance.config.animationDuration,
       isLoading: isLoadingTemp ?? instance.config.isLoading,
       maskColor: maskColorTemp ?? instance.config.maskColor,
+      maskWidget: maskWidgetTemp ?? instance.config.maskWidget,
       clickBgDismiss: clickBgDismissTemp ?? instance.config.clickBgDismiss,
       onDismiss: onDismiss,
     );
@@ -96,6 +98,7 @@ class SmartDialog {
     bool? isUseAnimationTemp,
     Duration? animationDurationTemp,
     Color? maskColorTemp,
+    Widget? maskWidgetTemp,
     Widget? widget,
   }) {
     return _loadingAction.showLoading(
@@ -103,6 +106,7 @@ class SmartDialog {
       clickBgDismiss: clickBgDismissTemp,
       isLoading: isLoadingTemp,
       maskColorTemp: maskColorTemp,
+      maskWidgetTemp: maskWidgetTemp,
       isPenetrateTemp: isPenetrateTemp,
       isUseAnimationTemp: isUseAnimationTemp,
       animationDurationTemp: animationDurationTemp,
