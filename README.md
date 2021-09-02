@@ -133,6 +133,7 @@ SmartDialog.show(
 | isPenetrate | Default: false; whether to penetrate the background of the mask, control after interactive mask, true: click to penetrate the background, false: not penetrate; set the penetration mask to true, the background mask will automatically become transparent (Required) |
 | clickBgDismiss | Default: true; click the mask, whether to close the dialog---true: click the mask to close the dialog, false: not close |
 | maskColor | Mask color |
+| maskWidget | Customize Mask |
 | animationDuration | Animation time |
 | isUseAnimation | Default: true; whether to use animation |
 | isLoading | Default: true; whether to use Loading animation; true: use fade animation for content body false: use zoom animation for content body, only for the middle position control |
