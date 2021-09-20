@@ -141,18 +141,18 @@ class SmartDialog {
   /// 4：都关闭
   static Future<void> dismiss({int closeType = 0}) async {
     if (closeType == 0) {
-      _mainAction.dismiss();
-      _loadingAction.dismiss();
+      await _mainAction.dismiss();
+      await _loadingAction.dismiss();
     } else if (closeType == 1) {
-      _mainAction.dismiss();
+      await _mainAction.dismiss();
     } else if (closeType == 2) {
-      _toastAction.dismiss();
+      await _toastAction.dismiss();
     } else if (closeType == 3) {
-      _loadingAction.dismiss();
+      await _loadingAction.dismiss();
     } else {
-      _mainAction.dismiss();
-      _toastAction.dismiss();
-      _loadingAction.dismiss();
+      await _mainAction.dismiss();
+      await _toastAction.dismiss();
+      await _loadingAction.dismiss();
     }
   }
 }

@@ -263,11 +263,7 @@ class BaseScaffold extends StatefulWidget {
     this.isTwiceBack = false,
     this.isCanBack = true,
     this.onBack,
-  })  : assert(primary != null),
-        assert(extendBody != null),
-        assert(extendBodyBehindAppBar != null),
-        assert(drawerDragStartBehavior != null),
-        super(key: key);
+  })  : super(key: key);
 
   ///系统Scaffold的属性
   final bool extendBody;

@@ -55,6 +55,7 @@ class DialogStrategy extends DialogAction {
     overlayEntry.markNeedsBuild();
 
     config.isExistMain = true;
+    config.isExist = true;
     _key = globalKey;
     _completer = Completer();
     return _completer!.future;
@@ -65,6 +66,9 @@ class DialogStrategy extends DialogAction {
     _widget = Container();
     _onDismiss?.call();
     config.isExistMain = false;
+    if (!config.isExistLoading) {
+      config.isExist = false;
+    }
 
     var state = _key?.currentState;
     if (!(_completer?.isCompleted ?? true)) {

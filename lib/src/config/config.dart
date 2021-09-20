@@ -44,10 +44,13 @@ class Config {
   ///仅仅针对中间位置的控件
   bool isLoading = true;
 
-  ///默认：false；loading 是否存在在界面上
+  ///默认：false
+  ///loading和自定义弹窗 是否存在在界面上
   bool isExist = false;
 
-  ///默认：false；主体 / toast 单独存在情况
+  ///默认：false
+  ///主体 / toast / loading 单独存在情况
   bool isExistMain = false;
+  bool isExistLoading = false;
   bool isExistToast = false;
 }

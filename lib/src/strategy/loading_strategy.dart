@@ -32,6 +32,7 @@ class LoadingStrategy extends DialogAction {
     Widget? maskWidgetTemp,
   }) async {
     config.isExist = true;
+    config.isExistLoading = true;
     return _action.show(
       widget: widget,
       clickBgDismiss: clickBgDismiss,
@@ -47,7 +48,10 @@ class LoadingStrategy extends DialogAction {
   @override
   Future<void> dismiss() async {
     await _action.dismiss();
-    config.isExist = false;
+    config.isExistLoading = false;
+    if (!config.isExistMain) {
+      config.isExist = false;
+    }
   }
 
   @override
