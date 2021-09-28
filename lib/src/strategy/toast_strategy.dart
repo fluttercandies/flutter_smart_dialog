@@ -48,6 +48,7 @@ class ToastStrategy extends DialogAction {
   @override
   Future<void> dismiss() async {
     await mainAction.dismiss();
+
     config.isExistToast = false;
   }
 }

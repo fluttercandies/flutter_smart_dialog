@@ -39,6 +39,7 @@ class LoadingStrategy extends DialogAction {
   @override
   Future<void> dismiss() async {
     await mainAction.dismiss();
+
     config.isExistLoading = false;
     if (!config.isExistMain) {
       config.isExist = false;

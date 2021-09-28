@@ -24,8 +24,8 @@ class DialogStrategy extends DialogAction {
     bool? clickBgDismiss,
     VoidCallback? onDismiss,
   }) async {
-    config.isExistMain = true;
     config.isExist = true;
+    config.isExistMain = true;
 
     return mainAction.show(
       widget: widget,
