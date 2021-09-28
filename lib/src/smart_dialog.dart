@@ -113,13 +113,15 @@ class SmartDialog {
     );
   }
 
-  ///提供toast示例
+  /// 提供toast示例
+  ///
+  /// isDefaultDismissType  true：toast一个个显示  false：后面toast会顶掉前面toast
+  ///
+  /// alignment：控制toast出现的位置
   static Future<void> showToast(
     String msg, {
     Duration time = const Duration(milliseconds: 2000),
     alignment: Alignment.bottomCenter,
-    //默认消失类型,类似android的toast,toast一个一个展示
-    //非默认消失类型,多次点击,后面toast会顶掉前者的toast显示
     bool isDefaultDismissType = true,
     Widget? widget,
   }) async {

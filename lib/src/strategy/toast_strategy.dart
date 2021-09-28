@@ -1,22 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/config/config.dart';
 import 'package:flutter_smart_dialog/src/strategy/action.dart';
-import 'package:flutter_smart_dialog/src/strategy/dialog_strategy.dart';
 
 class ToastStrategy extends DialogAction {
   ToastStrategy({
-    required this.config,
-    required this.overlayEntry,
-  }) : _action = DialogStrategy(config: config, overlayEntry: overlayEntry);
-
-  ///OverlayEntry instance
-  final OverlayEntry overlayEntry;
-
-  ///config info
-  final Config config;
+    required Config config,
+    required OverlayEntry overlayEntry,
+  }) : super(config: config, overlayEntry: overlayEntry);
 
   List _toastList = [];
-  late DialogAction _action;
 
   @override
   Future<void> showToast({
@@ -39,7 +31,7 @@ class ToastStrategy extends DialogAction {
 
     //锚定toast数量
     _toastList.add(
-      _action.show(
+      mainAction.show(
         widget: widget,
         isPenetrate: true,
         clickBgDismiss: false,
@@ -55,12 +47,7 @@ class ToastStrategy extends DialogAction {
 
   @override
   Future<void> dismiss() async {
-    await _action.dismiss();
+    await mainAction.dismiss();
     config.isExistToast = false;
-  }
-
-  @override
-  Widget getWidget() {
-    return _action.getWidget();
   }
 }

@@ -1,3 +1,6 @@
+# [2.3.x]
+- optimize function
+
 # [2.1.x]
 - reconstruction of the underlying logic
 - adjust toast default duration

@@ -4,21 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/config/config.dart';
 import 'package:flutter_smart_dialog/src/strategy/action.dart';
 
-import 'dialog_strategy.dart';
-
 class LoadingStrategy extends DialogAction {
   LoadingStrategy({
-    required this.config,
-    required this.overlayEntry,
-  }) : _action = DialogStrategy(config: config, overlayEntry: overlayEntry);
-
-  ///OverlayEntry instance
-  final OverlayEntry overlayEntry;
-
-  ///config info
-  final Config config;
-
-  late DialogAction _action;
+    required Config config,
+    required OverlayEntry overlayEntry,
+  }) : super(config: config, overlayEntry: overlayEntry);
 
   @override
   Future<void> showLoading({
@@ -33,7 +23,8 @@ class LoadingStrategy extends DialogAction {
   }) async {
     config.isExist = true;
     config.isExistLoading = true;
-    return _action.show(
+
+    return mainAction.show(
       widget: widget,
       clickBgDismiss: clickBgDismiss,
       isLoading: isLoading,
@@ -47,15 +38,10 @@ class LoadingStrategy extends DialogAction {
 
   @override
   Future<void> dismiss() async {
-    await _action.dismiss();
+    await mainAction.dismiss();
     config.isExistLoading = false;
     if (!config.isExistMain) {
       config.isExist = false;
     }
-  }
-
-  @override
-  Widget getWidget() {
-    return _action.getWidget();
   }
 }

@@ -1,8 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/config/config.dart';
+
+import 'main_strategy.dart';
 
 ///抽象dialog行为
 abstract class DialogAction {
-  ///自定义dialog
+  DialogAction({
+    required this.config,
+    required this.overlayEntry,
+  }) : mainAction = MainStrategy(config: config, overlayEntry: overlayEntry);
+
+  ///OverlayEntry instance
+  final OverlayEntry overlayEntry;
+
+  ///config info
+  final Config config;
+
+  final MainStrategy mainAction;
+
+  /// custom dialog
   Future<void> show({
     required Widget widget,
     AlignmentGeometry? alignment,
@@ -18,7 +34,7 @@ abstract class DialogAction {
     throw 'not implement show(...)';
   }
 
-  ///loading
+  /// loading
   Future<void> showLoading({
     required Widget widget,
     bool clickBgDismiss = false,
@@ -32,13 +48,11 @@ abstract class DialogAction {
     throw 'not implement showLoading(...)';
   }
 
-  ///toast
+  /// toast
   Future<void> showToast({
     required Widget widget,
     Duration time = const Duration(milliseconds: 2000),
     alignment: Alignment.bottomCenter,
-    //true：类似android的toast，toast一个一个展示
-    //false：多次点击,后面toast会顶掉前者的toast显示
     bool isDefaultDismissType = true,
   }) async {
     throw 'not implement showToast(...)';
@@ -48,5 +62,5 @@ abstract class DialogAction {
   Future<void> dismiss();
 
   /// get Widget : must implement
-  Widget getWidget();
+  Widget getWidget() => mainAction.getWidget();
 }
