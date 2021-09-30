@@ -189,11 +189,7 @@ class BaseScaffold extends StatefulWidget {
     this.isTwiceBack = false,
     this.isCanBack = true,
     this.onBack,
-  })  : assert(primary != null),
-        assert(extendBody != null),
-        assert(extendBodyBehindAppBar != null),
-        assert(drawerDragStartBehavior != null),
-        super(key: key);
+  }) : super(key: key);
 
   final bool extendBody;
   final bool extendBodyBehindAppBar;
@@ -216,14 +212,9 @@ class BaseScaffold extends StatefulWidget {
   final bool drawerEnableOpenDragGesture;
   final bool endDrawerEnableOpenDragGesture;
 
-  ///增加的属性
-  ///点击返回按钮提示是否退出页面,快速点击俩次才会退出页面
+  //custom param
   final bool isTwiceBack;
-
-  ///是否可以返回
   final bool isCanBack;
-
-  ///监听返回事件
   final ScaffoldParamVoidCallback? onBack;
 
   @override
@@ -231,7 +222,7 @@ class BaseScaffold extends StatefulWidget {
 }
 
 class _BaseScaffoldState extends State<BaseScaffold> {
-  DateTime? _lastPressedAt;
+  DateTime? _lastTime;
 
   @override
   Widget build(BuildContext context) {
@@ -258,14 +249,12 @@ class _BaseScaffoldState extends State<BaseScaffold> {
         drawerEnableOpenDragGesture: widget.drawerEnableOpenDragGesture,
         endDrawerEnableOpenDragGesture: widget.endDrawerEnableOpenDragGesture,
       ),
-      onWillPop: dealWillPop,
+      onWillPop: _dealWillPop,
     );
   }
 
-  Future<bool> dealWillPop() async {
-    if (widget.onBack != null) {
-      widget.onBack!();
-    }
+  Future<bool> _dealWillPop() async {
+    widget.onBack?.call();
 
     if (SmartDialog.instance.config.isExist) {
       SmartDialog.dismiss();
@@ -276,18 +265,15 @@ class _BaseScaffoldState extends State<BaseScaffold> {
       return false;
     }
 
-    if (widget.isTwiceBack) {
-      if (_lastPressedAt == null ||
-          DateTime.now().difference(_lastPressedAt!) > Duration(seconds: 1)) {
-        _lastPressedAt = DateTime.now();
-
-        SmartDialog.showToast("Click again to exit");
-        return false;
-      }
-      return true;
-    } else {
-      return true;
+    var now = DateTime.now();
+    var condition =
+        _lastTime == null || now.difference(_lastTime!) > Duration(seconds: 1);
+    if (widget.isTwiceBack && condition) {
+      _lastTime = now;
+      SmartDialog.showToast("再点一次退出");
+      return false;
     }
+    return true;
   }
 }
 ```
@@ -350,14 +336,10 @@ class BaseScaffold extends StatefulWidget {
   final bool drawerEnableOpenDragGesture;
   final bool endDrawerEnableOpenDragGesture;
 
-  ///增加的属性
-  ///点击返回按钮提示是否退出页面,快速点击俩次才会退出页面
   final bool isTwiceBack;
 
-  ///是否可以返回
   final bool isCanBack;
 
-  ///监听返回事件
   final ScaffoldParamVoidCallback onBack;
 
   @override

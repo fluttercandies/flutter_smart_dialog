@@ -214,22 +214,13 @@ Widget btnFunction({
     padding: EdgeInsets.all(15),
     child: RawMaterialButton(
       fillColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       constraints: constraints,
       elevation: 5,
-      onPressed: () {
-        onItem(data.tag);
-      },
+      onPressed: () => onItem.call(data.tag),
       child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: 15,
-          horizontal: 20,
-        ),
-        child: Text(
-          data.title,
-        ),
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        child: Text(data.title),
       ),
     ),
   );
@@ -263,9 +254,8 @@ class BaseScaffold extends StatefulWidget {
     this.isTwiceBack = false,
     this.isCanBack = true,
     this.onBack,
-  })  : super(key: key);
+  }) : super(key: key);
 
-  ///系统Scaffold的属性
   final bool extendBody;
   final bool extendBodyBehindAppBar;
   final PreferredSizeWidget? appBar;
@@ -287,14 +277,9 @@ class BaseScaffold extends StatefulWidget {
   final bool drawerEnableOpenDragGesture;
   final bool endDrawerEnableOpenDragGesture;
 
-  ///增加的属性
-  ///点击返回按钮提示是否退出页面,快速点击俩次才会退出页面
+  //custom param
   final bool isTwiceBack;
-
-  ///是否可以返回
   final bool isCanBack;
-
-  ///监听返回事件
   final ScaffoldParamVoidCallback? onBack;
 
   @override
@@ -302,7 +287,7 @@ class BaseScaffold extends StatefulWidget {
 }
 
 class _BaseScaffoldState extends State<BaseScaffold> {
-  DateTime? _lastPressedAt; //上次点击时间
+  DateTime? _lastTime;
 
   @override
   Widget build(BuildContext context) {
@@ -329,40 +314,30 @@ class _BaseScaffoldState extends State<BaseScaffold> {
         drawerEnableOpenDragGesture: widget.drawerEnableOpenDragGesture,
         endDrawerEnableOpenDragGesture: widget.endDrawerEnableOpenDragGesture,
       ),
-      onWillPop: dealWillPop,
+      onWillPop: _dealWillPop,
     );
   }
 
-  ///控件返回按钮
-  Future<bool> dealWillPop() async {
-    if (widget.onBack != null) {
-      widget.onBack!();
-    }
+  Future<bool> _dealWillPop() async {
+    widget.onBack?.call();
 
-    //处理弹窗问题
     if (SmartDialog.instance.config.isExist) {
       SmartDialog.dismiss();
       return false;
     }
 
-    //如果不能返回，后面的逻辑就不走了
     if (!widget.isCanBack) {
       return false;
     }
 
-    if (widget.isTwiceBack) {
-      if (_lastPressedAt == null ||
-          DateTime.now().difference(_lastPressedAt!) > Duration(seconds: 1)) {
-        //两次点击间隔超过1秒则重新计时
-        _lastPressedAt = DateTime.now();
-
-        //弹窗提示
-        SmartDialog.showToast("再点一次退出");
-        return false;
-      }
-      return true;
-    } else {
-      return true;
+    var now = DateTime.now();
+    var condition =
+        _lastTime == null || now.difference(_lastTime!) > Duration(seconds: 1);
+    if (widget.isTwiceBack && condition) {
+      _lastTime = now;
+      SmartDialog.showToast("再点一次退出");
+      return false;
     }
+    return true;
   }
 }
