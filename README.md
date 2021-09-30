@@ -136,9 +136,11 @@ SmartDialog.show(
 | maskWidget | Customize Mask |
 | animationDuration | Animation time |
 | isUseAnimation | Default: true; whether to use animation |
-| isLoading | Default: true; whether to use Loading animation; true: use fade animation for content body false: use zoom animation for content body, only for the middle position control |
-| isExist | Default: false; Whether the main SmartDialog (OverlayEntry) exists on the interface |
-| isExistExtra | Default: false; whether additional SmartDialog (OverlayEntry) exists on the interface |
+| isLoading | Default: true; whether to use Loading animation; true: use fade animation for content body false: use zoom animation for content body, only for the middle position dialog |
+| isExist | Status calibration: whether loading and custom dialog exist on the interface |
+| isExistMain | State calibration: whether the custom dialog exists on the interface (show) |
+| isExistLoading | State calibration: whether loading exists on the interface (showLoading) |
+| isExistToast | State calibration: whether toast exists on the interface (showToast) |
 
 - Use of Config attribute, for example
   - The relevant attributes have been initialized internally; if you need to customize, you can initialize the attributes you want at the main entrance
