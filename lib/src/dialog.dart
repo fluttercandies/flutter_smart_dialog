@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'smart_dialog.dart';
 
 class FlutterSmartDialog extends StatelessWidget {
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   FlutterSmartDialog({
     Key? key,
     required this.child,

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/config/config.dart';
 import 'package:flutter_smart_dialog/src/strategy/action.dart';
 
@@ -27,6 +28,14 @@ class DialogStrategy extends DialogAction {
     config.isExist = true;
     config.isExistMain = true;
 
+    //listener back event
+    var context = FlutterSmartDialog.navigatorKey.currentContext;
+    if (context != null) {
+      var route = ModalRoute.of(context);
+      route?.removeScopedWillPopCallback(_backDismiss);
+      route?.addScopedWillPopCallback(_backDismiss);
+    }
+
     return mainAction.show(
       widget: widget,
       alignment: alignment,
@@ -48,5 +57,13 @@ class DialogStrategy extends DialogAction {
     if (!config.isExistLoading) {
       config.isExist = false;
     }
+  }
+
+  Future<bool> _backDismiss() async {
+    if (config.isExistMain) {
+      await dismiss();
+      return false;
+    }
+    return true;
   }
 }

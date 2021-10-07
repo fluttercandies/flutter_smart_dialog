@@ -10,6 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: FlutterSmartDialog.navigatorKey,
       home: SmartDialogPage(),
       builder: (BuildContext context, Widget? child) {
         return FlutterSmartDialog(child: child);
@@ -31,8 +32,8 @@ class SmartDialogPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScaffold(
-      isTwiceBack: true,
+    return Scaffold(
+      // isTwiceBack: true,
       backgroundColor: Colors.white,
       appBar: AppBar(title: Text('SmartDialog')),
       body: FunctionItems(
