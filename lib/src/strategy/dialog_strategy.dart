@@ -46,6 +46,7 @@ class DialogStrategy extends DialogAction {
       maskColor: maskColor,
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
+      onDismiss: onDismiss,
     );
   }
 
