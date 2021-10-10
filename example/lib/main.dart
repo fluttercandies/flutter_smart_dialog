@@ -58,7 +58,6 @@ class SmartDialogPage extends StatelessWidget {
         break;
       case 'bottomDialog':
         SmartDialog.show(
-          context: context,
           alignmentTemp: Alignment.bottomCenter,
           clickBgDismissTemp: true,
           onDismiss: () {
