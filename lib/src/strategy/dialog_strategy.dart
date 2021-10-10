@@ -28,14 +28,6 @@ class DialogStrategy extends DialogAction {
     config.isExist = true;
     config.isExistMain = true;
 
-    //listener back event
-    var context = FlutterSmartDialog.navigatorKey.currentContext;
-    if (context != null) {
-      var route = ModalRoute.of(context);
-      route?.removeScopedWillPopCallback(_backDismiss);
-      route?.addScopedWillPopCallback(_backDismiss);
-    }
-
     return mainAction.show(
       widget: widget,
       alignment: alignment,

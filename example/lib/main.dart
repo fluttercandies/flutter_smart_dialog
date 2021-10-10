@@ -10,7 +10,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: FlutterSmartDialog.navigatorKey,
       home: SmartDialogPage(),
       builder: (BuildContext context, Widget? child) {
         return FlutterSmartDialog(child: child);
@@ -59,6 +58,7 @@ class SmartDialogPage extends StatelessWidget {
         break;
       case 'bottomDialog':
         SmartDialog.show(
+          context: context,
           alignmentTemp: Alignment.bottomCenter,
           clickBgDismissTemp: true,
           onDismiss: () {
