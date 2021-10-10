@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/strategy/dialog_strategy.dart';
 import 'package:flutter_smart_dialog/src/strategy/toast_strategy.dart';
 import 'package:flutter_smart_dialog/src/widget/loading_widget.dart';
+import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 
 import 'config/config.dart';
 import 'strategy/action.dart';
@@ -128,7 +129,9 @@ class SmartDialog {
     _toastAction.showToast(
       time: time,
       isDefaultDismissType: isDefaultDismissType,
-      widget: widget ?? ToastWidget(msg: msg, alignment: alignment),
+      widget: ToastHelper(
+        child: widget ?? ToastWidget(msg: msg, alignment: alignment),
+      ),
     );
   }
 
