@@ -1,3 +1,5 @@
+[![pub](https://img.shields.io/pub/v/flutter_smart_dialog?label=pub&logo=dart)](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install) [![stars](https://img.shields.io/github/stars/fluttercandies/flutter_smart_dialog?logo=github)](https://github.com/fluttercandies/flutter_smart_dialog)  [![issues](https://img.shields.io/github/issues/fluttercandies/flutter_smart_dialog?logo=github)](https://github.com/fluttercandies/flutter_smart_dialog)
+
 # flutter_smart_dialog
 
 语言: [English](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://juejin.cn/post/6902331428072390663)
@@ -6,35 +8,20 @@ An elegant Flutter Dialog solution.
 
 ## Introduction
 
-- **Pub**: [View flutter_smart_dialog plug-in version](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install)
+- [pub install](https://pub.dev/packages/flutter_smart_dialog/install)
 
 ```dart
 dependencies:
   flutter_smart_dialog: any
 ```
 
-# Preface
+# Advantage
 
-The Dialog that comes with the system actually pushes a new page, which has many benefits, but there are also some difficult problems to solve
-
-- **Must pass BuildContext**
-  - Loading pop-ups are usually encapsulated in the network framework, and it is a headache to pass more context parameters; it is good to use fish_redux, the effect layer can directly get the context, if you use bloc, you have to pass the context to bloc or cubit in the view layer . . .
-- **Cannot penetrate dark background, click on the page behind dialog**
-  - This is a real headache. I have thought of a lot of ways, but failed to solve this problem on the built-in dialog.
-- **The loading pop-up window written by Dialog comes with the system. In the case of network requests and page jumps, there will be routing confusion**
-  - Scenario review: The loading library is generally encapsulated in the network layer. After a page is submitted, the page needs to be jumped. The submission operation is completed and the page jumps. The loading is closed in an asynchronous callback (onError or onSuccess), and it will appear When the jump operation is performed, the pop-up window has not been closed, and will be closed after a short delay, because the pop page method is used, and the jumped page will be popped.
-  - The above is a very common scenario. It is more difficult to predict when it comes to complex scenarios. There are also solutions: locate whether the top of the page stack is the Loading pop-up window, select Pop, and troublesome implementation
-
-`The above pain points are all fatal`, of course, there are some other solutions, such as:
-
-- Use Stack at the top of the page
-- Use Overlay
-
-Obviously, the use of Overlay is the most portable. At present, many toast and dialog three-party libraries use this solution. Some loading libraries are used. After reading the source code, the penetration background solution is very different from the expected effect. The dialog library comes with toast display, but toast display cannot coexist with dialog (toast is a special information display and should be able to exist independently), so I need to rely on one more Toast library
+- **Do not need BuildContext**
+- **Can penetrate dark background, click on the page behind dialog**
+- **Easily implement loading dialog**
 
 # SmartDialog
-
-**Based on the above difficult problems, I can only implement it myself. It took some time to implement a Pub package. Basically, the pain points that should be solved have been solved, and there is no problem in actual business**
 
 ## Effect
 
