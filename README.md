@@ -66,10 +66,7 @@ class MyApp extends StatelessWidget {
 Use `FlutterSmartDialog` to wrap the child, and then you can use SmartDialog happily
 
 - Use Toast: Because of the special nature of toast, some optimizations have been made to toast separately here
-  - time: optional, Duration type, default 1500ms
-  - isDefaultDismissType: the type of toast disappearing, the default is true
-    - true: default disappearing type, similar to android toast, toast displayed one by one
-    - false: non-default disappearing type, multiple clicks, the toast will be displayed after the former toast
+  - time: optional, Duration type, default 2000ms
   - widget: toast can be customized
   - msg: mandatory message
   - alignment: optional, control toast position
