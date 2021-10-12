@@ -17,7 +17,7 @@ dependencies:
 
 - **Do not need BuildContext**
 - **Can penetrate dark background, click on the page behind dialog**
-- **Easily implement loading dialog**
+- **Easily implement loading dialog，toast，custome dialog**
 
 # Effect
 
