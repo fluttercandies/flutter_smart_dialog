@@ -1,6 +1,7 @@
 # [2.3.x]
 - optimize function
 - solve problem of keyboard shelter toast
+- optimize toast. remove isDefaultDismissType api
 
 # [2.1.x]
 - reconstruction of the underlying logic

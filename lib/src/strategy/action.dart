@@ -53,7 +53,6 @@ abstract class DialogAction {
     required Widget widget,
     Duration time = const Duration(milliseconds: 2000),
     alignment: Alignment.bottomCenter,
-    bool isDefaultDismissType = true,
   }) async {
     throw 'not implement showToast(...)';
   }

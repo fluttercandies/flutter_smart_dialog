@@ -116,19 +116,15 @@ class SmartDialog {
 
   /// 提供toast示例
   ///
-  /// isDefaultDismissType  true：toast一个个显示  false：后面toast会顶掉前面toast
-  ///
   /// alignment：控制toast出现的位置
   static Future<void> showToast(
     String msg, {
     Duration time = const Duration(milliseconds: 2000),
     alignment: Alignment.bottomCenter,
-    bool isDefaultDismissType = true,
     Widget? widget,
   }) async {
     _toastAction.showToast(
       time: time,
-      isDefaultDismissType: isDefaultDismissType,
       widget: ToastHelper(
         child: widget ?? ToastWidget(msg: msg, alignment: alignment),
       ),

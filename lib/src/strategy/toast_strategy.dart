@@ -8,41 +8,34 @@ class ToastStrategy extends DialogAction {
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
 
-  List _toastList = [];
+  List<void Function()> _toastList = [];
 
   @override
   Future<void> showToast({
     Duration time = const Duration(milliseconds: 2000),
     alignment: Alignment.bottomCenter,
     required Widget widget,
-    bool isDefaultDismissType = true,
   }) async {
     config.isExistToast = true;
 
-    //处理默认类型逻辑
-    if (isDefaultDismissType) {
-      while (true) {
-        if (_toastList.length == 0) {
-          break;
-        }
-        await Future.delayed(Duration(milliseconds: 100));
-      }
-    }
+    _toastList.add(() async {
+      //handling special circumstances
+      if (_toastList.length == 0) return;
 
-    //锚定toast数量
-    _toastList.add(
       mainAction.show(
         widget: widget,
         isPenetrate: true,
         clickBgDismiss: false,
-      ),
-    );
-    await Future.delayed(time);
-    //防止多个dismiss同时生效，只需要最后一个dismiss生效即可
-    if (_toastList.length == 1) {
+      );
+      await Future.delayed(time);
       await dismiss();
-    }
-    _toastList.removeLast();
+
+      //invoke next toast
+      _toastList.removeAt(0);
+      if (_toastList.length != 0) _toastList[0]();
+    });
+
+    if (_toastList.length == 1) _toastList[0]();
   }
 
   @override
