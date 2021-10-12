@@ -8,10 +8,9 @@ class ToastWidget extends StatelessWidget {
     this.alignment = Alignment.bottomCenter,
   }) : super(key: key);
 
-  ///信息
   final String msg;
 
-  ///toast显示位置
+  ///toast location
   final AlignmentGeometry alignment;
 
   @override
@@ -25,10 +24,7 @@ class ToastWidget extends StatelessWidget {
           color: Colors.black,
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Text(
-          msg,
-          style: TextStyle(color: Colors.white),
-        ),
+        child: Text('$msg', style: TextStyle(color: Colors.white)),
       ),
     );
   }
