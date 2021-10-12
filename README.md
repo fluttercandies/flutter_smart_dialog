@@ -1,12 +1,10 @@
 [![pub](https://img.shields.io/pub/v/flutter_smart_dialog?label=pub&logo=dart)](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install) [![stars](https://img.shields.io/github/stars/fluttercandies/flutter_smart_dialog?logo=github)](https://github.com/fluttercandies/flutter_smart_dialog)  [![issues](https://img.shields.io/github/issues/fluttercandies/flutter_smart_dialog?logo=github)](https://github.com/fluttercandies/flutter_smart_dialog)
 
-# flutter_smart_dialog
+Language: [English](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://juejin.cn/post/6902331428072390663)
 
-语言: [English](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://juejin.cn/post/6902331428072390663)
+# Introduction
 
 An elegant Flutter Dialog solution.
-
-## Introduction
 
 - [pub install](https://pub.dev/packages/flutter_smart_dialog/install)
 
@@ -21,15 +19,13 @@ dependencies:
 - **Can penetrate dark background, click on the page behind dialog**
 - **Easily implement loading dialog**
 
-# SmartDialog
-
-## Effect
+# Effect
 
 - [Click me to experience it](https://cnad666.github.io/flutter_use/web/index.html#/smartDialog)
 
 ![smartDialog](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20201204145311.gif)
 
-## Use
+# Use
 
 - Main entrance configuration
   - It needs to be configured in the main entrance, so that you can use Dialog without passing BuildContext
