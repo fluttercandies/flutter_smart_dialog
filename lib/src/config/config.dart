@@ -45,7 +45,7 @@ class Config {
   bool isLoading = true;
 
   ///返回（点击返回按钮或者手势返回之类）关闭弹窗，默认：true。
-  bool backDismiss = true;
+  // bool backDismiss = true;
 
   ///默认：false
   ///loading和自定义弹窗 是否存在在界面上
