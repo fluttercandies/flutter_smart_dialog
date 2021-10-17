@@ -21,7 +21,7 @@ dependencies:
 
 # Effect
 
-- [Click me to experience it](https://cnad666.github.io/flutter_use/web/index.html#/smartDialog)
+- [Click me to experience it](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
 
 ![smartDialog](https://cdn.jsdelivr.net/gh/CNAD666/MyData/pic/flutter/blog/20201204145311.gif)
 
