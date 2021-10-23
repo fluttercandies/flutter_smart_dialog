@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/src/config/config.dart';
+import 'package:flutter_smart_dialog/src/helper/config.dart';
 
 import 'main_strategy.dart';
 
@@ -39,11 +39,11 @@ abstract class DialogAction {
     required Widget widget,
     bool clickBgDismiss = false,
     bool isLoading = true,
-    bool? isPenetrateTemp,
-    bool? isUseAnimationTemp,
-    Duration? animationDurationTemp,
-    Color? maskColorTemp,
-    Widget? maskWidgetTemp,
+    bool? isPenetrate,
+    bool? isUseAnimation,
+    Duration? animationDuration,
+    Color? maskColor,
+    Widget? maskWidget,
   }) async {
     throw 'not implement showLoading(...)';
   }

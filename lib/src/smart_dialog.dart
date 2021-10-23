@@ -1,15 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/src/strategy/dialog_strategy.dart';
-import 'package:flutter_smart_dialog/src/strategy/toast_strategy.dart';
 import 'package:flutter_smart_dialog/src/widget/loading_widget.dart';
-import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 
-import 'config/config.dart';
-import 'strategy/action.dart';
-import 'strategy/loading_strategy.dart';
-import 'widget/toast_widget.dart';
+import 'helper/config.dart';
+import 'helper/proxy.dart';
 
 class SmartDialog {
   ///SmartDialog相关配置,使用Config管理
@@ -20,9 +15,6 @@ class SmartDialog {
   late OverlayEntry entryLoading;
 
   ///-------------------------私有类型，不对面提供修改----------------------
-  static late DialogAction _mainAction;
-  static late DialogAction _toastAction;
-  static late DialogAction _loadingAction;
   static SmartDialog? _instance;
 
   factory SmartDialog() => instance;
@@ -31,30 +23,10 @@ class SmartDialog {
 
   SmartDialog._internal() {
     ///初始化一些参数
-    config = Config();
-
-    entryMain = OverlayEntry(
-      builder: (BuildContext context) {
-        return _mainAction.getWidget();
-      },
-    );
-    entryLoading = OverlayEntry(
-      builder: (BuildContext context) {
-        return _loadingAction.getWidget();
-      },
-    );
-    entryToast = OverlayEntry(
-      builder: (BuildContext context) {
-        return _toastAction.getWidget();
-      },
-    );
-
-    _mainAction = DialogStrategy(config: config, overlayEntry: entryMain);
-    _loadingAction = LoadingStrategy(
-      config: config,
-      overlayEntry: entryLoading,
-    );
-    _toastAction = ToastStrategy(config: config, overlayEntry: entryToast);
+    config = DialogProxy.instance.config;
+    entryMain = DialogProxy.instance.entryMain;
+    entryToast = DialogProxy.instance.entryToast;
+    entryLoading = DialogProxy.instance.entryLoading;
   }
 
   ///使用自定义布局
@@ -74,7 +46,7 @@ class SmartDialog {
     //overlay弹窗消失回调
     VoidCallback? onDismiss,
   }) {
-    return _mainAction.show(
+    return DialogProxy.instance.show(
       widget: widget,
       alignment: alignmentTemp ?? instance.config.alignment,
       isPenetrate: isPenetrateTemp ?? instance.config.isPenetrate,
@@ -93,8 +65,8 @@ class SmartDialog {
   static Future<void> showLoading({
     String msg = 'loading...',
     Color background = Colors.black,
-    bool clickBgDismissTemp = false,
-    bool isLoadingTemp = true,
+    bool? clickBgDismissTemp,
+    bool? isLoadingTemp,
     bool? isPenetrateTemp,
     bool? isUseAnimationTemp,
     Duration? animationDurationTemp,
@@ -102,15 +74,16 @@ class SmartDialog {
     Widget? maskWidgetTemp,
     Widget? widget,
   }) {
-    return _loadingAction.showLoading(
+    return DialogProxy.instance.showLoading(
       widget: widget ?? LoadingWidget(msg: msg, background: background),
-      clickBgDismiss: clickBgDismissTemp,
-      isLoading: isLoadingTemp,
-      maskColorTemp: maskColorTemp,
-      maskWidgetTemp: maskWidgetTemp,
-      isPenetrateTemp: isPenetrateTemp,
-      isUseAnimationTemp: isUseAnimationTemp,
-      animationDurationTemp: animationDurationTemp,
+      clickBgDismiss: clickBgDismissTemp ?? false,
+      isLoading: isLoadingTemp ?? true,
+      maskColor: maskColorTemp ?? instance.config.maskColor,
+      maskWidget: maskWidgetTemp ?? instance.config.maskWidget,
+      isPenetrate: isPenetrateTemp ?? instance.config.isPenetrate,
+      isUseAnimation: isUseAnimationTemp ?? instance.config.isUseAnimation,
+      animationDuration:
+          animationDurationTemp ?? instance.config.animationDuration,
     );
   }
 
@@ -123,11 +96,11 @@ class SmartDialog {
     alignment: Alignment.bottomCenter,
     Widget? widget,
   }) async {
-    _toastAction.showToast(
+    DialogProxy.instance.showToast(
+      msg,
       time: time,
-      widget: ToastHelper(
-        child: widget ?? ToastWidget(msg: msg, alignment: alignment),
-      ),
+      alignment: alignment,
+      widget: widget,
     );
   }
 
@@ -141,19 +114,6 @@ class SmartDialog {
   /// 3：仅关闭loading
   /// 4：都关闭
   static Future<void> dismiss({int closeType = 0}) async {
-    if (closeType == 0) {
-      await _mainAction.dismiss();
-      await _loadingAction.dismiss();
-    } else if (closeType == 1) {
-      await _mainAction.dismiss();
-    } else if (closeType == 2) {
-      await _toastAction.dismiss();
-    } else if (closeType == 3) {
-      await _loadingAction.dismiss();
-    } else {
-      await _mainAction.dismiss();
-      await _toastAction.dismiss();
-      await _loadingAction.dismiss();
-    }
+    DialogProxy.instance.dismiss(closeType: 0);
   }
 }

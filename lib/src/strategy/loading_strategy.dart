@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/src/config/config.dart';
+import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/strategy/action.dart';
 
 class LoadingStrategy extends DialogAction {
@@ -15,11 +15,11 @@ class LoadingStrategy extends DialogAction {
     required Widget widget,
     bool clickBgDismiss = false,
     bool isLoading = true,
-    bool? isPenetrateTemp,
-    bool? isUseAnimationTemp,
-    Duration? animationDurationTemp,
-    Color? maskColorTemp,
-    Widget? maskWidgetTemp,
+    bool? isPenetrate,
+    bool? isUseAnimation,
+    Duration? animationDuration,
+    Color? maskColor,
+    Widget? maskWidget,
   }) async {
     config.isExist = true;
     config.isExistLoading = true;
@@ -28,11 +28,11 @@ class LoadingStrategy extends DialogAction {
       widget: widget,
       clickBgDismiss: clickBgDismiss,
       isLoading: isLoading,
-      maskColor: maskColorTemp,
-      maskWidget: maskWidgetTemp,
-      isPenetrate: isPenetrateTemp,
-      isUseAnimation: isUseAnimationTemp,
-      animationDuration: animationDurationTemp,
+      maskColor: maskColor,
+      maskWidget: maskWidget,
+      isPenetrate: isPenetrate,
+      isUseAnimation: isUseAnimation,
+      animationDuration: animationDuration,
     );
   }
 
