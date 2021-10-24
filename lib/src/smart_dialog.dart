@@ -8,11 +8,7 @@ import 'helper/proxy.dart';
 
 class SmartDialog {
   ///SmartDialog相关配置,使用Config管理
-  late Config config;
-
-  late OverlayEntry entryMain;
-  late OverlayEntry entryToast;
-  late OverlayEntry entryLoading;
+  Config config = DialogProxy.instance.config;
 
   ///-------------------------私有类型，不对面提供修改----------------------
   static SmartDialog? _instance;
@@ -21,13 +17,7 @@ class SmartDialog {
 
   static SmartDialog get instance => _instance ??= SmartDialog._internal();
 
-  SmartDialog._internal() {
-    ///初始化一些参数
-    config = DialogProxy.instance.config;
-    entryMain = DialogProxy.instance.entryMain;
-    entryToast = DialogProxy.instance.entryToast;
-    entryLoading = DialogProxy.instance.entryLoading;
-  }
+  SmartDialog._internal();
 
   ///使用自定义布局
   ///
@@ -45,6 +35,7 @@ class SmartDialog {
     bool? clickBgDismissTemp,
     //overlay弹窗消失回调
     VoidCallback? onDismiss,
+    String? tag,
   }) {
     return DialogProxy.instance.show(
       widget: widget,
@@ -58,6 +49,7 @@ class SmartDialog {
       maskWidget: maskWidgetTemp ?? instance.config.maskWidget,
       clickBgDismiss: clickBgDismissTemp ?? instance.config.clickBgDismiss,
       onDismiss: onDismiss,
+      tag: tag,
     );
   }
 
@@ -104,16 +96,14 @@ class SmartDialog {
     );
   }
 
-  ///关闭Dialog
+  /// 0：close dialog or loading
+  /// 1：only close dialog
+  /// 2：only close toast
+  /// 3：only close loading
+  /// 4：both close
   ///
-  /// closeType：关闭类型
-  ///
-  /// 0：关闭主体OverlayEntry和loading
-  /// 1：仅关闭主体OverlayEntry
-  /// 2：仅关闭Toast
-  /// 3：仅关闭loading
-  /// 4：都关闭
-  static Future<void> dismiss({int closeType = 0}) async {
-    DialogProxy.instance.dismiss(closeType: 0);
+  /// tag：the dialog for setting the 'tag' can be closed
+  static Future<void> dismiss({int closeType = 0,String? tag}) async {
+    DialogProxy.instance.dismiss(closeType: closeType, tag: tag);
   }
 }

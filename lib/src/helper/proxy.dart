@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/strategy/action.dart';
 import 'package:flutter_smart_dialog/src/strategy/dialog_strategy.dart';
 import 'package:flutter_smart_dialog/src/strategy/loading_strategy.dart';
@@ -14,14 +13,16 @@ class DialogProxy {
   ///SmartDialog相关配置,使用Config管理
   late Config config;
 
-  late OverlayEntry entryMain;
   late OverlayEntry entryToast;
   late OverlayEntry entryLoading;
 
+  static late BuildContext context;
+
   ///-------------------------私有类型，不对面提供修改----------------------
-  late DialogAction _mainAction;
   late DialogAction _toastAction;
   late DialogAction _loadingAction;
+  late Map<String, DialogAction> dialogMap;
+  late List<DialogAction> dialogList;
 
   factory DialogProxy() => instance;
   static DialogProxy? _instance;
@@ -29,39 +30,24 @@ class DialogProxy {
   static DialogProxy get instance => _instance ??= DialogProxy._internal();
 
   DialogProxy._internal() {
-    ///初始化一些参数
+    ///init some param
     config = Config();
 
-    entryMain = OverlayEntry(
-      builder: (BuildContext context) {
-        return _mainAction.getWidget();
-      },
-    );
     entryLoading = OverlayEntry(
-      builder: (BuildContext context) {
-        return _loadingAction.getWidget();
-      },
+      builder: (BuildContext context) => _loadingAction.getWidget(),
     );
     entryToast = OverlayEntry(
-      builder: (BuildContext context) {
-        return _toastAction.getWidget();
-      },
+      builder: (BuildContext context) => _toastAction.getWidget(),
     );
-    var context = FlutterSmartDialog.navigatorKey.currentContext;
-    print('------------------------');
-    print(context?.size?.width);
-    if (context != null) {
-      Overlay.of(context)?.insert(entryMain);
-      Overlay.of(context)?.insert(entryLoading);
-      Overlay.of(context)?.insert(entryToast);
-    }
 
-    _mainAction = DialogStrategy(config: config, overlayEntry: entryMain);
     _loadingAction = LoadingStrategy(
       config: config,
       overlayEntry: entryLoading,
     );
     _toastAction = ToastStrategy(config: config, overlayEntry: entryToast);
+
+    dialogMap = {};
+    dialogList = [];
   }
 
   ///使用自定义布局
@@ -78,10 +64,19 @@ class DialogProxy {
     Color? maskColor,
     Widget? maskWidget,
     bool? clickBgDismiss,
-    //overlay弹窗消失回调
     VoidCallback? onDismiss,
+    String? tag,
   }) {
-    return _mainAction.show(
+    DialogAction? action;
+    var entry = OverlayEntry(
+      builder: (BuildContext context) => action!.getWidget(),
+    );
+    action = DialogStrategy(config: config, overlayEntry: entry);
+    Overlay.of(context)!.insert(entry, below: entryLoading);
+    dialogList.add(action);
+    if (tag != null) dialogMap[tag] = action;
+
+    return action.show(
       widget: widget,
       alignment: alignment,
       isPenetrate: isPenetrate,
@@ -137,29 +132,42 @@ class DialogProxy {
     );
   }
 
-  ///关闭Dialog
+  /// 0：close dialog or loading
+  /// 1：only close dialog
+  /// 2：only close toast
+  /// 3：only close loading
+  /// 4：both close
   ///
-  /// closeType：关闭类型
-  ///
-  /// 0：关闭主体OverlayEntry和loading
-  /// 1：仅关闭主体OverlayEntry
-  /// 2：仅关闭Toast
-  /// 3：仅关闭loading
-  /// 4：都关闭
-  Future<void> dismiss({int closeType = 0}) async {
+  /// tag：the dialog for setting the 'tag' can be closed
+  Future<void> dismiss({int closeType = 0, String? tag}) async {
     if (closeType == 0) {
-      await _mainAction.dismiss();
-      await _loadingAction.dismiss();
+      if (config.isExistLoading) await _loadingAction.dismiss();
+      if (!config.isExistLoading) await _closeMain(tag);
     } else if (closeType == 1) {
-      await _mainAction.dismiss();
+      await _closeMain(tag);
     } else if (closeType == 2) {
       await _toastAction.dismiss();
     } else if (closeType == 3) {
       await _loadingAction.dismiss();
     } else {
-      await _mainAction.dismiss();
+      await _closeMain(tag);
       await _toastAction.dismiss();
       await _loadingAction.dismiss();
     }
+  }
+
+  Future<void> _closeMain(String? tag) async {
+    if (dialogList.length == 0) return;
+
+    DialogAction? action;
+    if (tag == null) {
+      action = dialogList[dialogList.length - 1];
+    } else {
+      action = dialogMap[tag];
+      dialogMap.remove(tag);
+    }
+    await action?.dismiss();
+    action?.overlayEntry.remove();
+    dialogList.remove(action);
   }
 }

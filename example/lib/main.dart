@@ -10,11 +10,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: FlutterSmartDialog.navigatorKey,
       home: SmartDialogPage(),
-      // builder: (BuildContext context, Widget? child) {
-      //   return FlutterSmartDialog(child: child);
-      // },
+      builder: (BuildContext context, Widget? child) {
+        return FlutterSmartDialog(child: child);
+      },
     );
   }
 }
@@ -32,8 +31,8 @@ class SmartDialogPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // isTwiceBack: true,
+    return BaseScaffold(
+      isTwiceBack: true,
       backgroundColor: Colors.white,
       appBar: AppBar(title: Text('SmartDialog')),
       body: FunctionItems(
@@ -102,7 +101,7 @@ class SmartDialogPage extends StatelessWidget {
       case 'penetrateDialog':
         SmartDialog.show(
           alignmentTemp: Alignment.bottomCenter,
-          clickBgDismissTemp: true,
+          clickBgDismissTemp: false,
           isPenetrateTemp: true,
           widget: _contentWidget(maxHeight: 400),
         );

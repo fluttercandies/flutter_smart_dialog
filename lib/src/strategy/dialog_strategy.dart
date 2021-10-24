@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
+import 'package:flutter_smart_dialog/src/helper/proxy.dart';
 import 'package:flutter_smart_dialog/src/strategy/action.dart';
 
 ///main function : customize dialog
@@ -43,18 +44,11 @@ class DialogStrategy extends DialogAction {
   @override
   Future<void> dismiss() async {
     await mainAction.dismiss();
+    if (DialogProxy.instance.dialogList.length != 0) return;
 
     config.isExistMain = false;
     if (!config.isExistLoading) {
       config.isExist = false;
     }
-  }
-
-  Future<bool> _backDismiss() async {
-    if (config.isExistMain) {
-      await dismiss();
-      return false;
-    }
-    return true;
   }
 }
