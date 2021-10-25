@@ -26,6 +26,7 @@ class ToastStrategy extends DialogAction {
         widget: widget,
         isPenetrate: true,
         clickBgDismiss: false,
+        onBgTap: () => dismiss(),
       );
       await Future.delayed(time);
       await dismiss();

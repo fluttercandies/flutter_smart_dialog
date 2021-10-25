@@ -26,6 +26,7 @@ class MainStrategy {
 
   Future<void> show({
     required Widget widget,
+    required SmartDialogVoidCallBack onBgTap,
     AlignmentGeometry? alignment,
     bool? isPenetrate,
     bool? isUseAnimation,
@@ -49,7 +50,7 @@ class MainStrategy {
       maskWidget: maskWidget ?? config.maskWidget,
       clickBgDismiss: clickBgDismiss ?? config.clickBgDismiss,
       child: widget,
-      onBgTap: () => dismiss(),
+      onBgTap: onBgTap,
     );
 
     //refresh dialog

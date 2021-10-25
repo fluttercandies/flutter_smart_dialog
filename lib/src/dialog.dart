@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/src/helper/proxy.dart';
 
-import 'smart_dialog.dart';
+import 'helper/dialog_proxy.dart';
+import 'helper/monitor_pop_route.dart';
 
 class FlutterSmartDialog extends StatelessWidget {
   FlutterSmartDialog({
@@ -13,22 +13,24 @@ class FlutterSmartDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    MonitorPopRoute.instance;
+
     return Material(
       color: Colors.transparent,
       child: Overlay(initialEntries: [
-        //主体布局
+        //main layout
         OverlayEntry(builder: (BuildContext context) => child ?? Container()),
 
-        //添加的控件,覆盖在主体布局上面
+        //provided separately for custom dialog
         OverlayEntry(builder: (BuildContext context) {
           DialogProxy.context = context;
           return Container();
         }),
 
-        //单独提供给Loading
+        //provided separately for loading
         DialogProxy.instance.entryLoading,
 
-        //单独提供给Toast
+        //provided separately for toast
         DialogProxy.instance.entryToast,
       ]),
     );

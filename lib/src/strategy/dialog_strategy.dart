@@ -2,8 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
-import 'package:flutter_smart_dialog/src/helper/proxy.dart';
+import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/strategy/action.dart';
+import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
 
 ///main function : customize dialog
 class DialogStrategy extends DialogAction {
@@ -12,6 +13,7 @@ class DialogStrategy extends DialogAction {
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
 
+  @override
   Future<void> show({
     required Widget widget,
     AlignmentGeometry? alignment,
@@ -23,6 +25,7 @@ class DialogStrategy extends DialogAction {
     Widget? maskWidget,
     bool? clickBgDismiss,
     VoidCallback? onDismiss,
+    SmartDialogVoidCallBack? onBgTap,
   }) async {
     config.isExist = true;
     config.isExistMain = true;
@@ -38,6 +41,7 @@ class DialogStrategy extends DialogAction {
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
+      onBgTap: () => onBgTap == null ? dismiss() : onBgTap(),
     );
   }
 

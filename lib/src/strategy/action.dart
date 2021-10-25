@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
+import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
 
 import 'main_strategy.dart';
 
@@ -30,6 +31,7 @@ abstract class DialogAction {
     Widget? maskWidget,
     bool? clickBgDismiss,
     VoidCallback? onDismiss,
+    SmartDialogVoidCallBack? onBgTap,
   }) async {
     throw 'not implement show(...)';
   }

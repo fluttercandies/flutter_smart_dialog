@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/strategy/action.dart';
+import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
 
 class LoadingStrategy extends DialogAction {
   LoadingStrategy({
@@ -33,6 +34,7 @@ class LoadingStrategy extends DialogAction {
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
       animationDuration: animationDuration,
+      onBgTap: () => dismiss(),
     );
   }
 
