@@ -19,7 +19,7 @@ class DialogProxy {
   late List<DialogInfo> dialogList;
   late DialogAction _toastAction;
   late DialogAction _loadingAction;
-  bool loadingBackDismiss = true;
+  bool _loadingBackDismiss = true;
 
   factory DialogProxy() => instance;
   static DialogProxy? _instance;
@@ -100,7 +100,7 @@ class DialogProxy {
     Widget? widget,
     bool backDismiss = true,
   }) {
-    loadingBackDismiss = backDismiss;
+    _loadingBackDismiss = backDismiss;
     return _loadingAction.showLoading(
       widget: widget ?? LoadingWidget(msg: msg, background: background),
       clickBgDismiss: clickBgDismiss,
@@ -156,7 +156,7 @@ class DialogProxy {
   }
 
   Future<void> _closeLoading(bool back) async {
-    if (!loadingBackDismiss && back) return;
+    if (!_loadingBackDismiss && back) return;
     await _loadingAction.dismiss();
   }
 

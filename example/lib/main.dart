@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
 }
 
 class SmartDialogPage extends StatelessWidget {
-  final List<BtnInfo> items = [
+  final items = [
     BtnInfo(title: 'showToast', tag: 'showToast'),
     BtnInfo(title: 'showLoading', tag: 'showLoading'),
     BtnInfo(title: 'bottomDialog', tag: 'bottomDialog'),
@@ -30,77 +30,71 @@ class SmartDialogPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: Text('SmartDialog')),
-      body: FunctionItems(
-        items: items,
-        onItem: (String? tag) => showFun(context, tag),
-      ),
+    return FunctionItems(
+      items: items,
+      onItem: (String? tag) async {
+        switch (tag) {
+          case 'showToast':
+            SmartDialog.showToast('test toast');
+            break;
+          case 'showLoading':
+            SmartDialog.showLoading();
+            await Future.delayed(Duration(seconds: 2));
+            SmartDialog.dismiss();
+            break;
+          case 'bottomDialog':
+            SmartDialog.show(
+              alignmentTemp: Alignment.bottomCenter,
+              clickBgDismissTemp: true,
+              onDismiss: () {
+                print('==============test callback==============');
+              },
+              widget: contentWidget(maxHeight: 400),
+            );
+            break;
+          case 'topDialog':
+            SmartDialog.show(
+              alignmentTemp: Alignment.topCenter,
+              clickBgDismissTemp: true,
+              widget: contentWidget(maxHeight: 300),
+            );
+            break;
+          case 'leftDialog':
+            SmartDialog.show(
+              alignmentTemp: Alignment.centerLeft,
+              clickBgDismissTemp: true,
+              widget: contentWidget(maxWidth: 260),
+            );
+            break;
+          case 'rightDialog':
+            var mask = Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [
+                  Colors.lightGreenAccent.withOpacity(0.4),
+                  Colors.deepOrange.withOpacity(0.4),
+                ]),
+              ),
+            );
+
+            SmartDialog.show(
+              alignmentTemp: Alignment.centerRight,
+              clickBgDismissTemp: true,
+              maskWidgetTemp: mask,
+              animationDurationTemp: Duration(milliseconds: 500),
+              widget: contentWidget(maxWidth: 260),
+            );
+            break;
+          case 'penetrateDialog':
+            SmartDialog.show(
+              alignmentTemp: Alignment.bottomCenter,
+              clickBgDismissTemp: false,
+              isPenetrateTemp: true,
+              widget: contentWidget(maxHeight: 400),
+            );
+            break;
+        }
+      },
     );
-  }
-
-  void showFun(context, tag) async {
-    switch (tag) {
-      case 'showToast':
-        SmartDialog.showToast('test toast');
-        break;
-      case 'showLoading':
-        SmartDialog.showLoading();
-        await Future.delayed(Duration(seconds: 2));
-        SmartDialog.dismiss();
-        break;
-      case 'bottomDialog':
-        SmartDialog.show(
-          alignmentTemp: Alignment.bottomCenter,
-          clickBgDismissTemp: true,
-          onDismiss: () {
-            print('==============test callback==============');
-          },
-          widget: contentWidget(maxHeight: 400),
-        );
-        break;
-      case 'topDialog':
-        SmartDialog.show(
-          alignmentTemp: Alignment.topCenter,
-          clickBgDismissTemp: true,
-          widget: contentWidget(maxHeight: 300),
-        );
-        break;
-      case 'leftDialog':
-        SmartDialog.show(
-          alignmentTemp: Alignment.centerLeft,
-          clickBgDismissTemp: true,
-          widget: contentWidget(maxWidth: 260),
-        );
-        break;
-      case 'rightDialog':
-        var mask = Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-              Colors.lightGreenAccent.withOpacity(0.4),
-              Colors.deepOrange.withOpacity(0.4),
-            ]),
-          ),
-        );
-
-        SmartDialog.show(
-          alignmentTemp: Alignment.centerRight,
-          clickBgDismissTemp: true,
-          maskWidgetTemp: mask,
-          animationDurationTemp: Duration(milliseconds: 500),
-          widget: contentWidget(maxWidth: 260),
-        );
-        break;
-      case 'penetrateDialog':
-        SmartDialog.show(
-          alignmentTemp: Alignment.bottomCenter,
-          clickBgDismissTemp: false,
-          isPenetrateTemp: true,
-          widget: contentWidget(maxHeight: 400),
-        );
-        break;
-    }
   }
 }
 
@@ -153,34 +147,38 @@ class FunctionItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(30),
-      child: SingleChildScrollView(
-        child: Material(
-          color: Colors.white,
-          child: Wrap(
-            spacing: 20,
-            runSpacing: 20,
-            children: items.map((e) {
-              return Container(
-                padding: EdgeInsets.all(15),
-                child: RawMaterialButton(
-                  fillColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: Text('SmartDialog')),
+      body: Container(
+        padding: EdgeInsets.all(30),
+        child: SingleChildScrollView(
+          child: Material(
+            color: Colors.white,
+            child: Wrap(
+              spacing: 20,
+              runSpacing: 20,
+              children: items.map((e) {
+                return Container(
+                  padding: EdgeInsets.all(15),
+                  child: RawMaterialButton(
+                    fillColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    constraints: BoxConstraints(minWidth: 100, minHeight: 36.0),
+                    elevation: 5,
+                    onPressed: () => onItem.call(e.tag),
+                    child: Container(
+                      width: 130,
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      alignment: Alignment.center,
+                      child: Text('${e.title}'),
+                    ),
                   ),
-                  constraints: BoxConstraints(minWidth: 100, minHeight: 36.0),
-                  elevation: 5,
-                  onPressed: () => onItem.call(e.tag),
-                  child: Container(
-                    width: 130,
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    alignment: Alignment.center,
-                    child: Text('${e.title}'),
-                  ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
           ),
         ),
       ),

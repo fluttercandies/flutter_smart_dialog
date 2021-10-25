@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
 
-import '../../flutter_smart_dialog.dart';
-
 ///main function : customize dialog
 class MainStrategy {
   MainStrategy({
