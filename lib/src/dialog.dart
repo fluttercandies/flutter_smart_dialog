@@ -13,8 +13,6 @@ class FlutterSmartDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MonitorPopRoute.instance;
-
     return Material(
       color: Colors.transparent,
       child: Overlay(initialEntries: [
@@ -35,4 +33,6 @@ class FlutterSmartDialog extends StatelessWidget {
       ]),
     );
   }
+
+  static void monitor() => MonitorPopRoute.instance;
 }
