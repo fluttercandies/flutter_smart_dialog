@@ -17,7 +17,7 @@ class MonitorPopRoute with WidgetsBindingObserver {
 
   @override
   Future<bool> didPopRoute() async {
-    if (SmartDialog.config.backDismiss && SmartDialog.config.isExist) {
+    if (SmartDialog.config.isExist) {
       DialogProxy.instance.dismiss(back: true);
       return true;
     }
