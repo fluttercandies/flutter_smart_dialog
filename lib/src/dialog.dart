@@ -37,6 +37,7 @@ class FlutterSmartDialog extends StatelessWidget {
   static void monitor() => MonitorPopRoute.instance;
 }
 
+///recommend the way of init
 TransitionBuilder initFlutterSmartDialog({TransitionBuilder? builder}) {
   FlutterSmartDialog.monitor();
 
