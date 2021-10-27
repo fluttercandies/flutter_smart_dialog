@@ -6,12 +6,9 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    FlutterSmartDialog.monitor();
     return MaterialApp(
       home: SmartDialogPage(),
-      builder: (BuildContext context, Widget? child) {
-        return FlutterSmartDialog(child: child);
-      },
+      builder: initFlutterSmartDialog(),
     );
   }
 }
