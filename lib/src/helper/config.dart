@@ -1,56 +1,72 @@
 import 'package:flutter/material.dart';
 
-///控件配置统一在此处处理
+///全局配置统一在此处处理
 class Config {
-  /// 控制自定义控件位于屏幕的位置
+  /// 控制dialog位于屏幕的位置，可使用animationDuration设置动画时间
   ///
-  /// Alignment.center: 自定义控件位于屏幕中间，且是动画默认为：渐隐和缩放，可使用isLoading选择
+  /// center: dialog位于屏幕中间，动画可选，可使用isLoading选择：true（渐隐），false（缩放）
   ///
-  /// Alignment.bottomCenter、Alignment.bottomLeft、Alignment.bottomRight：自定义控件
-  /// 位于屏幕底部，动画默认为位移动画，自下而上，可使用animationDuration设置动画时间
+  /// bottomCenter、bottomLeft、bottomRight：dialog位于屏幕底部，动画默认为位移动画，自下而上
   ///
-  /// Alignment.topCenter、Alignment.topLeft、Alignment.topRight：自定义控件位于屏幕顶部，
-  /// 动画默认为位移动画，自上而下，可使用animationDuration设置动画时间
+  /// topCenter、topLeft、Alignment.topRight：dialog位于屏幕顶部，
   ///
-  /// Alignment.centerLeft：自定义控件位于屏幕左边，动画默认为位移动画，自左而右，
-  /// 可使用animationDuration设置动画时间
+  /// centerLeft：dialog位于屏幕左边，动画默认为位移动画，自左而右，
   ///
-  /// Alignment.centerRight：自定义控件位于屏幕左边，动画默认为位移动画，自右而左，
-  /// 可使用animationDuration设置动画时间
+  /// centerRight：dialog位于屏幕左边，动画默认为位移动画，自右而左，
   AlignmentGeometry alignment = Alignment.center;
 
-  ///默认:false；是否穿透遮罩背景,交互遮罩之后控件，true：点击能穿透背景，false：不能穿透；
-  ///穿透遮罩设置为true，背景遮罩会自动变成透明（必须）
+  /// default（false），true（click event will penetrate background），false（not penetration）
+  ///
+  /// 屏幕上交互事件可以穿透遮罩背景（默认:false）：true（交互事件能穿透背景，遮罩会自动变成透明），false（不能穿透）
   bool isPenetrate = false;
 
-  ///默认：true；点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
+  /// default（true），true（loading will be closed after click background），false（not close）
+  ///
+  /// 点击遮罩，是否关闭dialog（默认：true）：true（点击遮罩关闭dialog），false（不关闭）
   bool clickBgDismiss = true;
 
-  ///遮罩颜色
-  ///isPenetrate设置为true，该参数失效
+  /// the color of the mask，it is invalid if [maskWidgetTemp] set the value and [isPenetrateTemp] is true
+  ///
+  /// 遮罩颜色：isPenetrate设置为true或设置maskWidget参数，该参数会失效
   Color maskColor = Colors.black.withOpacity(0.3);
 
-  ///遮罩Widget，可高度自定义你自己的遮罩背景
-  ///isPenetrate设置为true，该参数失效
+  /// highly customizable mask
+  ///
+  /// 遮罩Widget，可高度自定义你自己的遮罩背景：isPenetrate设置为true，该参数失效
   Widget? maskWidget;
 
-  ///动画时间
+  /// animation duration
+  ///
+  /// 动画时间
   Duration animationDuration = Duration(milliseconds: 260);
 
-  ///默认：true；是否使用动画
+  /// default（true），true（use the animation），false（not use）
+  ///
+  /// 是否使用动画（默认：true）
   bool isUseAnimation = true;
 
-  ///默认：true；是否使用Loading动画；true:内容体使用渐隐动画  false：内容体使用缩放动画，
-  ///仅仅针对中间位置的控件
+  /// default（true），true（use the opacity animation），false（use the scale transition animation）
+  ///
+  /// 是否使用Loading动画（默认：true，仅仅针对中间位置的dialog）；true:使用渐隐动画  false：使用缩放动画，
   bool isLoading = true;
 
-  ///默认：false
-  ///loading和自定义弹窗 是否存在在界面上
+  /// whether loading and custom dialog exist on the screen
+  ///
+  /// loading和自定义dialog，是否存在在界面上
   bool isExist = false;
 
-  ///默认：false
-  ///主体 / toast / loading 单独存在情况
+  /// whether custom dialog exist on the screen
+  ///
+  /// 自定义dialog是否存在在界面上
   bool isExistMain = false;
+
+  /// whether loading and custom dialog exist on the screen
+  ///
+  /// loading是否存在界面上
   bool isExistLoading = false;
+
+  /// whether loading and custom dialog exist on the screen
+  ///
+  /// toast是否存在在界面上
   bool isExistToast = false;
 }

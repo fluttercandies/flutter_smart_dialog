@@ -29,6 +29,7 @@ class LoadingStrategy extends DialogAction {
       widget: widget,
       clickBgDismiss: clickBgDismiss,
       isLoading: isLoading,
+      alignment: Alignment.center,
       maskColor: maskColor,
       maskWidget: maskWidget,
       isPenetrate: isPenetrate,

@@ -6,28 +6,83 @@ import 'package:flutter_smart_dialog/src/widget/loading_widget.dart';
 import 'helper/config.dart';
 import 'helper/dialog_proxy.dart';
 
+enum SmartStatus {
+  dialog,
+  loading,
+  toast,
+}
+
 class SmartDialog {
   /// SmartDialog global config
   ///
   /// SmartDialog全局配置
   static Config config = DialogProxy.instance.config;
 
-  /// custom dialog
-  /// attributes that use 'Temp' as the suffix will not affect the global config when used here;
-  /// attributes that do not use ‘Temp' as the suffix will default to the global config
+  /// custom dialog：'temp' suffix param, if there is no default value, the global attribute in config will be used by default
   ///
-  /// 自定义dialog
-  /// 使用'Temp'为后缀的属性，在此处使用，并不会影响全局的属性；未使用‘Temp’为后缀的属性，会默认使用Config设置的全局属性
+  /// [widget]：custom widget
+  ///
+  /// [alignmentTemp]：control the location of the dialog
+  ///
+  /// [clickBgDismissTemp]：true（the dialog will be closed after click background），false（not close）
+  ///
+  /// [isLoadingTemp]：true（use the opacity animation），false（use the scale transition animation）
+  ///
+  /// [isPenetrateTemp]：true（click event will penetrate background），false（not penetration）
+  ///
+  /// [isUseAnimationTemp]：true（use the animation），false（not use）
+  ///
+  /// [animationDurationTemp]：animation duration
+  ///
+  /// [maskColorTemp]：the color of the mask，it is invalid if [maskWidgetTemp] set the value and [isPenetrateTemp] is true
+  ///
+  /// [maskWidgetTemp]：highly customizable mask
+  ///
+  /// [onDismiss]：the callback will be invoked when the dialog is closed
+  ///
+  /// [tag]：if you set a tag for the dialog, you can turn it off in a targeted manner
+  ///
+  /// [backDismiss]：default（true），true（the back event will close the dialog but not close the page），
+  /// false（the back event not close the dialog and not close page），you still can use the dismiss method to close the dialog
+  ///
+  /// -------------------------------------------------------------------------------
+  ///
+  /// 提供loading弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
+  ///
+  /// [widget]：自定义 widget
+  ///
+  /// [alignmentTemp]：控制弹窗的位置
+  ///
+  /// [clickBgDismissTemp]：true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  ///
+  /// [isLoadingTemp]：true（使用透明动画），false（使用尺寸缩放动画）
+  ///
+  /// [isPenetrateTemp]：true（点击事件将穿透背景），false（不穿透）
+  ///
+  /// [isUseAnimationTemp]：true（使用动画），false（不使用）
+  ///
+  /// [animationDurationTemp]：动画持续时间
+  ///
+  /// [maskColorTemp]：遮罩颜色，如果给[maskWidgetTemp]设置了值，该参数将会失效
+  ///
+  /// [maskWidgetTemp]：可高度定制遮罩
+  ///
+  /// [onDismiss]：在dialog被关闭的时候，该回到将会被触发
+  ///
+  /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
+  ///
+  /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
+  /// 你仍然可以使用dismiss方法来关闭loading
   static Future<void> show({
     required Widget widget,
     AlignmentGeometry? alignmentTemp,
+    bool? clickBgDismissTemp,
+    bool? isLoadingTemp,
     bool? isPenetrateTemp,
     bool? isUseAnimationTemp,
     Duration? animationDurationTemp,
-    bool? isLoadingTemp,
     Color? maskColorTemp,
     Widget? maskWidgetTemp,
-    bool? clickBgDismissTemp,
     VoidCallback? onDismiss,
     String? tag,
     bool? backDismiss,
@@ -48,9 +103,57 @@ class SmartDialog {
     );
   }
 
-  /// provide loading dialog
+  /// loading dialog：'temp' suffix param, if there is no default value, the global attribute in config will be used by default
   ///
-  /// 提供loading弹窗
+  /// [msg]：loading msg
+  ///
+  /// [background]：the rectangle background color of msg
+  ///
+  /// [clickBgDismissTemp]：default（false），true（loading will be closed after click background），false（not close）
+  ///
+  /// [isLoadingTemp]：default（true），true（use the opacity animation），false（use the scale transition animation）
+  ///
+  /// [isPenetrateTemp]：default（false），true（click event will penetrate background），false（not penetration）
+  ///
+  /// [isUseAnimationTemp]：true（use the animation），false（not use）
+  ///
+  /// [animationDurationTemp]：animation duration
+  ///
+  /// [maskColorTemp]：the color of the mask，it is invalid if [maskWidgetTemp] set the value
+  ///
+  /// [maskWidgetTemp]：highly customizable mask
+  ///
+  /// [widget]：the custom loading
+  ///
+  /// [backDismiss]：default（true），true（the back event will close the loading but not close the page），
+  /// false（the back event not close the loading and not close page），you still can use the dismiss method to close the loading
+  ///
+  /// -------------------------------------------------------------------------------
+  ///
+  /// loading弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
+  ///
+  /// [msg]：loading 的信息
+  ///
+  /// [background]：loading信息后面的矩形背景颜色
+  ///
+  /// [clickBgDismissTemp]：默认（false），true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  ///
+  /// [isLoadingTemp]：默认（true），true（使用透明动画），false（使用尺寸缩放动画）
+  ///
+  /// [isPenetrateTemp]：默认（false），true（点击事件将穿透背景），false（不穿透）
+  ///
+  /// [isUseAnimationTemp]：true（使用动画），false（不使用）
+  ///
+  /// [animationDurationTemp]：动画持续时间
+  ///
+  /// [maskColorTemp]：遮罩颜色，如果给[maskWidgetTemp]设置了值，该参数将会失效
+  ///
+  /// [maskWidgetTemp]：可高度定制遮罩
+  ///
+  /// [widget]：the custom loading
+  ///
+  /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
+  /// 你仍然可以使用dismiss方法来关闭loading
   static Future<void> showLoading({
     String msg = 'loading...',
     Color background = Colors.black,
@@ -70,18 +173,31 @@ class SmartDialog {
       isLoading: isLoadingTemp ?? true,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
-      isPenetrate: isPenetrateTemp ?? config.isPenetrate,
+      isPenetrate: isPenetrateTemp ?? false,
       isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
       animationDuration: animationDurationTemp ?? config.animationDuration,
       backDismiss: backDismiss ?? true,
     );
   }
 
-  /// provide toast
-  /// alignment：control the location of toast
+
+  /// [msg]：msg presented to users
   ///
-  /// 提供toast
-  /// alignment：控制toast出现的位置
+  /// [time]：toast display time on the screen
+  ///
+  /// [alignment]：control the location of toast on the screen
+  ///
+  /// [widget]：highly customizable toast
+  ///
+  /// -------------------------------------------------------------------------------
+  ///
+  /// [msg]：呈现给用户的信息
+  ///
+  /// [time]：toast在屏幕上的显示时间
+  ///
+  /// [alignment]：控制toast在屏幕上的显示位置
+  ///
+  /// [widget]：可高度定制化toast
   static Future<void> showToast(
     String msg, {
     Duration time = const Duration(milliseconds: 2000),
@@ -96,22 +212,51 @@ class SmartDialog {
     );
   }
 
-  /// 0：close dialog or loading
-  /// 1：only close dialog
-  /// 2：only close toast
-  /// 3：only close loading
-  /// other：all close
+  /// It is recommended to use the status param,
+  /// and keep the closeType param for compatibility with older versions
+  ///
+  /// [status]：SmartStatus.dialog（only close dialog），SmartStatus.toast（only close loading），SmartStatus.loading（only close toast）。
+  /// note: the closeType param will become invalid after setting the value of the status param。
+  ///
+  /// [closeType]：0（default：close dialog or loading），1（only close dialog），2（only close toast），
+  /// 3（only close loading），other（all close）
   ///
   /// tag：the dialog for setting the 'tag' can be closed
   ///
-  /// 0：关闭dialog或者loading
-  /// 1：仅关闭dialog
-  /// 2：仅关闭toast
-  /// 3：仅关闭loading
-  /// other：全关闭
+  /// -------------------------------------------------------------------------------
   ///
-  /// tag：设置了tag的dialog，会被针对性关闭
-  static Future<void> dismiss({int closeType = 0, String? tag}) async {
-    DialogProxy.instance.dismiss(closeType: closeType, tag: tag);
+  /// 推荐使用status参数，保留closeType参数，是为了兼容旧版本用法
+  ///
+  /// [status]：SmartStatus.dialog（仅关闭dialog），SmartStatus.toast（仅关闭loading），SmartStatus.loading（仅关闭toast）。
+  /// 注意：status参数设置值后，closeType参数将失效。
+  ///
+  /// [closeType]：0（默认：关闭dialog或者loading），1（仅关闭dialog），2（仅关闭toast），
+  /// 3（仅关闭loading），other（全关闭）
+  ///
+  /// [tag]：设置了tag的dialog，会被针对性关闭
+  static Future<void> dismiss({
+    SmartStatus? status,
+    String? tag,
+    @deprecated int closeType = 0,
+  }) async {
+    var instance = DialogProxy.instance;
+    if (status == null) {
+      if (closeType == 0) {
+        await instance.dismiss(tag: tag);
+      } else if (closeType == 1) {
+        await instance.dismiss(status: SmartStatus.dialog, tag: tag);
+      } else if (closeType == 2) {
+        await instance.dismiss(status: SmartStatus.toast);
+      } else if (closeType == 3) {
+        await instance.dismiss(status: SmartStatus.loading);
+      } else {
+        await instance.dismiss(status: SmartStatus.loading);
+        await instance.dismiss(status: SmartStatus.dialog, tag: tag);
+        await instance.dismiss(status: SmartStatus.toast);
+      }
+      return;
+    }
+
+    await instance.dismiss(status: status, tag: tag);
   }
 }

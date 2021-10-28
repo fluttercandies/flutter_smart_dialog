@@ -7,11 +7,11 @@ import 'package:flutter_smart_dialog/src/widget/loading_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_widget.dart';
 
+import '../smart_dialog.dart';
 import 'config.dart';
 import 'entity.dart';
 
 class DialogProxy {
-  ///SmartDialog相关配置,使用Config管理
   late Config config;
   late OverlayEntry entryToast;
   late OverlayEntry entryLoading;
@@ -29,7 +29,6 @@ class DialogProxy {
   static late BuildContext context;
 
   DialogProxy._internal() {
-    ///init some param
     config = Config();
 
     entryLoading = OverlayEntry(
@@ -83,7 +82,7 @@ class DialogProxy {
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
-      onBgTap: () => dismiss(closeType: 1),
+      onBgTap: () => dismiss(status: SmartStatus.dialog),
     );
   }
 
@@ -127,30 +126,19 @@ class DialogProxy {
     );
   }
 
-  /// 0：close dialog or loading
-  /// 1：only close dialog
-  /// 2：only close toast
-  /// 3：only close loading
-  /// other：all close
-  ///
-  /// tag：the dialog for setting the 'tag' can be closed
   Future<void> dismiss({
-    int closeType = 0,
+    SmartStatus? status,
     String? tag,
     bool back = false,
   }) async {
-    if (closeType == 0) {
+    if (status == null) {
       if (!config.isExistLoading) await _closeMain(tag, back);
       if (config.isExistLoading) await _closeLoading(back);
-    } else if (closeType == 1) {
+    } else if (status == SmartStatus.dialog) {
       await _closeMain(tag, back);
-    } else if (closeType == 2) {
-      await _toastAction.dismiss();
-    } else if (closeType == 3) {
+    } else if (status == SmartStatus.loading) {
       await _closeLoading(back);
-    } else {
-      await _closeMain(tag, back);
-      await _closeLoading(back);
+    } else if (status == SmartStatus.toast) {
       await _toastAction.dismiss();
     }
   }
