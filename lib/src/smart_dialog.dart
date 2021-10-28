@@ -28,7 +28,7 @@ class SmartDialog {
   ///
   /// [isLoadingTemp]：true（use the opacity animation），false（use the scale transition animation）
   ///
-  /// [isPenetrateTemp]：true（click event will penetrate background），false（not penetration）
+  /// [isPenetrateTemp]：true（the click event will penetrate background），false（not penetration）
   ///
   /// [isUseAnimationTemp]：true（use the animation），false（not use）
   ///
@@ -113,7 +113,7 @@ class SmartDialog {
   ///
   /// [isLoadingTemp]：default（true），true（use the opacity animation），false（use the scale transition animation）
   ///
-  /// [isPenetrateTemp]：default（false），true（click event will penetrate background），false（not penetration）
+  /// [isPenetrateTemp]：default（false），true（the click event will penetrate background），false（not penetration）
   ///
   /// [isUseAnimationTemp]：true（use the animation），false（not use）
   ///
