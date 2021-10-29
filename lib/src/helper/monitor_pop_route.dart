@@ -5,9 +5,9 @@ import 'package:flutter_smart_dialog/src/smart_dialog.dart';
 typedef PopTestFunc = bool Function();
 
 class MonitorPopRoute with WidgetsBindingObserver {
-  static MonitorPopRoute? _instance;
-
   factory MonitorPopRoute() => instance;
+
+  static MonitorPopRoute? _instance;
 
   static MonitorPopRoute get instance => _instance ??= MonitorPopRoute._();
 
