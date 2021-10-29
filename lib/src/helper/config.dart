@@ -2,6 +2,24 @@ import 'package:flutter/material.dart';
 
 ///全局配置统一在此处处理
 class Config {
+  /// control the location of the dialog on the screen，
+  /// the animation duration can be adjusted by the animationDuration param
+  ///
+  /// center: the dialog locate the center on the screen，the animation type is selected by the 'isLoading' param：
+  /// true（the opacity animation），false（the scale transition animation）
+  ///
+  /// bottomCenter、bottomLeft、bottomRight：the dialog locate the bottom on the screen，
+  /// animation effect is bottom-to-up
+  ///
+  /// topCenter、topLeft、Alignment.topRight：the dialog locate the top on the screen，
+  /// animation effect is up-to-bottom
+  ///
+  /// centerLeft：the dialog locate the left on the screen，animation effect is left-to-right
+  ///
+  /// centerRight：the dialog locate the right on the screen，animation effect is right-to-left
+  ///
+  /// -------------------------------------------------------------------------------
+  ///
   /// 控制dialog位于屏幕的位置，可使用animationDuration设置动画时间
   ///
   /// center: dialog位于屏幕中间，动画可选，可使用isLoading选择：true（渐隐），false（缩放）

@@ -6,7 +6,7 @@ import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/strategy/action.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
 
-///main function : customize dialog
+///main function : custom dialog
 class DialogStrategy extends DialogAction {
   DialogStrategy({
     required Config config,
