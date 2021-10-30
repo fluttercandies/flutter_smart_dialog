@@ -1,14 +1,20 @@
+import 'package:example/widget/dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+
+import 'widget/function_btn.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    FlutterSmartDialog.monitor();
     return MaterialApp(
       home: SmartDialogPage(),
-      builder: FlutterSmartDialog.init(),
+      builder: (BuildContext context, Widget? child) {
+        return FlutterSmartDialog(child: child);
+      },
     );
   }
 }
@@ -26,7 +32,7 @@ class SmartDialogPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FunctionItems(
+    return FunctionBtn(
       items: items,
       onItem: (String? tag) async {
         switch (tag) {
@@ -34,7 +40,7 @@ class SmartDialogPage extends StatelessWidget {
             SmartDialog.showToast('test toast');
             break;
           case 'showLoading':
-            SmartDialog.showLoading();
+            SmartDialog.showLoading(msg: 'loading');
             await Future.delayed(Duration(seconds: 2));
             SmartDialog.dismiss();
             break;
@@ -45,21 +51,21 @@ class SmartDialogPage extends StatelessWidget {
               onDismiss: () {
                 print('==============test callback==============');
               },
-              widget: contentWidget(maxHeight: 400),
+              widget: CustomDialog(maxHeight: 400),
             );
             break;
           case 'topDialog':
             SmartDialog.show(
               alignmentTemp: Alignment.topCenter,
               clickBgDismissTemp: true,
-              widget: contentWidget(maxHeight: 300),
+              widget: CustomDialog(maxHeight: 300),
             );
             break;
           case 'leftDialog':
             SmartDialog.show(
               alignmentTemp: Alignment.centerLeft,
               clickBgDismissTemp: true,
-              widget: contentWidget(maxWidth: 260),
+              widget: CustomDialog(maxWidth: 260),
             );
             break;
           case 'rightDialog':
@@ -77,7 +83,7 @@ class SmartDialogPage extends StatelessWidget {
               clickBgDismissTemp: true,
               maskWidgetTemp: mask,
               animationDurationTemp: Duration(milliseconds: 500),
-              widget: contentWidget(maxWidth: 260),
+              widget: CustomDialog(maxWidth: 260),
             );
             break;
           case 'penetrateDialog':
@@ -85,7 +91,7 @@ class SmartDialogPage extends StatelessWidget {
               alignmentTemp: Alignment.bottomCenter,
               clickBgDismissTemp: false,
               isPenetrateTemp: true,
-              widget: contentWidget(maxHeight: 400),
+              widget: CustomDialog(maxHeight: 400),
             );
             break;
         }
@@ -94,90 +100,3 @@ class SmartDialogPage extends StatelessWidget {
   }
 }
 
-Widget contentWidget({
-  double maxWidth = double.infinity,
-  double maxHeight = double.infinity,
-}) {
-  return Container(
-    constraints: BoxConstraints(maxHeight: maxHeight, maxWidth: maxWidth),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      boxShadow: [
-        BoxShadow(color: Colors.black12, blurRadius: 20, spreadRadius: 10)
-      ],
-    ),
-    child: ListView.builder(
-      itemCount: 30,
-      itemBuilder: (BuildContext context, int index) {
-        return Column(children: [
-          ListTile(
-            leading: Icon(Icons.bubble_chart),
-            title: Text('title---------------$index'),
-          ),
-
-          //line
-          Container(height: 1, color: Colors.black.withOpacity(0.1)),
-        ]);
-      },
-    ),
-  );
-}
-
-class BtnInfo {
-  BtnInfo({this.title, this.tag});
-
-  String? title;
-
-  String? tag;
-}
-
-class FunctionItems extends StatelessWidget {
-  FunctionItems({
-    required this.items,
-    required this.onItem,
-  });
-
-  final List<BtnInfo> items;
-
-  final Function(String? data) onItem;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(title: Text('SmartDialog')),
-      body: Container(
-        padding: EdgeInsets.all(30),
-        child: SingleChildScrollView(
-          child: Material(
-            color: Colors.white,
-            child: Wrap(
-              spacing: 20,
-              runSpacing: 20,
-              children: items.map((e) {
-                return Container(
-                  padding: EdgeInsets.all(15),
-                  child: RawMaterialButton(
-                    fillColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    constraints: BoxConstraints(minWidth: 100, minHeight: 36.0),
-                    elevation: 5,
-                    onPressed: () => onItem.call(e.tag),
-                    child: Container(
-                      width: 130,
-                      padding: EdgeInsets.symmetric(vertical: 15),
-                      alignment: Alignment.center,
-                      child: Text('${e.title}'),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
