@@ -150,18 +150,14 @@ class DialogProxy {
   }
 
   Future<void> _closeMain(String? tag, bool back) async {
-    if (dialogList.length == 0) return;
+    var length = dialogList.length;
+    if (length == 0) return;
 
-    DialogInfo? info;
-    if (tag == null) {
-      info = dialogList[dialogList.length - 1];
-    } else {
-      info = dialogMap[tag];
-      dialogMap.remove(tag);
-    }
+    var info = (tag == null ? dialogList[length - 1] : dialogMap[tag]);
     if (info == null || (!info.backDismiss && back)) return;
 
     //handle close dialog
+    if (tag != null) dialogMap.remove(tag);
     dialogList.remove(info);
     DialogAction action = info.action;
     await action.dismiss();
