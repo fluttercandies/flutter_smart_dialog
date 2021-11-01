@@ -131,30 +131,31 @@ class DialogProxy {
     SmartStatus? status,
     String? tag,
     bool back = false,
+    bool pop = false,
   }) async {
     if (status == null) {
-      if (!config.isExistLoading) await _closeMain(tag, back);
-      if (config.isExistLoading) await _closeLoading(back);
+      if (!config.isExistLoading) await _closeMain(tag, back, pop);
+      if (config.isExistLoading) await _closeLoading(back, pop);
     } else if (status == SmartStatus.dialog) {
-      await _closeMain(tag, back);
+      await _closeMain(tag, back, pop);
     } else if (status == SmartStatus.loading) {
-      await _closeLoading(back);
+      await _closeLoading(back, pop);
     } else if (status == SmartStatus.toast) {
       await _toastAction.dismiss();
     }
   }
 
-  Future<void> _closeLoading(bool back) async {
-    if (!_loadingBackDismiss && back) return;
+  Future<void> _closeLoading(bool back, bool pop) async {
+    if (!_loadingBackDismiss && (back || pop)) return;
     await _loadingAction.dismiss();
   }
 
-  Future<void> _closeMain(String? tag, bool back) async {
+  Future<void> _closeMain(String? tag, bool back, bool pop) async {
     var length = dialogList.length;
     if (length == 0) return;
 
     var info = (tag == null ? dialogList[length - 1] : dialogMap[tag]);
-    if (info == null || (!info.backDismiss && back)) return;
+    if (info == null || (!info.backDismiss && (back || pop))) return;
 
     //handle close dialog
     if (tag != null) dialogMap.remove(tag);

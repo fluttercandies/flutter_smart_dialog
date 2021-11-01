@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'helper/dialog_proxy.dart';
 import 'helper/monitor_pop_route.dart';
+import 'helper/navigator_observer.dart';
 
 class FlutterSmartDialog extends StatelessWidget {
   FlutterSmartDialog({Key? key, required this.child}) : super(key: key);
 
   final Widget? child;
+
+  static final observer = SmartNavigatorObserver();
 
   @override
   Widget build(BuildContext context) {
