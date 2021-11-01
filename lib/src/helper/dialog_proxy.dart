@@ -68,8 +68,9 @@ class DialogProxy {
     );
     action = DialogStrategy(config: config, overlayEntry: entry);
     Overlay.of(context)!.insert(entry, below: entryLoading);
-    dialogList.add(DialogInfo(action, backDismiss));
-    if (tag != null) dialogMap[tag] = DialogInfo(action, backDismiss);
+    var dialogInfo = DialogInfo(action, backDismiss);
+    dialogList.add(dialogInfo);
+    if (tag != null) dialogMap[tag] = dialogInfo;
 
     return action.show(
       widget: widget,
