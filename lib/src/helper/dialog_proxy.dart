@@ -50,17 +50,17 @@ class DialogProxy {
 
   Future<void> show({
     required Widget widget,
-    AlignmentGeometry? alignment,
-    bool? isPenetrate,
-    bool? isUseAnimation,
-    Duration? animationDuration,
-    bool? isLoading,
-    Color? maskColor,
-    Widget? maskWidget,
-    bool? clickBgDismiss,
-    VoidCallback? onDismiss,
-    String? tag,
-    bool backDismiss = true,
+    required AlignmentGeometry alignment,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required bool isLoading,
+    required Color maskColor,
+    required Widget? maskWidget,
+    required bool clickBgDismiss,
+    required VoidCallback? onDismiss,
+    required String? tag,
+    required bool backDismiss,
   }) {
     DialogAction? action;
     var entry = OverlayEntry(
@@ -68,7 +68,7 @@ class DialogProxy {
     );
     action = DialogStrategy(config: config, overlayEntry: entry);
     Overlay.of(context)!.insert(entry, below: entryLoading);
-    var dialogInfo = DialogInfo(action, backDismiss);
+    var dialogInfo = DialogInfo(action, backDismiss, isUseAnimation);
     dialogList.add(dialogInfo);
     if (tag != null) dialogMap[tag] = dialogInfo;
 
@@ -88,17 +88,17 @@ class DialogProxy {
   }
 
   Future<void> showLoading({
-    String msg = 'loading...',
-    Color background = Colors.black,
-    bool clickBgDismiss = false,
-    bool isLoading = true,
-    bool? isPenetrate,
-    bool? isUseAnimation,
-    Duration? animationDuration,
-    Color? maskColor,
-    Widget? maskWidget,
-    Widget? widget,
-    bool backDismiss = true,
+    required String msg,
+    required Color background,
+    required bool clickBgDismiss,
+    required bool isLoading,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required Color maskColor,
+    required Widget? maskWidget,
+    required Widget? widget,
+    required bool backDismiss,
   }) {
     _loadingBackDismiss = backDismiss;
     return _loadingAction.showLoading(
@@ -115,9 +115,9 @@ class DialogProxy {
 
   Future<void> showToast(
     String msg, {
-    Duration time = const Duration(milliseconds: 2000),
-    alignment: Alignment.bottomCenter,
-    Widget? widget,
+    required Duration time,
+    required AlignmentGeometry alignment,
+    required Widget? widget,
   }) async {
     _toastAction.showToast(
       time: time,
