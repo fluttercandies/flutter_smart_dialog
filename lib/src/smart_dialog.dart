@@ -90,13 +90,13 @@ class SmartDialog {
     return DialogProxy.instance.show(
       widget: widget,
       alignment: alignmentTemp ?? config.alignment,
+      clickBgDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
+      isLoading: isLoadingTemp ?? config.isLoading,
       isPenetrate: isPenetrateTemp ?? config.isPenetrate,
       isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
       animationDuration: animationDurationTemp ?? config.animationDuration,
-      isLoading: isLoadingTemp ?? config.isLoading,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
-      clickBgDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
       onDismiss: onDismiss,
       tag: tag,
       backDismiss: backDismiss ?? true,
@@ -155,8 +155,8 @@ class SmartDialog {
   /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
   /// 你仍然可以使用dismiss方法来关闭loading
   static Future<void> showLoading({
-    String msg = 'loading...',
-    Color background = Colors.black,
+    String? msg,
+    Color? background,
     bool? clickBgDismissTemp,
     bool? isLoadingTemp,
     bool? isPenetrateTemp,
@@ -168,18 +168,19 @@ class SmartDialog {
     bool? backDismiss,
   }) {
     return DialogProxy.instance.showLoading(
-      widget: widget ?? LoadingWidget(msg: msg, background: background),
+      msg: msg ?? 'loading...',
+      background: background ?? Colors.black,
       clickBgDismiss: clickBgDismissTemp ?? false,
       isLoading: isLoadingTemp ?? true,
-      maskColor: maskColorTemp ?? config.maskColor,
-      maskWidget: maskWidgetTemp ?? config.maskWidget,
       isPenetrate: isPenetrateTemp ?? false,
       isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
       animationDuration: animationDurationTemp ?? config.animationDuration,
+      maskColor: maskColorTemp ?? config.maskColor,
+      maskWidget: maskWidgetTemp ?? config.maskWidget,
+      widget: widget,
       backDismiss: backDismiss ?? true,
     );
   }
-
 
   /// [msg]：msg presented to users
   ///
@@ -200,14 +201,14 @@ class SmartDialog {
   /// [widget]：可高度定制化toast
   static Future<void> showToast(
     String msg, {
-    Duration time = const Duration(milliseconds: 2000),
-    alignment: Alignment.bottomCenter,
+    Duration? time,
+    AlignmentGeometry? alignment,
     Widget? widget,
   }) async {
     DialogProxy.instance.showToast(
       msg,
-      time: time,
-      alignment: alignment,
+      time: time ?? Duration(milliseconds: 2000),
+      alignment: alignment ?? Alignment.bottomCenter,
       widget: widget,
     );
   }

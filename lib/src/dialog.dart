@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'helper/dialog_proxy.dart';
 import 'helper/monitor_pop_route.dart';
+import 'helper/navigator_observer.dart';
 
 class FlutterSmartDialog extends StatefulWidget {
   final Widget? child;
@@ -46,15 +47,17 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
       ]),
     );
   }
+
 }
 
-///recommend the way of init
-TransitionBuilder initFlutterSmartDialog({TransitionBuilder? builder}) {
-  FlutterSmartDialog.monitor();
+  ///recommend the way of init
+  static TransitionBuilder init({TransitionBuilder? builder}) {
+    monitor();
 
-  return (BuildContext context, Widget? child) {
-    return builder == null
-        ? FlutterSmartDialog(child: child)
-        : builder(context, FlutterSmartDialog(child: child));
-  };
+    return (BuildContext context, Widget? child) {
+      return builder == null
+          ? FlutterSmartDialog(child: child)
+          : builder(context, FlutterSmartDialog(child: child));
+    };
+  }
 }

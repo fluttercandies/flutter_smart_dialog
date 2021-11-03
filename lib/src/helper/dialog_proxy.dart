@@ -52,17 +52,17 @@ class DialogProxy {
 
   Future<void> show({
     required Widget widget,
-    AlignmentGeometry? alignment,
-    bool? isPenetrate,
-    bool? isUseAnimation,
-    Duration? animationDuration,
-    bool? isLoading,
-    Color? maskColor,
-    Widget? maskWidget,
-    bool? clickBgDismiss,
-    VoidCallback? onDismiss,
-    String? tag,
-    bool backDismiss = true,
+    required AlignmentGeometry alignment,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required bool isLoading,
+    required Color maskColor,
+    required Widget? maskWidget,
+    required bool clickBgDismiss,
+    required VoidCallback? onDismiss,
+    required String? tag,
+    required bool backDismiss,
   }) {
     DialogAction? action;
     var entry = OverlayEntry(
@@ -70,8 +70,9 @@ class DialogProxy {
     );
     action = DialogStrategy(config: config, overlayEntry: entry);
     Overlay.of(context)!.insert(entry, below: entryLoading);
-    dialogList.add(DialogInfo(action, backDismiss));
-    if (tag != null) dialogMap[tag] = DialogInfo(action, backDismiss);
+    var dialogInfo = DialogInfo(action, backDismiss, isUseAnimation);
+    dialogList.add(dialogInfo);
+    if (tag != null) dialogMap[tag] = dialogInfo;
 
     return action.show(
       widget: widget,
@@ -89,17 +90,17 @@ class DialogProxy {
   }
 
   Future<void> showLoading({
-    String msg = 'loading...',
-    Color background = Colors.black,
-    bool clickBgDismiss = false,
-    bool isLoading = true,
-    bool? isPenetrate,
-    bool? isUseAnimation,
-    Duration? animationDuration,
-    Color? maskColor,
-    Widget? maskWidget,
-    Widget? widget,
-    bool backDismiss = true,
+    required String msg,
+    required Color background,
+    required bool clickBgDismiss,
+    required bool isLoading,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required Color maskColor,
+    required Widget? maskWidget,
+    required Widget? widget,
+    required bool backDismiss,
   }) {
     _loadingBackDismiss = backDismiss;
     return _loadingAction.showLoading(
@@ -116,9 +117,9 @@ class DialogProxy {
 
   Future<void> showToast(
     String msg, {
-    Duration time = const Duration(milliseconds: 2000),
-    alignment: Alignment.bottomCenter,
-    Widget? widget,
+    required Duration time,
+    required AlignmentGeometry alignment,
+    required Widget? widget,
   }) async {
     _toastAction.showToast(
       time: time,
@@ -132,37 +133,34 @@ class DialogProxy {
     SmartStatus? status,
     String? tag,
     bool back = false,
+    bool pop = false,
   }) async {
     if (status == null) {
-      if (!config.isExistLoading) await _closeMain(tag, back);
-      if (config.isExistLoading) await _closeLoading(back);
+      if (!config.isExistLoading) await _closeMain(tag, back, pop);
+      if (config.isExistLoading) await _closeLoading(back, pop);
     } else if (status == SmartStatus.dialog) {
-      await _closeMain(tag, back);
+      await _closeMain(tag, back, pop);
     } else if (status == SmartStatus.loading) {
-      await _closeLoading(back);
+      await _closeLoading(back, pop);
     } else if (status == SmartStatus.toast) {
       await _toastAction.dismiss();
     }
   }
 
-  Future<void> _closeLoading(bool back) async {
-    if (!_loadingBackDismiss && back) return;
+  Future<void> _closeLoading(bool back, bool pop) async {
+    if (!_loadingBackDismiss && (back || pop)) return;
     await _loadingAction.dismiss();
   }
 
-  Future<void> _closeMain(String? tag, bool back) async {
-    if (dialogList.length == 0) return;
+  Future<void> _closeMain(String? tag, bool back, bool pop) async {
+    var length = dialogList.length;
+    if (length == 0) return;
 
-    DialogInfo? info;
-    if (tag == null) {
-      info = dialogList[dialogList.length - 1];
-    } else {
-      info = dialogMap[tag];
-      dialogMap.remove(tag);
-    }
-    if (info == null || (!info.backDismiss && back)) return;
+    var info = (tag == null ? dialogList[length - 1] : dialogMap[tag]);
+    if (info == null || (!info.backDismiss && (back || pop))) return;
 
     //handle close dialog
+    if (tag != null) dialogMap.remove(tag);
     dialogList.remove(info);
     DialogAction action = info.action;
     await action.dismiss();
