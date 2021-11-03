@@ -30,7 +30,9 @@ class DialogProxy {
 
   DialogProxy._internal() {
     config = Config();
+  }
 
+  void initialize() {
     entryLoading = OverlayEntry(
       builder: (BuildContext context) => _loadingAction.getWidget(),
     );
