@@ -1,26 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/helper/navigator_observer.dart';
 
 import 'helper/dialog_proxy.dart';
 import 'helper/monitor_pop_route.dart';
-import 'helper/navigator_observer.dart';
 
 class FlutterSmartDialog extends StatefulWidget {
-  final Widget? child;
-
-  static void monitor() => MonitorPopRoute.instance;
-
   FlutterSmartDialog({Key? key, required this.child}) : super(key: key);
+
+  final Widget? child;
 
   @override
   _FlutterSmartDialogState createState() => _FlutterSmartDialogState();
+
+  static final observer = SmartNavigatorObserver();
+
+  static void monitor() => MonitorPopRoute.instance;
+
+  ///recommend the way of init
+  static TransitionBuilder init({TransitionBuilder? builder}) {
+    monitor();
+
+    return (BuildContext context, Widget? child) {
+      return builder == null
+          ? FlutterSmartDialog(child: child)
+          : builder(context, FlutterSmartDialog(child: child));
+    };
+  }
 }
 
 class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
   @override
   void initState() {
     super.initState();
-    
-    // 解决Flutter Inspector -> select widget mode 功能失效问题
+
+    // solve Flutter Inspector -> select widget mode function failure problem
     DialogProxy.instance.initialize();
   }
 
@@ -46,18 +59,5 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
         DialogProxy.instance.entryToast,
       ]),
     );
-  }
-
-}
-
-  ///recommend the way of init
-  static TransitionBuilder init({TransitionBuilder? builder}) {
-    monitor();
-
-    return (BuildContext context, Widget? child) {
-      return builder == null
-          ? FlutterSmartDialog(child: child)
-          : builder(context, FlutterSmartDialog(child: child));
-    };
   }
 }
