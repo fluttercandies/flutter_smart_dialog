@@ -142,6 +142,23 @@ class DialogProxy {
       await _closeLoading(back, pop);
     } else if (status == SmartStatus.toast) {
       await _toastAction.dismiss();
+    } else if (status == SmartStatus.allDialog) {
+      await closeAllDialog(status: SmartStatus.dialog);
+    }
+  }
+
+  Future<void> closeAllDialog({
+    SmartStatus? status,
+    bool pop = false,
+  }) async {
+    var length = dialogList.length;
+    for (var i = 0; i < length; i++) {
+      var item = dialogList[dialogList.length - 1];
+
+      await dismiss(pop: pop, status: status);
+      if (item.isUseAnimation) {
+        await Future.delayed(Duration(milliseconds: 100));
+      }
     }
   }
 

@@ -1,15 +1,22 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/src/widget/loading_widget.dart';
 
 import 'helper/config.dart';
 import 'helper/dialog_proxy.dart';
 
 enum SmartStatus {
-  dialog,
-  loading,
+  /// close toast
   toast,
+
+  /// close loading
+  loading,
+
+  /// close single dialog
+  dialog,
+
+  /// close all dialog, but not close toast and loading
+  allDialog,
 }
 
 class SmartDialog {
@@ -222,7 +229,7 @@ class SmartDialog {
   /// [closeType]：0（default：close dialog or loading），1（only close dialog），2（only close toast），
   /// 3（only close loading），other（all close）
   ///
-  /// tag：the dialog for setting the 'tag' can be closed
+  /// tag：if you want to close the specified dialog, you can set a 'tag' for it
   ///
   /// -------------------------------------------------------------------------------
   ///
@@ -234,7 +241,7 @@ class SmartDialog {
   /// [closeType]：0（默认：关闭dialog或者loading），1（仅关闭dialog），2（仅关闭toast），
   /// 3（仅关闭loading），other（全关闭）
   ///
-  /// [tag]：设置了tag的dialog，会被针对性关闭
+  /// [tag]：如果你想关闭指定的dialog，你可以给它设置一个tag
   static Future<void> dismiss({
     SmartStatus? status,
     String? tag,

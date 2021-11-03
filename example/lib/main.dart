@@ -1,8 +1,5 @@
-import 'package:example/widget/dialog_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-
-import 'widget/function_btn.dart';
 
 void main() => runApp(MyApp());
 
@@ -18,82 +15,60 @@ class MyApp extends StatelessWidget {
 }
 
 class SmartDialogPage extends StatelessWidget {
-  final items = [
-    BtnInfo(title: 'showToast', tag: 'showToast'),
-    BtnInfo(title: 'showLoading', tag: 'showLoading'),
-    BtnInfo(title: 'bottomDialog', tag: 'bottomDialog'),
-    BtnInfo(title: 'topDialog', tag: 'topDialog'),
-    BtnInfo(title: 'leftDialog', tag: 'leftDialog'),
-    BtnInfo(title: 'rightDialog', tag: 'rightDialog'),
-    BtnInfo(title: 'penetrateDialog', tag: 'penetrateDialog'),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return FunctionBtn(
-      items: items,
-      onItem: (String? tag) async {
-        switch (tag) {
-          case 'showToast':
-            SmartDialog.showToast('test toast');
-            break;
-          case 'showLoading':
-            SmartDialog.showLoading(msg: 'loading');
-            await Future.delayed(Duration(seconds: 2));
-            SmartDialog.dismiss();
-            break;
-          case 'bottomDialog':
-            SmartDialog.show(
-              alignmentTemp: Alignment.bottomCenter,
-              clickBgDismissTemp: true,
-              onDismiss: () {
-                print('==============test callback==============');
-              },
-              widget: CustomDialog(maxHeight: 400),
-            );
-            break;
-          case 'topDialog':
-            SmartDialog.show(
-              alignmentTemp: Alignment.topCenter,
-              clickBgDismissTemp: true,
-              widget: CustomDialog(maxHeight: 300),
-            );
-            break;
-          case 'leftDialog':
-            SmartDialog.show(
-              alignmentTemp: Alignment.centerLeft,
-              clickBgDismissTemp: true,
-              widget: CustomDialog(maxWidth: 260),
-            );
-            break;
-          case 'rightDialog':
-            var mask = Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: [
-                  Colors.lightGreenAccent.withOpacity(0.4),
-                  Colors.deepOrange.withOpacity(0.4),
-                ]),
-              ),
-            );
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(title: Text('SmartDialog-EasyDemo')),
+      body: Container(
+        margin: EdgeInsets.all(30),
+        child: Wrap(spacing: 20, children: [
+          //toast
+          ElevatedButton(
+            onPressed: () => _showToast(),
+            child: Text('showToast'),
+          ),
 
-            SmartDialog.show(
-              alignmentTemp: Alignment.centerRight,
-              clickBgDismissTemp: true,
-              maskWidgetTemp: mask,
-              animationDurationTemp: Duration(milliseconds: 500),
-              widget: CustomDialog(maxWidth: 260),
-            );
-            break;
-          case 'penetrateDialog':
-            SmartDialog.show(
-              alignmentTemp: Alignment.bottomCenter,
-              clickBgDismissTemp: false,
-              isPenetrateTemp: true,
-              widget: CustomDialog(maxHeight: 400),
-            );
-            break;
-        }
-      },
+          //loading
+          ElevatedButton(
+            onPressed: () => _showLoading(),
+            child: Text('showLoading'),
+          ),
+
+          //dialog
+          ElevatedButton(
+            onPressed: () => _showDialog(),
+            child: Text('showDialog'),
+          ),
+        ]),
+      ),
     );
+  }
+
+  void _showToast() => SmartDialog.showToast('test toast');
+
+  void _showDialog() {
+    SmartDialog.show(
+      isLoadingTemp: false,
+      widget: Container(
+        height: 80,
+        width: 180,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          'easy custom dialog',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  void _showLoading() async {
+    SmartDialog.showLoading();
+    await Future.delayed(Duration(seconds: 2));
+    SmartDialog.dismiss();
   }
 }

@@ -17,15 +17,6 @@ class SmartNavigatorObserver extends NavigatorObserver {
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) async {
     if (!SmartDialog.config.isExist) return;
 
-    var length = DialogProxy.instance.dialogList.length;
-    for (var i = 0; i < length; i++) {
-      var dialogs = DialogProxy.instance.dialogList;
-      var item = dialogs[dialogs.length - 1];
-
-      await DialogProxy.instance.dismiss(pop: true);
-      if (item.isUseAnimation) {
-        await Future.delayed(Duration(milliseconds: 100));
-      }
-    }
+    DialogProxy.instance.closeAllDialog(pop: true);
   }
 }
