@@ -78,12 +78,12 @@ class Config {
   /// 自定义dialog是否存在在界面上
   bool isExistMain = false;
 
-  /// whether loading and custom dialog exist on the screen
+  /// whether loading exist on the screen
   ///
   /// loading是否存在界面上
   bool isExistLoading = false;
 
-  /// whether loading and custom dialog exist on the screen
+  /// whether toast exist on the screen
   ///
   /// toast是否存在在界面上
   bool isExistToast = false;
