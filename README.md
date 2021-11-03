@@ -24,8 +24,6 @@ dependencies:
 
 ## Initialization
 
-> **Initialization method 1:  Strong recommendation**😃
-
 ```dart
 void main() => runApp(MyApp());
 
@@ -39,29 +37,6 @@ class MyApp extends StatelessWidget {
       navigatorObservers: [FlutterSmartDialog.observer],
       // here
       builder: FlutterSmartDialog.init(),
-    );
-  }
-}
-```
-
-> **Initialization Method 2: Compatible with the old version**❤
-
-```dart
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // here
-    FlutterSmartDialog.monitor();
-    return MaterialApp(
-      home: SmartDialogPage(),
-      // here
-      navigatorObservers: [FlutterSmartDialog.observer],
-      /// here
-      builder: (BuildContext context, Widget? child) {
-        return FlutterSmartDialog(child: child);
-      },
     );
   }
 }
