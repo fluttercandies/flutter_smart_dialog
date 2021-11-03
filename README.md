@@ -159,8 +159,8 @@ Although the monitoring of the return button can cover most scenes, some manual 
 
 > **Super practical parameter: backDismiss**
 
-- This parameter is set to true by default, and the dialog will be closed by default when returning; if it is set to false, the page will not be closed
-  - In this way, an emergency pop- up window can be made very easily, prohibiting the user's next operation
+- This parameter is set to `true` by default, and the dialog will be closed by default when returning; if it is set to `false`, the page will not be closed
+  - In this way, an emergency dialog can be made very easily, prohibiting the user's next operation
 - Let’s look at a scenario: Suppose an open source author decides to abandon the software and does not allow users to use the software’s dialog
 
 ![hardClose](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092201.gif)
