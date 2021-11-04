@@ -31,8 +31,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: RouteConfig.main,
-      getPages: RouteConfig.getPages,
+      home: HomePage,
       // here
       navigatorObservers: [FlutterSmartDialog.observer],
       // here
@@ -94,8 +93,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: RouteConfig.main,
-      getPages: RouteConfig.getPages,
+      home: HomePage,
       navigatorObservers: [FlutterSmartDialog.observer],
       builder: FlutterSmartDialog.init(builder: _builder),
     );
