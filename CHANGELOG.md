@@ -1,7 +1,9 @@
 # [3.0.x]
 
-- support close the dialog when you pop route
+- Support dialog stack，close the specified dialog
 - support open multi dialog
+- Monitor back and pop event, then close dialog reasonably
+- Initialization is more concise
 
 # [2.3.x]
 
