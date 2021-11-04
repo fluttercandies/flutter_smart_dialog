@@ -16,16 +16,17 @@ class DialogStrategy extends DialogAction {
   @override
   Future<void> show({
     required Widget widget,
-    AlignmentGeometry? alignment,
-    bool? isPenetrate,
-    bool? isUseAnimation,
-    Duration? animationDuration,
-    bool? isLoading,
-    Color? maskColor,
-    Widget? maskWidget,
-    bool? clickBgDismiss,
+    required AlignmentGeometry alignment,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required bool isLoading,
+    required Color maskColor,
+    required bool clickBgDismiss,
+    required SmartDialogVoidCallBack onBgTap,
+    required bool antiShake,
+    required Widget? maskWidget,
     VoidCallback? onDismiss,
-    SmartDialogVoidCallBack? onBgTap,
   }) async {
     config.isExist = true;
     config.isExistMain = true;

@@ -70,8 +70,10 @@ class Config {
 
   /// anti-shake function，it works on toast and dialog：default（false）
   ///
-  /// 防抖功能，它作用于toast和dialog上：默认（false）
-  bool antiShake = false;
+  /// 防抖功能，它作用于toast和dialog上：默认（true）
+  bool antiShake = true;
+
+  Duration antiShakeTime = Duration(milliseconds: 100);
 
   /// whether loading and custom dialog exist on the screen
   ///

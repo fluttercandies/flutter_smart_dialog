@@ -24,15 +24,15 @@ class MainStrategy {
 
   Future<void> show({
     required Widget widget,
+    required AlignmentGeometry? alignment,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required bool isLoading,
+    required Color maskColor,
+    required Widget? maskWidget,
+    required bool clickBgDismiss,
     required SmartDialogVoidCallBack onBgTap,
-    AlignmentGeometry? alignment,
-    bool? isPenetrate,
-    bool? isUseAnimation,
-    Duration? animationDuration,
-    bool? isLoading,
-    Color? maskColor,
-    Widget? maskWidget,
-    bool? clickBgDismiss,
     VoidCallback? onDismiss,
   }) async {
     _onDismiss = onDismiss;

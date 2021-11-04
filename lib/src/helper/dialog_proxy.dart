@@ -58,8 +58,9 @@ class DialogProxy {
     required Duration animationDuration,
     required bool isLoading,
     required Color maskColor,
-    required Widget? maskWidget,
     required bool clickBgDismiss,
+    required Widget? maskWidget,
+    required bool antiShake,
     required VoidCallback? onDismiss,
     required String? tag,
     required bool backDismiss,
@@ -85,6 +86,7 @@ class DialogProxy {
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
+      antiShake: antiShake,
       onBgTap: () => dismiss(status: SmartStatus.dialog),
     );
   }
@@ -119,10 +121,12 @@ class DialogProxy {
     String msg, {
     required Duration time,
     required AlignmentGeometry alignment,
+    required bool antiShake,
     required Widget? widget,
   }) async {
     _toastAction.showToast(
       time: time,
+      antiShake: antiShake,
       widget: ToastHelper(
         child: widget ?? ToastWidget(msg: msg, alignment: alignment),
       ),

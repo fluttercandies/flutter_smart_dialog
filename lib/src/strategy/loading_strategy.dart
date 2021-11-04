@@ -14,13 +14,13 @@ class LoadingStrategy extends DialogAction {
   @override
   Future<void> showLoading({
     required Widget widget,
-    bool clickBgDismiss = false,
-    bool isLoading = true,
-    bool? isPenetrate,
-    bool? isUseAnimation,
-    Duration? animationDuration,
-    Color? maskColor,
-    Widget? maskWidget,
+    required bool clickBgDismiss,
+    required bool isLoading,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required Color maskColor,
+    required Widget? maskWidget,
   }) async {
     config.isExist = true;
     config.isExistLoading = true;

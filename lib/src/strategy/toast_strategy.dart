@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/strategy/action.dart';
 
@@ -10,12 +11,23 @@ class ToastStrategy extends DialogAction {
 
   List<void Function()> _toastList = [];
 
+  DateTime? _lastTime;
+
   @override
   Future<void> showToast({
-    Duration time = const Duration(milliseconds: 2000),
-    alignment: Alignment.bottomCenter,
+    required Duration time,
+    required bool antiShake,
     required Widget widget,
   }) async {
+    // anti-shake
+    if (antiShake) {
+      var now = DateTime.now();
+      var isShake = _lastTime != null &&
+          now.difference(_lastTime!) < SmartDialog.config.antiShakeTime;
+      _lastTime = now;
+      if (isShake) return;
+    }
+
     config.isExistToast = true;
 
     _toastList.add(() async {
@@ -23,10 +35,16 @@ class ToastStrategy extends DialogAction {
       if (_toastList.length == 0) return;
 
       mainAction.show(
-        widget: widget,
+        alignment: Alignment.center,
+        maskColor: Colors.transparent,
+        maskWidget: null,
+        animationDuration: Duration(milliseconds: 200),
+        isLoading: true,
+        isUseAnimation: true,
         isPenetrate: true,
         clickBgDismiss: false,
         onBgTap: () => dismiss(),
+        widget: widget,
       );
       await Future.delayed(time);
       await dismiss();

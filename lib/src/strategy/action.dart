@@ -22,16 +22,17 @@ abstract class DialogAction {
   /// custom dialog
   Future<void> show({
     required Widget widget,
-    AlignmentGeometry? alignment,
-    bool? isPenetrate,
-    bool? isUseAnimation,
-    Duration? animationDuration,
-    bool? isLoading,
-    Color? maskColor,
-    Widget? maskWidget,
-    bool? clickBgDismiss,
+    required AlignmentGeometry alignment,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required bool isLoading,
+    required Color maskColor,
+    required bool clickBgDismiss,
+    required SmartDialogVoidCallBack onBgTap,
+    required bool antiShake,
+    required Widget? maskWidget,
     VoidCallback? onDismiss,
-    SmartDialogVoidCallBack? onBgTap,
   }) async {
     throw 'not implement show(...)';
   }
@@ -39,22 +40,22 @@ abstract class DialogAction {
   /// loading
   Future<void> showLoading({
     required Widget widget,
-    bool clickBgDismiss = false,
-    bool isLoading = true,
-    bool? isPenetrate,
-    bool? isUseAnimation,
-    Duration? animationDuration,
-    Color? maskColor,
-    Widget? maskWidget,
+    required bool clickBgDismiss,
+    required bool isLoading,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required Color maskColor,
+    required Widget? maskWidget,
   }) async {
     throw 'not implement showLoading(...)';
   }
 
   /// toast
   Future<void> showToast({
+    required Duration time,
+    required bool antiShake,
     required Widget widget,
-    Duration time = const Duration(milliseconds: 2000),
-    alignment: Alignment.bottomCenter,
   }) async {
     throw 'not implement showToast(...)';
   }

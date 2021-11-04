@@ -31,10 +31,10 @@ class FlutterSmartDialog extends StatefulWidget {
 class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
   @override
   void initState() {
-    super.initState();
-
     // solve Flutter Inspector -> select widget mode function failure problem
     DialogProxy.instance.initialize();
+
+    super.initState();
   }
 
   @override
@@ -44,7 +44,8 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
       child: Overlay(initialEntries: [
         //main layout
         OverlayEntry(
-            builder: (BuildContext context) => widget.child ?? Container()),
+          builder: (BuildContext context) => widget.child ?? Container(),
+        ),
 
         //provided separately for custom dialog
         OverlayEntry(builder: (BuildContext context) {

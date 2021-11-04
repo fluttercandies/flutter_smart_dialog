@@ -45,6 +45,8 @@ class SmartDialog {
   ///
   /// [maskWidgetTemp]：highly customizable mask
   ///
+  /// [antiShakeTemp]：anti-shake function
+  ///
   /// [onDismiss]：the callback will be invoked when the dialog is closed
   ///
   /// [tag]：if you set a tag for the dialog, you can turn it off in a targeted manner
@@ -74,6 +76,8 @@ class SmartDialog {
   ///
   /// [maskWidgetTemp]：可高度定制遮罩
   ///
+  /// [antiShakeTemp]：防抖功能
+  ///
   /// [onDismiss]：在dialog被关闭的时候，该回到将会被触发
   ///
   /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
@@ -90,6 +94,7 @@ class SmartDialog {
     Duration? animationDurationTemp,
     Color? maskColorTemp,
     Widget? maskWidgetTemp,
+    bool? antiShakeTemp,
     VoidCallback? onDismiss,
     String? tag,
     bool? backDismiss,
@@ -104,6 +109,7 @@ class SmartDialog {
       animationDuration: animationDurationTemp ?? config.animationDuration,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
+      antiShake: antiShakeTemp ?? config.antiShake,
       onDismiss: onDismiss,
       tag: tag,
       backDismiss: backDismiss ?? true,
@@ -195,6 +201,8 @@ class SmartDialog {
   ///
   /// [alignment]：control the location of toast on the screen
   ///
+  /// [antiShakeTemp]：anti-shake function
+  ///
   /// [widget]：highly customizable toast
   ///
   /// -------------------------------------------------------------------------------
@@ -205,17 +213,21 @@ class SmartDialog {
   ///
   /// [alignment]：控制toast在屏幕上的显示位置
   ///
+  ///  [antiShakeTemp]：防抖功能
+  ///
   /// [widget]：可高度定制化toast
   static Future<void> showToast(
     String msg, {
-    Duration? time,
     AlignmentGeometry? alignment,
+    Duration? time,
+    bool? antiShakeTemp,
     Widget? widget,
   }) async {
     DialogProxy.instance.showToast(
       msg,
-      time: time ?? Duration(milliseconds: 2000),
       alignment: alignment ?? Alignment.bottomCenter,
+      time: time ?? Duration(milliseconds: 2000),
+      antiShake: antiShakeTemp ?? config.antiShake,
       widget: widget,
     );
   }
