@@ -68,6 +68,11 @@ class Config {
   /// 是否使用Loading动画（默认：true，仅仅针对中间位置的dialog）；true:使用渐隐动画  false：使用缩放动画，
   bool isLoading = true;
 
+  /// anti-shake function，it works on toast and dialog：default（false）
+  ///
+  /// 防抖功能，它作用于toast和dialog上：默认（false）
+  bool antiShake = false;
+
   /// whether loading and custom dialog exist on the screen
   ///
   /// loading和自定义dialog，是否存在在界面上
