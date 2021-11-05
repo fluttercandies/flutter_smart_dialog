@@ -6,12 +6,16 @@ import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/strategy/action.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
 
+import '../../flutter_smart_dialog.dart';
+
 ///main function : custom dialog
 class DialogStrategy extends DialogAction {
   DialogStrategy({
     required Config config,
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
+
+  DateTime? _lastTime;
 
   @override
   Future<void> show({
@@ -26,8 +30,21 @@ class DialogStrategy extends DialogAction {
     required SmartDialogVoidCallBack onBgTap,
     required bool antiShake,
     required Widget? maskWidget,
+    required bool backDismiss,
     VoidCallback? onDismiss,
   }) async {
+    // anti-shake
+    if (antiShake) {
+      var now = DateTime.now();
+      var isShake = _lastTime != null &&
+          now.difference(_lastTime!) < SmartDialog.config.antiShakeTime;
+      _lastTime = now;
+      if (isShake) return;
+    }
+
+
+
+
     config.isExist = true;
     config.isExistMain = true;
 
@@ -42,7 +59,7 @@ class DialogStrategy extends DialogAction {
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
-      onBgTap: () => onBgTap == null ? dismiss() : onBgTap(),
+      onBgTap: () => onBgTap,
     );
   }
 

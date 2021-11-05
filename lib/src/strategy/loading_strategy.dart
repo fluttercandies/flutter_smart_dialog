@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
+import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/strategy/action.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
 
@@ -21,7 +22,9 @@ class LoadingStrategy extends DialogAction {
     required Duration animationDuration,
     required Color maskColor,
     required Widget? maskWidget,
+    required bool backDismiss,
   }) async {
+    DialogProxy.instance.loadingBackDismiss = backDismiss;
     config.isExist = true;
     config.isExistLoading = true;
 

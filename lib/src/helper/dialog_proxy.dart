@@ -19,7 +19,7 @@ class DialogProxy {
   late List<DialogInfo> dialogList;
   late DialogAction _toastAction;
   late DialogAction _loadingAction;
-  bool _loadingBackDismiss = true;
+  bool loadingBackDismiss = true;
 
   factory DialogProxy() => instance;
   static DialogProxy? _instance;
@@ -70,6 +70,7 @@ class DialogProxy {
       builder: (BuildContext context) => action!.getWidget(),
     );
     action = DialogStrategy(config: config, overlayEntry: entry);
+
     Overlay.of(context)!.insert(entry, below: entryLoading);
     var dialogInfo = DialogInfo(action, backDismiss, isUseAnimation);
     dialogList.add(dialogInfo);
@@ -87,6 +88,7 @@ class DialogProxy {
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
       antiShake: antiShake,
+      backDismiss: backDismiss,
       onBgTap: () => dismiss(status: SmartStatus.dialog),
     );
   }
@@ -104,7 +106,7 @@ class DialogProxy {
     required Widget? widget,
     required bool backDismiss,
   }) {
-    _loadingBackDismiss = backDismiss;
+
     return _loadingAction.showLoading(
       widget: widget ?? LoadingWidget(msg: msg, background: background),
       clickBgDismiss: clickBgDismiss,
@@ -114,6 +116,7 @@ class DialogProxy {
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
       animationDuration: animationDuration,
+      backDismiss: backDismiss,
     );
   }
 
@@ -169,7 +172,7 @@ class DialogProxy {
   }
 
   Future<void> _closeLoading(bool back, bool pop) async {
-    if (!_loadingBackDismiss && (back || pop)) return;
+    if (!loadingBackDismiss && (back || pop)) return;
     await _loadingAction.dismiss();
   }
 

@@ -32,6 +32,7 @@ abstract class DialogAction {
     required SmartDialogVoidCallBack onBgTap,
     required bool antiShake,
     required Widget? maskWidget,
+    required bool backDismiss,
     VoidCallback? onDismiss,
   }) async {
     throw 'not implement show(...)';
@@ -47,6 +48,7 @@ abstract class DialogAction {
     required Duration animationDuration,
     required Color maskColor,
     required Widget? maskWidget,
+    required bool backDismiss,
   }) async {
     throw 'not implement showLoading(...)';
   }

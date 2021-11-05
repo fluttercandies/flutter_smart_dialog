@@ -24,7 +24,7 @@ class MainStrategy {
 
   Future<void> show({
     required Widget widget,
-    required AlignmentGeometry? alignment,
+    required AlignmentGeometry alignment,
     required bool isPenetrate,
     required bool isUseAnimation,
     required Duration animationDuration,
@@ -39,14 +39,14 @@ class MainStrategy {
     //custom dialog
     _widget = SmartDialogView(
       key: _key = GlobalKey<SmartDialogViewState>(),
-      alignment: alignment ?? config.alignment,
-      isPenetrate: isPenetrate ?? config.isPenetrate,
-      isUseAnimation: isUseAnimation ?? config.isUseAnimation,
-      animationDuration: animationDuration ?? config.animationDuration,
-      isLoading: isLoading ?? config.isLoading,
-      maskColor: maskColor ?? config.maskColor,
-      maskWidget: maskWidget ?? config.maskWidget,
-      clickBgDismiss: clickBgDismiss ?? config.clickBgDismiss,
+      alignment: alignment,
+      isPenetrate: isPenetrate,
+      isUseAnimation: isUseAnimation,
+      animationDuration: animationDuration,
+      isLoading: isLoading,
+      maskColor: maskColor,
+      maskWidget: maskWidget,
+      clickBgDismiss: clickBgDismiss,
       child: widget,
       onBgTap: onBgTap,
     );

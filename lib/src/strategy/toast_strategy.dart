@@ -29,7 +29,6 @@ class ToastStrategy extends DialogAction {
     }
 
     config.isExistToast = true;
-
     _toastList.add(() async {
       //handling special circumstances
       if (_toastList.length == 0) return;
