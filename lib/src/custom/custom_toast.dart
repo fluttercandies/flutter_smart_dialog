@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
-import 'package:flutter_smart_dialog/src/strategy/action.dart';
 
-class ToastStrategy extends DialogAction {
-  ToastStrategy({
+import 'base_dialog.dart';
+
+class CustomToast extends BaseDialog {
+  CustomToast({
     required Config config,
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
@@ -13,7 +14,6 @@ class ToastStrategy extends DialogAction {
 
   DateTime? _lastTime;
 
-  @override
   Future<void> showToast({
     required Duration time,
     required bool antiShake,
@@ -33,7 +33,7 @@ class ToastStrategy extends DialogAction {
       //handling special circumstances
       if (_toastList.length == 0) return;
 
-      mainAction.show(
+      mainDialog.show(
         alignment: Alignment.center,
         maskColor: Colors.transparent,
         maskWidget: null,
@@ -56,9 +56,8 @@ class ToastStrategy extends DialogAction {
     if (_toastList.length == 1) _toastList[0]();
   }
 
-  @override
   Future<void> dismiss() async {
-    await mainAction.dismiss();
+    await mainDialog.dismiss();
 
     config.isExistToast = false;
   }

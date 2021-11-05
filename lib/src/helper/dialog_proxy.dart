@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/src/strategy/action.dart';
-import 'package:flutter_smart_dialog/src/strategy/dialog_strategy.dart';
-import 'package:flutter_smart_dialog/src/strategy/loading_strategy.dart';
-import 'package:flutter_smart_dialog/src/strategy/toast_strategy.dart';
+import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
+import 'package:flutter_smart_dialog/src/custom/custom_loading.dart';
+import 'package:flutter_smart_dialog/src/custom/custom_toast.dart';
 import 'package:flutter_smart_dialog/src/widget/loading_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_widget.dart';
@@ -17,9 +16,11 @@ class DialogProxy {
   late OverlayEntry entryLoading;
   late Map<String, DialogInfo> dialogMap;
   late List<DialogInfo> dialogList;
-  late DialogAction _toastAction;
-  late DialogAction _loadingAction;
+  late CustomToast _toast;
+  late CustomLoading _loading;
+
   bool loadingBackDismiss = true;
+  DateTime? dialogLastTime;
 
   factory DialogProxy() => instance;
   static DialogProxy? _instance;
@@ -34,17 +35,17 @@ class DialogProxy {
 
   void initialize() {
     entryLoading = OverlayEntry(
-      builder: (BuildContext context) => _loadingAction.getWidget(),
+      builder: (BuildContext context) => _loading.getWidget(),
     );
     entryToast = OverlayEntry(
-      builder: (BuildContext context) => _toastAction.getWidget(),
+      builder: (BuildContext context) => _toast.getWidget(),
     );
 
-    _loadingAction = LoadingStrategy(
+    _loading = CustomLoading(
       config: config,
       overlayEntry: entryLoading,
     );
-    _toastAction = ToastStrategy(config: config, overlayEntry: entryToast);
+    _toast = CustomToast(config: config, overlayEntry: entryToast);
 
     dialogMap = {};
     dialogList = [];
@@ -65,18 +66,13 @@ class DialogProxy {
     required String? tag,
     required bool backDismiss,
   }) {
-    DialogAction? action;
+    CustomDialog? dialog;
     var entry = OverlayEntry(
-      builder: (BuildContext context) => action!.getWidget(),
+      builder: (BuildContext context) => dialog!.getWidget(),
     );
-    action = DialogStrategy(config: config, overlayEntry: entry);
+    dialog = CustomDialog(config: config, overlayEntry: entry);
 
-    Overlay.of(context)!.insert(entry, below: entryLoading);
-    var dialogInfo = DialogInfo(action, backDismiss, isUseAnimation);
-    dialogList.add(dialogInfo);
-    if (tag != null) dialogMap[tag] = dialogInfo;
-
-    return action.show(
+    return dialog.show(
       widget: widget,
       alignment: alignment,
       isPenetrate: isPenetrate,
@@ -88,6 +84,7 @@ class DialogProxy {
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
       antiShake: antiShake,
+      tag: tag,
       backDismiss: backDismiss,
       onBgTap: () => dismiss(status: SmartStatus.dialog),
     );
@@ -106,8 +103,7 @@ class DialogProxy {
     required Widget? widget,
     required bool backDismiss,
   }) {
-
-    return _loadingAction.showLoading(
+    return _loading.showLoading(
       widget: widget ?? LoadingWidget(msg: msg, background: background),
       clickBgDismiss: clickBgDismiss,
       isLoading: isLoading,
@@ -127,7 +123,7 @@ class DialogProxy {
     required bool antiShake,
     required Widget? widget,
   }) async {
-    _toastAction.showToast(
+    _toast.showToast(
       time: time,
       antiShake: antiShake,
       widget: ToastHelper(
@@ -143,14 +139,15 @@ class DialogProxy {
     bool pop = false,
   }) async {
     if (status == null) {
-      if (!config.isExistLoading) await _closeMain(tag, back, pop);
-      if (config.isExistLoading) await _closeLoading(back, pop);
+      if (!config.isExistLoading) await _loading.dismiss(back: back, pop: pop);
+      if (config.isExistLoading)
+        await CustomDialog.dismiss(tag: tag, back: back, pop: pop);
     } else if (status == SmartStatus.dialog) {
-      await _closeMain(tag, back, pop);
+      await CustomDialog.dismiss(tag: tag, back: back, pop: pop);
     } else if (status == SmartStatus.loading) {
-      await _closeLoading(back, pop);
+      await _loading.dismiss(back: back, pop: pop);
     } else if (status == SmartStatus.toast) {
-      await _toastAction.dismiss();
+      await _toast.dismiss();
     } else if (status == SmartStatus.allDialog) {
       await closeAllDialog(status: SmartStatus.dialog);
     }
@@ -169,25 +166,5 @@ class DialogProxy {
         await Future.delayed(Duration(milliseconds: 100));
       }
     }
-  }
-
-  Future<void> _closeLoading(bool back, bool pop) async {
-    if (!loadingBackDismiss && (back || pop)) return;
-    await _loadingAction.dismiss();
-  }
-
-  Future<void> _closeMain(String? tag, bool back, bool pop) async {
-    var length = dialogList.length;
-    if (length == 0) return;
-
-    var info = (tag == null ? dialogList[length - 1] : dialogMap[tag]);
-    if (info == null || (!info.backDismiss && (back || pop))) return;
-
-    //handle close dialog
-    if (tag != null) dialogMap.remove(tag);
-    dialogList.remove(info);
-    DialogAction action = info.action;
-    await action.dismiss();
-    action.overlayEntry.remove();
   }
 }

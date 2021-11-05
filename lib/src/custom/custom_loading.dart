@@ -3,16 +3,15 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
-import 'package:flutter_smart_dialog/src/strategy/action.dart';
-import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
 
-class LoadingStrategy extends DialogAction {
-  LoadingStrategy({
+import 'base_dialog.dart';
+
+class CustomLoading extends BaseDialog {
+  CustomLoading({
     required Config config,
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
 
-  @override
   Future<void> showLoading({
     required Widget widget,
     required bool clickBgDismiss,
@@ -28,7 +27,7 @@ class LoadingStrategy extends DialogAction {
     config.isExist = true;
     config.isExistLoading = true;
 
-    return mainAction.show(
+    return mainDialog.show(
       widget: widget,
       clickBgDismiss: clickBgDismiss,
       isLoading: isLoading,
@@ -42,9 +41,10 @@ class LoadingStrategy extends DialogAction {
     );
   }
 
-  @override
-  Future<void> dismiss() async {
-    await mainAction.dismiss();
+  Future<void> dismiss({bool back = false, bool pop = false}) async {
+    if (!DialogProxy.instance.loadingBackDismiss && (back || pop)) return;
+
+    await mainDialog.dismiss();
 
     config.isExistLoading = false;
     if (!config.isExistMain) {

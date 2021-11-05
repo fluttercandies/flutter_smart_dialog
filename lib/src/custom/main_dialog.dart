@@ -5,8 +5,8 @@ import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
 
 ///main function : customize dialog
-class MainStrategy {
-  MainStrategy({
+class MainDialog {
+  MainDialog({
     required this.config,
     required this.overlayEntry,
   }) : _widget = Container();

@@ -1,9 +1,9 @@
-import 'package:flutter_smart_dialog/src/strategy/action.dart';
+import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
 
 class DialogInfo {
-  DialogInfo(this.action, this.backDismiss, this.isUseAnimation);
+  DialogInfo(this.dialog, this.backDismiss, this.isUseAnimation);
 
-  final DialogAction action;
+  final CustomDialog dialog;
 
   final bool backDismiss;
 
