@@ -37,12 +37,13 @@ class CustomLoading extends BaseDialog {
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
       animationDuration: animationDuration,
+      onDismiss: null,
       onBgTap: () => dismiss(),
     );
   }
 
-  Future<void> dismiss({bool back = false, bool pop = false}) async {
-    if (!DialogProxy.instance.loadingBackDismiss && (back || pop)) return;
+  Future<void> dismiss({bool back = false}) async {
+    if (!DialogProxy.instance.loadingBackDismiss && back) return;
 
     await mainDialog.dismiss();
 

@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-typedef SmartDialogVoidCallBack = void Function();
-
 class SmartDialogView extends StatefulWidget {
   SmartDialogView({
     Key? key,
@@ -19,35 +17,35 @@ class SmartDialogView extends StatefulWidget {
     this.maskWidget,
   }) : super(key: key);
 
-  ///内容widget
+  /// 内容widget
   final Widget child;
 
-  ///点击背景
-  final SmartDialogVoidCallBack onBgTap;
+  /// 点击背景
+  final VoidCallback onBgTap;
 
-  ///内容控件方向
+  /// 内容控件方向
   final AlignmentGeometry alignment;
 
-  ///是否穿透背景,交互背景之后控件
+  /// 是否穿透背景,交互背景之后控件
   final bool isPenetrate;
 
-  ///动画时间
+  /// 动画时间
   final Duration animationDuration;
 
-  ///是否使用动画
+  /// 是否使用动画
   final bool isUseAnimation;
 
-  ///是否使用Loading情况；true:内容体使用渐隐动画  false：内容体使用缩放动画
-  ///仅仅针对中间位置的控件
+  /// 是否使用Loading情况；true:内容体使用渐隐动画  false：内容体使用缩放动画
+  /// 仅仅针对中间位置的控件
   final bool isLoading;
 
-  ///遮罩颜色
+  /// 遮罩颜色
   final Color maskColor;
 
-  ///自定义遮罩Widget
+  /// 自定义遮罩Widget
   final Widget? maskWidget;
 
-  ///点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
+  /// 点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
   final bool clickBgDismiss;
 
   @override
@@ -60,7 +58,7 @@ class SmartDialogViewState extends State<SmartDialogView>
 
   late AnimationController _controller;
 
-  //处理下内容widget动画放心
+  /// 处理下内容widget动画放心
   Offset? _offset;
 
   @override
@@ -186,7 +184,6 @@ class SmartDialogViewState extends State<SmartDialogView>
 
   @override
   void dispose() {
-    //关闭资源
     _controller.dispose();
     super.dispose();
   }

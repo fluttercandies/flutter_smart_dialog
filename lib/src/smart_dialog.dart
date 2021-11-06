@@ -78,7 +78,7 @@ class SmartDialog {
   ///
   /// [antiShakeTemp]：防抖功能
   ///
-  /// [onDismiss]：在dialog被关闭的时候，该回到将会被触发
+  /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
   ///
   /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
   ///

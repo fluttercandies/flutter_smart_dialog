@@ -43,13 +43,14 @@ class CustomToast extends BaseDialog {
         isPenetrate: true,
         clickBgDismiss: false,
         widget: widget,
+        onDismiss: null,
         onBgTap: () => dismiss(),
       );
       await Future.delayed(time);
-      await dismiss();
-
       //invoke next toast
       _toastList.removeAt(0);
+      await dismiss();
+
       if (_toastList.length != 0) _toastList[0]();
     });
 
@@ -58,6 +59,7 @@ class CustomToast extends BaseDialog {
 
   Future<void> dismiss() async {
     await mainDialog.dismiss();
+    if (_toastList.length != 0) return;
 
     config.isExistToast = false;
   }

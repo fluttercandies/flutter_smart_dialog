@@ -32,8 +32,8 @@ class MainDialog {
     required Color maskColor,
     required Widget? maskWidget,
     required bool clickBgDismiss,
-    required SmartDialogVoidCallBack onBgTap,
-    VoidCallback? onDismiss,
+    required VoidCallback onBgTap,
+    required VoidCallback? onDismiss,
   }) async {
     _onDismiss = onDismiss;
     //custom dialog

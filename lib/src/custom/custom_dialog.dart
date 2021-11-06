@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
-import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
 
 import '../../flutter_smart_dialog.dart';
 import 'base_dialog.dart';
@@ -69,25 +68,21 @@ class CustomDialog extends BaseDialog {
     );
   }
 
-  static Future<void> dismiss({
-    bool back = false,
-    bool pop = false,
-    String? tag,
-  }) async {
+  static Future<void> dismiss({bool back = false, String? tag}) async {
     var proxy = DialogProxy.instance;
     var length = proxy.dialogList.length;
     if (length == 0) return;
 
     var info =
         (tag == null ? proxy.dialogList[length - 1] : proxy.dialogMap[tag]);
-    if (info == null || (!info.backDismiss && (back || pop))) return;
+    if (info == null || (!info.backDismiss && back)) return;
 
     //handle close dialog
     if (tag != null) proxy.dialogMap.remove(tag);
     proxy.dialogList.remove(info);
-    CustomDialog dialog = info.dialog;
-    await dialog.mainDialog.dismiss();
-    dialog.overlayEntry.remove();
+    var customDialog = info.dialog;
+    await customDialog.mainDialog.dismiss();
+    customDialog.overlayEntry.remove();
 
     if (proxy.dialogList.length != 0) return;
     proxy.config.isExistMain = false;

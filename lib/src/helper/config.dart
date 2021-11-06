@@ -40,15 +40,15 @@ class Config {
   bool isLoading = true;
   Duration animationDuration = Duration(milliseconds: 260);
 
+  /// default（true），true（use the animation），false（not use）
+  ///
+  /// 是否使用动画（默认：true）
+  bool isUseAnimation = true;
+
   /// default（false），true（click event will penetrate background），false（not penetration）
   ///
   /// 屏幕上交互事件可以穿透遮罩背景（默认:false）：true（交互事件能穿透背景，遮罩会自动变成透明），false（不能穿透）
   bool isPenetrate = false;
-
-  /// default（true），true（loading will be closed after click background），false（not close）
-  ///
-  /// 点击遮罩，是否关闭dialog（默认：true）：true（点击遮罩关闭dialog），false（不关闭）
-  bool clickBgDismiss = true;
 
   /// the color of the mask，it is invalid if [isPenetrate] is true or [maskWidget] set the value
   ///
@@ -60,17 +60,17 @@ class Config {
   /// 遮罩Widget，可高度自定义你自己的遮罩背景：[isPenetrate]设置为true，该参数失效
   Widget? maskWidget;
 
-  /// default（true），true（use the animation），false（not use）
+  /// default（true），true（loading will be closed after click background），false（not close）
   ///
-  /// 是否使用动画（默认：true）
-  bool isUseAnimation = true;
+  /// 点击遮罩，是否关闭dialog（默认：true）：true（点击遮罩关闭dialog），false（不关闭）
+  bool clickBgDismiss = true;
 
   /// anti-shake function，it works on toast and dialog：default（false）;
   /// you can use the [antiShakeTime] param to set the anti-shake time
   ///
   /// 防抖功能，它作用于toast和dialog上：默认（false）;
   /// 可以通过[antiShakeTime]参数设置防抖时间
-  bool antiShake = true;
+  bool antiShake = false;
   Duration antiShakeTime = Duration(milliseconds: 300);
 
   /// whether loading and custom dialog exist on the screen

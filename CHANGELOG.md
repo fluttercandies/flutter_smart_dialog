@@ -4,6 +4,8 @@
 - support open multi dialog
 - Monitor back and pop event, then close dialog reasonably
 - Initialization is more concise
+- Add anti-shake function
+- Add close all dialog status
 
 # [2.3.x]
 

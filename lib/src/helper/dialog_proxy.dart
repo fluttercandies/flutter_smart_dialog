@@ -133,32 +133,28 @@ class DialogProxy {
     SmartStatus? status,
     String? tag,
     bool back = false,
-    bool pop = false,
   }) async {
     if (status == null) {
       if (!config.isExistLoading)
-        await CustomDialog.dismiss(tag: tag, back: back, pop: pop);
-      if (config.isExistLoading) await _loading.dismiss(back: back, pop: pop);
+        await CustomDialog.dismiss(tag: tag, back: back);
+      if (config.isExistLoading) await _loading.dismiss(back: back);
     } else if (status == SmartStatus.dialog) {
-      await CustomDialog.dismiss(tag: tag, back: back, pop: pop);
+      await CustomDialog.dismiss(tag: tag, back: back);
     } else if (status == SmartStatus.loading) {
-      await _loading.dismiss(back: back, pop: pop);
+      await _loading.dismiss(back: back);
     } else if (status == SmartStatus.toast) {
       await _toast.dismiss();
     } else if (status == SmartStatus.allDialog) {
-      await closeAllDialog(status: SmartStatus.dialog);
+      await _closeAllDialog(status: SmartStatus.dialog);
     }
   }
 
-  Future<void> closeAllDialog({
-    SmartStatus? status,
-    bool pop = false,
-  }) async {
+  Future<void> _closeAllDialog({SmartStatus? status}) async {
     var length = dialogList.length;
     for (var i = 0; i < length; i++) {
       var item = dialogList[dialogList.length - 1];
 
-      await dismiss(pop: pop, status: status);
+      await dismiss(status: status);
       if (item.isUseAnimation) {
         await Future.delayed(Duration(milliseconds: 100));
       }
