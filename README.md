@@ -1,12 +1,12 @@
 [![pub](https://img.shields.io/pub/v/flutter_smart_dialog?label=pub&logo=dart)](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install) [![stars](https://img.shields.io/github/stars/fluttercandies/flutter_smart_dialog?logo=github)](https://github.com/fluttercandies/flutter_smart_dialog)  [![issues](https://img.shields.io/github/issues/fluttercandies/flutter_smart_dialog?logo=github)](https://github.com/fluttercandies/flutter_smart_dialog/issues)
 
-Language: [English](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/README.md) | [中文简体](https://juejin.cn/post/7026150456673959943)
+Language:  English | [中文简体](https://juejin.cn/post/7026150456673959943)
 
 # Introduction
 
 An elegant Flutter Dialog solution.
 
-- [pub](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install)，[github](https://github.com/fluttercandies/flutter_smart_dialog)，[click me to experience it](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
+- [pub](https://pub.flutter-io.cn/packages/flutter_smart_dialog)，[github](https://github.com/fluttercandies/flutter_smart_dialog)，[click me to experience it](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
 
 # Advantage
 
@@ -16,6 +16,8 @@ An elegant Flutter Dialog solution.
 - **Easily implement toast，loading dialog，custome dialog**
 
 # Quick start
+
+- **First：[install pub](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install)**
 
 ## Initialization
 
