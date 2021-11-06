@@ -17,7 +17,9 @@ An elegant Flutter Dialog solution.
 
 # Quick start
 
-- **First：[install pub](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install)**
+## Install
+
+- **latest version：[install pub](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install)**
 
 ## Initialization
 
