@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
-import 'package:flutter_smart_dialog/src/helper/entity.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
 
 import '../../flutter_smart_dialog.dart';
@@ -25,7 +24,6 @@ class CustomDialog extends BaseDialog {
     required bool isLoading,
     required Color maskColor,
     required bool clickBgDismiss,
-    required SmartDialogVoidCallBack onBgTap,
     required bool antiShake,
     required Widget? maskWidget,
     required String? tag,
@@ -67,7 +65,7 @@ class CustomDialog extends BaseDialog {
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
-      onBgTap: () => onBgTap,
+      onBgTap: () => dismiss(),
     );
   }
 
@@ -97,4 +95,14 @@ class CustomDialog extends BaseDialog {
       proxy.config.isExist = false;
     }
   }
+}
+
+class DialogInfo {
+  DialogInfo(this.dialog, this.backDismiss, this.isUseAnimation);
+
+  final CustomDialog dialog;
+
+  final bool backDismiss;
+
+  final bool isUseAnimation;
 }

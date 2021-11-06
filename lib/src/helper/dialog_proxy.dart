@@ -8,7 +8,6 @@ import 'package:flutter_smart_dialog/src/widget/toast_widget.dart';
 
 import '../smart_dialog.dart';
 import 'config.dart';
-import 'entity.dart';
 
 class DialogProxy {
   late Config config;
@@ -31,6 +30,9 @@ class DialogProxy {
 
   DialogProxy._internal() {
     config = Config();
+
+    dialogMap = {};
+    dialogList = [];
   }
 
   void initialize() {
@@ -46,9 +48,6 @@ class DialogProxy {
       overlayEntry: entryLoading,
     );
     _toast = CustomToast(config: config, overlayEntry: entryToast);
-
-    dialogMap = {};
-    dialogList = [];
   }
 
   Future<void> show({
@@ -71,7 +70,6 @@ class DialogProxy {
       builder: (BuildContext context) => dialog!.getWidget(),
     );
     dialog = CustomDialog(config: config, overlayEntry: entry);
-
     return dialog.show(
       widget: widget,
       alignment: alignment,
@@ -86,7 +84,6 @@ class DialogProxy {
       antiShake: antiShake,
       tag: tag,
       backDismiss: backDismiss,
-      onBgTap: () => dismiss(status: SmartStatus.dialog),
     );
   }
 
@@ -139,9 +136,9 @@ class DialogProxy {
     bool pop = false,
   }) async {
     if (status == null) {
-      if (!config.isExistLoading) await _loading.dismiss(back: back, pop: pop);
-      if (config.isExistLoading)
+      if (!config.isExistLoading)
         await CustomDialog.dismiss(tag: tag, back: back, pop: pop);
+      if (config.isExistLoading) await _loading.dismiss(back: back, pop: pop);
     } else if (status == SmartStatus.dialog) {
       await CustomDialog.dismiss(tag: tag, back: back, pop: pop);
     } else if (status == SmartStatus.loading) {

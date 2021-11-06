@@ -42,8 +42,8 @@ class CustomToast extends BaseDialog {
         isUseAnimation: true,
         isPenetrate: true,
         clickBgDismiss: false,
-        onBgTap: () => dismiss(),
         widget: widget,
+        onBgTap: () => dismiss(),
       );
       await Future.delayed(time);
       await dismiss();

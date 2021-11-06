@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
-import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
 
 import 'main_dialog.dart';
 
-/// 抽象基类
+/// base dialog：encapsulate common logic
 class BaseDialog {
   BaseDialog({
     required this.config,

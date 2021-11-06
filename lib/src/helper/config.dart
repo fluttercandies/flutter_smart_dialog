@@ -66,7 +66,7 @@ class Config {
   bool isUseAnimation = true;
 
   /// anti-shake function，it works on toast and dialog：default（false）;
-  /// you can use the [antiShakeTime] parameter to set the anti-shake time
+  /// you can use the [antiShakeTime] param to set the anti-shake time
   ///
   /// 防抖功能，它作用于toast和dialog上：默认（false）;
   /// 可以通过[antiShakeTime]参数设置防抖时间
