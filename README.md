@@ -8,11 +8,6 @@ An elegant Flutter Dialog solution.
 
 - [pub](https://pub.flutter-io.cn/packages/flutter_smart_dialog/install)，[github](https://github.com/fluttercandies/flutter_smart_dialog)，[click me to experience it](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
 
-```dart
-dependencies:
-  flutter_smart_dialog: ^3.0.1
-```
-
 # Advantage
 
 - **Do not need BuildContext**
@@ -144,14 +139,16 @@ you can modify the global parameters that meet your own requirements
 
 ```dart
 SmartDialog.config
-    ..alignment = Alignment.center
-    ..isPenetrate = false
-    ..clickBgDismiss = true
-    ..maskColor = Colors.black.withOpacity(0.3)
-    ..maskWidget = null
-    ..animationDuration = Duration(milliseconds: 260)
-    ..isUseAnimation = true
-    ..isLoading = true;
+  ..alignment = Alignment.center
+  ..isPenetrate = false
+  ..clickBgDismiss = true
+  ..maskColor = Colors.black.withOpacity(0.3)
+  ..maskWidget = null
+  ..animationDuration = Duration(milliseconds: 260)
+  ..isUseAnimation = true
+  ..isLoading = true
+  ..antiShake = false
+  ..antiShakeTime = Duration(milliseconds: 300);
 ```
 
 # Toast Chapter
