@@ -235,7 +235,7 @@ class SmartDialog {
   /// It is recommended to use the status param,
   /// and keep the closeType param for compatibility with older versions
   ///
-  /// [status]：SmartStatus.dialog（only close dialog），SmartStatus.toast（only close loading），SmartStatus.loading（only close toast）。
+  /// [status]：SmartStatus.dialog（only close dialog），SmartStatus.toast（only close toast），SmartStatus.loading（only close loading）。
   /// note: the closeType param will become invalid after setting the value of the status param。
   ///
   /// [closeType]：0（default：close dialog or loading），1（only close dialog），2（only close toast），
@@ -247,7 +247,7 @@ class SmartDialog {
   ///
   /// 推荐使用status参数，保留closeType参数，是为了兼容旧版本用法
   ///
-  /// [status]：SmartStatus.dialog（仅关闭dialog），SmartStatus.toast（仅关闭loading），SmartStatus.loading（仅关闭toast）。
+  /// [status]：SmartStatus.dialog（仅关闭dialog），SmartStatus.toast（仅关闭toast），SmartStatus.loading（仅关闭loading）。
   /// 注意：status参数设置值后，closeType参数将失效。
   ///
   /// [closeType]：0（默认：关闭dialog或者loading），1（仅关闭dialog），2（仅关闭toast），

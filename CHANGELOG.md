@@ -6,6 +6,7 @@
 - Initialization is more concise
 - Add anti-shake function
 - Add close all dialog status
+- Adjustment annotation
 
 # [2.3.x]
 
