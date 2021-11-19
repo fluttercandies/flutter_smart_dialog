@@ -65,8 +65,8 @@ class Config {
   /// 点击遮罩，是否关闭dialog（默认：true）：true（点击遮罩关闭dialog），false（不关闭）
   bool clickBgDismiss = true;
 
-  /// anti-shake function，it works on toast and dialog：default（false）;
-  /// you can use the [antiShakeTime] param to set the anti-shake time
+  /// debounce function，it works on toast and dialog：default（false）;
+  /// you can use the [antiShakeTime] param to set the debounce time
   ///
   /// 防抖功能，它作用于toast和dialog上：默认（false）;
   /// 可以通过[antiShakeTime]参数设置防抖时间
