@@ -118,11 +118,13 @@ class DialogProxy {
     required Duration time,
     required AlignmentGeometry alignment,
     required bool antiShake,
+    required SmartToastStatus status,
     required Widget? widget,
   }) async {
     _toast.showToast(
       time: time,
       antiShake: antiShake,
+      status: status,
       widget: ToastHelper(
         child: widget ?? ToastWidget(msg: msg, alignment: alignment),
       ),

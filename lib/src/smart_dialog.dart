@@ -19,6 +19,24 @@ enum SmartStatus {
   allDialog,
 }
 
+enum SmartToastStatus {
+  /// Each toast will be displayed, and then disappear one by one
+  ///
+  /// 每一条toast都会显示，然后一条接着一条消失
+  normal,
+
+  /// Call toast continuously, the next one will top off the previous message
+  ///
+  /// 连续调用toast，后一条会顶掉前一条消息
+  last,
+
+  /// Call toast continuously, only the first and last one will be displayed,
+  /// and all the toasts in the middle will be removed
+  ///
+  /// 连续调用toast，只会展示第一条和最后一条，中间的toast都将被移除
+  firstAndLast,
+}
+
 class SmartDialog {
   /// SmartDialog global config
   ///
@@ -195,9 +213,9 @@ class SmartDialog {
     );
   }
 
-  /// [msg]：msg presented to users
+  /// [msg]：msg presented to users(Use the 'widget' param, this param will be invalid)
   ///
-  /// [time]：toast display time on the screen
+  /// [time]：toast display time on the screen(Use the 'widget' param, this param will be invalid)
   ///
   /// [alignment]：control the location of toast on the screen
   ///
@@ -207,11 +225,11 @@ class SmartDialog {
   ///
   /// -------------------------------------------------------------------------------
   ///
-  /// [msg]：呈现给用户的信息
+  /// [msg]：呈现给用户的信息（使用 'widget' 参数，该参数将失效）
   ///
   /// [time]：toast在屏幕上的显示时间
   ///
-  /// [alignment]：控制toast在屏幕上的显示位置
+  /// [alignment]：控制toast在屏幕上的显示位置（使用 'widget' 参数，该参数将失效）
   ///
   ///  [antiShakeTemp]：防抖功能
   ///
@@ -221,6 +239,7 @@ class SmartDialog {
     AlignmentGeometry? alignment,
     Duration? time,
     bool? antiShakeTemp,
+    SmartToastStatus status = SmartToastStatus.normal,
     Widget? widget,
   }) async {
     DialogProxy.instance.showToast(
@@ -228,6 +247,7 @@ class SmartDialog {
       alignment: alignment ?? Alignment.bottomCenter,
       time: time ?? Duration(milliseconds: 2000),
       antiShake: antiShakeTemp ?? config.antiShake,
+      status: status,
       widget: widget,
     );
   }
