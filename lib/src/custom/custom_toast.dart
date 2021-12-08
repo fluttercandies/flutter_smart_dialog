@@ -33,6 +33,8 @@ class CustomToast extends BaseDialog {
     // provider some toast display effect
     if (status == SmartToastStatus.normal) {
       _normalToast(time: time, widget: widget);
+    } else if (status == SmartToastStatus.first) {
+      _firstToast(time: time, widget: widget);
     } else if (status == SmartToastStatus.last) {
       _lastToast(time: time, widget: widget);
     } else if (status == SmartToastStatus.firstAndLast) {
@@ -70,6 +72,34 @@ class CustomToast extends BaseDialog {
     });
 
     if (_toastList.length == 1) await _toastList[0]();
+  }
+
+  Future<void> _firstToast({
+    required Duration time,
+    required Widget widget,
+  }) async {
+    if (_toastList.length != 0) {
+      return;
+    }
+
+    _toastList.add(() async {});
+    mainDialog.show(
+      alignment: Alignment.center,
+      maskColor: Colors.transparent,
+      maskWidget: null,
+      animationDuration: Duration(milliseconds: 200),
+      isLoading: true,
+      isUseAnimation: true,
+      isPenetrate: true,
+      clickBgDismiss: false,
+      widget: widget,
+      onDismiss: null,
+      onBgTap: () => dismiss(),
+    );
+    await Future.delayed(time);
+    await dismiss();
+
+    _toastList.removeLast();
   }
 
   Future<void> _lastToast({

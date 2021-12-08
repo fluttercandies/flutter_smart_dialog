@@ -20,14 +20,21 @@ enum SmartStatus {
 }
 
 enum SmartToastStatus {
-  /// Each toast will be displayed, and then disappear one by one
+  /// Each toast will be displayed, after the current toast disappears，
+  /// the next toast will be displayed
   ///
-  /// 每一条toast都会显示，然后一条接着一条消失
+  /// 每一条toast都会显示，当前toast消失之后，后一条toast才会显示
   normal,
 
-  /// Call toast continuously, the next one will top off the previous message
+  /// Call toast continuously, during the period when the first toast exists on the screen,
+  /// other toasts called will be invalid
   ///
-  /// 连续调用toast，后一条会顶掉前一条消息
+  /// 连续调用toast，在第一条toast存在界面的期间内，调用的其它toast都将无效
+  first,
+
+  /// Call toast continuously, the next toast will top off the previous toast
+  ///
+  /// 连续调用toast，后一条toast会顶掉前一条toast
   last,
 
   /// Call toast continuously, only the first and last one will be displayed,
@@ -63,7 +70,7 @@ class SmartDialog {
   ///
   /// [maskWidgetTemp]：highly customizable mask
   ///
-  /// [antiShakeTemp]：anti-shake function
+  /// [antiShakeTemp]：anti-shake function（debounce）
   ///
   /// [onDismiss]：the callback will be invoked when the dialog is closed
   ///
@@ -94,7 +101,7 @@ class SmartDialog {
   ///
   /// [maskWidgetTemp]：可高度定制遮罩
   ///
-  /// [antiShakeTemp]：防抖功能
+  /// [antiShakeTemp]：防抖功能（debounce）
   ///
   /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
   ///
@@ -134,17 +141,21 @@ class SmartDialog {
     );
   }
 
-  /// loading dialog：'temp' suffix param, if there is no default value, the global attribute in config will be used by default
+  /// loading dialog：'temp' suffix param, if there is no default value,
+  /// the global attribute in config will be used by default
   ///
   /// [msg]：loading msg
   ///
   /// [background]：the rectangle background color of msg
   ///
-  /// [clickBgDismissTemp]：default（false），true（loading will be closed after click background），false（not close）
+  /// [clickBgDismissTemp]：default（false），true（loading will be closed after click background），
+  /// false（not close）
   ///
-  /// [isLoadingTemp]：default（true），true（use the opacity animation），false（use the scale transition animation）
+  /// [isLoadingTemp]：default（true），true（use the opacity animation），
+  /// false（use the scale transition animation）
   ///
-  /// [isPenetrateTemp]：default（false），true（the click event will penetrate background），false（not penetration）
+  /// [isPenetrateTemp]：default（false），true（the click event will penetrate background），
+  /// false（not penetration）
   ///
   /// [isUseAnimationTemp]：true（use the animation），false（not use）
   ///
@@ -157,7 +168,8 @@ class SmartDialog {
   /// [widget]：the custom loading
   ///
   /// [backDismiss]：default（true），true（the back event will close the loading but not close the page），
-  /// false（the back event not close the loading and not close page），you still can use the dismiss method to close the loading
+  /// false（the back event not close the loading and not close page），
+  /// you still can use the dismiss method to close the loading
   ///
   /// -------------------------------------------------------------------------------
   ///
@@ -183,8 +195,8 @@ class SmartDialog {
   ///
   /// [widget]：the custom loading
   ///
-  /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
-  /// 你仍然可以使用dismiss方法来关闭loading
+  /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），
+  /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭loading
   static Future<void> showLoading({
     String? msg,
     Color? background,
@@ -219,7 +231,10 @@ class SmartDialog {
   ///
   /// [alignment]：control the location of toast on the screen
   ///
-  /// [antiShakeTemp]：anti-shake function
+  /// [antiShakeTemp]：anti-shake function（debounce）
+  ///
+  /// [status]：provider multiple display logic，
+  /// please refer to [SmartToastStatus] comment for detailed description
   ///
   /// [widget]：highly customizable toast
   ///
@@ -231,7 +246,9 @@ class SmartDialog {
   ///
   /// [alignment]：控制toast在屏幕上的显示位置（使用 'widget' 参数，该参数将失效）
   ///
-  ///  [antiShakeTemp]：防抖功能
+  /// [antiShakeTemp]：防抖功能（debounce）
+  ///
+  /// [status]：提供多种显示逻辑，详细描述请查看 [SmartToastStatus] 注释
   ///
   /// [widget]：可高度定制化toast
   static Future<void> showToast(
@@ -255,7 +272,8 @@ class SmartDialog {
   /// It is recommended to use the status param,
   /// and keep the closeType param for compatibility with older versions
   ///
-  /// [status]：SmartStatus.dialog（only close dialog），SmartStatus.toast（only close toast），SmartStatus.loading（only close loading）。
+  /// [status]：SmartStatus.dialog（only close dialog），SmartStatus.toast（only close toast），
+  /// SmartStatus.loading（only close loading）。
   /// note: the closeType param will become invalid after setting the value of the status param。
   ///
   /// [closeType]：0（default：close dialog or loading），1（only close dialog），2（only close toast），
@@ -267,7 +285,8 @@ class SmartDialog {
   ///
   /// 推荐使用status参数，保留closeType参数，是为了兼容旧版本用法
   ///
-  /// [status]：SmartStatus.dialog（仅关闭dialog），SmartStatus.toast（仅关闭toast），SmartStatus.loading（仅关闭loading）。
+  /// [status]：SmartStatus.dialog（仅关闭dialog），SmartStatus.toast（仅关闭toast），
+  /// SmartStatus.loading（仅关闭loading）。
   /// 注意：status参数设置值后，closeType参数将失效。
   ///
   /// [closeType]：0（默认：关闭dialog或者loading），1（仅关闭dialog），2（仅关闭toast），

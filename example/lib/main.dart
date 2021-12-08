@@ -45,7 +45,9 @@ class SmartDialogPage extends StatelessWidget {
     );
   }
 
-  void _showToast() => SmartDialog.showToast('test toast');
+  void _showToast() {
+    SmartDialog.showToast('test toast');
+  }
 
   void _showDialog() {
     SmartDialog.show(

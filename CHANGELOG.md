@@ -7,7 +7,7 @@
 - Add anti-shake function
 - Add close all dialog status
 - Adjustment annotation
-- Add three toast display effect
+- Add four toast display logic
 
 # [2.3.x]
 
