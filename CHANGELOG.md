@@ -1,3 +1,8 @@
+# [3.1.x]
+
+- Optimize toast
+- Add four toast display logic
+
 # [3.0.x]
 
 - Support dialog stack，close the specified dialog
