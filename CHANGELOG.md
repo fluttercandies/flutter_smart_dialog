@@ -1,8 +1,3 @@
-# [3.1.x]
-
-- Optimize toast
-- Add four toast display logic
-
 # [3.0.x]
 
 - Support dialog stack，close the specified dialog
@@ -11,7 +6,7 @@
 - Initialization is more concise
 - Add anti-shake function
 - Add close all dialog status
-- Adjustment annotation
+- Adjustment comment
 - Add four toast display logic
 
 # [2.3.x]

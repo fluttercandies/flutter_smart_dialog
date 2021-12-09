@@ -17,10 +17,10 @@ class CustomToast extends BaseDialog {
   Future<void> showToast({
     required Duration time,
     required bool antiShake,
-    required SmartToastStatus status,
+    required SmartToastType type,
     required Widget widget,
   }) async {
-    // anti-shake
+    // debounce
     if (antiShake) {
       var now = DateTime.now();
       var isShake = _lastTime != null &&
@@ -30,15 +30,15 @@ class CustomToast extends BaseDialog {
     }
     config.isExistToast = true;
 
-    // provider some toast display effect
-    if (status == SmartToastStatus.normal) {
-      _normalToast(time: time, widget: widget);
-    } else if (status == SmartToastStatus.first) {
-      _firstToast(time: time, widget: widget);
-    } else if (status == SmartToastStatus.last) {
-      _lastToast(time: time, widget: widget);
-    } else if (status == SmartToastStatus.firstAndLast) {
-      _firstAndLastToast(time: time, widget: widget);
+    // provider multiple toast display logic
+    if (type == SmartToastType.normal) {
+      await _normalToast(time: time, widget: widget);
+    } else if (type == SmartToastType.first) {
+      await _firstToast(time: time, widget: widget);
+    } else if (type == SmartToastType.last) {
+      await _lastToast(time: time, widget: widget);
+    } else if (type == SmartToastType.firstAndLast) {
+      await _firstAndLastToast(time: time, widget: widget);
     }
   }
 

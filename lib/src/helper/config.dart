@@ -68,7 +68,7 @@ class Config {
   /// debounce function，it works on toast and dialog：default（false）;
   /// you can use the [antiShakeTime] param to set the debounce time
   ///
-  /// 防抖功能，它作用于toast和dialog上：默认（false）;
+  /// 防抖功能（debounce），它作用于toast和dialog上：默认（false）;
   /// 可以通过[antiShakeTime]参数设置防抖时间
   bool antiShake = false;
   Duration antiShakeTime = Duration(milliseconds: 300);

@@ -19,7 +19,7 @@ enum SmartStatus {
   allDialog,
 }
 
-enum SmartToastStatus {
+enum SmartToastType {
   /// Each toast will be displayed, after the current toast disappears，
   /// the next toast will be displayed
   ///
@@ -37,10 +37,10 @@ enum SmartToastStatus {
   /// 连续调用toast，后一条toast会顶掉前一条toast
   last,
 
-  /// Call toast continuously, only the first and last one will be displayed,
-  /// and all the toasts in the middle will be removed
+  /// Call toast continuously, the first toast is displayed normally，
+  /// and all toasts generated during the first toast display period，only the last toast is valid
   ///
-  /// 连续调用toast，只会展示第一条和最后一条，中间的toast都将被移除
+  /// 连续调用toast，第一条toast正常显示，其显示期间产生的所有toast，仅最后一条toast有效
   firstAndLast,
 }
 
@@ -233,8 +233,8 @@ class SmartDialog {
   ///
   /// [antiShakeTemp]：anti-shake function（debounce）
   ///
-  /// [status]：provider multiple display logic，
-  /// please refer to [SmartToastStatus] comment for detailed description
+  /// [type]：provider multiple display logic，
+  /// please refer to [SmartToastType] comment for detailed description
   ///
   /// [widget]：highly customizable toast
   ///
@@ -248,7 +248,7 @@ class SmartDialog {
   ///
   /// [antiShakeTemp]：防抖功能（debounce）
   ///
-  /// [status]：提供多种显示逻辑，详细描述请查看 [SmartToastStatus] 注释
+  /// [type]：提供多种显示逻辑，详细描述请查看 [SmartToastType] 注释
   ///
   /// [widget]：可高度定制化toast
   static Future<void> showToast(
@@ -256,15 +256,15 @@ class SmartDialog {
     AlignmentGeometry? alignment,
     Duration? time,
     bool? antiShakeTemp,
-    SmartToastStatus status = SmartToastStatus.normal,
+    SmartToastType type = SmartToastType.normal,
     Widget? widget,
   }) async {
-    DialogProxy.instance.showToast(
+    return DialogProxy.instance.showToast(
       msg,
       alignment: alignment ?? Alignment.bottomCenter,
       time: time ?? Duration(milliseconds: 2000),
       antiShake: antiShakeTemp ?? config.antiShake,
-      status: status,
+      type: type,
       widget: widget,
     );
   }
