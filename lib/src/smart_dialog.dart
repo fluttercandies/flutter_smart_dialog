@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'helper/config.dart';
 import 'helper/dialog_proxy.dart';
+import 'widget/loading_widget.dart';
+import 'widget/toast_widget.dart';
 
 enum SmartStatus {
   /// close toast
@@ -144,9 +146,9 @@ class SmartDialog {
   /// loading dialog：'temp' suffix param, if there is no default value,
   /// the global attribute in config will be used by default
   ///
-  /// [msg]：loading msg
+  /// [msg]：loading msg (Use the 'widget' param, this param will be invalid)
   ///
-  /// [background]：the rectangle background color of msg
+  /// [background]：the rectangle background color of msg (Use the 'widget' param, this param will be invalid)
   ///
   /// [clickBgDismissTemp]：default（false），true（loading will be closed after click background），
   /// false（not close）
@@ -175,9 +177,9 @@ class SmartDialog {
   ///
   /// loading弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
   ///
-  /// [msg]：loading 的信息
+  /// [msg]：loading 的信息（使用 'widget' 参数，该参数将失效）
   ///
-  /// [background]：loading信息后面的矩形背景颜色
+  /// [background]：loading信息后面的矩形背景颜色（使用 'widget' 参数，该参数将失效）
   ///
   /// [clickBgDismissTemp]：默认（false），true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
   ///
@@ -198,8 +200,8 @@ class SmartDialog {
   /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），
   /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭loading
   static Future<void> showLoading({
-    String? msg,
-    Color? background,
+    String msg = 'loading...',
+    Color background = Colors.black,
     bool? clickBgDismissTemp,
     bool? isLoadingTemp,
     bool? isPenetrateTemp,
@@ -207,12 +209,10 @@ class SmartDialog {
     Duration? animationDurationTemp,
     Color? maskColorTemp,
     Widget? maskWidgetTemp,
-    Widget? widget,
     bool? backDismiss,
+    Widget? widget,
   }) {
     return DialogProxy.instance.showLoading(
-      msg: msg ?? 'loading...',
-      background: background ?? Colors.black,
       clickBgDismiss: clickBgDismissTemp ?? false,
       isLoading: isLoadingTemp ?? true,
       isPenetrate: isPenetrateTemp ?? false,
@@ -220,8 +220,8 @@ class SmartDialog {
       animationDuration: animationDurationTemp ?? config.animationDuration,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
-      widget: widget,
       backDismiss: backDismiss ?? true,
+      widget: widget ?? LoadingWidget(msg: msg, background: background),
     );
   }
 
@@ -253,19 +253,17 @@ class SmartDialog {
   /// [widget]：可高度定制化toast
   static Future<void> showToast(
     String msg, {
-    AlignmentGeometry? alignment,
+    AlignmentGeometry alignment = Alignment.bottomCenter,
     Duration? time,
     bool? antiShakeTemp,
-    SmartToastType type = SmartToastType.normal,
+    SmartToastType? type,
     Widget? widget,
   }) async {
     return DialogProxy.instance.showToast(
-      msg,
-      alignment: alignment ?? Alignment.bottomCenter,
       time: time ?? Duration(milliseconds: 2000),
       antiShake: antiShakeTemp ?? config.antiShake,
-      type: type,
-      widget: widget,
+      type: type ?? SmartToastType.normal,
+      widget: widget ?? ToastWidget(msg: msg, alignment: alignment),
     );
   }
 

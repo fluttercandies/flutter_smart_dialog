@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_loading.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_toast.dart';
-import 'package:flutter_smart_dialog/src/widget/loading_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
-import 'package:flutter_smart_dialog/src/widget/toast_widget.dart';
 
 import '../smart_dialog.dart';
 import 'config.dart';
@@ -88,8 +86,6 @@ class DialogProxy {
   }
 
   Future<void> showLoading({
-    required String msg,
-    required Color background,
     required bool clickBgDismiss,
     required bool isLoading,
     required bool isPenetrate,
@@ -97,11 +93,10 @@ class DialogProxy {
     required Duration animationDuration,
     required Color maskColor,
     required Widget? maskWidget,
-    required Widget? widget,
     required bool backDismiss,
+    required Widget widget,
   }) {
     return _loading.showLoading(
-      widget: widget ?? LoadingWidget(msg: msg, background: background),
       clickBgDismiss: clickBgDismiss,
       isLoading: isLoading,
       maskColor: maskColor,
@@ -110,24 +105,21 @@ class DialogProxy {
       isUseAnimation: isUseAnimation,
       animationDuration: animationDuration,
       backDismiss: backDismiss,
+      widget: widget,
     );
   }
 
-  Future<void> showToast(
-    String msg, {
+  Future<void> showToast({
     required Duration time,
-    required AlignmentGeometry alignment,
     required bool antiShake,
     required SmartToastType type,
-    required Widget? widget,
+    required Widget widget,
   }) async {
     return _toast.showToast(
       time: time,
       antiShake: antiShake,
       type: type,
-      widget: ToastHelper(
-        child: widget ?? ToastWidget(msg: msg, alignment: alignment),
-      ),
+      widget: ToastHelper(child: widget),
     );
   }
 

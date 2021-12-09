@@ -53,8 +53,6 @@ class SmartDialogPage extends StatelessWidget {
   void _showDialog() {
     SmartDialog.show(
       isLoadingTemp: false,
-      isPenetrateTemp: true,
-      clickBgDismissTemp: false,
       widget: Container(
         height: 80,
         width: 180,
