@@ -73,7 +73,7 @@ class SmartDialogViewState extends State<SmartDialogView>
     //开启背景动画的效果
     Future.delayed(Duration(milliseconds: 10), () {
       _opacity = 1.0;
-      setState(() {});
+      if (mounted) setState(() {});
     });
 
     super.initState();
@@ -170,9 +170,8 @@ class SmartDialogViewState extends State<SmartDialogView>
   ///等待动画结束,关闭动画资源
   Future<void> dismiss() async {
     //背景结束动画
-    setState(() {
-      _opacity = 0.0;
-    });
+    _opacity = 0.0;
+    if (mounted) setState(() {});
 
     //内容widget结束动画
     _controller.reverse();
