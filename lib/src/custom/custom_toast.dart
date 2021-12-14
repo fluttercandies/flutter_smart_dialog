@@ -48,7 +48,7 @@ class CustomToast extends BaseDialog {
   }) async {
     _toastList.add(() async {
       //handling special circumstances
-      if (_toastList.length == 0) return;
+      if (_toastList.isEmpty) return;
 
       mainDialog.show(
         alignment: Alignment.center,
@@ -65,10 +65,10 @@ class CustomToast extends BaseDialog {
       );
       await Future.delayed(time);
       //invoke next toast
-      _toastList.removeAt(0);
+      if (_toastList.isNotEmpty) _toastList.removeAt(0);
       await dismiss();
 
-      if (_toastList.length != 0) await _toastList[0]();
+      if (_toastList.isNotEmpty) await _toastList[0]();
     });
 
     if (_toastList.length == 1) await _toastList[0]();
@@ -78,9 +78,7 @@ class CustomToast extends BaseDialog {
     required Duration time,
     required Widget widget,
   }) async {
-    if (_toastList.length != 0) {
-      return;
-    }
+    if (_toastList.isNotEmpty) return;
 
     _toastList.add(() async {});
     mainDialog.show(
@@ -133,7 +131,7 @@ class CustomToast extends BaseDialog {
   }) async {
     _toastList.add(() async {
       //handling special circumstances
-      if (_toastList.length == 0) return;
+      if (_toastList.isEmpty) return;
 
       mainDialog.show(
         alignment: Alignment.center,
@@ -150,10 +148,10 @@ class CustomToast extends BaseDialog {
       );
       await Future.delayed(time);
       //invoke next toast
-      _toastList.removeAt(0);
+      if (_toastList.isNotEmpty) _toastList.removeAt(0);
       await dismiss();
 
-      if (_toastList.length != 0) await _toastList[0]();
+      if (_toastList.isNotEmpty) await _toastList[0]();
     });
 
     if (_toastList.length == 1) await _toastList[0]();
@@ -165,7 +163,7 @@ class CustomToast extends BaseDialog {
 
   Future<void> dismiss() async {
     await mainDialog.dismiss();
-    if (_toastList.length != 0) return;
+    if (_toastList.isNotEmpty) return;
 
     config.isExistToast = false;
   }
