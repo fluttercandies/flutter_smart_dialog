@@ -4,10 +4,19 @@ import 'package:flutter_smart_dialog/src/helper/navigator_observer.dart';
 import 'helper/dialog_proxy.dart';
 import 'helper/monitor_pop_route.dart';
 
+typedef SmartStyleBuilder = Widget Function(Widget child);
+
 class FlutterSmartDialog extends StatefulWidget {
-  FlutterSmartDialog({Key? key, required this.child}) : super(key: key);
+  FlutterSmartDialog({
+    Key? key,
+    required this.child,
+    //Compatible with cupertino style
+    this.styleBuilder,
+  }) : super(key: key);
 
   final Widget? child;
+
+  final SmartStyleBuilder? styleBuilder;
 
   @override
   _FlutterSmartDialogState createState() => _FlutterSmartDialogState();
@@ -17,13 +26,20 @@ class FlutterSmartDialog extends StatefulWidget {
   static void monitor() => MonitorPopRoute.instance;
 
   ///recommend the way of init
-  static TransitionBuilder init({TransitionBuilder? builder}) {
+  static TransitionBuilder init({
+    TransitionBuilder? builder,
+    //Compatible with cupertino style
+    SmartStyleBuilder? styleBuilder,
+  }) {
     monitor();
 
     return (BuildContext context, Widget? child) {
       return builder == null
-          ? FlutterSmartDialog(child: child)
-          : builder(context, FlutterSmartDialog(child: child));
+          ? FlutterSmartDialog(child: child, styleBuilder: styleBuilder)
+          : builder(
+              context,
+              FlutterSmartDialog(child: child, styleBuilder: styleBuilder),
+            );
     };
   }
 }
@@ -39,26 +55,29 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Overlay(initialEntries: [
-        //main layout
-        OverlayEntry(
-          builder: (BuildContext context) => widget.child ?? Container(),
-        ),
+    return widget.styleBuilder == null
+        ? Material(color: Colors.transparent, child: _buildOverlay())
+        : widget.styleBuilder!.call(_buildOverlay());
+  }
 
-        //provided separately for custom dialog
-        OverlayEntry(builder: (BuildContext context) {
-          DialogProxy.context = context;
-          return Container();
-        }),
+  Widget _buildOverlay() {
+    return Overlay(initialEntries: [
+      //main layout
+      OverlayEntry(
+        builder: (BuildContext context) => widget.child ?? Container(),
+      ),
 
-        //provided separately for loading
-        DialogProxy.instance.entryLoading,
+      //provided separately for custom dialog
+      OverlayEntry(builder: (BuildContext context) {
+        DialogProxy.context = context;
+        return Container();
+      }),
 
-        //provided separately for toast
-        DialogProxy.instance.entryToast,
-      ]),
-    );
+      //provided separately for loading
+      DialogProxy.instance.entryLoading,
+
+      //provided separately for toast
+      DialogProxy.instance.entryToast,
+    ]);
   }
 }

@@ -8,6 +8,7 @@
 - Add close all dialog status
 - Adjustment comment
 - Add four toast display logic
+- Compatible with cupertino style
 
 # [2.3.x]
 
