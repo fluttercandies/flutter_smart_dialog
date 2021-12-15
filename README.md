@@ -13,7 +13,7 @@ An elegant Flutter Dialog solution.
 - **Do not need BuildContext**
 - **Can penetrate dark background, click on the page behind dialog**
 - **Support dialog stack，close the specified dialog**
-- **Easily implement toast，loading dialog，custome dialog**
+- **Easily implement toast，loading，custome dialog**
 
 # Quick start
 
