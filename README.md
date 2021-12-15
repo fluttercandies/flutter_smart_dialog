@@ -8,6 +8,14 @@ An elegant Flutter Dialog solution.
 
 - [pub](https://pub.flutter-io.cn/packages/flutter_smart_dialog)，[github](https://github.com/fluttercandies/flutter_smart_dialog)，[click me to experience it](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
 
+# Some Effect
+
+![dialogStack](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211106214858.gif)
+
+![toastCustom](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092253.gif)
+
+![loadingSmile](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092359.gif)
+
 # Advantage
 
 - **Do not need BuildContext**
