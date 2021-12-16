@@ -9,15 +9,23 @@ import 'widget/toast_widget.dart';
 
 enum SmartStatus {
   /// close toast
+  ///
+  /// 关闭toast
   toast,
 
   /// close loading
+  ///
+  /// 关闭loading
   loading,
 
   /// close single dialog
+  ///
+  /// 关闭单个dialog
   dialog,
 
   /// close all dialog, but not close toast and loading
+  ///
+  /// 关闭打开的所有dialog，但是不关闭toast和loading
   allDialog,
 }
 
