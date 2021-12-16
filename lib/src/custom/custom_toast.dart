@@ -15,6 +15,13 @@ class CustomToast extends BaseDialog {
   DateTime? _lastTime;
 
   Future<void> showToast({
+    required bool clickBgDismiss,
+    required bool isLoading,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required Color maskColor,
+    required Widget? maskWidget,
     required Duration time,
     required bool antiShake,
     required SmartToastType type,
@@ -30,39 +37,44 @@ class CustomToast extends BaseDialog {
     }
     config.isExistToast = true;
 
+    var showToast = () {
+      mainDialog.show(
+        alignment: Alignment.center,
+        maskColor: maskColor,
+        maskWidget: maskWidget,
+        animationDuration: animationDuration,
+        isLoading: isLoading,
+        isUseAnimation: isUseAnimation,
+        isPenetrate: isPenetrate,
+        clickBgDismiss: clickBgDismiss,
+        widget: widget,
+        onDismiss: null,
+        onBgTap: () => dismiss(),
+      );
+    };
+
     // provider multiple toast display logic
     if (type == SmartToastType.normal) {
-      await _normalToast(time: time, widget: widget);
+      await _normalToast(time: time, onShowToast: showToast);
     } else if (type == SmartToastType.first) {
-      await _firstToast(time: time, widget: widget);
+      await _firstToast(time: time, onShowToast: showToast);
     } else if (type == SmartToastType.last) {
-      await _lastToast(time: time, widget: widget);
+      await _lastToast(time: time, onShowToast: showToast);
     } else if (type == SmartToastType.firstAndLast) {
-      await _firstAndLastToast(time: time, widget: widget);
+      await _firstAndLastToast(time: time, onShowToast: showToast);
     }
   }
 
   Future<void> _normalToast({
     required Duration time,
-    required Widget widget,
+    required Function() onShowToast,
   }) async {
     _toastList.add(() async {
       //handling special circumstances
       if (_toastList.isEmpty) return;
 
-      mainDialog.show(
-        alignment: Alignment.center,
-        maskColor: Colors.transparent,
-        maskWidget: null,
-        animationDuration: Duration(milliseconds: 200),
-        isLoading: true,
-        isUseAnimation: true,
-        isPenetrate: true,
-        clickBgDismiss: false,
-        widget: widget,
-        onDismiss: null,
-        onBgTap: () => dismiss(),
-      );
+      onShowToast();
+
       await Future.delayed(time);
       //invoke next toast
       if (_toastList.isNotEmpty) _toastList.removeAt(0);
@@ -76,24 +88,14 @@ class CustomToast extends BaseDialog {
 
   Future<void> _firstToast({
     required Duration time,
-    required Widget widget,
+    required Function() onShowToast,
   }) async {
     if (_toastList.isNotEmpty) return;
 
     _toastList.add(() async {});
-    mainDialog.show(
-      alignment: Alignment.center,
-      maskColor: Colors.transparent,
-      maskWidget: null,
-      animationDuration: Duration(milliseconds: 200),
-      isLoading: true,
-      isUseAnimation: true,
-      isPenetrate: true,
-      clickBgDismiss: false,
-      widget: widget,
-      onDismiss: null,
-      onBgTap: () => dismiss(),
-    );
+
+    onShowToast();
+
     await Future.delayed(time);
     await dismiss();
 
@@ -102,21 +104,10 @@ class CustomToast extends BaseDialog {
 
   Future<void> _lastToast({
     required Duration time,
-    required Widget widget,
+    required Function() onShowToast,
   }) async {
-    mainDialog.show(
-      alignment: Alignment.center,
-      maskColor: Colors.transparent,
-      maskWidget: null,
-      animationDuration: Duration(milliseconds: 200),
-      isLoading: true,
-      isUseAnimation: true,
-      isPenetrate: true,
-      clickBgDismiss: false,
-      widget: widget,
-      onDismiss: null,
-      onBgTap: () => dismiss(),
-    );
+    onShowToast();
+
     _toastList.add(() async {});
     await Future.delayed(time);
     if (_toastList.length == 1) {
@@ -127,25 +118,14 @@ class CustomToast extends BaseDialog {
 
   Future<void> _firstAndLastToast({
     required Duration time,
-    required Widget widget,
+    required Function() onShowToast,
   }) async {
     _toastList.add(() async {
       //handling special circumstances
       if (_toastList.isEmpty) return;
 
-      mainDialog.show(
-        alignment: Alignment.center,
-        maskColor: Colors.transparent,
-        maskWidget: null,
-        animationDuration: Duration(milliseconds: 200),
-        isLoading: true,
-        isUseAnimation: true,
-        isPenetrate: true,
-        clickBgDismiss: false,
-        widget: widget,
-        onDismiss: null,
-        onBgTap: () => dismiss(),
-      );
+      onShowToast();
+
       await Future.delayed(time);
       //invoke next toast
       if (_toastList.isNotEmpty) _toastList.removeAt(0);

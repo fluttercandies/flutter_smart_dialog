@@ -110,12 +110,26 @@ class DialogProxy {
   }
 
   Future<void> showToast({
+    required bool clickBgDismiss,
+    required bool isLoading,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required Color maskColor,
+    required Widget? maskWidget,
     required Duration time,
     required bool antiShake,
     required SmartToastType type,
     required Widget widget,
   }) async {
     return _toast.showToast(
+      clickBgDismiss: clickBgDismiss,
+      isLoading: isLoading,
+      isPenetrate: isPenetrate,
+      isUseAnimation: isUseAnimation,
+      animationDuration: animationDuration,
+      maskColor: maskColor,
+      maskWidget: maskWidget,
       time: time,
       antiShake: antiShake,
       type: type,

@@ -9,6 +9,7 @@
 - Adjustment comment
 - Add four toast display logic
 - Compatible with cupertino style
+- Increase showToast's external exposure param
 
 # [2.3.x]
 

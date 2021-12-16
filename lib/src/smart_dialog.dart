@@ -227,9 +227,26 @@ class SmartDialog {
 
   /// [msg]：msg presented to users(Use the 'widget' param, this param will be invalid)
   ///
-  /// [time]：toast display time on the screen(Use the 'widget' param, this param will be invalid)
+  /// [clickBgDismissTemp]：default（false），true（loading will be closed after click background），
+  /// false（not close）
+  ///
+  /// [isLoadingTemp]：default（true），true（use the opacity animation），
+  /// false（use the scale transition animation）
+  ///
+  /// [isPenetrateTemp]：default（true），true（the click event will penetrate background），
+  /// false（not penetration）
+  ///
+  /// [isUseAnimationTemp]：true（use the animation），false（not use）
+  ///
+  /// [animationDurationTemp]：animation duration
+  ///
+  /// [maskColorTemp]：the color of the mask，it is invalid if [maskWidgetTemp] set the value
+  ///
+  /// [maskWidgetTemp]：highly customizable mask
   ///
   /// [alignment]：control the location of toast on the screen
+  ///
+  /// [time]：toast display time on the screen(Use the 'widget' param, this param will be invalid)
   ///
   /// [antiShakeTemp]：anti-shake function（debounce）
   ///
@@ -242,9 +259,23 @@ class SmartDialog {
   ///
   /// [msg]：呈现给用户的信息（使用 'widget' 参数，该参数将失效）
   ///
-  /// [time]：toast在屏幕上的显示时间
+  /// [clickBgDismissTemp]：默认（false），true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  ///
+  /// [isLoadingTemp]：默认（true），true（使用透明动画），false（使用尺寸缩放动画）
+  ///
+  /// [isPenetrateTemp]：默认（true），true（点击事件将穿透背景），false（不穿透）
+  ///
+  /// [isUseAnimationTemp]：true（使用动画），false（不使用）
+  ///
+  /// [animationDurationTemp]：动画持续时间
+  ///
+  /// [maskColorTemp]：遮罩颜色，如果给[maskWidgetTemp]设置了值，该参数将会失效
+  ///
+  /// [maskWidgetTemp]：可高度定制遮罩
   ///
   /// [alignment]：控制toast在屏幕上的显示位置（使用 'widget' 参数，该参数将失效）
+  ///
+  /// [time]：toast在屏幕上的显示时间
   ///
   /// [antiShakeTemp]：防抖功能（debounce）
   ///
@@ -253,6 +284,13 @@ class SmartDialog {
   /// [widget]：可高度定制化toast
   static Future<void> showToast(
     String msg, {
+    bool? clickBgDismissTemp,
+    bool? isLoadingTemp,
+    bool? isPenetrateTemp,
+    bool? isUseAnimationTemp,
+    Duration? animationDurationTemp,
+    Color? maskColorTemp,
+    Widget? maskWidgetTemp,
     AlignmentGeometry alignment = Alignment.bottomCenter,
     Duration? time,
     bool? antiShakeTemp,
@@ -260,6 +298,13 @@ class SmartDialog {
     Widget? widget,
   }) async {
     return DialogProxy.instance.showToast(
+      clickBgDismiss: clickBgDismissTemp ?? false,
+      isLoading: isLoadingTemp ?? true,
+      isPenetrate: isPenetrateTemp ?? true,
+      isUseAnimation: isUseAnimationTemp ?? true,
+      animationDuration: animationDurationTemp ?? Duration(milliseconds: 200),
+      maskColor: maskColorTemp ?? Colors.transparent,
+      maskWidget: maskWidgetTemp ?? null,
       time: time ?? Duration(milliseconds: 2000),
       antiShake: antiShakeTemp ?? config.antiShake,
       type: type ?? SmartToastType.normal,
