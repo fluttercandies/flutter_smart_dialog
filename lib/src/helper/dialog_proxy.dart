@@ -41,10 +41,7 @@ class DialogProxy {
       builder: (BuildContext context) => _toast.getWidget(),
     );
 
-    _loading = CustomLoading(
-      config: config,
-      overlayEntry: entryLoading,
-    );
+    _loading = CustomLoading(config: config, overlayEntry: entryLoading);
     _toast = CustomToast(config: config, overlayEntry: entryToast);
   }
 
@@ -143,9 +140,9 @@ class DialogProxy {
     bool back = false,
   }) async {
     if (status == null) {
-      if (!config.isExistLoading)
-        await CustomDialog.dismiss(tag: tag, back: back);
-      if (config.isExistLoading) await _loading.dismiss(back: back);
+      var loading = config.isExistLoading;
+      if (!loading) await CustomDialog.dismiss(tag: tag, back: back);
+      if (loading) await _loading.dismiss(back: back);
     } else if (status == SmartStatus.dialog) {
       await CustomDialog.dismiss(tag: tag, back: back);
     } else if (status == SmartStatus.loading) {
