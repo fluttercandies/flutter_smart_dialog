@@ -59,6 +59,7 @@ class DialogProxy {
     required VoidCallback? onDismiss,
     required String? tag,
     required bool backDismiss,
+    required bool keepSingle,
   }) {
     CustomDialog? dialog;
     var entry = OverlayEntry(
@@ -79,6 +80,7 @@ class DialogProxy {
       antiShake: antiShake,
       tag: tag,
       backDismiss: backDismiss,
+      keepSingle: keepSingle,
     );
   }
 

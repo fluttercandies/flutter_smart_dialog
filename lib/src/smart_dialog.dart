@@ -89,6 +89,8 @@ class SmartDialog {
   /// [backDismiss]：default（true），true（the back event will close the dialog but not close the page），
   /// false（the back event not close the dialog and not close page），you still can use the dismiss method to close the dialog
   ///
+  /// [keepSingle]：Default (false), true (calling [show] multiple times will not generate multiple dialogs,
+  /// only single dialog will be kept), false (calling [show] multiple times will generate multiple dialogs)
   /// -------------------------------------------------------------------------------
   ///
   /// 提供loading弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
@@ -117,8 +119,11 @@ class SmartDialog {
   ///
   /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
   ///
-  /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
-  /// 你仍然可以使用dismiss方法来关闭loading
+  /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），
+  /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭loading
+  ///
+  /// [keepSingle]：默认（false），true（多次调用[show]并不会生成多个dialog，仅仅保持一个dialog），
+  /// false（多次调用[show]会生成多个dialog）
   static Future<void> show({
     required Widget widget,
     AlignmentGeometry? alignmentTemp,
@@ -133,6 +138,7 @@ class SmartDialog {
     VoidCallback? onDismiss,
     String? tag,
     bool? backDismiss,
+    bool? keepSingle,
   }) {
     return DialogProxy.instance.show(
       widget: widget,
@@ -148,6 +154,7 @@ class SmartDialog {
       onDismiss: onDismiss,
       tag: tag,
       backDismiss: backDismiss ?? true,
+      keepSingle: keepSingle ?? false,
     );
   }
 

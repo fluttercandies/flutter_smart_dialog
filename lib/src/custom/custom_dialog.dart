@@ -14,6 +14,8 @@ class CustomDialog extends BaseDialog {
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
 
+  final String tagKeepSingle = 'keepSingle';
+
   Future<void> show({
     required Widget widget,
     required AlignmentGeometry alignment,
@@ -27,28 +29,18 @@ class CustomDialog extends BaseDialog {
     required Widget? maskWidget,
     required String? tag,
     required bool backDismiss,
+    required bool keepSingle,
     VoidCallback? onDismiss,
   }) async {
-    var proxy = DialogProxy.instance;
+    // debounce
+    if (!_checkDebounce(antiShake)) return;
 
-    // anti-shake
-    if (antiShake) {
-      var now = DateTime.now();
-      var isShake = proxy.dialogLastTime != null &&
-          now.difference(proxy.dialogLastTime!) <
-              SmartDialog.config.antiShakeTime;
-      proxy.dialogLastTime = now;
-      if (isShake) return;
-    }
-
-    // handle dialog stack
-    var dialogInfo = DialogInfo(this, backDismiss, isUseAnimation);
-    proxy.dialogList.add(dialogInfo);
-    if (tag != null) proxy.dialogMap[tag] = dialogInfo;
-    // insert the dialog carrier into the page
-    Overlay.of(DialogProxy.context)!.insert(
-      overlayEntry,
-      below: proxy.entryLoading,
+    //handle dialog stack
+    _handleDialogStack(
+      isUseAnimation: isUseAnimation,
+      tag: tag,
+      backDismiss: backDismiss,
+      keepSingle: keepSingle,
     );
 
     config.isExist = true;
@@ -89,6 +81,55 @@ class CustomDialog extends BaseDialog {
     if (!proxy.config.isExistLoading) {
       proxy.config.isExist = false;
     }
+  }
+
+  void _handleDialogStack({
+    required bool isUseAnimation,
+    required String? tag,
+    required bool backDismiss,
+    required bool keepSingle,
+  }) {
+    var proxy = DialogProxy.instance;
+
+    if (keepSingle) {
+      DialogInfo dialogInfo;
+      if (proxy.dialogMap[tagKeepSingle] == null) {
+        dialogInfo = DialogInfo(this, backDismiss, isUseAnimation);
+        proxy.dialogList.add(dialogInfo);
+        proxy.dialogMap[tagKeepSingle] = dialogInfo;
+        Overlay.of(DialogProxy.context)!.insert(
+          overlayEntry,
+          below: proxy.entryLoading,
+        );
+      }
+      dialogInfo = proxy.dialogMap[tagKeepSingle]!;
+      mainDialog.overlayEntry = dialogInfo.dialog.overlayEntry;
+      return;
+    }
+
+    // handle dialog stack
+    var dialogInfo = DialogInfo(this, backDismiss, isUseAnimation);
+    proxy.dialogList.add(dialogInfo);
+    if (tag != null) proxy.dialogMap[tag] = dialogInfo;
+    // insert the dialog carrier into the page
+    Overlay.of(DialogProxy.context)!.insert(
+      overlayEntry,
+      below: proxy.entryLoading,
+    );
+  }
+
+  bool _checkDebounce(bool antiShake) {
+    if (!antiShake) return true;
+
+    var proxy = DialogProxy.instance;
+    var now = DateTime.now();
+    var isShake = proxy.dialogLastTime != null &&
+        now.difference(proxy.dialogLastTime!) <
+            SmartDialog.config.antiShakeTime;
+    proxy.dialogLastTime = now;
+    if (isShake) return false;
+
+    return true;
   }
 }
 
