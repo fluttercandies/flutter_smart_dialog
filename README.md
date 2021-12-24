@@ -6,7 +6,7 @@ Language:  English | [中文](https://juejin.cn/post/7026150456673959943)
 
 An elegant Flutter Dialog solution.
 
-- [pub](https://pub.flutter-io.cn/packages/flutter_smart_dialog)，[github](https://github.com/fluttercandies/flutter_smart_dialog)，[click me to experience it](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
+- [pub](https://pub.flutter-io.cn/packages/flutter_smart_dialog)，[github](https://github.com/fluttercandies/flutter_smart_dialog)，[web effect](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
 
 # Some Effect
 
