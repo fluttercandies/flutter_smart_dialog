@@ -16,7 +16,7 @@ class BaseDialog {
   ///config info
   final Config config;
 
-  final MainDialog mainDialog;
+  MainDialog mainDialog;
 
   /// get Widget : must implement
   Widget getWidget() => mainDialog.getWidget();

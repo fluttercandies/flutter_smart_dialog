@@ -1,3 +1,8 @@
+# [3.1.x]
+
+- 'show' method add 'keepSingle' function
+- Optimize dismiss method
+
 # [3.0.x]
 
 - Support dialog stack，close the specified dialog
@@ -10,6 +15,7 @@
 - Add four toast display logic
 - Compatible with cupertino style
 - Increase showToast's external exposure param
+
 
 # [2.3.x]
 

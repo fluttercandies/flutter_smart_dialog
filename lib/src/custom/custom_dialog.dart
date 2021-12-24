@@ -6,6 +6,7 @@ import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
 import '../../flutter_smart_dialog.dart';
 import 'base_dialog.dart';
+import 'main_dialog.dart';
 
 ///main function : custom dialog
 class CustomDialog extends BaseDialog {
@@ -13,6 +14,8 @@ class CustomDialog extends BaseDialog {
     required Config config,
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
+
+  static MainDialog? mainDialogSingle;
 
   final String tagKeepSingle = 'keepSingle';
 
@@ -70,7 +73,7 @@ class CustomDialog extends BaseDialog {
     if (info == null || (!info.backDismiss && back)) return;
 
     //handle close dialog
-    if (tag != null) proxy.dialogMap.remove(tag);
+    if (info.tag != null) proxy.dialogMap.remove(info.tag);
     proxy.dialogList.remove(info);
     var customDialog = info.dialog;
     await customDialog.mainDialog.dismiss();
@@ -94,21 +97,32 @@ class CustomDialog extends BaseDialog {
     if (keepSingle) {
       DialogInfo dialogInfo;
       if (proxy.dialogMap[tagKeepSingle] == null) {
-        dialogInfo = DialogInfo(this, backDismiss, isUseAnimation);
+        dialogInfo = DialogInfo(
+          dialog: this,
+          backDismiss: backDismiss,
+          isUseAnimation: isUseAnimation,
+          tag: tagKeepSingle,
+        );
         proxy.dialogList.add(dialogInfo);
         proxy.dialogMap[tagKeepSingle] = dialogInfo;
         Overlay.of(DialogProxy.context)!.insert(
           overlayEntry,
           below: proxy.entryLoading,
         );
+        mainDialogSingle = mainDialog;
       }
-      dialogInfo = proxy.dialogMap[tagKeepSingle]!;
-      mainDialog.overlayEntry = dialogInfo.dialog.overlayEntry;
+
+      mainDialog = mainDialogSingle!;
       return;
     }
 
     // handle dialog stack
-    var dialogInfo = DialogInfo(this, backDismiss, isUseAnimation);
+    var dialogInfo = DialogInfo(
+      dialog: this,
+      backDismiss: backDismiss,
+      isUseAnimation: isUseAnimation,
+      tag: tag,
+    );
     proxy.dialogList.add(dialogInfo);
     if (tag != null) proxy.dialogMap[tag] = dialogInfo;
     // insert the dialog carrier into the page
@@ -134,11 +148,18 @@ class CustomDialog extends BaseDialog {
 }
 
 class DialogInfo {
-  DialogInfo(this.dialog, this.backDismiss, this.isUseAnimation);
+  DialogInfo({
+    required this.dialog,
+    required this.backDismiss,
+    required this.isUseAnimation,
+    required this.tag,
+  });
 
   final CustomDialog dialog;
 
   final bool backDismiss;
 
   final bool isUseAnimation;
+
+  final String? tag;
 }

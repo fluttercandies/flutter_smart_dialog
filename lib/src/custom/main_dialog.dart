@@ -12,7 +12,7 @@ class MainDialog {
   }) : _widget = Container();
 
   ///OverlayEntry instance
-  OverlayEntry overlayEntry;
+  final OverlayEntry overlayEntry;
 
   ///config info
   final Config config;
