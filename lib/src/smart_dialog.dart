@@ -158,6 +158,106 @@ class SmartDialog {
     );
   }
 
+  /// custom dialog：'temp' suffix param, if there is no default value, the global attribute in config will be used by default
+  ///
+  /// [widget]：custom widget
+  ///
+  /// [alignmentTemp]：control the location of the dialog
+  ///
+  /// [clickBgDismissTemp]：true（the dialog will be closed after click background），false（not close）
+  ///
+  /// [isLoadingTemp]：true（use the opacity animation），false（use the scale transition animation）
+  ///
+  /// [isPenetrateTemp]：true（the click event will penetrate background），false（not penetration）
+  ///
+  /// [isUseAnimationTemp]：true（use the animation），false（not use）
+  ///
+  /// [animationDurationTemp]：animation duration
+  ///
+  /// [maskColorTemp]：the color of the mask，it is invalid if [maskWidgetTemp] set the value and [isPenetrateTemp] is true
+  ///
+  /// [maskWidgetTemp]：highly customizable mask
+  ///
+  /// [antiShakeTemp]：anti-shake function（debounce）
+  ///
+  /// [onDismiss]：the callback will be invoked when the dialog is closed
+  ///
+  /// [tag]：if you set a tag for the dialog, you can turn it off in a targeted manner
+  ///
+  /// [backDismiss]：default（true），true（the back event will close the dialog but not close the page），
+  /// false（the back event not close the dialog and not close page），you still can use the dismiss method to close the dialog
+  ///
+  /// [keepSingle]：Default (false), true (calling [showAttach] multiple times will not generate multiple dialogs,
+  /// only single dialog will be kept), false (calling [showAttach] multiple times will generate multiple dialogs)
+  /// -------------------------------------------------------------------------------
+  ///
+  /// 提供loading弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
+  ///
+  /// [widget]：自定义 widget
+  ///
+  /// [alignmentTemp]：控制弹窗的位置
+  ///
+  /// [clickBgDismissTemp]：true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  ///
+  /// [isLoadingTemp]：true（使用透明动画），false（使用尺寸缩放动画）
+  ///
+  /// [isPenetrateTemp]：true（点击事件将穿透背景），false（不穿透）
+  ///
+  /// [isUseAnimationTemp]：true（使用动画），false（不使用）
+  ///
+  /// [animationDurationTemp]：动画持续时间
+  ///
+  /// [maskColorTemp]：遮罩颜色，如果给[maskWidgetTemp]设置了值，该参数将会失效
+  ///
+  /// [maskWidgetTemp]：可高度定制遮罩
+  ///
+  /// [antiShakeTemp]：防抖功能（debounce）
+  ///
+  /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
+  ///
+  /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
+  ///
+  /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），
+  /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭loading
+  ///
+  /// [keepSingle]：默认（false），true（多次调用[showAttach]并不会生成多个dialog，仅仅保持一个dialog），
+  /// false（多次调用[showAttach]会生成多个dialog）
+  static Future<void> showAttach({
+    required Widget widget,
+    required BuildContext targetContext,
+    AlignmentGeometry? alignmentTemp,
+    bool? clickBgDismissTemp,
+    bool? isLoadingTemp,
+    bool? isPenetrateTemp,
+    bool? isUseAnimationTemp,
+    Duration? animationDurationTemp,
+    Color? maskColorTemp,
+    Widget? maskWidgetTemp,
+    bool? antiShakeTemp,
+    VoidCallback? onDismiss,
+    String? tag,
+    bool? backDismiss,
+    bool? keepSingle,
+  }) {
+    return DialogProxy.instance.showAttach(
+      widget: widget,
+      targetContext: targetContext,
+      alignment: alignmentTemp ?? config.alignment,
+      clickBgDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
+      isLoading: isLoadingTemp ?? config.isLoading,
+      isPenetrate: isPenetrateTemp ?? config.isPenetrate,
+      isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
+      animationDuration: animationDurationTemp ?? config.animationDuration,
+      maskColor: maskColorTemp ?? config.maskColor,
+      maskWidget: maskWidgetTemp ?? config.maskWidget,
+      antiShake: antiShakeTemp ?? config.antiShake,
+      onDismiss: onDismiss,
+      tag: tag,
+      backDismiss: backDismiss ?? true,
+      keepSingle: keepSingle ?? false,
+    );
+  }
+
   /// loading dialog：'temp' suffix param, if there is no default value,
   /// the global attribute in config will be used by default
   ///

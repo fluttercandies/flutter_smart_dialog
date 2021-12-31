@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
 
-import 'base_dialog.dart';
+import '../data/base_dialog.dart';
 
 class CustomToast extends BaseDialog {
   CustomToast({
@@ -39,6 +39,8 @@ class CustomToast extends BaseDialog {
 
     var showToast = () {
       mainDialog.show(
+        widget: widget,
+        targetContext: null,
         alignment: Alignment.center,
         maskColor: maskColor,
         maskWidget: maskWidget,
@@ -47,7 +49,6 @@ class CustomToast extends BaseDialog {
         isUseAnimation: isUseAnimation,
         isPenetrate: isPenetrate,
         clickBgDismiss: clickBgDismiss,
-        widget: widget,
         onDismiss: null,
         onBgTap: () => dismiss(),
       );

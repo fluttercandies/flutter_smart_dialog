@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 
 class SmartDialogWidget extends StatefulWidget {
   SmartDialogWidget({
     Key? key,
     required this.child,
+    required this.controller,
     required this.onBgTap,
     required this.alignment,
     required this.isPenetrate,
@@ -19,6 +21,8 @@ class SmartDialogWidget extends StatefulWidget {
 
   /// 内容widget
   final Widget child;
+
+  final SmartDialogController controller;
 
   /// 点击背景
   final VoidCallback onBgTap;
@@ -49,10 +53,10 @@ class SmartDialogWidget extends StatefulWidget {
   final bool clickBgDismiss;
 
   @override
-  SmartDialogWidgetState createState() => SmartDialogWidgetState();
+  _SmartDialogWidgetState createState() => _SmartDialogWidgetState();
 }
 
-class SmartDialogWidgetState extends State<SmartDialogWidget>
+class _SmartDialogWidgetState extends State<SmartDialogWidget>
     with SingleTickerProviderStateMixin {
   late double _opacity;
 
@@ -187,3 +191,18 @@ class SmartDialogWidgetState extends State<SmartDialogWidget>
     super.dispose();
   }
 }
+
+class SmartDialogController extends BaseController {
+  _SmartDialogWidgetState? _state;
+
+  void bind(_SmartDialogWidgetState _state) {
+    this._state = _state;
+  }
+
+  @override
+  Future<void> dismiss() async {
+    await _state?.dismiss();
+    _state = null;
+  }
+}
+

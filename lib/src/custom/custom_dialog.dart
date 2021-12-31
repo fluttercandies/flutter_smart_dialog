@@ -1,11 +1,12 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
 import '../../flutter_smart_dialog.dart';
-import 'base_dialog.dart';
+import '../data/base_dialog.dart';
 import 'main_dialog.dart';
 
 ///main function : custom dialog
@@ -21,6 +22,7 @@ class CustomDialog extends BaseDialog {
 
   Future<void> show({
     required Widget widget,
+    required BuildContext? targetContext,
     required AlignmentGeometry alignment,
     required bool isPenetrate,
     required bool isUseAnimation,
@@ -30,10 +32,11 @@ class CustomDialog extends BaseDialog {
     required bool clickBgDismiss,
     required bool antiShake,
     required Widget? maskWidget,
+    required VoidCallback? onDismiss,
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
-    VoidCallback? onDismiss,
+    required bool useAttach,
   }) async {
     // debounce
     if (!_checkDebounce(antiShake)) return;
@@ -50,6 +53,7 @@ class CustomDialog extends BaseDialog {
     config.isExistMain = true;
     return mainDialog.show(
       widget: widget,
+      targetContext: targetContext,
       alignment: alignment,
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
@@ -145,21 +149,4 @@ class CustomDialog extends BaseDialog {
 
     return true;
   }
-}
-
-class DialogInfo {
-  DialogInfo({
-    required this.dialog,
-    required this.backDismiss,
-    required this.isUseAnimation,
-    required this.tag,
-  });
-
-  final BaseDialog dialog;
-
-  final bool backDismiss;
-
-  final bool isUseAnimation;
-
-  final String? tag;
 }

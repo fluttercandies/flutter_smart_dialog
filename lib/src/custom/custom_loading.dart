@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
-import 'base_dialog.dart';
+import '../data/base_dialog.dart';
 
 class CustomLoading extends BaseDialog {
   CustomLoading({
@@ -29,6 +29,7 @@ class CustomLoading extends BaseDialog {
 
     return mainDialog.show(
       widget: widget,
+      targetContext: null,
       clickBgDismiss: clickBgDismiss,
       isLoading: isLoading,
       alignment: Alignment.center,
