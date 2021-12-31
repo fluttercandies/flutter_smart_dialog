@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
-import 'package:flutter_smart_dialog/src/widget/smart_dialog_view.dart';
+import 'package:flutter_smart_dialog/src/widget/smart_dialog_widget.dart';
 
 ///main function : customize dialog
 class MainDialog {
@@ -17,7 +17,7 @@ class MainDialog {
   ///config info
   final Config config;
 
-  GlobalKey<SmartDialogViewState>? _key;
+  GlobalKey<SmartDialogWidgetState>? _key;
   Completer? _completer;
   VoidCallback? _onDismiss;
   Widget _widget;
@@ -37,8 +37,8 @@ class MainDialog {
   }) async {
     _onDismiss = onDismiss;
     //custom dialog
-    _widget = SmartDialogView(
-      key: _key = GlobalKey<SmartDialogViewState>(),
+    _widget = SmartDialogWidget(
+      key: _key = GlobalKey<SmartDialogWidgetState>(),
       alignment: alignment,
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,

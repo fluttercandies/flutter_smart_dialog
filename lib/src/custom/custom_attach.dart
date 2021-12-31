@@ -6,11 +6,12 @@ import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
 import '../../flutter_smart_dialog.dart';
 import 'base_dialog.dart';
+import 'custom_dialog.dart';
 import 'main_dialog.dart';
 
 ///main function : custom dialog
-class CustomDialog extends BaseDialog {
-  CustomDialog({
+class CustomAttach extends BaseDialog {
+  CustomAttach({
     required Config config,
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
@@ -145,21 +146,4 @@ class CustomDialog extends BaseDialog {
 
     return true;
   }
-}
-
-class DialogInfo {
-  DialogInfo({
-    required this.dialog,
-    required this.backDismiss,
-    required this.isUseAnimation,
-    required this.tag,
-  });
-
-  final BaseDialog dialog;
-
-  final bool backDismiss;
-
-  final bool isUseAnimation;
-
-  final String? tag;
 }

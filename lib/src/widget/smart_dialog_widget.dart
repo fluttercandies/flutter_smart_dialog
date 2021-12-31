@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-class SmartDialogView extends StatefulWidget {
-  SmartDialogView({
+class SmartDialogWidget extends StatefulWidget {
+  SmartDialogWidget({
     Key? key,
     required this.child,
     required this.onBgTap,
@@ -49,10 +49,10 @@ class SmartDialogView extends StatefulWidget {
   final bool clickBgDismiss;
 
   @override
-  SmartDialogViewState createState() => SmartDialogViewState();
+  SmartDialogWidgetState createState() => SmartDialogWidgetState();
 }
 
-class SmartDialogViewState extends State<SmartDialogView>
+class SmartDialogWidgetState extends State<SmartDialogWidget>
     with SingleTickerProviderStateMixin {
   late double _opacity;
 

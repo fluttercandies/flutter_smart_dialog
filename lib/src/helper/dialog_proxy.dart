@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/custom/custom_attach.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_loading.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_toast.dart';
@@ -66,6 +67,46 @@ class DialogProxy {
       builder: (BuildContext context) => dialog!.getWidget(),
     );
     dialog = CustomDialog(config: config, overlayEntry: entry);
+    return dialog.show(
+      widget: widget,
+      alignment: alignment,
+      isPenetrate: isPenetrate,
+      isUseAnimation: isUseAnimation,
+      animationDuration: animationDuration,
+      isLoading: isLoading,
+      maskColor: maskColor,
+      maskWidget: maskWidget,
+      clickBgDismiss: clickBgDismiss,
+      onDismiss: onDismiss,
+      antiShake: antiShake,
+      tag: tag,
+      backDismiss: backDismiss,
+      keepSingle: keepSingle,
+    );
+  }
+
+  Future<void> showAttach({
+    required Widget widget,
+    required BuildContext targetContext,
+    required AlignmentGeometry alignment,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required bool isLoading,
+    required Color maskColor,
+    required bool clickBgDismiss,
+    required Widget? maskWidget,
+    required bool antiShake,
+    required VoidCallback? onDismiss,
+    required String? tag,
+    required bool backDismiss,
+    required bool keepSingle,
+  }) {
+    CustomAttach? dialog;
+    var entry = OverlayEntry(
+      builder: (BuildContext context) => dialog!.getWidget(),
+    );
+    dialog = CustomAttach(config: config, overlayEntry: entry);
     return dialog.show(
       widget: widget,
       alignment: alignment,
