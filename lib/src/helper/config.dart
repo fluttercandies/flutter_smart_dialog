@@ -53,7 +53,7 @@ class Config {
   /// the color of the mask，it is invalid if [isPenetrate] is true or [maskWidget] set the value
   ///
   /// 遮罩颜色：[isPenetrate]设置为true或[maskWidget]参数设置了数据，该参数会失效
-  Color maskColor = Colors.black.withOpacity(0.3);
+  Color maskColor = Colors.black.withOpacity(0.35);
 
   /// highly customizable mask, it is invalid if [isPenetrate] is true
   ///

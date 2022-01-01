@@ -51,22 +51,55 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showDialog() {
+    var attachDialog = (BuildContext context) {
+      SmartDialog.showAttach(
+        targetContext: context,
+        alignmentTemp: Alignment.bottomRight,
+        isLoadingTemp: false,
+        widget: Container(width: 100, height: 100, color: Colors.red),
+      );
+    };
+
+    //target widget
     SmartDialog.show(
       isLoadingTemp: false,
       widget: Container(
-        height: 80,
-        width: 180,
+        height: double.infinity,
+        width: double.infinity,
+        margin: EdgeInsets.all(100),
         decoration: BoxDecoration(
-          color: Colors.black,
           borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
         ),
         alignment: Alignment.center,
-        child: Text(
-          'easy custom dialog',
-          style: TextStyle(color: Colors.white),
+        child: Container(
+          margin: EdgeInsets.only(right: 100),
+          child: Builder(builder: (context) {
+            return ElevatedButton(
+              onPressed: () => attachDialog(context),
+              child: Text('attach widget'),
+            );
+          }),
         ),
       ),
     );
+
+    // SmartDialog.show(
+    //   isLoadingTemp: false,
+    //   widget: Container(
+    //     height: 80,
+    //     width: 180,
+    //     decoration: BoxDecoration(
+    //       color: Colors.black,
+    //       borderRadius: BorderRadius.circular(20),
+    //     ),
+    //     alignment: Alignment.center,
+    //     child: Text(
+    //       'easy custom dialog',
+    //       style: TextStyle(color: Colors.white),
+    //     ),
+    //   ),
+    // );
   }
 
   void _showLoading() async {

@@ -1,7 +1,10 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
+import 'package:flutter_smart_dialog/src/data/location.dart';
 
 class AttachDialogWidget extends StatefulWidget {
   const AttachDialogWidget({
@@ -65,8 +68,10 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   late AnimationController _controller;
 
-  /// 处理下内容widget动画放心
-  Offset? _offset;
+  //target info
+  RectInfo? _targetRect;
+  late BuildContext _childContext;
+  late Axis _axis;
 
   @override
   void initState() {
@@ -75,7 +80,6 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     _controller =
         AnimationController(vsync: this, duration: widget.animationDuration);
     _controller.forward();
-    _dealContentAnimate();
 
     //开启背景动画的效果
     Future.delayed(Duration(milliseconds: 10), () {
@@ -83,7 +87,24 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       if (mounted) setState(() {});
     });
 
+    //bind controller
+    widget.controller.bind(this);
+
+    //target info
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      if (mounted) _handleLocation();
+    });
+    _axis = Axis.vertical;
+
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant AttachDialogWidget oldWidget) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      if (mounted) _handleLocation();
+    });
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -97,10 +118,27 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
             : Container(color: widget.isPenetrate ? null : widget.maskColor),
       ),
 
+      //get child size
+      Positioned(
+        left: _targetRect?.left,
+        right: _targetRect?.right,
+        top: _targetRect?.top,
+        bottom: _targetRect?.bottom,
+        child: Builder(builder: (context) {
+          _childContext = context;
+          return Opacity(opacity: 0, child: widget.child);
+        }),
+      ),
+
       //内容Widget动画
-      Container(
-        alignment: widget.alignment,
-        child: widget.isUseAnimation ? _buildBodyAnimation() : widget.child,
+      Positioned(
+        left: _targetRect?.left,
+        right: _targetRect?.right,
+        top: _targetRect?.top,
+        bottom: _targetRect?.bottom,
+        child: widget.isUseAnimation
+            ? _buildBodyAnimation(widget.child)
+            : widget.child,
       ),
     ]);
   }
@@ -121,53 +159,86 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     );
   }
 
-  Widget _buildBodyAnimation() {
-    return widget.alignment == Alignment.center
+  Widget _buildBodyAnimation(Widget child) {
+    var transition = widget.alignment == Alignment.center
         //中间弹窗动画的使用需要分情况 渐隐和缩放俩种
-        ? (widget.isLoading
-            ? AnimatedOpacity(
-                duration: widget.animationDuration,
-                curve: Curves.linear,
-                opacity: _opacity,
-                child: widget.child,
-              )
-            : ScaleTransition(
-                scale: CurvedAnimation(
-                  parent: _controller,
-                  curve: Curves.linear,
-                ),
-                child: widget.child,
-              ))
+        ? ScaleTransition(
+            scale: CurvedAnimation(parent: _controller, curve: Curves.linear),
+            child: child,
+          )
         //除了中间弹窗,其它的都使用位移动画
-        : SizeTransition(
-            sizeFactor: _controller,
-            child: widget.child,
-          );
+        : SizeTransition(axis: _axis, sizeFactor: _controller, child: child);
+
+    return widget.isLoading
+        ? AnimatedOpacity(
+            duration: widget.animationDuration,
+            curve: Curves.linear,
+            opacity: _opacity,
+            child: child,
+          )
+        : transition;
+    ;
   }
 
   ///处理下内容widget动画方向
-  void _dealContentAnimate() {
-    AlignmentGeometry? alignment = widget.alignment;
-    _offset = Offset(0, 0);
+  void _handleLocation() {
+    _axis = Axis.vertical;
+    final alignment = widget.alignment;
+    final renderBox = widget.targetContext.findRenderObject() as RenderBox;
+    final size = renderBox.size;
+    final offset = renderBox.localToGlobal(Offset.zero);
+    final screen = MediaQuery.of(widget.targetContext).size;
+    final childSize = (_childContext.findRenderObject() as RenderBox).size;
 
-    if (alignment == Alignment.bottomCenter ||
-        alignment == Alignment.bottomLeft ||
-        alignment == Alignment.bottomRight) {
-      //靠下
-      _offset = Offset(0, 1);
-    } else if (alignment == Alignment.topCenter ||
-        alignment == Alignment.topLeft ||
-        alignment == Alignment.topRight) {
-      //靠上
-      _offset = Offset(0, -1);
+    if (alignment == Alignment.topLeft) {
+      _targetRect = RectInfo(
+        bottom: screen.height - offset.dy,
+        left: max(offset.dx - childSize.width / 2, 0),
+      );
+    } else if (alignment == Alignment.topCenter) {
+      _targetRect = RectInfo(
+        bottom: screen.height - offset.dy,
+        left: max(offset.dx + size.width / 2 - childSize.width / 2, 0),
+      );
+    } else if (alignment == Alignment.topRight) {
+      _targetRect = RectInfo(
+        bottom: screen.height - offset.dy,
+        right: max(
+            screen.width - (offset.dx + size.width + childSize.width / 2), 0),
+      );
     } else if (alignment == Alignment.centerLeft) {
-      //靠左
-      _offset = Offset(-1, 0);
+      _axis = Axis.horizontal;
+      _targetRect = RectInfo(
+        right: screen.width - offset.dx,
+        top: max(offset.dy + size.height / 2 - childSize.height / 2, 0),
+      );
+    } else if (alignment == Alignment.center) {
+      _targetRect = RectInfo(
+        left: max(offset.dx + size.width / 2 - childSize.width / 2, 0),
+        top: max(offset.dy + size.height / 2 - childSize.height / 2, 0),
+      );
     } else if (alignment == Alignment.centerRight) {
-      //靠右
-      _offset = Offset(1, 0);
-    } else {
-      //居中使用缩放动画,空结构体,不需要操作
+      _axis = Axis.horizontal;
+      _targetRect = RectInfo(
+        left: offset.dx + size.width,
+        top: max(offset.dy + size.height / 2 - childSize.height / 2, 0),
+      );
+    } else if (alignment == Alignment.bottomLeft) {
+      _targetRect = RectInfo(
+        top: offset.dy + size.height,
+        left: max(offset.dx - childSize.width / 2, 0),
+      );
+    } else if (alignment == Alignment.bottomCenter) {
+      _targetRect = RectInfo(
+        top: offset.dy + size.height,
+        left: max(offset.dx + size.width / 2 - childSize.width / 2, 0),
+      );
+    } else if (alignment == Alignment.bottomRight) {
+      _targetRect = RectInfo(
+        top: offset.dy + size.height,
+        right: max(
+            screen.width - (offset.dx + size.width + childSize.width / 2), 0),
+      );
     }
   }
 
@@ -203,41 +274,5 @@ class AttachDialogController extends BaseController {
   Future<void> dismiss() async {
     await _state?.dismiss();
     _state = null;
-  }
-}
-
-class SizeTransition extends AnimatedWidget {
-  const SizeTransition({
-    Key? key,
-    this.axis = Axis.vertical,
-    required Animation<double> sizeFactor,
-    this.axisAlignment = 0.0,
-    this.child,
-  }) : super(key: key, listenable: sizeFactor);
-
-  final Axis axis;
-
-  Animation<double> get sizeFactor => listenable as Animation<double>;
-
-  final double axisAlignment;
-
-  final Widget? child;
-
-  @override
-  Widget build(BuildContext context) {
-    final AlignmentDirectional alignment;
-    if (axis == Axis.vertical)
-      alignment = AlignmentDirectional(-1.0, axisAlignment);
-    else
-      alignment = AlignmentDirectional(axisAlignment, -1.0);
-    return ClipRect(
-      child: Align(
-        alignment: alignment,
-        heightFactor: axis == Axis.vertical ? max(sizeFactor.value, 0.0) : null,
-        widthFactor:
-            axis == Axis.horizontal ? max(sizeFactor.value, 0.0) : null,
-        child: child,
-      ),
-    );
   }
 }

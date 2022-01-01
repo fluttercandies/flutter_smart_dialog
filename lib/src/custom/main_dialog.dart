@@ -25,8 +25,8 @@ class MainDialog {
   Widget _widget;
 
   Future<void> show({
-    required Widget widget,
     required BuildContext? targetContext,
+    required Widget widget,
     required AlignmentGeometry alignment,
     required bool isPenetrate,
     required bool isUseAnimation,
@@ -56,7 +56,7 @@ class MainDialog {
       );
     } else {
       _widget = AttachDialogWidget(
-        targetContext: targetContext!,
+        targetContext: targetContext,
         controller: _controller = AttachDialogController(),
         alignment: alignment,
         isPenetrate: isPenetrate,

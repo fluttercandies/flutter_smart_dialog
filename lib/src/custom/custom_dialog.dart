@@ -20,9 +20,11 @@ class CustomDialog extends BaseDialog {
 
   final String tagKeepSingle = 'keepSingle';
 
+  bool onlyClickBg = true;
+
   Future<void> show({
-    required Widget widget,
     required BuildContext? targetContext,
+    required Widget widget,
     required AlignmentGeometry alignment,
     required bool isPenetrate,
     required bool isUseAnimation,
@@ -36,7 +38,6 @@ class CustomDialog extends BaseDialog {
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
-    required bool useAttach,
   }) async {
     // debounce
     if (!_checkDebounce(antiShake)) return;
@@ -52,8 +53,8 @@ class CustomDialog extends BaseDialog {
     config.isExist = true;
     config.isExistMain = true;
     return mainDialog.show(
-      widget: widget,
       targetContext: targetContext,
+      widget: widget,
       alignment: alignment,
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
@@ -63,7 +64,11 @@ class CustomDialog extends BaseDialog {
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
-      onBgTap: () => dismiss(),
+      onBgTap: () {
+        if (!onlyClickBg) return;
+        onlyClickBg = false;
+        dismiss();
+      },
     );
   }
 

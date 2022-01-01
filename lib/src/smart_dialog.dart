@@ -93,7 +93,7 @@ class SmartDialog {
   /// only single dialog will be kept), false (calling [show] multiple times will generate multiple dialogs)
   /// -------------------------------------------------------------------------------
   ///
-  /// 提供loading弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
+  /// 提供自定义弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
   ///
   /// [widget]：自定义 widget
   ///
@@ -158,9 +158,11 @@ class SmartDialog {
     );
   }
 
-  /// custom dialog：'temp' suffix param, if there is no default value, the global attribute in config will be used by default
+  /// custom dialog for specific locations：'temp' suffix param, if there is no default value, the global attribute in config will be used by default
   ///
   /// [widget]：custom widget
+  ///
+  /// [targetContext]：BuildContext with location widget
   ///
   /// [alignmentTemp]：control the location of the dialog
   ///
@@ -191,9 +193,11 @@ class SmartDialog {
   /// only single dialog will be kept), false (calling [showAttach] multiple times will generate multiple dialogs)
   /// -------------------------------------------------------------------------------
   ///
-  /// 提供loading弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
+  /// 提供自定义特定位置弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
   ///
   /// [widget]：自定义 widget
+  ///
+  /// [targetContext]：伴随位置widget的BuildContext
   ///
   /// [alignmentTemp]：控制弹窗的位置
   ///
@@ -223,8 +227,8 @@ class SmartDialog {
   /// [keepSingle]：默认（false），true（多次调用[showAttach]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[showAttach]会生成多个dialog）
   static Future<void> showAttach({
-    required Widget widget,
     required BuildContext targetContext,
+    required Widget widget,
     AlignmentGeometry? alignmentTemp,
     bool? clickBgDismissTemp,
     bool? isLoadingTemp,
@@ -240,11 +244,11 @@ class SmartDialog {
     bool? keepSingle,
   }) {
     return DialogProxy.instance.showAttach(
-      widget: widget,
       targetContext: targetContext,
+      widget: widget,
       alignment: alignmentTemp ?? config.alignment,
       clickBgDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
-      isLoading: isLoadingTemp ?? config.isLoading,
+      isLoading: isLoadingTemp ?? false,
       isPenetrate: isPenetrateTemp ?? config.isPenetrate,
       isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
       animationDuration: animationDurationTemp ?? config.animationDuration,

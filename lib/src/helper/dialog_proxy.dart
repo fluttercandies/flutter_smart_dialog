@@ -83,7 +83,6 @@ class DialogProxy {
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
-      useAttach: false,
     );
   }
 
@@ -110,8 +109,8 @@ class DialogProxy {
     );
     dialog = CustomDialog(config: config, overlayEntry: entry);
     return dialog.show(
-      widget: widget,
       targetContext: targetContext,
+      widget: widget,
       alignment: alignment,
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
@@ -125,7 +124,6 @@ class DialogProxy {
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
-      useAttach: true,
     );
   }
 
