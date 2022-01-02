@@ -185,6 +185,8 @@ class SmartDialog {
   ///
   /// [antiShakeTemp]：anti-shake function（debounce）
   ///
+  /// [highlight]：highlight feature, dissolve the mask of a specific area
+  ///
   /// [onDismiss]：the callback will be invoked when the dialog is closed
   ///
   /// [tag]：if you set a tag for the dialog, you can turn it off in a targeted manner
@@ -221,6 +223,8 @@ class SmartDialog {
   /// [maskWidgetTemp]：可高度定制遮罩
   ///
   /// [antiShakeTemp]：防抖功能（debounce）
+  ///
+  /// [highlight]：高亮功能，溶解特定区域的遮罩
   ///
   /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
   ///
