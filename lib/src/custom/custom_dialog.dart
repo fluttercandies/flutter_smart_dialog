@@ -20,10 +20,9 @@ class CustomDialog extends BaseDialog {
 
   final String tagKeepSingle = 'keepSingle';
 
-  bool onlyClickBg = true;
+  DateTime? clickBgLastTime;
 
   Future<void> show({
-    required BuildContext? targetContext,
     required Widget widget,
     required AlignmentGeometry alignment,
     required bool isPenetrate,
@@ -39,21 +38,14 @@ class CustomDialog extends BaseDialog {
     required bool backDismiss,
     required bool keepSingle,
   }) async {
-    // debounce
-    if (!_checkDebounce(antiShake)) return;
-
-    //handle dialog stack
-    _handleDialogStack(
+    _handleMustOperate(
       isUseAnimation: isUseAnimation,
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
+      antiShake: antiShake,
     );
-
-    config.isExist = true;
-    config.isExistMain = true;
     return mainDialog.show(
-      targetContext: targetContext,
       widget: widget,
       alignment: alignment,
       isPenetrate: isPenetrate,
@@ -65,8 +57,54 @@ class CustomDialog extends BaseDialog {
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
       onBgTap: () {
-        if (!onlyClickBg) return;
-        onlyClickBg = false;
+        if (!_clickBgDebounce()) return;
+        dismiss();
+      },
+    );
+  }
+
+  Future<void> showAttach({
+    required BuildContext? targetContext,
+    required Offset? target,
+    required Widget widget,
+    required AlignmentGeometry alignment,
+    required bool isPenetrate,
+    required bool isUseAnimation,
+    required Duration animationDuration,
+    required bool isLoading,
+    required Color maskColor,
+    required bool clickBgDismiss,
+    required bool antiShake,
+    required Widget? maskWidget,
+    required Positioned highlight,
+    required VoidCallback? onDismiss,
+    required String? tag,
+    required bool backDismiss,
+    required bool keepSingle,
+  }) async {
+    _handleMustOperate(
+      isUseAnimation: isUseAnimation,
+      tag: tag,
+      backDismiss: backDismiss,
+      keepSingle: keepSingle,
+      antiShake: antiShake,
+    );
+    return mainDialog.showAttach(
+      targetContext: targetContext,
+      target: target,
+      widget: widget,
+      alignment: alignment,
+      isPenetrate: isPenetrate,
+      isUseAnimation: isUseAnimation,
+      animationDuration: animationDuration,
+      isLoading: isLoading,
+      maskColor: maskColor,
+      highlight: highlight,
+      maskWidget: maskWidget,
+      clickBgDismiss: clickBgDismiss,
+      onDismiss: onDismiss,
+      onBgTap: () {
+        if (!_clickBgDebounce()) return;
         dismiss();
       },
     );
@@ -93,6 +131,28 @@ class CustomDialog extends BaseDialog {
     if (!proxy.config.isExistLoading) {
       proxy.config.isExist = false;
     }
+  }
+
+  void _handleMustOperate({
+    required bool isUseAnimation,
+    required String? tag,
+    required bool backDismiss,
+    required bool keepSingle,
+    required bool antiShake,
+  }) {
+    // debounce
+    if (!_checkDebounce(antiShake)) return;
+
+    //handle dialog stack
+    _handleDialogStack(
+      isUseAnimation: isUseAnimation,
+      tag: tag,
+      backDismiss: backDismiss,
+      keepSingle: keepSingle,
+    );
+
+    config.isExist = true;
+    config.isExistMain = true;
   }
 
   void _handleDialogStack({
@@ -150,6 +210,16 @@ class CustomDialog extends BaseDialog {
         now.difference(proxy.dialogLastTime!) <
             SmartDialog.config.antiShakeTime;
     proxy.dialogLastTime = now;
+    if (isShake) return false;
+
+    return true;
+  }
+
+  bool _clickBgDebounce() {
+    var now = DateTime.now();
+    var isShake = clickBgLastTime != null &&
+        now.difference(clickBgLastTime!) < Duration(milliseconds: 500);
+    clickBgLastTime = now;
     if (isShake) return false;
 
     return true;

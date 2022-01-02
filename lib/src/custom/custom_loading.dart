@@ -29,7 +29,6 @@ class CustomLoading extends BaseDialog {
 
     return mainDialog.show(
       widget: widget,
-      targetContext: null,
       clickBgDismiss: clickBgDismiss,
       isLoading: isLoading,
       alignment: Alignment.center,

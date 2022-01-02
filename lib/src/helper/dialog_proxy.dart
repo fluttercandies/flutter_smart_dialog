@@ -68,7 +68,6 @@ class DialogProxy {
     );
     dialog = CustomDialog(config: config, overlayEntry: entry);
     return dialog.show(
-      targetContext: null,
       widget: widget,
       alignment: alignment,
       isPenetrate: isPenetrate,
@@ -87,8 +86,9 @@ class DialogProxy {
   }
 
   Future<void> showAttach({
-    required BuildContext targetContext,
+    required BuildContext? targetContext,
     required Widget widget,
+    required Offset? target,
     required AlignmentGeometry alignment,
     required bool isPenetrate,
     required bool isUseAnimation,
@@ -97,6 +97,7 @@ class DialogProxy {
     required Color maskColor,
     required bool clickBgDismiss,
     required Widget? maskWidget,
+    required Positioned highlight,
     required bool antiShake,
     required VoidCallback? onDismiss,
     required String? tag,
@@ -108,8 +109,9 @@ class DialogProxy {
       builder: (BuildContext context) => dialog!.getWidget(),
     );
     dialog = CustomDialog(config: config, overlayEntry: entry);
-    return dialog.show(
+    return dialog.showAttach(
       targetContext: targetContext,
+      target: target,
       widget: widget,
       alignment: alignment,
       isPenetrate: isPenetrate,
@@ -118,6 +120,7 @@ class DialogProxy {
       isLoading: isLoading,
       maskColor: maskColor,
       maskWidget: maskWidget,
+      highlight: highlight,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
       antiShake: antiShake,
@@ -202,6 +205,7 @@ class DialogProxy {
   Future<void> _closeAllDialog({SmartStatus? status}) async {
     var length = dialogList.length;
     for (var i = 0; i < length; i++) {
+      if (dialogList.length - 1 < 0) return;
       var item = dialogList[dialogList.length - 1];
 
       await dismiss(status: status);

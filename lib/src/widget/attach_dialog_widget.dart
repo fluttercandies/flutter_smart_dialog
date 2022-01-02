@@ -1,8 +1,6 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/location.dart';
 
@@ -11,6 +9,7 @@ class AttachDialogWidget extends StatefulWidget {
     Key? key,
     required this.child,
     required this.targetContext,
+    required this.target,
     required this.controller,
     required this.animationDuration,
     required this.isUseAnimation,
@@ -20,11 +19,14 @@ class AttachDialogWidget extends StatefulWidget {
     required this.isLoading,
     required this.maskColor,
     required this.clickBgDismiss,
+    required this.highlight,
     this.maskWidget,
   }) : super(key: key);
 
   ///target context
-  final BuildContext targetContext;
+  final BuildContext? targetContext;
+
+  final Offset? target;
 
   /// 是否使用动画
   final bool isUseAnimation;
@@ -55,6 +57,9 @@ class AttachDialogWidget extends StatefulWidget {
   /// 自定义遮罩Widget
   final Widget? maskWidget;
 
+  /// 溶解遮罩,设置高亮位置
+  final Positioned? highlight;
+
   /// 点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
   final bool clickBgDismiss;
 
@@ -70,29 +75,27 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   //target info
   RectInfo? _targetRect;
-  late BuildContext _childContext;
+  BuildContext? _childContext;
   late Axis _axis;
+  late double _postFrameOpacity;
 
   @override
   void initState() {
     //处理背景动画和内容widget动画设置
     _opacity = widget.isUseAnimation ? 0.0 : 1.0;
-    _controller =
-        AnimationController(vsync: this, duration: widget.animationDuration);
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.animationDuration,
+    );
     _controller.forward();
-
-    //开启背景动画的效果
-    Future.delayed(Duration(milliseconds: 10), () {
-      _opacity = 1.0;
-      if (mounted) setState(() {});
-    });
 
     //bind controller
     widget.controller.bind(this);
 
     //target info
+    _postFrameOpacity = 0;
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      if (mounted) _handleLocation();
+      if (mounted) _handleAnimatedAndLocation();
     });
     _axis = Axis.vertical;
 
@@ -102,32 +105,57 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   @override
   void didUpdateWidget(covariant AttachDialogWidget oldWidget) {
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      if (mounted) _handleLocation();
+      if (mounted) _handleAnimatedAndLocation();
     });
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
+    var child = Opacity(opacity: _postFrameOpacity, child: widget.child);
     return Stack(children: [
       //暗色背景widget动画
       _buildBgAnimation(
         onPointerUp: widget.clickBgDismiss ? widget.onBgTap : null,
         child: (widget.maskWidget != null && !widget.isPenetrate)
             ? widget.maskWidget
-            : Container(color: widget.isPenetrate ? null : widget.maskColor),
+            : widget.isPenetrate
+                ? Container()
+                : ColorFiltered(
+                    colorFilter: ColorFilter.mode(
+                      // mask color
+                      widget.maskColor,
+                      BlendMode.srcOut,
+                    ),
+                    child: Stack(children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          // any color
+                          color: Colors.white,
+                          backgroundBlendMode: BlendMode.dstOut,
+                        ),
+                      ),
+
+                      //dissolve mask, highlight location
+                      widget.highlight ?? Container(),
+                    ]),
+                  ),
       ),
 
-      //get child size
+      //CustomSingleChildLayout 和 SizeTransition 占位面积冲突
+      //使用SizeTransition位移动画，不适合使用CustomSingleChildLayout
+      //只能使用折中的方式获取子控件大小
       Positioned(
         left: _targetRect?.left,
         right: _targetRect?.right,
         top: _targetRect?.top,
         bottom: _targetRect?.bottom,
-        child: Builder(builder: (context) {
-          _childContext = context;
-          return Opacity(opacity: 0, child: widget.child);
-        }),
+        child: Center(
+          child: Builder(builder: (context) {
+            _childContext = context;
+            return Opacity(opacity: 0, child: widget.child);
+          }),
+        ),
       ),
 
       //内容Widget动画
@@ -136,9 +164,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
         right: _targetRect?.right,
         top: _targetRect?.top,
         bottom: _targetRect?.bottom,
-        child: widget.isUseAnimation
-            ? _buildBodyAnimation(widget.child)
-            : widget.child,
+        child: widget.isUseAnimation ? _buildBodyAnimation(child) : child,
       ),
     ]);
   }
@@ -161,12 +187,12 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   Widget _buildBodyAnimation(Widget child) {
     var transition = widget.alignment == Alignment.center
-        //中间弹窗动画的使用需要分情况 渐隐和缩放俩种
+        //中间弹窗动画使用缩放
         ? ScaleTransition(
             scale: CurvedAnimation(parent: _controller, curve: Curves.linear),
             child: child,
           )
-        //除了中间弹窗,其它的都使用位移动画
+        //其它的都使用位移动画
         : SizeTransition(axis: _axis, sizeFactor: _controller, child: child);
 
     return widget.isLoading
@@ -177,18 +203,22 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
             child: child,
           )
         : transition;
-    ;
   }
 
-  ///处理下内容widget动画方向
-  void _handleLocation() {
+  ///处理下动画方向及其位置
+  void _handleAnimatedAndLocation() {
+    _postFrameOpacity = 1;
     _axis = Axis.vertical;
     final alignment = widget.alignment;
-    final renderBox = widget.targetContext.findRenderObject() as RenderBox;
-    final size = renderBox.size;
-    final offset = renderBox.localToGlobal(Offset.zero);
-    final screen = MediaQuery.of(widget.targetContext).size;
-    final childSize = (_childContext.findRenderObject() as RenderBox).size;
+    var size = Size.zero;
+    var offset = widget.target ?? Offset.zero;
+    if (widget.targetContext != null) {
+      final renderBox = widget.targetContext!.findRenderObject() as RenderBox;
+      size = renderBox.size;
+      offset = renderBox.localToGlobal(Offset.zero);
+    }
+    final screen = MediaQuery.of(context).size;
+    final childSize = (_childContext!.findRenderObject() as RenderBox).size;
 
     if (alignment == Alignment.topLeft) {
       _targetRect = RectInfo(
@@ -240,6 +270,10 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
             screen.width - (offset.dx + size.width + childSize.width / 2), 0),
       );
     }
+
+    //处理透明度动画
+    _opacity = 1.0;
+    setState(() {});
   }
 
   ///等待动画结束,关闭动画资源

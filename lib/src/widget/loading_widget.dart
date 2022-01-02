@@ -8,10 +8,10 @@ class LoadingWidget extends StatelessWidget {
     this.background = Colors.black,
   }) : super(key: key);
 
-  ///加载信息
+  ///loading msg
   final String msg;
 
-  ///loading背景色
+  ///loading background
   final Color background;
 
   @override

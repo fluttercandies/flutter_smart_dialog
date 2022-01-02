@@ -40,7 +40,6 @@ class CustomToast extends BaseDialog {
     var showToast = () {
       mainDialog.show(
         widget: widget,
-        targetContext: null,
         alignment: Alignment.center,
         maskColor: maskColor,
         maskWidget: maskWidget,

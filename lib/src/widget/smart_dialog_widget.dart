@@ -59,10 +59,7 @@ class SmartDialogWidget extends StatefulWidget {
 class _SmartDialogWidgetState extends State<SmartDialogWidget>
     with SingleTickerProviderStateMixin {
   late double _opacity;
-
   late AnimationController _controller;
-
-  /// 处理下内容widget动画放心
   Offset? _offset;
 
   @override

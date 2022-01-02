@@ -160,9 +160,12 @@ class SmartDialog {
 
   /// custom dialog for specific locations：'temp' suffix param, if there is no default value, the global attribute in config will be used by default
   ///
+  /// [targetContext]：BuildContext with location widget
+  ///
   /// [widget]：custom widget
   ///
-  /// [targetContext]：BuildContext with location widget
+  /// [target]：target offset，when the target is set to value，
+  /// the targetContext param will be invalid
   ///
   /// [alignmentTemp]：control the location of the dialog
   ///
@@ -195,9 +198,11 @@ class SmartDialog {
   ///
   /// 提供自定义特定位置弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
   ///
+  /// [targetContext]：伴随位置widget的BuildContext
+  ///
   /// [widget]：自定义 widget
   ///
-  /// [targetContext]：伴随位置widget的BuildContext
+  /// [target]：target offset，当target被设置数据，targetContext参数将失效
   ///
   /// [alignmentTemp]：控制弹窗的位置
   ///
@@ -227,8 +232,9 @@ class SmartDialog {
   /// [keepSingle]：默认（false），true（多次调用[showAttach]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[showAttach]会生成多个dialog）
   static Future<void> showAttach({
-    required BuildContext targetContext,
+    required BuildContext? targetContext,
     required Widget widget,
+    Offset? target,
     AlignmentGeometry? alignmentTemp,
     bool? clickBgDismissTemp,
     bool? isLoadingTemp,
@@ -238,15 +244,20 @@ class SmartDialog {
     Color? maskColorTemp,
     Widget? maskWidgetTemp,
     bool? antiShakeTemp,
+    Positioned? highlight,
     VoidCallback? onDismiss,
     String? tag,
     bool? backDismiss,
     bool? keepSingle,
   }) {
+    assert(targetContext != null || target != null,
+        'targetContext and target, cannot both be null');
+
     return DialogProxy.instance.showAttach(
       targetContext: targetContext,
+      target: target,
       widget: widget,
-      alignment: alignmentTemp ?? config.alignment,
+      alignment: alignmentTemp ?? Alignment.bottomCenter,
       clickBgDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
       isLoading: isLoadingTemp ?? false,
       isPenetrate: isPenetrateTemp ?? config.isPenetrate,
@@ -255,6 +266,7 @@ class SmartDialog {
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       antiShake: antiShakeTemp ?? config.antiShake,
+      highlight: highlight ?? Positioned(child: Container()),
       onDismiss: onDismiss,
       tag: tag,
       backDismiss: backDismiss ?? true,
