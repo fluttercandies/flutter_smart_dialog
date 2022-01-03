@@ -9,6 +9,11 @@ import '../../flutter_smart_dialog.dart';
 import '../data/base_dialog.dart';
 import 'main_dialog.dart';
 
+enum DialogType {
+  custom,
+  attach,
+}
+
 ///main function : custom dialog
 class CustomDialog extends BaseDialog {
   CustomDialog({
@@ -44,6 +49,7 @@ class CustomDialog extends BaseDialog {
       backDismiss: backDismiss,
       keepSingle: keepSingle,
       antiShake: antiShake,
+      type: DialogType.custom,
     );
     return mainDialog.show(
       widget: widget,
@@ -88,6 +94,7 @@ class CustomDialog extends BaseDialog {
       backDismiss: backDismiss,
       keepSingle: keepSingle,
       antiShake: antiShake,
+      type: DialogType.attach,
     );
     return mainDialog.showAttach(
       targetContext: targetContext,
@@ -139,6 +146,7 @@ class CustomDialog extends BaseDialog {
     required bool backDismiss,
     required bool keepSingle,
     required bool antiShake,
+    required DialogType type,
   }) {
     // debounce
     if (!_checkDebounce(antiShake)) return;
@@ -149,6 +157,7 @@ class CustomDialog extends BaseDialog {
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
+      type: type,
     );
 
     config.isExist = true;
@@ -160,6 +169,7 @@ class CustomDialog extends BaseDialog {
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
+    required DialogType type,
   }) {
     var proxy = DialogProxy.instance;
 
@@ -170,6 +180,7 @@ class CustomDialog extends BaseDialog {
           dialog: this,
           backDismiss: backDismiss,
           isUseAnimation: isUseAnimation,
+          type: type,
           tag: tagKeepSingle,
         );
         proxy.dialogList.add(dialogInfo);
@@ -190,6 +201,7 @@ class CustomDialog extends BaseDialog {
       dialog: this,
       backDismiss: backDismiss,
       isUseAnimation: isUseAnimation,
+      type: type,
       tag: tag,
     );
     proxy.dialogList.add(dialogInfo);

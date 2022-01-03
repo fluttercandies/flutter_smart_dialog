@@ -58,7 +58,7 @@ class AttachDialogWidget extends StatefulWidget {
   final Widget? maskWidget;
 
   /// 溶解遮罩,设置高亮位置
-  final Positioned? highlight;
+  final Positioned highlight;
 
   /// 点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
   final bool clickBgDismiss;
@@ -137,7 +137,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
                       ),
 
                       //dissolve mask, highlight location
-                      widget.highlight ?? Container(),
+                      widget.highlight,
                     ]),
                   ),
       ),

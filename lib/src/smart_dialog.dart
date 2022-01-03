@@ -23,9 +23,14 @@ enum SmartStatus {
   /// 关闭单个dialog
   dialog,
 
-  /// close all dialog, but not close toast and loading
+  /// close all attach dialog, but not close toast,loading and custom dialog
   ///
-  /// 关闭打开的所有dialog，但是不关闭toast和loading
+  /// 关闭打开的所有attach dialog，但是不关闭toast，loading和custom dialog
+  allAttach,
+
+  /// close all dialog（attach and custom）, but not close toast and loading
+  ///
+  /// 关闭打开的所有dialog（attach和custom），但是不关闭toast和loading
   allDialog,
 }
 
@@ -60,7 +65,8 @@ class SmartDialog {
   /// SmartDialog全局配置
   static Config config = DialogProxy.instance.config;
 
-  /// custom dialog：'temp' suffix param, if there is no default value, the global attribute in config will be used by default
+  /// custom dialog：'temp' suffix param, if there is no default value,
+  /// the global attribute in config will be used by default
   ///
   /// [widget]：custom widget
   ///
@@ -158,9 +164,10 @@ class SmartDialog {
     );
   }
 
-  /// custom dialog for specific locations：'temp' suffix param, if there is no default value, the global attribute in config will be used by default
+  /// custom dialog for specific locations：'temp' suffix param, if there is no default value,
+  /// the global attribute in config will be used by default
   ///
-  /// [targetContext]：BuildContext with location widget
+  /// [targetContext]：BuildContext with target widget
   ///
   /// [widget]：custom widget
   ///
@@ -256,7 +263,6 @@ class SmartDialog {
   }) {
     assert(targetContext != null || target != null,
         'targetContext and target, cannot both be null');
-
     return DialogProxy.instance.showAttach(
       targetContext: targetContext,
       target: target,

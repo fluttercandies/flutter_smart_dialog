@@ -92,7 +92,7 @@ class MainDialog {
       isLoading: isLoading,
       maskColor: maskColor,
       maskWidget: maskWidget,
-      highlight: null,
+      highlight: highlight,
       clickBgDismiss: clickBgDismiss,
       child: widget,
       onBgTap: onBgTap,

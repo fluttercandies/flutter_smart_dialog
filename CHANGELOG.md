@@ -1,3 +1,10 @@
+# [3.2.x]
+
+- Major update！
+- Add 'showAttach' feature
+- Support positioning widget, display the specified location dialog
+- Support highlight feature，dissolve the specified location mask
+
 # [3.1.x]
 
 - 'show' method add 'keepSingle' function

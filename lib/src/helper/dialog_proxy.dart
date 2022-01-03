@@ -197,8 +197,25 @@ class DialogProxy {
       await _loading.dismiss(back: back);
     } else if (status == SmartStatus.toast) {
       await _toast.dismiss();
+    } else if (status == SmartStatus.allAttach) {
+      await _closeAllAttach(status: SmartStatus.dialog);
     } else if (status == SmartStatus.allDialog) {
       await _closeAllDialog(status: SmartStatus.dialog);
+    }
+  }
+
+  Future<void> _closeAllAttach({SmartStatus? status}) async {
+    var length = dialogList.length;
+    for (var i = 0; i < length; i++) {
+      if (dialogList.length - 1 < 0) return;
+      var item = dialogList[dialogList.length - 1];
+      //only close attach dialog
+      if (item.type == DialogType.attach) {
+        await dismiss(status: status);
+        if (item.isUseAnimation) {
+          await Future.delayed(Duration(milliseconds: 100));
+        }
+      }
     }
   }
 
