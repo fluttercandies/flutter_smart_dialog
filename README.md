@@ -162,7 +162,7 @@ SmartDialog.config
   ..alignment = Alignment.center
   ..isPenetrate = false
   ..clickBgDismiss = true
-  ..maskColor = Colors.black.withOpacity(0.3)
+  ..maskColor = Colors.black.withOpacity(0.35)
   ..maskWidget = null
   ..animationDuration = Duration(milliseconds: 260)
   ..isUseAnimation = true
