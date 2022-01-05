@@ -57,30 +57,47 @@ class SmartDialogWidget extends StatefulWidget {
 }
 
 class _SmartDialogWidgetState extends State<SmartDialogWidget>
-    with SingleTickerProviderStateMixin {
-  late double _opacity;
-  late AnimationController _controller;
+    with TickerProviderStateMixin {
+  AnimationController? _ctrlBg;
+  late AnimationController _ctrlBody;
   Offset? _offset;
+
+  //refuse operation during dispose
+  bool _closing = false;
 
   @override
   void initState() {
-    //处理背景动画和内容widget动画设置
-    _opacity = widget.isUseAnimation ? 0.0 : 1.0;
-    _controller =
-        AnimationController(vsync: this, duration: widget.animationDuration);
-    _controller.forward();
+    _resetState();
+
+    super.initState();
+  }
+
+  void _resetState() {
     _dealContentAnimate();
 
-    //开启背景动画的效果
-    Future.delayed(Duration(milliseconds: 10), () {
-      _opacity = 1.0;
-      if (mounted) setState(() {});
-    });
+    var duration = widget.animationDuration;
+    if (_ctrlBg == null) {
+      _ctrlBg = AnimationController(vsync: this, duration: duration);
+      _ctrlBody = AnimationController(vsync: this, duration: duration);
+      _ctrlBg!.forward();
+      _ctrlBody.forward();
+    } else {
+      _ctrlBg!.duration = duration;
+      _ctrlBody.duration = duration;
+
+      _ctrlBody.value = 0;
+      _ctrlBody.forward();
+    }
 
     //bind controller
     widget.controller.bind(this);
+  }
 
-    super.initState();
+  @override
+  void didUpdateWidget(covariant SmartDialogWidget oldWidget) {
+    if (oldWidget.child != widget.child) _resetState();
+
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -102,14 +119,12 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
     ]);
   }
 
-  AnimatedOpacity _buildBgAnimation({
+  Widget _buildBgAnimation({
     required void Function()? onPointerUp,
     required Widget? child,
   }) {
-    return AnimatedOpacity(
-      duration: widget.animationDuration,
-      curve: Curves.linear,
-      opacity: _opacity,
+    return FadeTransition(
+      opacity: CurvedAnimation(parent: _ctrlBg!, curve: Curves.linear),
       child: Listener(
         behavior: HitTestBehavior.translucent,
         onPointerUp: (event) => onPointerUp?.call(),
@@ -119,17 +134,10 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
   }
 
   Widget _buildBodyAnimation() {
+    var animation = CurvedAnimation(parent: _ctrlBody, curve: Curves.linear);
     var centerTransition = widget.isLoading
-        ? AnimatedOpacity(
-            duration: widget.animationDuration,
-            curve: Curves.linear,
-            opacity: _opacity,
-            child: widget.child,
-          )
-        : ScaleTransition(
-            scale: CurvedAnimation(parent: _controller, curve: Curves.linear),
-            child: widget.child,
-          );
+        ? FadeTransition(opacity: animation, child: widget.child)
+        : ScaleTransition(scale: animation, child: widget.child);
 
     return widget.alignment == Alignment.center
         //中间弹窗动画的使用需要分情况 渐隐和缩放俩种
@@ -139,7 +147,7 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
             position: Tween<Offset>(
               begin: _offset,
               end: Offset.zero,
-            ).animate(_controller),
+            ).animate(_ctrlBody),
             child: widget.child,
           );
   }
@@ -172,12 +180,12 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   ///等待动画结束,关闭动画资源
   Future<void> dismiss() async {
-    //背景结束动画
-    _opacity = 0.0;
-    if (mounted) setState(() {});
+    if (_closing) return;
 
-    //内容widget结束动画
-    _controller.reverse();
+    _closing = true;
+    //结束动画
+    _ctrlBg?.reverse();
+    _ctrlBody.reverse();
 
     if (widget.isUseAnimation) {
       await Future.delayed(widget.animationDuration);
@@ -186,7 +194,8 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _ctrlBg?.dispose();
+    _ctrlBody.dispose();
     super.dispose();
   }
 }

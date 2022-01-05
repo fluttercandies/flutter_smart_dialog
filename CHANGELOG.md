@@ -4,6 +4,7 @@
 - Add 'showAttach' feature
 - Support positioning widget, display the specified location dialog
 - Support highlight feature，dissolve the specified location mask
+- Optimize 'keepSingle' feature
 
 # [3.1.x]
 
@@ -22,7 +23,6 @@
 - Add four toast display logic
 - Compatible with cupertino style
 - Increase showToast's external exposure param
-
 
 # [2.3.x]
 

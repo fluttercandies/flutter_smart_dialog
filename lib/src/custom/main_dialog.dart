@@ -24,6 +24,8 @@ class MainDialog {
   VoidCallback? _onDismiss;
   Widget _widget;
 
+  final _uniqueKey = UniqueKey();
+
   Future<void> show({
     required Widget widget,
     required AlignmentGeometry alignment,
@@ -40,7 +42,7 @@ class MainDialog {
     _onDismiss = onDismiss;
     //custom dialog
     _widget = SmartDialogWidget(
-      key: UniqueKey(),
+      key: _uniqueKey,
       controller: _controller = SmartDialogController(),
       alignment: alignment,
       isPenetrate: isPenetrate,
@@ -81,7 +83,7 @@ class MainDialog {
     _onDismiss = onDismiss;
     //custom dialog
     _widget = AttachDialogWidget(
-      key: UniqueKey(),
+      key: _uniqueKey,
       targetContext: targetContext,
       target: target,
       controller: _controller = AttachDialogController(),

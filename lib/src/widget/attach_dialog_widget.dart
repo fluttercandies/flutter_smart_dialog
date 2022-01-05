@@ -68,10 +68,9 @@ class AttachDialogWidget extends StatefulWidget {
 }
 
 class _AttachDialogWidgetState extends State<AttachDialogWidget>
-    with SingleTickerProviderStateMixin {
-  late double _opacity;
-
-  late AnimationController _controller;
+    with TickerProviderStateMixin {
+  AnimationController? _ctrlBg;
+  late AnimationController _ctrlBody;
 
   //target info
   RectInfo? _targetRect;
@@ -79,18 +78,30 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   late Axis _axis;
   late double _postFrameOpacity;
 
+  //refuse operation during dispose
+  bool _closing = false;
+
   @override
   void initState() {
-    //处理背景动画和内容widget动画设置
-    _opacity = widget.isUseAnimation ? 0.0 : 1.0;
-    _controller = AnimationController(
-      vsync: this,
-      duration: widget.animationDuration,
-    );
-    _controller.forward();
+    _resetState();
 
-    //bind controller
-    widget.controller.bind(this);
+    super.initState();
+  }
+
+  void _resetState() {
+    var duration = widget.animationDuration;
+    if (_ctrlBg == null) {
+      _ctrlBg = AnimationController(vsync: this, duration: duration);
+      _ctrlBody = AnimationController(vsync: this, duration: duration);
+      _ctrlBg?.forward();
+      _ctrlBody.forward();
+    } else {
+      _ctrlBg!.duration = duration;
+      _ctrlBody.duration = duration;
+
+      _ctrlBody.value = 0;
+      _ctrlBody.forward();
+    }
 
     //target info
     _postFrameOpacity = 0;
@@ -99,14 +110,14 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     });
     _axis = Axis.vertical;
 
-    super.initState();
+    //bind controller
+    widget.controller.bind(this);
   }
 
   @override
   void didUpdateWidget(covariant AttachDialogWidget oldWidget) {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      if (mounted) _handleAnimatedAndLocation();
-    });
+    if (oldWidget.child != widget.child) _resetState();
+
     super.didUpdateWidget(oldWidget);
   }
 
@@ -169,14 +180,12 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     ]);
   }
 
-  AnimatedOpacity _buildBgAnimation({
+  Widget _buildBgAnimation({
     required void Function()? onPointerUp,
     required Widget? child,
   }) {
-    return AnimatedOpacity(
-      duration: widget.animationDuration,
-      curve: Curves.linear,
-      opacity: _opacity,
+    return FadeTransition(
+      opacity: CurvedAnimation(parent: _ctrlBg!, curve: Curves.linear),
       child: Listener(
         behavior: HitTestBehavior.translucent,
         onPointerUp: (event) => onPointerUp?.call(),
@@ -186,28 +195,20 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   }
 
   Widget _buildBodyAnimation(Widget child) {
+    var animation = CurvedAnimation(parent: _ctrlBody, curve: Curves.linear);
     var transition = widget.alignment == Alignment.center
         //中间弹窗动画使用缩放
-        ? ScaleTransition(
-            scale: CurvedAnimation(parent: _controller, curve: Curves.linear),
-            child: child,
-          )
+        ? ScaleTransition(scale: animation, child: child)
         //其它的都使用位移动画
-        : SizeTransition(axis: _axis, sizeFactor: _controller, child: child);
+        : SizeTransition(axis: _axis, sizeFactor: _ctrlBody, child: child);
 
     return widget.isLoading
-        ? AnimatedOpacity(
-            duration: widget.animationDuration,
-            curve: Curves.linear,
-            opacity: _opacity,
-            child: child,
-          )
+        ? FadeTransition(opacity: animation, child: child)
         : transition;
   }
 
   ///处理下动画方向及其位置
   void _handleAnimatedAndLocation() {
-    _postFrameOpacity = 1;
     _axis = Axis.vertical;
     final alignment = widget.alignment;
     var size = Size.zero;
@@ -272,18 +273,18 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     }
 
     //处理透明度动画
-    _opacity = 1.0;
+    _postFrameOpacity = 1;
     setState(() {});
   }
 
   ///等待动画结束,关闭动画资源
   Future<void> dismiss() async {
-    //背景结束动画
-    _opacity = 0.0;
-    if (mounted) setState(() {});
+    if (_closing) return;
 
-    //内容widget结束动画
-    _controller.reverse();
+    _closing = true;
+    //over animation
+    _ctrlBg?.reverse();
+    _ctrlBody.reverse();
 
     if (widget.isUseAnimation) {
       await Future.delayed(widget.animationDuration);
@@ -292,7 +293,8 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   @override
   void dispose() {
-    _controller.dispose();
+    _ctrlBg?.reverse();
+    _ctrlBody.reverse();
     super.dispose();
   }
 }
