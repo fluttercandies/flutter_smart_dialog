@@ -111,7 +111,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     _axis = Axis.vertical;
 
     //bind controller
-    widget.controller.bind(this);
+    widget.controller._bind(this);
   }
 
   @override
@@ -293,8 +293,8 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   @override
   void dispose() {
-    _ctrlBg?.reverse();
-    _ctrlBody.reverse();
+    _ctrlBg?.dispose();
+    _ctrlBody.dispose();
     super.dispose();
   }
 }
@@ -302,7 +302,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 class AttachDialogController extends BaseController {
   _AttachDialogWidgetState? _state;
 
-  void bind(_AttachDialogWidgetState _state) {
+  void _bind(_AttachDialogWidgetState _state) {
     this._state = _state;
   }
 

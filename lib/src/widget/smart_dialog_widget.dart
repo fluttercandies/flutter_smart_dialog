@@ -90,7 +90,7 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
     }
 
     //bind controller
-    widget.controller.bind(this);
+    widget.controller._bind(this);
   }
 
   @override
@@ -203,7 +203,7 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 class SmartDialogController extends BaseController {
   _SmartDialogWidgetState? _state;
 
-  void bind(_SmartDialogWidgetState _state) {
+  void _bind(_SmartDialogWidgetState _state) {
     this._state = _state;
   }
 
