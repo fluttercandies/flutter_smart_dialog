@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/location.dart';
 
+typedef SmartHighlightBuilder = Positioned Function(
+    Offset targetOffset, Size targetSize);
+
 class AttachDialogWidget extends StatefulWidget {
   const AttachDialogWidget({
     Key? key,
@@ -20,6 +23,7 @@ class AttachDialogWidget extends StatefulWidget {
     required this.maskColor,
     required this.clickBgDismiss,
     required this.highlight,
+    required this.highlightBuilder,
     this.maskWidget,
   }) : super(key: key);
 
@@ -61,6 +65,7 @@ class AttachDialogWidget extends StatefulWidget {
 
   /// 溶解遮罩,设置高亮位置
   final Positioned highlight;
+  final SmartHighlightBuilder? highlightBuilder;
 
   /// 点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
   final bool clickBgDismiss;
@@ -82,6 +87,10 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   //refuse operation during dispose
   bool _closing = false;
+
+  //offset size
+  late Offset targetOffset;
+  late Size targetSize;
 
   @override
   void initState() {
@@ -107,6 +116,15 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
     //target info
     _postFrameOpacity = 0;
+    if (widget.targetContext != null) {
+      final renderBox = widget.targetContext!.findRenderObject() as RenderBox;
+      targetOffset = renderBox.localToGlobal(Offset.zero);
+      targetSize = renderBox.size;
+    }
+    if (widget.target != null) {
+      targetOffset = widget.target!;
+      targetSize = Size.zero;
+    }
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       if (mounted) _handleAnimatedAndLocation();
     });
@@ -150,7 +168,9 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
                       ),
 
                       //dissolve mask, highlight location
-                      widget.highlight,
+                      widget.highlightBuilder == null
+                          ? widget.highlight
+                          : widget.highlightBuilder!(targetOffset, targetSize),
                     ]),
                   ),
       ),
@@ -213,13 +233,8 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   void _handleAnimatedAndLocation() {
     _axis = Axis.vertical;
     final alignment = widget.alignment;
-    var size = Size.zero;
-    var offset = widget.target ?? Offset.zero;
-    if (widget.targetContext != null) {
-      final renderBox = widget.targetContext!.findRenderObject() as RenderBox;
-      size = renderBox.size;
-      offset = renderBox.localToGlobal(Offset.zero);
-    }
+    var offset = targetOffset;
+    var size = targetSize;
     final screen = MediaQuery.of(context).size;
     final childSize = (_childContext!.findRenderObject() as RenderBox).size;
 

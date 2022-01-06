@@ -3,6 +3,7 @@ import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_loading.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_toast.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
+import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 
 import '../smart_dialog.dart';
@@ -98,6 +99,7 @@ class DialogProxy {
     required bool clickBgDismiss,
     required Widget? maskWidget,
     required Positioned highlight,
+    required SmartHighlightBuilder? highlightBuilder,
     required bool antiShake,
     required VoidCallback? onDismiss,
     required String? tag,
@@ -121,6 +123,7 @@ class DialogProxy {
       maskColor: maskColor,
       maskWidget: maskWidget,
       highlight: highlight,
+      highlightBuilder: highlightBuilder,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
       antiShake: antiShake,

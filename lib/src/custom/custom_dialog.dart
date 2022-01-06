@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
+import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
 import '../../flutter_smart_dialog.dart';
 import '../data/base_dialog.dart';
@@ -83,6 +84,7 @@ class CustomDialog extends BaseDialog {
     required bool antiShake,
     required Widget? maskWidget,
     required Positioned highlight,
+    required SmartHighlightBuilder? highlightBuilder,
     required VoidCallback? onDismiss,
     required String? tag,
     required bool backDismiss,
@@ -107,6 +109,7 @@ class CustomDialog extends BaseDialog {
       isLoading: isLoading,
       maskColor: maskColor,
       highlight: highlight,
+      highlightBuilder: highlightBuilder,
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,

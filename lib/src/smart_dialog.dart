@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'helper/config.dart';
 import 'helper/dialog_proxy.dart';
+import 'widget/attach_dialog_widget.dart';
 import 'widget/loading_widget.dart';
 import 'widget/toast_widget.dart';
 
@@ -194,6 +195,10 @@ class SmartDialog {
   ///
   /// [highlight]：highlight feature, dissolve the mask of a specific area
   ///
+  /// [highlightBuilder]：the function is the same as [highlight], it may be a little troublesome to use,
+  /// but you can quickly get the target widget info（Coordinates and size）；
+  /// Note: If [highlightBuilder] is used, [highlight] will be invalid
+  ///
   /// [onDismiss]：the callback will be invoked when the dialog is closed
   ///
   /// [tag]：if you set a tag for the dialog, you can turn it off in a targeted manner
@@ -233,6 +238,9 @@ class SmartDialog {
   ///
   /// [highlight]：高亮功能，溶解特定区域的遮罩
   ///
+  /// [highlightBuilder]：功能和[highlight]一致，使用上可能麻烦一点，但是可以快速获取目标widget信息（坐标和大小）；
+  /// 注：使用了[highlightBuilder]，[highlight]将失效
+  ///
   /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
   ///
   /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
@@ -256,6 +264,7 @@ class SmartDialog {
     Widget? maskWidgetTemp,
     bool? antiShakeTemp,
     Positioned? highlight,
+    SmartHighlightBuilder? highlightBuilder,
     VoidCallback? onDismiss,
     String? tag,
     bool? backDismiss,
@@ -277,6 +286,7 @@ class SmartDialog {
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       antiShake: antiShakeTemp ?? config.antiShake,
       highlight: highlight ?? Positioned(child: Container()),
+      highlightBuilder: highlightBuilder,
       onDismiss: onDismiss,
       tag: tag,
       backDismiss: backDismiss ?? true,
