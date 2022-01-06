@@ -38,10 +38,7 @@ class LoadingWidget extends StatelessWidget {
         color: background,
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: children,
-      ),
+      child: Column(mainAxisSize: MainAxisSize.min, children: children),
     );
   }
 }

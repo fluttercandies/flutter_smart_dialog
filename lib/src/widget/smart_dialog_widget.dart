@@ -22,6 +22,7 @@ class SmartDialogWidget extends StatefulWidget {
   /// 内容widget
   final Widget child;
 
+  ///widget controller
   final SmartDialogController controller;
 
   /// 点击背景

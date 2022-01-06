@@ -34,8 +34,10 @@ class AttachDialogWidget extends StatefulWidget {
   ///动画时间
   final Duration animationDuration;
 
+  ///自定义的主体布局
   final Widget child;
 
+  ///widget controller
   final AttachDialogController controller;
 
   /// 点击背景
@@ -272,7 +274,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       );
     }
 
-    //处理透明度动画
+    //第一帧后恢复透明度
     _postFrameOpacity = 1;
     setState(() {});
   }

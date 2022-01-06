@@ -19,12 +19,12 @@ class MainDialog {
   ///config info
   final Config config;
 
+  final _uniqueKey = UniqueKey();
+
   late BaseController _controller;
   Completer? _completer;
   VoidCallback? _onDismiss;
   Widget _widget;
-
-  final _uniqueKey = UniqueKey();
 
   Future<void> show({
     required Widget widget,
@@ -39,7 +39,6 @@ class MainDialog {
     required VoidCallback onBgTap,
     required VoidCallback? onDismiss,
   }) async {
-    _onDismiss = onDismiss;
     //custom dialog
     _widget = SmartDialogWidget(
       key: _uniqueKey,
@@ -56,11 +55,8 @@ class MainDialog {
       onBgTap: onBgTap,
     );
 
-    //refresh dialog
-    overlayEntry.markNeedsBuild();
+    _handleCommonOperate(onDismiss: onDismiss);
 
-    //wait dialog dismiss
-    _completer = Completer();
     return _completer!.future;
   }
 
@@ -80,8 +76,7 @@ class MainDialog {
     required VoidCallback onBgTap,
     required VoidCallback? onDismiss,
   }) async {
-    _onDismiss = onDismiss;
-    //custom dialog
+    //attach dialog
     _widget = AttachDialogWidget(
       key: _uniqueKey,
       targetContext: targetContext,
@@ -100,26 +95,31 @@ class MainDialog {
       onBgTap: onBgTap,
     );
 
+    _handleCommonOperate(onDismiss: onDismiss);
+
+    return _completer!.future;
+  }
+
+  void _handleCommonOperate({required VoidCallback? onDismiss}) {
+    _onDismiss = onDismiss;
+
     //refresh dialog
     overlayEntry.markNeedsBuild();
 
     //wait dialog dismiss
     _completer = Completer();
-    return _completer!.future;
   }
 
   Future<void> dismiss() async {
-    //reset widget
-    _widget = Container();
-    _onDismiss?.call();
-
     //close animation
     await _controller.dismiss();
 
-    //refresh dialog
+    //remove dialog
+    _widget = Container();
     overlayEntry.markNeedsBuild();
 
     //end waiting
+    _onDismiss?.call();
     if (!(_completer?.isCompleted ?? true)) {
       _completer?.complete();
     }
