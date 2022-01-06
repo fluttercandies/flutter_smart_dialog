@@ -99,7 +99,7 @@ class DialogProxy {
     required bool clickBgDismiss,
     required Widget? maskWidget,
     required Positioned highlight,
-    required SmartHighlightBuilder? highlightBuilder,
+    required HighlightBuilder? highlightBuilder,
     required bool antiShake,
     required VoidCallback? onDismiss,
     required String? tag,

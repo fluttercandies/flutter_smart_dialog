@@ -72,7 +72,7 @@ class MainDialog {
     required Color maskColor,
     required Widget? maskWidget,
     required Positioned highlight,
-    required SmartHighlightBuilder? highlightBuilder,
+    required HighlightBuilder? highlightBuilder,
     required bool clickBgDismiss,
     required VoidCallback onBgTap,
     required VoidCallback? onDismiss,

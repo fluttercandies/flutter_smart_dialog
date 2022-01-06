@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/location.dart';
 
-typedef SmartHighlightBuilder = Positioned Function(
+typedef HighlightBuilder = Positioned Function(
     Offset targetOffset, Size targetSize);
 
 class AttachDialogWidget extends StatefulWidget {
@@ -65,7 +65,7 @@ class AttachDialogWidget extends StatefulWidget {
 
   /// 溶解遮罩,设置高亮位置
   final Positioned highlight;
-  final SmartHighlightBuilder? highlightBuilder;
+  final HighlightBuilder? highlightBuilder;
 
   /// 点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
   final bool clickBgDismiss;

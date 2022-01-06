@@ -264,7 +264,7 @@ class SmartDialog {
     Widget? maskWidgetTemp,
     bool? antiShakeTemp,
     Positioned? highlight,
-    SmartHighlightBuilder? highlightBuilder,
+    HighlightBuilder? highlightBuilder,
     VoidCallback? onDismiss,
     String? tag,
     bool? backDismiss,

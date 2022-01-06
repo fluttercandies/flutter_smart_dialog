@@ -84,7 +84,7 @@ class CustomDialog extends BaseDialog {
     required bool antiShake,
     required Widget? maskWidget,
     required Positioned highlight,
-    required SmartHighlightBuilder? highlightBuilder,
+    required HighlightBuilder? highlightBuilder,
     required VoidCallback? onDismiss,
     required String? tag,
     required bool backDismiss,
