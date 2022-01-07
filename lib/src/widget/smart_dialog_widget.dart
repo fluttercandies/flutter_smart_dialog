@@ -16,7 +16,7 @@ class SmartDialogWidget extends StatefulWidget {
     required this.isLoading,
     required this.maskColor,
     required this.clickBgDismiss,
-    this.maskWidget,
+    required this.maskWidget,
   }) : super(key: key);
 
   /// 内容widget
