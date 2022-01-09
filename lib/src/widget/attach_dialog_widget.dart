@@ -24,7 +24,7 @@ class AttachDialogWidget extends StatefulWidget {
     required this.clickBgDismiss,
     required this.highlight,
     required this.highlightBuilder,
-    this.maskWidget,
+    required this.maskWidget,
   }) : super(key: key);
 
   ///target context
