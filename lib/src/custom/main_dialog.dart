@@ -113,6 +113,9 @@ class MainDialog {
   }
 
   Future<void> dismiss() async {
+    //dialog prepare dismiss
+    _onDismiss?.call();
+
     //close animation
     await _controller.dismiss();
 
@@ -121,7 +124,6 @@ class MainDialog {
     overlayEntry.markNeedsBuild();
 
     //end waiting
-    _onDismiss?.call();
     if (!(_completer?.isCompleted ?? true)) {
       _completer?.complete();
     }
