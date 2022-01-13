@@ -37,7 +37,7 @@ class CustomDialog extends BaseDialog {
     required bool isLoading,
     required Color maskColor,
     required bool clickBgDismiss,
-    required bool antiShake,
+    required bool debounce,
     required Widget? maskWidget,
     required VoidCallback? onDismiss,
     required String? tag,
@@ -49,7 +49,7 @@ class CustomDialog extends BaseDialog {
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
-      antiShake: antiShake,
+      debounce: debounce,
       type: DialogType.custom,
     );
     return mainDialog.show(
@@ -81,7 +81,7 @@ class CustomDialog extends BaseDialog {
     required bool isLoading,
     required Color maskColor,
     required bool clickBgDismiss,
-    required bool antiShake,
+    required bool debounce,
     required Widget? maskWidget,
     required Positioned highlight,
     required HighlightBuilder? highlightBuilder,
@@ -95,7 +95,7 @@ class CustomDialog extends BaseDialog {
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
-      antiShake: antiShake,
+      debounce: debounce,
       type: DialogType.attach,
     );
     return mainDialog.showAttach(
@@ -148,11 +148,11 @@ class CustomDialog extends BaseDialog {
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
-    required bool antiShake,
+    required bool debounce,
     required DialogType type,
   }) {
     // debounce
-    if (!_checkDebounce(antiShake)) return;
+    if (!_checkDebounce(debounce)) return;
 
     //handle dialog stack
     _handleDialogStack(
@@ -216,14 +216,14 @@ class CustomDialog extends BaseDialog {
     );
   }
 
-  bool _checkDebounce(bool antiShake) {
-    if (!antiShake) return true;
+  bool _checkDebounce(bool debounce) {
+    if (!debounce) return true;
 
     var proxy = DialogProxy.instance;
     var now = DateTime.now();
     var isShake = proxy.dialogLastTime != null &&
         now.difference(proxy.dialogLastTime!) <
-            SmartDialog.config.antiShakeTime;
+            SmartDialog.config.debounceTime;
     proxy.dialogLastTime = now;
     if (isShake) return false;
 

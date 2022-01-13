@@ -1,3 +1,7 @@
+# [3.3.x]
+
+- notice: 'antiShake' renamed 'debounce'
+
 # [3.2.x]
 
 - Major update！
@@ -17,7 +21,7 @@
 - support open multi dialog
 - Monitor back and pop event, then close dialog reasonably
 - Initialization is more concise
-- Add anti-shake function
+- Add debounce feature
 - Add close all dialog status
 - Adjustment comment
 - Add four toast display logic

@@ -65,22 +65,22 @@ class Config {
   /// 点击遮罩，是否关闭dialog（默认：true）：true（点击遮罩关闭dialog），false（不关闭）
   bool clickBgDismiss = true;
 
-  /// debounce function，it works on toast and dialog：default（false）;
-  /// you can use the [antiShakeTime] param to set the debounce time
+  /// debounce feature，it works on toast and dialog：default（false）;
+  /// you can use the [debounceTime] param to set the debounce time
   ///
   /// 防抖功能（debounce），它作用于toast和dialog上：默认（false）;
-  /// 可以通过[antiShakeTime]参数设置防抖时间
-  bool antiShake = false;
-  Duration antiShakeTime = Duration(milliseconds: 300);
+  /// 可以通过[debounceTime]参数设置防抖时间
+  bool debounce = false;
+  Duration debounceTime = Duration(milliseconds: 300);
 
   /// whether loading and custom dialog exist on the screen
   ///
-  /// loading和自定义dialog，是否存在在界面上
+  /// loading，自定义dialog和attach，是否存在在界面上
   bool isExist = false;
 
   /// whether custom dialog exist on the screen
   ///
-  /// 自定义dialog是否存在在界面上
+  /// 自定义dialog和attach是否存在在界面上
   bool isExistMain = false;
 
   /// whether loading exist on the screen

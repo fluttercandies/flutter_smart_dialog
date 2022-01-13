@@ -23,15 +23,15 @@ class CustomToast extends BaseDialog {
     required Color maskColor,
     required Widget? maskWidget,
     required Duration time,
-    required bool antiShake,
+    required bool debounce,
     required SmartToastType type,
     required Widget widget,
   }) async {
     // debounce
-    if (antiShake) {
+    if (debounce) {
       var now = DateTime.now();
       var isShake = _lastTime != null &&
-          now.difference(_lastTime!) < SmartDialog.config.antiShakeTime;
+          now.difference(_lastTime!) < SmartDialog.config.debounceTime;
       _lastTime = now;
       if (isShake) return;
     }

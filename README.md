@@ -167,8 +167,8 @@ SmartDialog.config
   ..animationDuration = Duration(milliseconds: 260)
   ..isUseAnimation = true
   ..isLoading = true
-  ..antiShake = false
-  ..antiShakeTime = Duration(milliseconds: 300);
+  ..debounce = false
+  ..debounceTime = Duration(milliseconds: 300);
 ```
 
 # Attach Chapter

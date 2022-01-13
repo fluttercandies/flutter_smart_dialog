@@ -87,7 +87,7 @@ class SmartDialog {
   ///
   /// [maskWidgetTemp]：highly customizable mask
   ///
-  /// [antiShakeTemp]：anti-shake function（debounce）
+  /// [debounceTemp]：debounce feature
   ///
   /// [onDismiss]：the callback will be invoked when the dialog is closed
   ///
@@ -120,7 +120,7 @@ class SmartDialog {
   ///
   /// [maskWidgetTemp]：可高度定制遮罩
   ///
-  /// [antiShakeTemp]：防抖功能（debounce）
+  /// [debounceTemp]：防抖功能（debounce）
   ///
   /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
   ///
@@ -141,7 +141,7 @@ class SmartDialog {
     Duration? animationDurationTemp,
     Color? maskColorTemp,
     Widget? maskWidgetTemp,
-    bool? antiShakeTemp,
+    bool? debounceTemp,
     VoidCallback? onDismiss,
     String? tag,
     bool? backDismiss,
@@ -157,7 +157,7 @@ class SmartDialog {
       animationDuration: animationDurationTemp ?? config.animationDuration,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
-      antiShake: antiShakeTemp ?? config.antiShake,
+      debounce: debounceTemp ?? config.debounce,
       onDismiss: onDismiss,
       tag: tag,
       backDismiss: backDismiss ?? true,
@@ -191,7 +191,7 @@ class SmartDialog {
   ///
   /// [maskWidgetTemp]：highly customizable mask
   ///
-  /// [antiShakeTemp]：anti-shake function（debounce）
+  /// [debounceTemp]：debounce feature
   ///
   /// [highlight]：highlight feature, dissolve the mask of a specific area
   ///
@@ -234,7 +234,7 @@ class SmartDialog {
   ///
   /// [maskWidgetTemp]：可高度定制遮罩
   ///
-  /// [antiShakeTemp]：防抖功能（debounce）
+  /// [debounceTemp]：防抖功能（debounce）
   ///
   /// [highlight]：高亮功能，溶解特定区域的遮罩
   ///
@@ -262,7 +262,7 @@ class SmartDialog {
     Duration? animationDurationTemp,
     Color? maskColorTemp,
     Widget? maskWidgetTemp,
-    bool? antiShakeTemp,
+    bool? debounceTemp,
     Positioned? highlight,
     HighlightBuilder? highlightBuilder,
     VoidCallback? onDismiss,
@@ -284,7 +284,7 @@ class SmartDialog {
       animationDuration: animationDurationTemp ?? config.animationDuration,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
-      antiShake: antiShakeTemp ?? config.antiShake,
+      debounce: debounceTemp ?? config.debounce,
       highlight: highlight ?? Positioned(child: Container()),
       highlightBuilder: highlightBuilder,
       onDismiss: onDismiss,
@@ -399,7 +399,7 @@ class SmartDialog {
   ///
   /// [time]：toast display time on the screen(Use the 'widget' param, this param will be invalid)
   ///
-  /// [antiShakeTemp]：anti-shake function（debounce）
+  /// [debounceTemp]：debounce feature
   ///
   /// [type]：provider multiple display logic，
   /// please refer to [SmartToastType] comment for detailed description
@@ -428,7 +428,7 @@ class SmartDialog {
   ///
   /// [time]：toast在屏幕上的显示时间
   ///
-  /// [antiShakeTemp]：防抖功能（debounce）
+  /// [debounceTemp]：防抖功能（debounce）
   ///
   /// [type]：提供多种显示逻辑，详细描述请查看 [SmartToastType] 注释
   ///
@@ -444,7 +444,7 @@ class SmartDialog {
     Widget? maskWidgetTemp,
     AlignmentGeometry alignment = Alignment.bottomCenter,
     Duration? time,
-    bool? antiShakeTemp,
+    bool? debounceTemp,
     SmartToastType? type,
     Widget? widget,
   }) async {
@@ -457,7 +457,7 @@ class SmartDialog {
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       time: time ?? Duration(milliseconds: 2000),
-      antiShake: antiShakeTemp ?? config.antiShake,
+      debounce: debounceTemp ?? config.debounce,
       type: type ?? SmartToastType.normal,
       widget: widget ?? ToastWidget(msg: msg, alignment: alignment),
     );
