@@ -1,6 +1,7 @@
 # [3.3.x]
 
-- notice: 'antiShake' renamed 'debounce'
+- Notice: 'antiShake' renamed 'debounce'
+- Fix bug
 
 # [3.2.x]
 

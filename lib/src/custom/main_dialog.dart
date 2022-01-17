@@ -21,7 +21,7 @@ class MainDialog {
 
   final _uniqueKey = UniqueKey();
 
-  late BaseController _controller;
+  BaseController? _controller;
   Completer? _completer;
   VoidCallback? _onDismiss;
   Widget _widget;
@@ -117,7 +117,7 @@ class MainDialog {
     _onDismiss?.call();
 
     //close animation
-    await _controller.dismiss();
+    await _controller?.dismiss();
 
     //remove dialog
     _widget = Container();
