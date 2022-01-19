@@ -43,7 +43,7 @@ class SmartDialogPage extends StatelessWidget {
 
           //attach
           ElevatedButton(
-            onPressed: () => _showAttach(),
+            onPressed: () => _showAttach(context),
             child: Text('showAttach'),
           ),
         ]),
@@ -52,7 +52,7 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showToast() async {
-    await SmartDialog.showToast('test toast');
+    await SmartDialog.showToast('test toast', debounceTemp: true);
     print('--------------------------');
   }
 
@@ -75,19 +75,30 @@ class SmartDialogPage extends StatelessWidget {
     );
   }
 
-  void _showAttach() {
+  void _showAttach(BuildContext ctx) {
     var attachDialog = (BuildContext context) {
-      SmartDialog.showAttach(
-        targetContext: context,
-        isPenetrateTemp: true,
-        alignmentTemp: Alignment.topCenter,
-        widget: Container(width: 100, height: 100, color: Colors.red),
+      Navigator.push(
+        ctx,
+        MaterialPageRoute(builder: (context) {
+          return Center(
+            child: Container(width: 100, height: 100, color: Colors.red),
+          );
+        }),
       );
+
+      // SmartDialog.showAttach(
+      //   targetContext: context,
+      //   isPenetrateTemp: true,
+      //   alignmentTemp: Alignment.topCenter,
+      //   useSystem: true,
+      //   widget: Container(width: 100, height: 100, color: Colors.red),
+      // );
     };
 
     //target widget
     SmartDialog.show(
       isLoadingTemp: false,
+      useSystem: true,
       widget: Container(
         height: 300,
         width: 500,

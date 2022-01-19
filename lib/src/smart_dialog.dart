@@ -66,8 +66,7 @@ class SmartDialog {
   /// SmartDialog全局配置
   static Config config = DialogProxy.instance.config;
 
-  /// custom dialog：'temp' suffix param, if there is no default value,
-  /// the global attribute in config will be used by default
+  /// custom dialog：param with a suffix of 'temp', indicating that such params can be set to default values in [Config]
   ///
   /// [widget]：custom widget
   ///
@@ -98,9 +97,14 @@ class SmartDialog {
   ///
   /// [keepSingle]：Default (false), true (calling [show] multiple times will not generate multiple dialogs,
   /// only single dialog will be kept), false (calling [show] multiple times will generate multiple dialogs)
+  ///
+  /// [useSystem]: default (false), true (using the system dialog, the [isPenetrateTemp],[tag] param will be invalid),
+  /// false (using SmartDialog's pop-up window), this param can completely solve the page jump scene on the pop-up window;
+  /// Note: If you rewrite the routing module of MaterialApp, please make sure to assign GlobalKey to the key of Navigator, otherwise the param may be invalid
+  ///
   /// -------------------------------------------------------------------------------
   ///
-  /// 提供自定义弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
+  /// 提供自定义弹窗：以 'temp' 后缀的参数，表示此类参数都可在[Config]中设置默认值
   ///
   /// [widget]：自定义 widget
   ///
@@ -131,6 +135,10 @@ class SmartDialog {
   ///
   /// [keepSingle]：默认（false），true（多次调用[show]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[show]会生成多个dialog）
+  ///
+  /// [useSystem]：默认（false），true（使用系统dialog，[isPenetrateTemp],[tag]参数将失效），
+  /// false（使用SmartDialog弹窗），此参数可彻底解决在弹窗上跳转页面问题；
+  /// 注意：如果你重写MaterialApp的路由模块，请确保给Navigator的key赋值GlobalKey，不然该参数可能会失效
   static Future<void> show({
     required Widget widget,
     AlignmentGeometry? alignmentTemp,
@@ -146,6 +154,7 @@ class SmartDialog {
     String? tag,
     bool? backDismiss,
     bool? keepSingle,
+    bool? useSystem,
   }) {
     return DialogProxy.instance.show(
       widget: widget,
@@ -162,11 +171,12 @@ class SmartDialog {
       tag: tag,
       backDismiss: backDismiss ?? true,
       keepSingle: keepSingle ?? false,
+      useSystem: useSystem ?? false,
     );
   }
 
-  /// custom dialog for specific locations：'temp' suffix param, if there is no default value,
-  /// the global attribute in config will be used by default
+  /// custom dialog for specific locations：param with a suffix of 'temp',
+  /// indicating that such params can be set to default values in [Config]
   ///
   /// [targetContext]：BuildContext with target widget
   ///
@@ -208,9 +218,14 @@ class SmartDialog {
   ///
   /// [keepSingle]：Default (false), true (calling [showAttach] multiple times will not generate multiple dialogs,
   /// only single dialog will be kept), false (calling [showAttach] multiple times will generate multiple dialogs)
+  ///
+  /// [useSystem]: default (false), true (using the system dialog, the [isPenetrateTemp],[tag] param will be invalid),
+  /// false (using SmartDialog's pop-up window), this param can completely solve the page jump scene on the pop-up window;
+  /// Note: If you rewrite the routing module of MaterialApp, please make sure to assign GlobalKey to the key of Navigator, otherwise the param may be invalid
+  ///
   /// -------------------------------------------------------------------------------
   ///
-  /// 提供自定义特定位置弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
+  /// 提供自定义特定位置弹窗：以 'temp' 后缀的参数，表示此类参数都可在[Config]中设置默认值
   ///
   /// [targetContext]：伴随位置widget的BuildContext
   ///
@@ -250,6 +265,10 @@ class SmartDialog {
   ///
   /// [keepSingle]：默认（false），true（多次调用[showAttach]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[showAttach]会生成多个dialog）
+  ///
+  /// [useSystem]：默认（false），true（使用系统dialog，[isPenetrateTemp],[tag]参数将失效），
+  /// false（使用SmartDialog弹窗），此参数可彻底解决在弹窗上跳转页面问题；
+  /// 注意：如果你重写MaterialApp的路由模块，请确保给Navigator的key赋值GlobalKey，不然该参数可能会失效
   static Future<void> showAttach({
     required BuildContext? targetContext,
     required Widget widget,
@@ -269,6 +288,7 @@ class SmartDialog {
     String? tag,
     bool? backDismiss,
     bool? keepSingle,
+    bool? useSystem,
   }) {
     assert(targetContext != null || target != null,
         'targetContext and target, cannot both be null');
@@ -291,11 +311,11 @@ class SmartDialog {
       tag: tag,
       backDismiss: backDismiss ?? true,
       keepSingle: keepSingle ?? false,
+      useSystem: useSystem ?? false,
     );
   }
 
-  /// loading dialog：'temp' suffix param, if there is no default value,
-  /// the global attribute in config will be used by default
+  /// loading dialog：param with a suffix of 'temp', indicating that such params can be set to default values in [Config]
   ///
   /// [msg]：loading msg (Use the 'widget' param, this param will be invalid)
   ///
@@ -326,7 +346,7 @@ class SmartDialog {
   ///
   /// -------------------------------------------------------------------------------
   ///
-  /// loading弹窗：'temp' 后缀的参数，如果没有默认值，则默认使用config中的全局属性
+  /// loading弹窗：以 'temp' 后缀的参数，表示此类参数都可在[Config]中设置默认值
   ///
   /// [msg]：loading 的信息（使用 'widget' 参数，该参数将失效）
   ///
@@ -376,6 +396,8 @@ class SmartDialog {
     );
   }
 
+  /// toast message: param with a suffix of 'temp', indicating that such params can be set to default values in [Config]
+  ///
   /// [msg]：msg presented to users(Use the 'widget' param, this param will be invalid)
   ///
   /// [clickBgDismissTemp]：default（false），true（loading will be closed after click background），
@@ -407,6 +429,8 @@ class SmartDialog {
   /// [widget]：highly customizable toast
   ///
   /// -------------------------------------------------------------------------------
+  ///
+  /// toast消息：以 'temp' 后缀的参数，表示此类参数都可在[Config]中设置默认值
   ///
   /// [msg]：呈现给用户的信息（使用 'widget' 参数，该参数将失效）
   ///

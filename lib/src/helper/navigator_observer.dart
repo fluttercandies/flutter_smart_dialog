@@ -6,7 +6,9 @@ import 'dialog_proxy.dart';
 
 class SmartNavigatorObserver extends NavigatorObserver {
   @override
-  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {}
+  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    if (DialogProxy.instance.dialogList.isNotEmpty) {}
+  }
 
   @override
   void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {}
@@ -16,6 +18,7 @@ class SmartNavigatorObserver extends NavigatorObserver {
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) async {
+    print('${DialogProxy.pages?.length}');
     if (!SmartDialog.config.isExist) return;
 
     DialogProxy.instance.dismiss(status: SmartStatus.allDialog);

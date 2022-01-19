@@ -43,15 +43,17 @@ class CustomDialog extends BaseDialog {
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
+    required bool useSystem,
   }) async {
-    _handleMustOperate(
+    if (!_handleMustOperate(
       isUseAnimation: isUseAnimation,
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
       debounce: debounce,
       type: DialogType.custom,
-    );
+      useSystem: useSystem,
+    )) return;
     return mainDialog.show(
       widget: widget,
       alignment: alignment,
@@ -63,6 +65,7 @@ class CustomDialog extends BaseDialog {
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
+      useSystem: useSystem,
       onBgTap: () {
         if (!_clickBgDebounce()) return;
         dismiss();
@@ -89,15 +92,17 @@ class CustomDialog extends BaseDialog {
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
+    required bool useSystem,
   }) async {
-    _handleMustOperate(
+    if (!_handleMustOperate(
       isUseAnimation: isUseAnimation,
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
       debounce: debounce,
       type: DialogType.attach,
-    );
+      useSystem: useSystem,
+    )) return;
     return mainDialog.showAttach(
       targetContext: targetContext,
       target: target,
@@ -113,6 +118,7 @@ class CustomDialog extends BaseDialog {
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
+      useSystem: useSystem,
       onBgTap: () {
         if (!_clickBgDebounce()) return;
         dismiss();
@@ -133,7 +139,7 @@ class CustomDialog extends BaseDialog {
     if (info.tag != null) proxy.dialogMap.remove(info.tag);
     proxy.dialogList.remove(info);
     var customDialog = info.dialog;
-    await customDialog.mainDialog.dismiss();
+    await customDialog.mainDialog.dismiss(useSystem: info.useSystem);
     customDialog.overlayEntry.remove();
 
     if (proxy.dialogList.length != 0) return;
@@ -143,16 +149,17 @@ class CustomDialog extends BaseDialog {
     }
   }
 
-  void _handleMustOperate({
+  bool _handleMustOperate({
     required bool isUseAnimation,
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
     required bool debounce,
     required DialogType type,
+    required bool useSystem,
   }) {
     // debounce
-    if (!_checkDebounce(debounce)) return;
+    if (!_checkDebounce(debounce)) return false;
 
     //handle dialog stack
     _handleDialogStack(
@@ -161,10 +168,13 @@ class CustomDialog extends BaseDialog {
       backDismiss: backDismiss,
       keepSingle: keepSingle,
       type: type,
+      useSystem: useSystem,
     );
 
     config.isExist = true;
     config.isExistMain = true;
+
+    return true;
   }
 
   void _handleDialogStack({
@@ -173,6 +183,7 @@ class CustomDialog extends BaseDialog {
     required bool backDismiss,
     required bool keepSingle,
     required DialogType type,
+    required bool useSystem,
   }) {
     var proxy = DialogProxy.instance;
 
@@ -185,6 +196,7 @@ class CustomDialog extends BaseDialog {
           isUseAnimation: isUseAnimation,
           type: type,
           tag: tagKeepSingle,
+          useSystem: useSystem,
         );
         proxy.dialogList.add(dialogInfo);
         proxy.dialogMap[tagKeepSingle] = dialogInfo;
@@ -206,6 +218,7 @@ class CustomDialog extends BaseDialog {
       isUseAnimation: isUseAnimation,
       type: type,
       tag: tag,
+      useSystem: useSystem,
     );
     proxy.dialogList.add(dialogInfo);
     if (tag != null) proxy.dialogMap[tag] = dialogInfo;
@@ -222,8 +235,7 @@ class CustomDialog extends BaseDialog {
     var proxy = DialogProxy.instance;
     var now = DateTime.now();
     var isShake = proxy.dialogLastTime != null &&
-        now.difference(proxy.dialogLastTime!) <
-            SmartDialog.config.debounceTime;
+        now.difference(proxy.dialogLastTime!) < SmartDialog.config.debounceTime;
     proxy.dialogLastTime = now;
     if (isShake) return false;
 

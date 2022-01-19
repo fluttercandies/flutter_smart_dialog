@@ -27,6 +27,8 @@ class DialogProxy {
   static DialogProxy get instance => _instance ??= DialogProxy._internal();
 
   static late BuildContext context;
+  static BuildContext? navigatorContext;
+  static List<Page<dynamic>>? pages;
 
   DialogProxy._internal() {
     config = Config();
@@ -62,6 +64,7 @@ class DialogProxy {
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
+    required bool useSystem,
   }) {
     CustomDialog? dialog;
     var entry = OverlayEntry(
@@ -83,6 +86,7 @@ class DialogProxy {
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
+      useSystem: useSystem,
     );
   }
 
@@ -105,6 +109,7 @@ class DialogProxy {
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
+    required bool useSystem,
   }) {
     CustomDialog? dialog;
     var entry = OverlayEntry(
@@ -130,6 +135,7 @@ class DialogProxy {
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
+      useSystem: useSystem,
     );
   }
 

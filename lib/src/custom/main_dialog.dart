@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
+import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_widget.dart';
 
@@ -38,6 +39,7 @@ class MainDialog {
     required bool clickBgDismiss,
     required VoidCallback onBgTap,
     required VoidCallback? onDismiss,
+    required bool useSystem,
   }) async {
     //custom dialog
     _widget = SmartDialogWidget(
@@ -55,7 +57,7 @@ class MainDialog {
       onBgTap: onBgTap,
     );
 
-    _handleCommonOperate(onDismiss: onDismiss);
+    _handleCommonOperate(onDismiss: onDismiss, useSystem: useSystem);
 
     return _completer!.future;
   }
@@ -76,6 +78,7 @@ class MainDialog {
     required bool clickBgDismiss,
     required VoidCallback onBgTap,
     required VoidCallback? onDismiss,
+    required bool useSystem,
   }) async {
     //attach dialog
     _widget = AttachDialogWidget(
@@ -97,13 +100,30 @@ class MainDialog {
       onBgTap: onBgTap,
     );
 
-    _handleCommonOperate(onDismiss: onDismiss);
+    _handleCommonOperate(onDismiss: onDismiss, useSystem: useSystem);
 
     return _completer!.future;
   }
 
-  void _handleCommonOperate({required VoidCallback? onDismiss}) {
+  void _handleCommonOperate({
+    required VoidCallback? onDismiss,
+    required bool useSystem,
+  }) {
     _onDismiss = onDismiss;
+
+    if (useSystem && DialogProxy.navigatorContext != null) {
+      var tempWidget = _widget;
+      showDialog(
+        context: DialogProxy.navigatorContext!,
+        barrierColor: Colors.red,
+        barrierDismissible: false,
+        useSafeArea: false,
+        builder: (BuildContext context) {
+          return tempWidget;
+        },
+      );
+      _widget = Container();
+    }
 
     //refresh dialog
     overlayEntry.markNeedsBuild();
@@ -112,7 +132,7 @@ class MainDialog {
     _completer = Completer();
   }
 
-  Future<void> dismiss() async {
+  Future<void> dismiss({bool useSystem = false}) async {
     //dialog prepare dismiss
     _onDismiss?.call();
 
@@ -122,6 +142,10 @@ class MainDialog {
     //remove dialog
     _widget = Container();
     overlayEntry.markNeedsBuild();
+
+    if (useSystem && DialogProxy.navigatorContext != null) {
+      Navigator.pop(DialogProxy.navigatorContext!);
+    }
 
     //end waiting
     if (!(_completer?.isCompleted ?? true)) {

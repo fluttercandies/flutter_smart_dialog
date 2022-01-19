@@ -49,6 +49,7 @@ class CustomToast extends BaseDialog {
         isPenetrate: isPenetrate,
         clickBgDismiss: clickBgDismiss,
         onDismiss: null,
+        useSystem: false,
         onBgTap: () => dismiss(),
       );
     };

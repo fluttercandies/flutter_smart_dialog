@@ -50,6 +50,13 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
     // solve Flutter Inspector -> select widget mode function failure problem
     DialogProxy.instance.initialize();
 
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+      var navigator = widget.child as Navigator;
+      var key = navigator.key as GlobalKey;
+      DialogProxy.navigatorContext = key.currentContext;
+      DialogProxy.pages = navigator.pages;
+    });
+
     super.initState();
   }
 

@@ -9,6 +9,7 @@ class DialogInfo {
     required this.isUseAnimation,
     required this.type,
     required this.tag,
+    required this.useSystem,
   });
 
   final BaseDialog dialog;
@@ -20,4 +21,6 @@ class DialogInfo {
   final DialogType type;
 
   final String? tag;
+
+  final bool useSystem;
 }
