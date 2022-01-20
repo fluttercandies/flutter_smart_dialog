@@ -98,7 +98,7 @@ class SmartDialog {
   /// [keepSingle]：Default (false), true (calling [show] multiple times will not generate multiple dialogs,
   /// only single dialog will be kept), false (calling [show] multiple times will generate multiple dialogs)
   ///
-  /// [useSystem]: default (false), true (using the system dialog, the [isPenetrateTemp],[tag] param will be invalid),
+  /// [useSystem]: default (false), true (using the system dialog, [isPenetrateTemp] is invalid, [tag] and [keepSingle] are prohibited),
   /// false (using SmartDialog), this param can completely solve the page jump scene on the dialog
   ///
   /// -------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ class SmartDialog {
   /// [keepSingle]：默认（false），true（多次调用[show]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[show]会生成多个dialog）
   ///
-  /// [useSystem]：默认（false），true（使用系统dialog，[isPenetrateTemp],[tag]参数将失效），
+  /// [useSystem]：默认（false），true（使用系统dialog，[isPenetrateTemp]功能失效,[tag]和[keepSingle]禁止使用），
   /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题
   static Future<void> show({
     required Widget widget,
@@ -154,6 +154,12 @@ class SmartDialog {
     bool? keepSingle,
     bool? useSystem,
   }) {
+    assert(
+      (useSystem == true && keepSingle == null && tag == null) ||
+          (useSystem == null || useSystem == false),
+      'useSystem is true, keepSingle and tag prohibit setting values',
+    );
+
     return DialogProxy.instance.show(
       widget: widget,
       alignment: alignmentTemp ?? config.alignment,
@@ -217,7 +223,7 @@ class SmartDialog {
   /// [keepSingle]：Default (false), true (calling [showAttach] multiple times will not generate multiple dialogs,
   /// only single dialog will be kept), false (calling [showAttach] multiple times will generate multiple dialogs)
   ///
-  /// [useSystem]: default (false), true (using the system dialog, the [isPenetrateTemp],[tag] param will be invalid),
+  /// [useSystem]: default (false), true (using the system dialog, [isPenetrateTemp] is invalid, [tag] and [keepSingle] are prohibited),
   /// false (using SmartDialog), this param can completely solve the page jump scene on the dialog
   ///
   /// -------------------------------------------------------------------------------
@@ -263,7 +269,7 @@ class SmartDialog {
   /// [keepSingle]：默认（false），true（多次调用[showAttach]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[showAttach]会生成多个dialog）
   ///
-  /// [useSystem]：默认（false），true（使用系统dialog，[isPenetrateTemp],[tag]参数将失效），
+  /// [useSystem]：默认（false），true（使用系统dialog，[isPenetrateTemp]功能失效,[tag]和[keepSingle]禁止使用），
   /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题
   static Future<void> showAttach({
     required BuildContext? targetContext,
@@ -286,8 +292,16 @@ class SmartDialog {
     bool? keepSingle,
     bool? useSystem,
   }) {
-    assert(targetContext != null || target != null,
-        'targetContext and target, cannot both be null');
+    assert(
+      targetContext != null || target != null,
+      'targetContext and target, cannot both be null',
+    );
+    assert(
+      (useSystem == true && keepSingle == null && tag == null) ||
+          (useSystem == null || useSystem == false),
+      'useSystem is true, keepSingle and tag prohibit setting values',
+    );
+
     return DialogProxy.instance.showAttach(
       targetContext: targetContext,
       target: target,

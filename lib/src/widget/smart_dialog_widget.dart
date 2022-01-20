@@ -141,16 +141,16 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
         : ScaleTransition(scale: animation, child: widget.child);
 
     return widget.alignment == Alignment.center
-        //中间弹窗动画的使用需要分情况 渐隐和缩放俩种
+    //中间弹窗动画的使用需要分情况 渐隐和缩放俩种
         ? centerTransition
-        //除了中间弹窗,其它的都使用位移动画
+    //除了中间弹窗,其它的都使用位移动画
         : SlideTransition(
-            position: Tween<Offset>(
-              begin: _offset,
-              end: Offset.zero,
-            ).animate(_ctrlBody),
-            child: widget.child,
-          );
+      position: Tween<Offset>(
+        begin: _offset,
+        end: Offset.zero,
+      ).animate(_ctrlBody),
+      child: widget.child,
+    );
   }
 
   ///处理下内容widget动画方向
@@ -181,7 +181,7 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   ///等待动画结束,关闭动画资源
   Future<void> dismiss() async {
-    if (_closing) return;
+    if (_closing || !mounted) return;
 
     _closing = true;
     //结束动画
