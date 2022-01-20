@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_loading.dart';
@@ -14,7 +16,7 @@ class DialogProxy {
   late OverlayEntry entryToast;
   late OverlayEntry entryLoading;
   late Map<String, DialogInfo> dialogMap;
-  late List<DialogInfo> dialogList;
+  late Queue<DialogInfo> dialogQueue;
   late CustomToast _toast;
   late CustomLoading _loading;
 
@@ -28,13 +30,12 @@ class DialogProxy {
 
   static late BuildContext context;
   static BuildContext? navigatorContext;
-  static List<Page<dynamic>>? pages;
 
   DialogProxy._internal() {
     config = Config();
 
     dialogMap = {};
-    dialogList = [];
+    dialogQueue = DoubleLinkedQueue();
   }
 
   void initialize() {
@@ -214,10 +215,10 @@ class DialogProxy {
   }
 
   Future<void> _closeAllAttach({SmartStatus? status}) async {
-    var length = dialogList.length;
+    int length = dialogQueue.length;
     for (var i = 0; i < length; i++) {
-      if (dialogList.length - 1 < 0) return;
-      var item = dialogList[dialogList.length - 1];
+      if (dialogQueue.length == 0) return;
+      var item = dialogQueue.last;
       //only close attach dialog
       if (item.type == DialogType.attach) {
         await dismiss(status: status);
@@ -229,10 +230,10 @@ class DialogProxy {
   }
 
   Future<void> _closeAllDialog({SmartStatus? status}) async {
-    var length = dialogList.length;
+    int length = dialogQueue.length;
     for (var i = 0; i < length; i++) {
-      if (dialogList.length - 1 < 0) return;
-      var item = dialogList[dialogList.length - 1];
+      if (dialogQueue.length == 0) return;
+      var item = dialogQueue.last;
 
       await dismiss(status: status);
       if (item.isUseAnimation) {

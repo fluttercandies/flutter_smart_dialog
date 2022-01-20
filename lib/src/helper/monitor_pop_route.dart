@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
-import 'package:flutter_smart_dialog/src/smart_dialog.dart';
+import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 
 typedef PopTestFunc = bool Function();
 
@@ -17,7 +17,8 @@ class MonitorPopRoute with WidgetsBindingObserver {
 
   @override
   Future<bool> didPopRoute() async {
-    if (SmartDialog.config.isExist) {
+    // handle contain system dialog and common condition
+    if (RouteRecord.instance.handleSmartDialog()) {
       DialogProxy.instance.dismiss(back: true);
       return true;
     }

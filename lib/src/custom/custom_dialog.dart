@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
+import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
@@ -23,8 +24,6 @@ class CustomDialog extends BaseDialog {
   }) : super(config: config, overlayEntry: overlayEntry);
 
   static MainDialog? mainDialogSingle;
-
-  final String tagKeepSingle = 'keepSingle';
 
   DateTime? clickBgLastTime;
 
@@ -128,21 +127,19 @@ class CustomDialog extends BaseDialog {
 
   static Future<void> dismiss({bool back = false, String? tag}) async {
     var proxy = DialogProxy.instance;
-    var length = proxy.dialogList.length;
-    if (length == 0) return;
+    if (proxy.dialogQueue.length == 0) return;
 
-    var info =
-        (tag == null ? proxy.dialogList[length - 1] : proxy.dialogMap[tag]);
+    var info = (tag == null ? proxy.dialogQueue.last : proxy.dialogMap[tag]);
     if (info == null || (!info.backDismiss && back)) return;
 
     //handle close dialog
     if (info.tag != null) proxy.dialogMap.remove(info.tag);
-    proxy.dialogList.remove(info);
+    proxy.dialogQueue.remove(info);
     var customDialog = info.dialog;
     await customDialog.mainDialog.dismiss(useSystem: info.useSystem);
     customDialog.overlayEntry.remove();
 
-    if (proxy.dialogList.length != 0) return;
+    if (proxy.dialogQueue.length != 0) return;
     proxy.config.isExistMain = false;
     if (!proxy.config.isExistLoading) {
       proxy.config.isExist = false;
@@ -189,17 +186,17 @@ class CustomDialog extends BaseDialog {
 
     if (keepSingle) {
       DialogInfo dialogInfo;
-      if (proxy.dialogMap[tagKeepSingle] == null) {
+      if (proxy.dialogMap[SmartTag.keepSingle] == null) {
         dialogInfo = DialogInfo(
           dialog: this,
           backDismiss: backDismiss,
           isUseAnimation: isUseAnimation,
           type: type,
-          tag: tagKeepSingle,
+          tag: SmartTag.keepSingle,
           useSystem: useSystem,
         );
-        proxy.dialogList.add(dialogInfo);
-        proxy.dialogMap[tagKeepSingle] = dialogInfo;
+        proxy.dialogQueue.add(dialogInfo);
+        proxy.dialogMap[SmartTag.keepSingle] = dialogInfo;
         Overlay.of(DialogProxy.context)!.insert(
           overlayEntry,
           below: proxy.entryLoading,
@@ -220,7 +217,7 @@ class CustomDialog extends BaseDialog {
       tag: tag,
       useSystem: useSystem,
     );
-    proxy.dialogList.add(dialogInfo);
+    proxy.dialogQueue.add(dialogInfo);
     if (tag != null) proxy.dialogMap[tag] = dialogInfo;
     // insert the dialog carrier into the page
     Overlay.of(DialogProxy.context)!.insert(

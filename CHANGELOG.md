@@ -1,6 +1,8 @@
 # [3.3.x]
 
 - Notice: 'antiShake' renamed 'debounce'
+- Add use System dialog feature
+- Solve the page jump scene on the dialog (useSystem)
 - Fix bug
 
 # [3.2.x]

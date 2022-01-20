@@ -77,22 +77,13 @@ class SmartDialogPage extends StatelessWidget {
 
   void _showAttach(BuildContext ctx) {
     var attachDialog = (BuildContext context) {
-      Navigator.push(
-        ctx,
-        MaterialPageRoute(builder: (context) {
-          return Center(
-            child: Container(width: 100, height: 100, color: Colors.red),
-          );
-        }),
+      SmartDialog.showAttach(
+        targetContext: context,
+        isPenetrateTemp: true,
+        alignmentTemp: Alignment.topCenter,
+        useSystem: true,
+        widget: Container(width: 100, height: 100, color: Colors.red),
       );
-
-      // SmartDialog.showAttach(
-      //   targetContext: context,
-      //   isPenetrateTemp: true,
-      //   alignmentTemp: Alignment.topCenter,
-      //   useSystem: true,
-      //   widget: Container(width: 100, height: 100, color: Colors.red),
-      // );
     };
 
     //target widget

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoadingWidget extends StatelessWidget {
@@ -17,13 +16,13 @@ class LoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _buildBg(children: [
-      //加载动画
+      //loading animation
       CircularProgressIndicator(
         strokeWidth: 3,
         valueColor: AlwaysStoppedAnimation(Colors.white),
       ),
 
-      //文字
+      //msg
       Container(
         margin: EdgeInsets.only(top: 20),
         child: Text(msg, style: TextStyle(color: Colors.white)),

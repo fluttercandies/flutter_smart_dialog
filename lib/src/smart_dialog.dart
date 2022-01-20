@@ -99,8 +99,7 @@ class SmartDialog {
   /// only single dialog will be kept), false (calling [show] multiple times will generate multiple dialogs)
   ///
   /// [useSystem]: default (false), true (using the system dialog, the [isPenetrateTemp],[tag] param will be invalid),
-  /// false (using SmartDialog's pop-up window), this param can completely solve the page jump scene on the pop-up window;
-  /// Note: If you rewrite the routing module of MaterialApp, please make sure to assign GlobalKey to the key of Navigator, otherwise the param may be invalid
+  /// false (using SmartDialog), this param can completely solve the page jump scene on the dialog
   ///
   /// -------------------------------------------------------------------------------
   ///
@@ -137,8 +136,7 @@ class SmartDialog {
   /// false（多次调用[show]会生成多个dialog）
   ///
   /// [useSystem]：默认（false），true（使用系统dialog，[isPenetrateTemp],[tag]参数将失效），
-  /// false（使用SmartDialog弹窗），此参数可彻底解决在弹窗上跳转页面问题；
-  /// 注意：如果你重写MaterialApp的路由模块，请确保给Navigator的key赋值GlobalKey，不然该参数可能会失效
+  /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题
   static Future<void> show({
     required Widget widget,
     AlignmentGeometry? alignmentTemp,
@@ -220,8 +218,7 @@ class SmartDialog {
   /// only single dialog will be kept), false (calling [showAttach] multiple times will generate multiple dialogs)
   ///
   /// [useSystem]: default (false), true (using the system dialog, the [isPenetrateTemp],[tag] param will be invalid),
-  /// false (using SmartDialog's pop-up window), this param can completely solve the page jump scene on the pop-up window;
-  /// Note: If you rewrite the routing module of MaterialApp, please make sure to assign GlobalKey to the key of Navigator, otherwise the param may be invalid
+  /// false (using SmartDialog), this param can completely solve the page jump scene on the dialog
   ///
   /// -------------------------------------------------------------------------------
   ///
@@ -267,8 +264,7 @@ class SmartDialog {
   /// false（多次调用[showAttach]会生成多个dialog）
   ///
   /// [useSystem]：默认（false），true（使用系统dialog，[isPenetrateTemp],[tag]参数将失效），
-  /// false（使用SmartDialog弹窗），此参数可彻底解决在弹窗上跳转页面问题；
-  /// 注意：如果你重写MaterialApp的路由模块，请确保给Navigator的key赋值GlobalKey，不然该参数可能会失效
+  /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题
   static Future<void> showAttach({
     required BuildContext? targetContext,
     required Widget widget,

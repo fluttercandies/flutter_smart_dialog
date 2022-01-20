@@ -7,6 +7,7 @@ class ToastWidget extends StatelessWidget {
     required this.alignment,
   }) : super(key: key);
 
+  ///toast msg
   final String msg;
 
   ///toast location

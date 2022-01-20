@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
+import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 import 'package:flutter_smart_dialog/src/smart_dialog.dart';
 
 import 'dialog_proxy.dart';
@@ -7,7 +9,11 @@ import 'dialog_proxy.dart';
 class SmartNavigatorObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    if (DialogProxy.instance.dialogList.isNotEmpty) {}
+    if (DialogProxy.navigatorContext == null) {
+      DialogProxy.navigatorContext = navigator?.context;
+    }
+
+    RouteRecord.instance.push(route);
   }
 
   @override
@@ -18,9 +24,23 @@ class SmartNavigatorObserver extends NavigatorObserver {
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) async {
-    print('${DialogProxy.pages?.length}');
-    if (!SmartDialog.config.isExist) return;
+    RouteRecord.instance.pop(route);
 
-    DialogProxy.instance.dismiss(status: SmartStatus.allDialog);
+    if (!SmartDialog.config.isExist ||
+        route.settings.name == SmartTag.systemDialog) return;
+
+    //smart close dialog
+    var dialogQueue = DialogProxy.instance.dialogQueue;
+    int length = dialogQueue.length;
+    for (var i = 0; i < length; i++) {
+      if (dialogQueue.length == 0) return;
+      var item = dialogQueue.last;
+      if (item.useSystem) return;
+
+      await DialogProxy.instance.dismiss(status: SmartStatus.dialog);
+      if (item.isUseAnimation) {
+        await Future.delayed(Duration(milliseconds: 100));
+      }
+    }
   }
 }

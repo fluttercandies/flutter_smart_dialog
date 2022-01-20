@@ -51,10 +51,11 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
     DialogProxy.instance.initialize();
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
-      var navigator = widget.child as Navigator;
-      var key = navigator.key as GlobalKey;
-      DialogProxy.navigatorContext = key.currentContext;
-      DialogProxy.pages = navigator.pages;
+      try {
+        var navigator = widget.child as Navigator;
+        var key = navigator.key as GlobalKey;
+        DialogProxy.navigatorContext = key.currentContext;
+      } catch (e) {}
     });
 
     super.initState();
