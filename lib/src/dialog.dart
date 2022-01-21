@@ -1,22 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/navigator_observer.dart';
+import 'package:flutter_smart_dialog/src/widget/toast_widget.dart';
 
 import 'helper/dialog_proxy.dart';
 import 'helper/monitor_pop_route.dart';
+import 'widget/loading_widget.dart';
 
-typedef SmartStyleBuilder = Widget Function(Widget child);
+typedef FlutterSmartToastBuilder = Widget Function(
+  String msg,
+  AlignmentGeometry alignment,
+);
+typedef FlutterSmartLoadingBuilder = Widget Function(
+  String msg,
+  Color background,
+);
+typedef FlutterSmartStyleBuilder = Widget Function(Widget child);
 
 class FlutterSmartDialog extends StatefulWidget {
   FlutterSmartDialog({
     Key? key,
     required this.child,
-    //Compatible with cupertino style
+    this.toastBuilder,
+    this.loadingBuilder,
     this.styleBuilder,
   }) : super(key: key);
 
   final Widget? child;
 
-  final SmartStyleBuilder? styleBuilder;
+  ///set default toast widget
+  final FlutterSmartToastBuilder? toastBuilder;
+
+  ///set default loading widget
+  final FlutterSmartLoadingBuilder? loadingBuilder;
+
+  ///Compatible with cupertino style
+  final FlutterSmartStyleBuilder? styleBuilder;
 
   @override
   _FlutterSmartDialogState createState() => _FlutterSmartDialogState();
@@ -28,17 +46,31 @@ class FlutterSmartDialog extends StatefulWidget {
   ///recommend the way of init
   static TransitionBuilder init({
     TransitionBuilder? builder,
+    //set default toast widget
+    FlutterSmartToastBuilder? toastBuilder,
+    //set default loading widget
+    FlutterSmartLoadingBuilder? loadingBuilder,
     //Compatible with cupertino style
-    SmartStyleBuilder? styleBuilder,
+    FlutterSmartStyleBuilder? styleBuilder,
   }) {
     monitor();
 
     return (BuildContext context, Widget? child) {
       return builder == null
-          ? FlutterSmartDialog(child: child, styleBuilder: styleBuilder)
+          ? FlutterSmartDialog(
+              toastBuilder: toastBuilder,
+              loadingBuilder: loadingBuilder,
+              styleBuilder: styleBuilder,
+              child: child,
+            )
           : builder(
               context,
-              FlutterSmartDialog(child: child, styleBuilder: styleBuilder),
+              FlutterSmartDialog(
+                toastBuilder: toastBuilder,
+                loadingBuilder: loadingBuilder,
+                styleBuilder: styleBuilder,
+                child: child,
+              ),
             );
     };
   }
@@ -47,9 +79,6 @@ class FlutterSmartDialog extends StatefulWidget {
 class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
   @override
   void initState() {
-    // solve Flutter Inspector -> select widget mode function failure problem
-    DialogProxy.instance.initialize();
-
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       try {
         var navigator = widget.child as Navigator;
@@ -57,6 +86,20 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
         DialogProxy.contextNavigator = key.currentContext;
       } catch (e) {}
     });
+
+    var proxy = DialogProxy.instance;
+    // solve Flutter Inspector -> select widget mode function failure problem
+    proxy.initialize();
+    defaultToast(String msg, AlignmentGeometry alignment) {
+      return ToastWidget(msg: msg, alignment: alignment);
+    }
+
+    defaultLoading(String msg, Color background) {
+      return LoadingWidget(msg: msg, background: background);
+    }
+
+    proxy.toastBuilder = widget.toastBuilder ?? defaultToast;
+    proxy.loadingBuilder = widget.loadingBuilder ?? defaultLoading;
 
     super.initState();
   }

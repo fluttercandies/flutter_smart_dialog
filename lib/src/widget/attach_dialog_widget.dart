@@ -5,7 +5,9 @@ import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/location.dart';
 
 typedef HighlightBuilder = Positioned Function(
-    Offset targetOffset, Size targetSize);
+  Offset targetOffset,
+  Size targetSize,
+);
 
 class AttachDialogWidget extends StatefulWidget {
   const AttachDialogWidget({

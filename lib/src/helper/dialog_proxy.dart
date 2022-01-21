@@ -8,6 +8,7 @@ import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 
+import '../dialog.dart';
 import '../smart_dialog.dart';
 import 'config.dart';
 
@@ -30,6 +31,12 @@ class DialogProxy {
 
   static late BuildContext contextOverlay;
   static BuildContext? contextNavigator;
+
+  ///set default loading widget
+  late FlutterSmartLoadingBuilder loadingBuilder;
+
+  ///set default toast widget
+  late FlutterSmartToastBuilder toastBuilder;
 
   DialogProxy._internal() {
     config = Config();
