@@ -54,7 +54,7 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
       try {
         var navigator = widget.child as Navigator;
         var key = navigator.key as GlobalKey;
-        DialogProxy.navigatorContext = key.currentContext;
+        DialogProxy.contextNavigator = key.currentContext;
       } catch (e) {}
     });
 
@@ -77,7 +77,7 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
 
       //provided separately for custom dialog
       OverlayEntry(builder: (BuildContext context) {
-        DialogProxy.context = context;
+        DialogProxy.contextOverlay = context;
         return Container();
       }),
 

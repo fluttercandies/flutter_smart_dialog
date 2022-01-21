@@ -9,20 +9,35 @@ import 'widget/loading_widget.dart';
 import 'widget/toast_widget.dart';
 
 enum SmartStatus {
-  /// close toast
+  /// close toast（showToast）
   ///
-  /// 关闭toast
+  /// 关闭toast（showToast）
   toast,
 
-  /// close loading
+  /// close loading（showLoading）
   ///
-  /// 关闭loading
+  /// 关闭loading（showLoading）
   loading,
 
-  /// close single dialog
+  /// close single custom dialog（show）
   ///
-  /// 关闭单个dialog
+  /// 关闭单个custom dialog（show）
+  custom,
+
+  /// close single attach dialog（showAttach）
+  ///
+  /// 关闭单个attach dialog（showAttach）
+  attach,
+
+  /// close single dialog（attach or custom）
+  ///
+  /// 关闭单个dialog（attach或custom）
   dialog,
+
+  /// close all custom dialog, but not close toast,loading and attach dialog
+  ///
+  /// 关闭打开的所有custom dialog，但是不关闭toast，loading和attach dialog
+  allCustom,
 
   /// close all attach dialog, but not close toast,loading and custom dialog
   ///
@@ -538,7 +553,7 @@ class SmartDialog {
         await instance.dismiss(status: SmartStatus.loading);
       } else {
         await instance.dismiss(status: SmartStatus.loading);
-        await instance.dismiss(status: SmartStatus.dialog, tag: tag);
+        await instance.dismiss(status: SmartStatus.allDialog, tag: tag);
         await instance.dismiss(status: SmartStatus.toast);
       }
       return;

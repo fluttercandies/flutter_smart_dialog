@@ -28,14 +28,14 @@ class DialogProxy {
 
   static DialogProxy get instance => _instance ??= DialogProxy._internal();
 
-  static late BuildContext context;
-  static BuildContext? navigatorContext;
+  static late BuildContext contextOverlay;
+  static BuildContext? contextNavigator;
 
   DialogProxy._internal() {
     config = Config();
 
     dialogMap = {};
-    dialogQueue = DoubleLinkedQueue();
+    dialogQueue = ListQueue();
   }
 
   void initialize() {
@@ -201,44 +201,22 @@ class DialogProxy {
       var loading = config.isExistLoading;
       if (!loading) await CustomDialog.dismiss(tag: tag, back: back);
       if (loading) await _loading.dismiss(back: back);
-    } else if (status == SmartStatus.dialog) {
-      await CustomDialog.dismiss(tag: tag, back: back);
-    } else if (status == SmartStatus.loading) {
-      await _loading.dismiss(back: back);
     } else if (status == SmartStatus.toast) {
       await _toast.dismiss();
-    } else if (status == SmartStatus.allAttach) {
-      await _closeAllAttach(status: SmartStatus.dialog);
+    } else if (status == SmartStatus.loading) {
+      await _loading.dismiss(back: back);
+    } else if (status == SmartStatus.dialog) {
+      await CustomDialog.dismiss(tag: tag, back: back);
+    } else if (status == SmartStatus.custom) {
+      await CustomDialog.dismiss(type: DialogType.custom, tag: tag);
+    } else if (status == SmartStatus.attach) {
+      await CustomDialog.dismiss(type: DialogType.attach, tag: tag);
     } else if (status == SmartStatus.allDialog) {
-      await _closeAllDialog(status: SmartStatus.dialog);
-    }
-  }
-
-  Future<void> _closeAllAttach({SmartStatus? status}) async {
-    int length = dialogQueue.length;
-    for (var i = 0; i < length; i++) {
-      if (dialogQueue.length == 0) return;
-      var item = dialogQueue.last;
-      //only close attach dialog
-      if (item.type == DialogType.attach) {
-        await dismiss(status: status);
-        if (item.isUseAnimation) {
-          await Future.delayed(Duration(milliseconds: 100));
-        }
-      }
-    }
-  }
-
-  Future<void> _closeAllDialog({SmartStatus? status}) async {
-    int length = dialogQueue.length;
-    for (var i = 0; i < length; i++) {
-      if (dialogQueue.length == 0) return;
-      var item = dialogQueue.last;
-
-      await dismiss(status: status);
-      if (item.isUseAnimation) {
-        await Future.delayed(Duration(milliseconds: 100));
-      }
+      await CustomDialog.dismiss(type: DialogType.allDialog);
+    } else if (status == SmartStatus.allCustom) {
+      await CustomDialog.dismiss(type: DialogType.allCustom);
+    } else if (status == SmartStatus.allAttach) {
+      await CustomDialog.dismiss(type: DialogType.allAttach);
     }
   }
 }

@@ -12,8 +12,12 @@ import '../data/base_dialog.dart';
 import 'main_dialog.dart';
 
 enum DialogType {
+  dialog,
   custom,
   attach,
+  allDialog,
+  allCustom,
+  allAttach,
 }
 
 ///main function : custom dialog
@@ -125,27 +129,6 @@ class CustomDialog extends BaseDialog {
     );
   }
 
-  static Future<void> dismiss({bool back = false, String? tag}) async {
-    var proxy = DialogProxy.instance;
-    if (proxy.dialogQueue.length == 0) return;
-
-    var info = (tag == null ? proxy.dialogQueue.last : proxy.dialogMap[tag]);
-    if (info == null || (!info.backDismiss && back)) return;
-
-    //handle close dialog
-    if (info.tag != null) proxy.dialogMap.remove(info.tag);
-    proxy.dialogQueue.remove(info);
-    var customDialog = info.dialog;
-    await customDialog.mainDialog.dismiss(useSystem: info.useSystem);
-    customDialog.overlayEntry.remove();
-
-    if (proxy.dialogQueue.length != 0) return;
-    proxy.config.isExistMain = false;
-    if (!proxy.config.isExistLoading) {
-      proxy.config.isExist = false;
-    }
-  }
-
   bool _handleMustOperate({
     required bool isUseAnimation,
     required String? tag,
@@ -197,7 +180,7 @@ class CustomDialog extends BaseDialog {
         );
         proxy.dialogQueue.add(dialogInfo);
         proxy.dialogMap[SmartTag.keepSingle] = dialogInfo;
-        Overlay.of(DialogProxy.context)!.insert(
+        Overlay.of(DialogProxy.contextOverlay)!.insert(
           overlayEntry,
           below: proxy.entryLoading,
         );
@@ -220,7 +203,7 @@ class CustomDialog extends BaseDialog {
     proxy.dialogQueue.add(dialogInfo);
     if (tag != null) proxy.dialogMap[tag] = dialogInfo;
     // insert the dialog carrier into the page
-    Overlay.of(DialogProxy.context)!.insert(
+    Overlay.of(DialogProxy.contextOverlay)!.insert(
       overlayEntry,
       below: proxy.entryLoading,
     );
@@ -247,5 +230,78 @@ class CustomDialog extends BaseDialog {
     if (isShake) return false;
 
     return true;
+  }
+
+  static Future<void> dismiss({
+    DialogType type = DialogType.dialog,
+    bool back = false,
+    String? tag,
+  }) async {
+    if (type == DialogType.dialog) {
+      await _closeSingle(DialogType.dialog, back, tag);
+    } else if (type == DialogType.custom) {
+      await _closeSingle(DialogType.custom, back, tag);
+    } else if (type == DialogType.attach) {
+      await _closeSingle(DialogType.attach, back, tag);
+    } else if (type == DialogType.allDialog) {
+      await _closeAll(DialogType.dialog, back, tag);
+    } else if (type == DialogType.allCustom) {
+      await _closeAll(DialogType.custom, back, tag);
+    } else if (type == DialogType.allAttach) {
+      await _closeAll(DialogType.attach, back, tag);
+    }
+  }
+
+  static Future<void> _closeAll(DialogType type, bool back, String? tag) async {
+    int length = DialogProxy.instance.dialogQueue.length;
+    for (int i = 0; i < length; i++) {
+      await _closeSingle(type, back, tag);
+    }
+  }
+
+  static Future<void> _closeSingle(
+    DialogType type,
+    bool back,
+    String? tag,
+  ) async {
+    var info = _getDialog(type, back, tag);
+    if (info == null) return;
+
+    //handle close dialog
+    var proxy = DialogProxy.instance;
+    if (info.tag != null) proxy.dialogMap.remove(info.tag);
+    proxy.dialogQueue.remove(info);
+    var customDialog = info.dialog;
+    await customDialog.mainDialog.dismiss(useSystem: info.useSystem);
+    customDialog.overlayEntry.remove();
+
+    if (proxy.dialogQueue.isNotEmpty) return;
+    proxy.config.isExistMain = false;
+    if (!proxy.config.isExistLoading) proxy.config.isExist = false;
+  }
+
+  static DialogInfo? _getDialog(DialogType type, bool back, String? tag) {
+    var proxy = DialogProxy.instance;
+    if (proxy.dialogQueue.isEmpty) return null;
+
+    DialogInfo? info;
+    var dialogQueue = proxy.dialogQueue;
+    var list = dialogQueue.toList();
+    int length = dialogQueue.length;
+    for (var i = length - 1; i >= 0; i--) {
+      if (dialogQueue.isEmpty) break;
+      var item = list[i];
+      if (type == DialogType.dialog || item.type == type) {
+        info = item;
+        break;
+      }
+    }
+
+    DialogInfo? infoMap = tag == null ? null : proxy.dialogMap[tag];
+    info = infoMap ?? info;
+    //handle prohibiting back event
+    if (info != null && (!info.backDismiss && back)) return null;
+
+    return info;
   }
 }

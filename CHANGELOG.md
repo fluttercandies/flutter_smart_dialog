@@ -3,6 +3,7 @@
 - Notice: 'antiShake' renamed 'debounce'
 - Add use System dialog feature
 - Solve the page jump scene on the dialog (useSystem)
+- SmartStatus add status：custom，attach，allCustom
 - Fix bug
 
 # [3.2.x]

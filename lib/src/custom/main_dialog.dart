@@ -113,10 +113,10 @@ class MainDialog {
   }) {
     _onDismiss = onDismiss;
 
-    if (useSystem && DialogProxy.navigatorContext != null) {
+    if (useSystem && DialogProxy.contextNavigator != null) {
       var tempWidget = _widget;
       showDialog(
-        context: DialogProxy.navigatorContext!,
+        context: DialogProxy.contextNavigator!,
         barrierColor: Colors.transparent,
         barrierDismissible: false,
         useSafeArea: false,
@@ -146,8 +146,8 @@ class MainDialog {
     _widget = Container();
     overlayEntry.markNeedsBuild();
 
-    if (useSystem && DialogProxy.navigatorContext != null) {
-      Navigator.pop(DialogProxy.navigatorContext!);
+    if (useSystem && DialogProxy.contextNavigator != null) {
+      Navigator.pop(DialogProxy.contextNavigator!);
     }
 
     //end waiting
