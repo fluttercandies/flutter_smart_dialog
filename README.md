@@ -39,6 +39,8 @@ An elegant Flutter Dialog solution.
 
 ## Initialization
 
+> **initialization**
+
 ```dart
 void main() => runApp(MyApp());
 
@@ -55,6 +57,47 @@ class MyApp extends StatelessWidget {
   }
 }
 ```
+
+> **Advanced initialization: configure global custom Loading and Toast**
+
+SmartDialog's showLoading and showToast provide a default style. Of course, custom param are definitely supported.
+
+- SmartDialog custom Loading or Toast is very simple: However, when using it, it may make you feel a little troublesome
+- for example
+  - Use custom Loading: `SmartDialog.showLoading(widget: CustomLoadingWidget);`
+  - The effect we want must be like this:  `SmartDialog.showLoading();`
+- In view of the above considerations, I added the function of setting custom default Loading and Toast styles at the entrance
+
+Let me show you the following
+
+- The entry needs to be configured: implement toastBuilder and loadingBuilder, and pass in custom Toast and Loading
+
+
+````dart
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: HomePage,
+      // here
+      navigatorObservers: [FlutterSmartDialog.observer],
+      // here
+      builder: FlutterSmartDialog.init(
+        //default toast widget
+        toastBuilder: (String msg, AlignmentGeometry alignment) {
+          return CustomToastWidget(msg: msg, alignment: alignment);
+        },
+        //default loading widget
+        loadingBuilder: (String msg, Color background) {
+          return CustomLoadingWidget(msg: msg, background: background);
+        },
+      ),
+    );
+  }
+}
+````
 
 ## Easy usage
 
@@ -94,115 +137,6 @@ SmartDialog.show(widget: custom, isLoadingTemp: false);
 ```
 
 ![dialogEasy](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211102232821.gif)
-
-## Toast and Loading default styles
-
-As demonstrated above, simple code can call Toast and loading; you may have found that their style is a default style provided internally
-
-- Although custom widget parameters are also provided, in this case, you may need to encapsulate a method separately, and it is not suitable to directly call SmartDialog.showToast or SmartDialog.showLoading
-- Because if you also use showToast or showLoading, you need to pass in a custom widget, which is usually more troublesome to use
-
-In view of the above considerations, I added the function of customizing the default Loading and Toast styles at the entrance.
-
-Let me show you the following
-
-- The entry needs to be configured: implement toastBuilder and loadingBuilder, and pass in custom Toast and Loading controls
-  - The parameters of the builder callback are passed from showToast and showLoading, you can use it or not, there is no mandatory
-  - But I think toast-style msg parameters will definitely be used by everyone. . .
-
-
-````dart
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomePage,
-      // here
-      navigatorObservers: [FlutterSmartDialog.observer],
-      // here
-      builder: FlutterSmartDialog.init(
-        //default toast widget
-        toastBuilder: (String msg, AlignmentGeometry alignment) {
-          return ToastWidget(msg: msg, alignment: alignment);
-        },
-        //default loading widget
-        loadingBuilder: (String msg, Color background) {
-          return LoadingWidget(msg: msg, background: background);
-        },
-      ),
-    );
-  }
-}
-````
-
-- This is the entrance, the incoming custom Toast and Loading
-
-````dart
-class LoadingWidget extends StatelessWidget {
-  LoadingWidget({
-    Key? key,
-    required this.msg,
-    required this.background,
-  }) : super(key: key);
-
-  final String msg;
-  final Color background;
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildBg(children: [
-      CircularProgressIndicator(
-        strokeWidth: 3,
-        valueColor: AlwaysStoppedAnimation(Colors.white),
-      ),
-      Container(
-        margin: EdgeInsets.only(top: 20),
-        child: Text(msg, style: TextStyle(color: Colors.white)),
-      ),
-    ]);
-  }
-
-  Widget _buildBg({required List<Widget> children}) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
-      decoration: BoxDecoration(
-        color: background,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Column(mainAxisSize: MainAxisSize.min, children: children),
-    );
-  }
-}
-
-class ToastWidget extends StatelessWidget {
-  ToastWidget({
-    Key? key,
-    required this.msg,
-    required this.alignment,
-  }) : super(key: key);
-
-  final String msg;
-  final AlignmentGeometry alignment;
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: alignment,
-      child: Container(
-        margin: EdgeInsets.symmetric(horizontal: 30, vertical: 50),
-        padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text('$msg', style: TextStyle(color: Colors.white)),
-      ),
-    );
-  }
-}
-````
 
 # You may have questions
 
