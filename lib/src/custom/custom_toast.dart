@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
@@ -10,7 +12,7 @@ class CustomToast extends BaseDialog {
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
 
-  List<Future<void> Function()> _toastList = [];
+  Queue<Future<void> Function()> _toastQueue = ListQueue();
 
   DateTime? _lastTime;
 
@@ -70,37 +72,34 @@ class CustomToast extends BaseDialog {
     required Duration time,
     required Function() onShowToast,
   }) async {
-    _toastList.add(() async {
+    _toastQueue.add(() async {
       //handling special circumstances
-      if (_toastList.isEmpty) return;
-
+      if (_toastQueue.isEmpty) return;
       onShowToast();
-
       await Future.delayed(time);
-      //invoke next toast
-      if (_toastList.isNotEmpty) _toastList.removeAt(0);
       await dismiss();
 
-      if (_toastList.isNotEmpty) await _toastList[0]();
+      //remove current toast
+      if (_toastQueue.isNotEmpty) _toastQueue.removeFirst();
+      //invoke next toast
+      if (_toastQueue.isNotEmpty) await _toastQueue.first();
     });
 
-    if (_toastList.length == 1) await _toastList[0]();
+    if (_toastQueue.length == 1) await _toastQueue.first();
   }
 
   Future<void> _firstToast({
     required Duration time,
     required Function() onShowToast,
   }) async {
-    if (_toastList.isNotEmpty) return;
+    if (_toastQueue.isNotEmpty) return;
 
-    _toastList.add(() async {});
-
+    _toastQueue.add(() async {});
     onShowToast();
-
     await Future.delayed(time);
     await dismiss();
 
-    _toastList.removeLast();
+    _toastQueue.removeLast();
   }
 
   Future<void> _lastToast({
@@ -109,42 +108,42 @@ class CustomToast extends BaseDialog {
   }) async {
     onShowToast();
 
-    _toastList.add(() async {});
+    _toastQueue.add(() async {});
     await Future.delayed(time);
-    if (_toastList.length == 1) {
-      await dismiss();
-    }
-    _toastList.removeLast();
+    if (_toastQueue.length == 1) await dismiss();
+
+    _toastQueue.removeLast();
   }
 
   Future<void> _firstAndLastToast({
     required Duration time,
     required Function() onShowToast,
   }) async {
-    _toastList.add(() async {
+    _toastQueue.add(() async {
       //handling special circumstances
-      if (_toastList.isEmpty) return;
+      if (_toastQueue.isEmpty) return;
 
       onShowToast();
-
       await Future.delayed(time);
-      //invoke next toast
-      if (_toastList.isNotEmpty) _toastList.removeAt(0);
       await dismiss();
 
-      if (_toastList.isNotEmpty) await _toastList[0]();
+      //remove current toast
+      if (_toastQueue.isNotEmpty) _toastQueue.removeFirst();
+      //invoke next toast
+      if (_toastQueue.isNotEmpty) await _toastQueue.first();
     });
 
-    if (_toastList.length == 1) await _toastList[0]();
+    if (_toastQueue.length == 1) await _toastQueue.first();
 
-    if (_toastList.length > 2) {
-      _toastList.removeAt(1);
+    if (_toastQueue.length > 2) {
+      var list = _toastQueue.toList();
+      list.removeAt(1);
     }
   }
 
   Future<void> dismiss() async {
     await mainDialog.dismiss();
-    if (_toastList.isNotEmpty) return;
+    if (_toastQueue.isNotEmpty) return;
 
     config.isExistToast = false;
   }
