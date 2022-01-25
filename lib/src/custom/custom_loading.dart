@@ -37,6 +37,7 @@ class CustomLoading extends BaseDialog {
       animationDuration: animationDuration,
       onDismiss: null,
       useSystem: false,
+      reuse: true,
       onBgTap: () => dismiss(),
     );
   }

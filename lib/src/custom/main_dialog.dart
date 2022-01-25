@@ -42,10 +42,11 @@ class MainDialog {
     required VoidCallback onBgTap,
     required VoidCallback? onDismiss,
     required bool useSystem,
+    required bool reuse,
   }) async {
     //custom dialog
     _widget = SmartDialogWidget(
-      key: _uniqueKey,
+      key: reuse ? _uniqueKey : UniqueKey(),
       controller: _controller = SmartDialogController(),
       alignment: alignment,
       isPenetrate: isPenetrate,

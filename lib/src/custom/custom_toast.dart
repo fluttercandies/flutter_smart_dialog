@@ -12,7 +12,7 @@ class CustomToast extends BaseDialog {
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
 
-  Queue<Future<void> Function()> _toastQueue = ListQueue();
+  Queue<Future<void> Function()> _toastQueue = DoubleLinkedQueue();
 
   DateTime? _lastTime;
 
@@ -39,7 +39,7 @@ class CustomToast extends BaseDialog {
     }
     config.isExistToast = true;
 
-    var showToast = () {
+    showToast() {
       mainDialog.show(
         widget: widget,
         alignment: Alignment.center,
@@ -52,9 +52,10 @@ class CustomToast extends BaseDialog {
         clickBgDismiss: clickBgDismiss,
         onDismiss: null,
         useSystem: false,
+        reuse: false,
         onBgTap: () => dismiss(),
       );
-    };
+    }
 
     // provider multiple toast display logic
     if (type == SmartToastType.normal) {
@@ -78,11 +79,10 @@ class CustomToast extends BaseDialog {
       onShowToast();
       await Future.delayed(time);
       await dismiss();
-
       //remove current toast
       if (_toastQueue.isNotEmpty) _toastQueue.removeFirst();
       //invoke next toast
-      if (_toastQueue.isNotEmpty) await _toastQueue.first();
+      if (_toastQueue.isNotEmpty) _toastQueue.first();
     });
 
     if (_toastQueue.length == 1) await _toastQueue.first();
@@ -135,10 +135,7 @@ class CustomToast extends BaseDialog {
 
     if (_toastQueue.length == 1) await _toastQueue.first();
 
-    if (_toastQueue.length > 2) {
-      var list = _toastQueue.toList();
-      list.removeAt(1);
-    }
+    if (_toastQueue.length > 2) _toastQueue.remove(_toastQueue.elementAt(1));
   }
 
   Future<void> dismiss() async {

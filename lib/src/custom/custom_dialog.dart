@@ -69,6 +69,7 @@ class CustomDialog extends BaseDialog {
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
       useSystem: useSystem,
+      reuse: true,
       onBgTap: () {
         if (!_clickBgDebounce()) return;
         dismiss();
