@@ -121,9 +121,7 @@ class MainDialog {
         barrierDismissible: false,
         useSafeArea: false,
         routeSettings: RouteSettings(name: SmartTag.systemDialog),
-        builder: (BuildContext context) {
-          return tempWidget;
-        },
+        builder: (BuildContext context) => tempWidget,
       );
       _widget = Container();
     }

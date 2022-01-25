@@ -417,7 +417,7 @@ class SmartDialog {
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       backDismiss: backDismiss ?? true,
-      widget: widget ?? LoadingWidget(msg: msg, background: background),
+      widget: widget ?? DialogProxy.instance.loadingBuilder(msg, background),
     );
   }
 
@@ -508,7 +508,7 @@ class SmartDialog {
       time: time ?? Duration(milliseconds: 2000),
       debounce: debounceTemp ?? config.debounce,
       type: type ?? SmartToastType.normal,
-      widget: widget ?? ToastWidget(msg: msg, alignment: alignment),
+      widget: widget ?? DialogProxy.instance.toastBuilder(msg, alignment),
     );
   }
 

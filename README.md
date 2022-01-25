@@ -39,6 +39,8 @@ An elegant Flutter Dialog solution.
 
 ## Initialization
 
+> **initialization**
+
 ```dart
 void main() => runApp(MyApp());
 
@@ -55,6 +57,47 @@ class MyApp extends StatelessWidget {
   }
 }
 ```
+
+> **Advanced initialization: configure global custom Loading and Toast**
+
+SmartDialog's showLoading and showToast provide a default style. Of course, custom param are definitely supported.
+
+- SmartDialog custom Loading or Toast is very simple: However, when using it, it may make you feel a little troublesome
+- for example
+  - Use custom Loading: `SmartDialog.showLoading(widget: CustomLoadingWidget);`
+  - The effect we want must be like this:  `SmartDialog.showLoading();`
+- In view of the above considerations, I added the function of setting custom default Loading and Toast styles at the entrance
+
+Let me show you the following
+
+- The entry needs to be configured: implement toastBuilder and loadingBuilder, and pass in custom Toast and Loading
+
+
+````dart
+void main() => runApp(MyApp());
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: HomePage,
+      // here
+      navigatorObservers: [FlutterSmartDialog.observer],
+      // here
+      builder: FlutterSmartDialog.init(
+        //default toast widget
+        toastBuilder: (String msg, AlignmentGeometry alignment) {
+          return CustomToastWidget(msg: msg, alignment: alignment);
+        },
+        //default loading widget
+        loadingBuilder: (String msg, Color background) {
+          return CustomLoadingWidget(msg: msg, background: background);
+        },
+      ),
+    );
+  }
+}
+````
 
 ## Easy usage
 
