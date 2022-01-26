@@ -49,7 +49,6 @@ class CustomDialog extends BaseDialog {
     required bool useSystem,
   }) async {
     if (!_handleMustOperate(
-      isUseAnimation: isUseAnimation,
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
@@ -99,7 +98,6 @@ class CustomDialog extends BaseDialog {
     required bool useSystem,
   }) async {
     if (!_handleMustOperate(
-      isUseAnimation: isUseAnimation,
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
@@ -131,7 +129,6 @@ class CustomDialog extends BaseDialog {
   }
 
   bool _handleMustOperate({
-    required bool isUseAnimation,
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
@@ -144,7 +141,6 @@ class CustomDialog extends BaseDialog {
 
     //handle dialog stack
     _handleDialogStack(
-      isUseAnimation: isUseAnimation,
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
@@ -159,7 +155,6 @@ class CustomDialog extends BaseDialog {
   }
 
   void _handleDialogStack({
-    required bool isUseAnimation,
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
@@ -174,7 +169,6 @@ class CustomDialog extends BaseDialog {
         dialogInfo = DialogInfo(
           dialog: this,
           backDismiss: backDismiss,
-          isUseAnimation: isUseAnimation,
           type: type,
           tag: SmartTag.keepSingle,
           useSystem: useSystem,
@@ -196,7 +190,6 @@ class CustomDialog extends BaseDialog {
     var dialogInfo = DialogInfo(
       dialog: this,
       backDismiss: backDismiss,
-      isUseAnimation: isUseAnimation,
       type: type,
       tag: tag,
       useSystem: useSystem,

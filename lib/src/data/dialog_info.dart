@@ -6,7 +6,6 @@ class DialogInfo {
   DialogInfo({
     required this.dialog,
     required this.backDismiss,
-    required this.isUseAnimation,
     required this.type,
     required this.tag,
     required this.useSystem,
@@ -15,8 +14,6 @@ class DialogInfo {
   final BaseDialog dialog;
 
   final bool backDismiss;
-
-  final bool isUseAnimation;
 
   final DialogType type;
 
