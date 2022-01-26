@@ -24,7 +24,7 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: _keyboardHeight),
-      child: widget.child,
+      child: IgnorePointer(child: widget.child),
     );
   }
 

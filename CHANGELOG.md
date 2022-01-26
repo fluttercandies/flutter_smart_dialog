@@ -5,6 +5,7 @@
 - Solve the page jump scene on the dialog (useSystem)
 - SmartStatus add status：custom，attach，allCustom
 - The entry 'init' method can customize the default style of Toast and Loading
+- Optimize toast：The toast no longer consumes touch events
 - Fix bug
 
 # [3.2.x]
