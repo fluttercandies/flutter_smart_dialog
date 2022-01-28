@@ -247,8 +247,7 @@ class CustomDialog extends BaseDialog {
   }
 
   static Future<void> _closeAll(DialogType type, bool back, String? tag) async {
-    int length = DialogProxy.instance.dialogQueue.length;
-    for (int i = 0; i < length; i++) {
+    for (int i = DialogProxy.instance.dialogQueue.length; i > 0; i--) {
       await _closeSingle(type, back, tag);
     }
   }
@@ -281,8 +280,7 @@ class CustomDialog extends BaseDialog {
     DialogInfo? info;
     var dialogQueue = proxy.dialogQueue;
     var list = dialogQueue.toList();
-    int length = dialogQueue.length;
-    for (var i = length - 1; i >= 0; i--) {
+    for (var i = dialogQueue.length - 1; i >= 0; i--) {
       if (dialogQueue.isEmpty) break;
       var item = list[i];
       if (type == DialogType.dialog || item.type == type) {

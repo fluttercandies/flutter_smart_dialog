@@ -29,8 +29,7 @@ class SmartNavigatorObserver extends NavigatorObserver {
 
     //smart close dialog
     var dialogQueue = DialogProxy.instance.dialogQueue;
-    int length = dialogQueue.length;
-    for (var i = 0; i < length; i++) {
+    for (var i = dialogQueue.length; i > 0; i--) {
       if (dialogQueue.isEmpty) return;
       if (dialogQueue.last.useSystem) return;
 
