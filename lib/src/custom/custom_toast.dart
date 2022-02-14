@@ -140,7 +140,7 @@ class CustomToast extends BaseDialog {
 
   Future<void> dismiss() async {
     await mainDialog.dismiss();
-    if (_toastQueue.isNotEmpty) return;
+    if (_toastQueue.length > 1) return;
 
     config.isExistToast = false;
   }
