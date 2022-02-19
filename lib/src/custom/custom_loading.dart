@@ -46,10 +46,7 @@ class CustomLoading extends BaseDialog {
     if (!DialogProxy.instance.loadingBackDismiss && back) return;
 
     await mainDialog.dismiss();
-
     config.isExistLoading = false;
-    if (!config.isExistMain) {
-      config.isExist = false;
-    }
+    if (!config.isExistMain) config.isExist = false;
   }
 }
