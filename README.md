@@ -140,7 +140,7 @@ SmartDialog.show(widget: custom, isLoadingTemp: false);
 
 # You may have questions
 
-For details, please check： [Some Consideration Details]()
+For details, please check： [Some Consideration Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Some%20Consideration.md)
 
 ![initBack](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092132.gif)
 
@@ -148,7 +148,7 @@ For details, please check： [Some Consideration Details]()
 
 # Attach Chapter
 
-For details, please check： [Attach Chapter Details]()
+For details, please check： [Attach Chapter Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Attach%20Chapter.md)
 
 This is a very important function. I wanted to add it a long time ago, but it was busy and has been shelved; New Year's Day (2022.1.1) started, and it took some time to complete this function and related demos.
 
@@ -160,7 +160,7 @@ This is a very important function. I wanted to add it a long time ago, but it wa
 
 # Dialog Chapter
 
-For details, please check： [Dialog Chapter Details]()
+For details, please check： [Dialog Chapter Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Dialog%20Chapter.md)
 
 ![dialogLocation](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092433.gif)
 
@@ -170,7 +170,7 @@ For details, please check： [Dialog Chapter Details]()
 
 # Loading Chapter
 
-For details, please check： [Loading Chapter Details]()
+For details, please check： [Loading Chapter Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Loading%20Chapter.md)
 
 ![loadingOne](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092313.gif)
 
@@ -180,7 +180,7 @@ For details, please check： [Loading Chapter Details]()
 
 # Toast Chapter
 
-For details, please check： [Toast Chapter Details]()
+For details, please check： [Toast Chapter Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Toast%20Chapter.md)
 
 ![toastOne](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092214.gif)
 
