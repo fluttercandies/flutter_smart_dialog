@@ -200,11 +200,11 @@ class DialogProxy {
   }
 
   Future<void> dismiss({
-    SmartStatus? status,
+    required SmartStatus status,
     String? tag,
     bool back = false,
   }) async {
-    if (status == null) {
+    if (status == SmartStatus.smart) {
       var loading = config.isExistLoading;
       if (!loading) await CustomDialog.dismiss(tag: tag, back: back);
       if (loading) await _loading.dismiss(back: back);

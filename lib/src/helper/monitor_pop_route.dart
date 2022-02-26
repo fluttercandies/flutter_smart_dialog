@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 
@@ -19,7 +20,7 @@ class MonitorPopRoute with WidgetsBindingObserver {
   Future<bool> didPopRoute() async {
     // handle contain system dialog and common condition
     if (RouteRecord.instance.handleSmartDialog()) {
-      DialogProxy.instance.dismiss(back: true);
+      DialogProxy.instance.dismiss(status: SmartStatus.smart, back: true);
       return true;
     }
 

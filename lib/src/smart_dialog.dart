@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'helper/config.dart';
 import 'helper/dialog_proxy.dart';
 import 'widget/attach_dialog_widget.dart';
-import 'widget/loading_widget.dart';
-import 'widget/toast_widget.dart';
 
 enum SmartStatus {
+  /// close single dialog：loading（showToast），custom（show）or attach（showAttach）
+  ///
+  /// 关闭单个dialog：loading（showToast），custom（show）或 attach（showAttach）
+  smart,
+
   /// close toast（showToast）
   ///
   /// 关闭toast（showToast）
@@ -519,7 +522,7 @@ class SmartDialog {
   /// SmartStatus.loading（only close loading）。
   /// note: the closeType param will become invalid after setting the value of the status param。
   ///
-  /// [closeType]：0（default：close dialog or loading），1（only close dialog），2（only close toast），
+  /// [closeType]：0（default：close loading，custom or attach），1（only close dialog），2（only close toast），
   /// 3（only close loading），other（all close）
   ///
   /// tag：if you want to close the specified dialog, you can set a 'tag' for it
@@ -532,7 +535,7 @@ class SmartDialog {
   /// SmartStatus.loading（仅关闭loading）。
   /// 注意：status参数设置值后，closeType参数将失效。
   ///
-  /// [closeType]：0（默认：关闭dialog或者loading），1（仅关闭dialog），2（仅关闭toast），
+  /// [closeType]：0（默认：关闭loading，custom或attach），1（仅关闭dialog），2（仅关闭toast），
   /// 3（仅关闭loading），other（全关闭）
   ///
   /// [tag]：如果你想关闭指定的dialog，你可以给它设置一个tag
@@ -544,7 +547,7 @@ class SmartDialog {
     var instance = DialogProxy.instance;
     if (status == null) {
       if (closeType == 0) {
-        await instance.dismiss(tag: tag);
+        await instance.dismiss(status: SmartStatus.smart, tag: tag);
       } else if (closeType == 1) {
         await instance.dismiss(status: SmartStatus.dialog, tag: tag);
       } else if (closeType == 2) {
