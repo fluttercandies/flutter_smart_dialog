@@ -6,7 +6,7 @@
 - SmartStatus add status：custom，attach，allCustom
 - The entry 'init' method can customize the default style of Toast and Loading
 - Optimize toast：The toast no longer consumes touch events
-- add SmartStatus.smart
+- Add SmartStatus.smart
 - Fixed the problem that the top-of-stack dialog would be closed if the tags did not match
 
 # [3.2.x]
