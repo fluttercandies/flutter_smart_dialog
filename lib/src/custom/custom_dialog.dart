@@ -289,8 +289,8 @@ class CustomDialog extends BaseDialog {
       }
     }
 
-    DialogInfo? infoMap = tag == null ? null : proxy.dialogMap[tag];
-    info = infoMap ?? info;
+    DialogInfo? infoMap = tag != null ? proxy.dialogMap[tag] : null;
+    info = tag != null ? infoMap : info;
     //handle prohibiting back event
     if (info != null && (!info.backDismiss && back)) return null;
 
