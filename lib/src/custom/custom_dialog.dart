@@ -280,17 +280,19 @@ class CustomDialog extends BaseDialog {
     DialogInfo? info;
     var dialogQueue = proxy.dialogQueue;
     var list = dialogQueue.toList();
+
     for (var i = dialogQueue.length - 1; i >= 0; i--) {
       if (dialogQueue.isEmpty) break;
       var item = list[i];
-      if (type == DialogType.dialog || item.type == type) {
+      if (tag != null && item.tag == tag) {
+        info = item;
+        break;
+      }else if (type == DialogType.dialog || item.type == type) {
         info = item;
         break;
       }
     }
 
-    DialogInfo? infoMap = tag != null ? proxy.dialogMap[tag] : null;
-    info = tag != null ? infoMap : info;
     //handle prohibiting back event
     if (info != null && (!info.backDismiss && back)) return null;
 

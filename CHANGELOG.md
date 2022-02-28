@@ -1,3 +1,8 @@
+# [3.4.x]
+
+- 'showToast' add 'consumeEvent' param
+- 'dismiss' can close dialogs with duplicate tags
+
 # [3.3.x]
 
 - Notice: 'antiShake' renamed 'debounce'

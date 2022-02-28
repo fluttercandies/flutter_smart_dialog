@@ -447,6 +447,9 @@ class SmartDialog {
   ///
   /// [alignment]：control the location of toast on the screen
   ///
+  /// [consumeEvent]： default (false), true (toast will consume touch events),
+  /// false (toast no longer consumes events, touch events can penetrate toast)
+  ///
   /// [time]：toast display time on the screen(Use the 'widget' param, this param will be invalid)
   ///
   /// [debounceTemp]：debounce feature
@@ -478,6 +481,8 @@ class SmartDialog {
   ///
   /// [alignment]：控制toast在屏幕上的显示位置（使用 'widget' 参数，该参数将失效）
   ///
+  /// [consumeEvent]：默认（false），true（toast会消耗触摸事件），false（toast不再消耗事件，触摸事件能穿透toast）
+  ///
   /// [time]：toast在屏幕上的显示时间
   ///
   /// [debounceTemp]：防抖功能（debounce）
@@ -495,6 +500,7 @@ class SmartDialog {
     Color? maskColorTemp,
     Widget? maskWidgetTemp,
     AlignmentGeometry alignment = Alignment.bottomCenter,
+    bool? consumeEvent,
     Duration? time,
     bool? debounceTemp,
     SmartToastType? type,
@@ -508,6 +514,7 @@ class SmartDialog {
       animationDuration: animationDurationTemp ?? Duration(milliseconds: 200),
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
+      consumeEvent: consumeEvent ?? false,
       time: time ?? Duration(milliseconds: 2000),
       debounce: debounceTemp ?? config.debounce,
       type: type ?? SmartToastType.normal,

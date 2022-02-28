@@ -3,7 +3,7 @@ description:
   An elegant Flutter Dialog solution,
   Easily implement Toast, Loading and custom Dialog,
   Make the use of the dialog easier!
-version: 3.3.9
+version: 3.4.0
 homepage: https://github.com/fluttercandies/flutter_smart_dialog
 
 environment:

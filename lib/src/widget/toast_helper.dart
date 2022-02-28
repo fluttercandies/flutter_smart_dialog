@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 
 class ToastHelper extends StatefulWidget {
-  ToastHelper({Key? key, required this.child}) : super(key: key);
+  ToastHelper({
+    Key? key,
+    required this.consumeEvent,
+    required this.child,
+  }) : super(key: key);
+
+  final bool consumeEvent;
 
   final Widget child;
 
@@ -24,7 +30,9 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: _keyboardHeight),
-      child: IgnorePointer(child: widget.child),
+      child: widget.consumeEvent
+          ? widget.child
+          : IgnorePointer(child: widget.child),
     );
   }
 

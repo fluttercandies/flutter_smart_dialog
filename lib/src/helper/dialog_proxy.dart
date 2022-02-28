@@ -179,6 +179,7 @@ class DialogProxy {
     required Duration animationDuration,
     required Color maskColor,
     required Widget? maskWidget,
+    required bool consumeEvent,
     required Duration time,
     required bool debounce,
     required SmartToastType type,
@@ -195,7 +196,7 @@ class DialogProxy {
       time: time,
       debounce: debounce,
       type: type,
-      widget: ToastHelper(child: widget),
+      widget: ToastHelper(consumeEvent: consumeEvent, child: widget),
     );
   }
 
