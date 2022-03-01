@@ -12,7 +12,7 @@ class CustomToast extends BaseDialog {
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
 
-  Queue<Future<void> Function()> _toastQueue = DoubleLinkedQueue();
+  Queue<Future<void> Function()> _toastQueue = ListQueue();
 
   DateTime? _lastTime;
 

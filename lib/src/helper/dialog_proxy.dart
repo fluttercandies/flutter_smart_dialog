@@ -16,7 +16,6 @@ class DialogProxy {
   late Config config;
   late OverlayEntry entryToast;
   late OverlayEntry entryLoading;
-  late Map<String, DialogInfo> dialogMap;
   late Queue<DialogInfo> dialogQueue;
   late CustomToast _toast;
   late CustomLoading _loading;
@@ -41,7 +40,6 @@ class DialogProxy {
   DialogProxy._internal() {
     config = Config();
 
-    dialogMap = {};
     dialogQueue = ListQueue();
   }
 

@@ -165,7 +165,7 @@ class CustomDialog extends BaseDialog {
 
     if (keepSingle) {
       DialogInfo dialogInfo;
-      if (proxy.dialogMap[SmartTag.keepSingle] == null) {
+      if (_getDialog(DialogType.dialog, false, SmartTag.keepSingle) == null) {
         dialogInfo = DialogInfo(
           dialog: this,
           backDismiss: backDismiss,
@@ -174,7 +174,6 @@ class CustomDialog extends BaseDialog {
           useSystem: useSystem,
         );
         proxy.dialogQueue.add(dialogInfo);
-        proxy.dialogMap[SmartTag.keepSingle] = dialogInfo;
         Overlay.of(DialogProxy.contextOverlay)!.insert(
           overlayEntry,
           below: proxy.entryLoading,
@@ -195,7 +194,6 @@ class CustomDialog extends BaseDialog {
       useSystem: useSystem,
     );
     proxy.dialogQueue.add(dialogInfo);
-    if (tag != null) proxy.dialogMap[tag] = dialogInfo;
     // insert the dialog carrier into the page
     Overlay.of(DialogProxy.contextOverlay)!.insert(
       overlayEntry,
@@ -262,7 +260,6 @@ class CustomDialog extends BaseDialog {
 
     //handle close dialog
     var proxy = DialogProxy.instance;
-    if (info.tag != null) proxy.dialogMap.remove(info.tag);
     proxy.dialogQueue.remove(info);
     var customDialog = info.dialog;
     await customDialog.mainDialog.dismiss(useSystem: info.useSystem);
@@ -287,7 +284,8 @@ class CustomDialog extends BaseDialog {
       if (tag != null && item.tag == tag) {
         info = item;
         break;
-      }else if (type == DialogType.dialog || item.type == type) {
+      } else if (tag == null &&
+          (type == DialogType.dialog || item.type == type)) {
         info = item;
         break;
       }
