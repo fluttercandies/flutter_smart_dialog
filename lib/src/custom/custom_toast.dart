@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
@@ -15,6 +16,9 @@ class CustomToast extends BaseDialog {
   Queue<Future<void> Function()> _toastQueue = ListQueue();
 
   DateTime? _lastTime;
+
+  Timer? _curTime;
+  Completer? _curCompleter;
 
   Future<void> showToast({
     required bool clickBgDismiss,
@@ -53,7 +57,7 @@ class CustomToast extends BaseDialog {
         onDismiss: null,
         useSystem: false,
         reuse: false,
-        onBgTap: () => dismiss(),
+        onBgTap: () => _realDismiss(),
       );
     }
 
@@ -77,8 +81,8 @@ class CustomToast extends BaseDialog {
       //handling special circumstances
       if (_toastQueue.isEmpty) return;
       onShowToast();
-      await Future.delayed(time);
-      await dismiss();
+      await _toastDelay(time);
+      await _realDismiss();
       //remove current toast
       if (_toastQueue.isNotEmpty) _toastQueue.removeFirst();
       //invoke next toast
@@ -96,8 +100,8 @@ class CustomToast extends BaseDialog {
 
     _toastQueue.add(() async {});
     onShowToast();
-    await Future.delayed(time);
-    await dismiss();
+    await _toastDelay(time);
+    await _realDismiss();
 
     _toastQueue.removeLast();
   }
@@ -107,10 +111,9 @@ class CustomToast extends BaseDialog {
     required Function() onShowToast,
   }) async {
     onShowToast();
-
     _toastQueue.add(() async {});
-    await Future.delayed(time);
-    if (_toastQueue.length == 1) await dismiss();
+    await _toastDelay(time);
+    if (_toastQueue.length == 1) await _realDismiss();
 
     _toastQueue.removeLast();
   }
@@ -124,8 +127,8 @@ class CustomToast extends BaseDialog {
       if (_toastQueue.isEmpty) return;
 
       onShowToast();
-      await Future.delayed(time);
-      await dismiss();
+      await _toastDelay(time);
+      await _realDismiss();
 
       //remove current toast
       if (_toastQueue.isNotEmpty) _toastQueue.removeFirst();
@@ -138,10 +141,24 @@ class CustomToast extends BaseDialog {
     if (_toastQueue.length > 2) _toastQueue.remove(_toastQueue.elementAt(1));
   }
 
-  Future<void> dismiss() async {
+  Future _toastDelay(Duration duration) {
+    var completer = _curCompleter = Completer();
+    _curTime = Timer(duration, () {
+      if (!completer.isCompleted) completer.complete();
+    });
+    return completer.future;
+  }
+
+  Future<void> _realDismiss() async {
     await mainDialog.dismiss();
     if (_toastQueue.length > 1) return;
 
     config.isExistToast = false;
+  }
+
+  Future<void> dismiss() async {
+    _curTime?.cancel();
+    if (!(_curCompleter?.isCompleted ?? true)) _curCompleter?.complete();
+    await Future.delayed(Duration(milliseconds: 1));
   }
 }

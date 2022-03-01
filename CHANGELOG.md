@@ -1,7 +1,8 @@
 # [3.4.x]
 
-- 'showToast' add 'consumeEvent' param
+- 'showToast' add 'consumeEvent' param: [issue #27](https://github.com/fluttercandies/flutter_smart_dialog/issues/27)
 - 'dismiss' can close dialogs with duplicate tags
+- Fix [issue #28](https://github.com/fluttercandies/flutter_smart_dialog/issues/28)
 
 # [3.3.x]
 
