@@ -177,6 +177,10 @@ class SmartDialog {
           (useSystem == null || useSystem == false),
       'useSystem is true, keepSingle and tag prohibit setting values',
     );
+    assert(
+      keepSingle == null || keepSingle == false || tag == null,
+      'keepSingle is true, tag prohibit setting values',
+    );
 
     return DialogProxy.instance.show(
       widget: widget,
@@ -318,6 +322,10 @@ class SmartDialog {
       (useSystem == true && keepSingle == null && tag == null) ||
           (useSystem == null || useSystem == false),
       'useSystem is true, keepSingle and tag prohibit setting values',
+    );
+    assert(
+      keepSingle == null || keepSingle == false || tag == null,
+      'keepSingle is true, tag prohibit setting values',
     );
 
     return DialogProxy.instance.showAttach(
