@@ -9,7 +9,7 @@ import 'widget/attach_dialog_widget.dart';
 enum SmartStatus {
   /// close single dialog：loading（showToast），custom（show）or attach（showAttach）
   ///
-  /// 关闭单个dialog：loading（showToast），custom（show）或 attach（showAttach）
+  /// 关闭单个dialog：loading（showLoading），custom（show）或 attach（showAttach）
   smart,
 
   /// close toast（showToast）
