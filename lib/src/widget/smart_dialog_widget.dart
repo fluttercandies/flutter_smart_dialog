@@ -63,9 +63,6 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
   late AnimationController _ctrlBody;
   Offset? _offset;
 
-  //refuse operation during dispose
-  bool _closing = false;
-
   @override
   void initState() {
     _resetState();
@@ -181,9 +178,6 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   ///等待动画结束,关闭动画资源
   Future<void> dismiss() async {
-    if (_closing) return;
-
-    _closing = true;
     //结束动画
     _ctrlBg?.reverse();
     _ctrlBody.reverse();
