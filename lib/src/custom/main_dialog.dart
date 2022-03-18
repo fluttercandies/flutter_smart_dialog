@@ -5,7 +5,6 @@ import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
-import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_widget.dart';
 
@@ -28,6 +27,9 @@ class MainDialog {
   Completer? _completer;
   VoidCallback? _onDismiss;
   Widget _widget;
+
+  //refuse repeat close
+  bool repeatClose = false;
 
   Future<void> show({
     required Widget widget,
@@ -112,6 +114,7 @@ class MainDialog {
     required VoidCallback? onDismiss,
     required bool useSystem,
   }) {
+    repeatClose = false;
     _onDismiss = onDismiss;
 
     if (useSystem && DialogProxy.contextNavigator != null) {
@@ -135,6 +138,10 @@ class MainDialog {
   }
 
   Future<void> dismiss({bool useSystem = false}) async {
+    // handling duplicate closes
+    if (repeatClose) return;
+    repeatClose = true;
+
     //dialog prepare dismiss
     _onDismiss?.call();
 

@@ -87,9 +87,6 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   late Axis _axis;
   late double _postFrameOpacity;
 
-  //refuse operation during dispose
-  bool _closing = false;
-
   //offset size
   late Offset targetOffset;
   late Size targetSize;
@@ -298,9 +295,6 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   ///等待动画结束,关闭动画资源
   Future<void> dismiss() async {
-    if (_closing) return;
-
-    _closing = true;
     //over animation
     _ctrlBg?.reverse();
     _ctrlBody.reverse();
