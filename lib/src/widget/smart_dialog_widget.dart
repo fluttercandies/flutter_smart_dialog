@@ -204,6 +204,7 @@ class SmartDialogController extends BaseController {
 
   @override
   Future<void> dismiss() async {
+    await Future.delayed(Duration(milliseconds: 1));
     await _state?.dismiss();
     _state = null;
   }

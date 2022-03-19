@@ -138,10 +138,6 @@ class MainDialog {
   }
 
   Future<void> dismiss({bool useSystem = false}) async {
-    // handling duplicate closes
-    if (repeatClose) return;
-    repeatClose = true;
-
     //dialog prepare dismiss
     _onDismiss?.call();
 
