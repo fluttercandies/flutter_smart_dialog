@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/location.dart';
 
+import '../smart_dialog.dart';
+
 typedef HighlightBuilder = Positioned Function(
   Offset targetOffset,
   Size targetSize,
@@ -21,7 +23,7 @@ class AttachDialogWidget extends StatefulWidget {
     required this.onBgTap,
     required this.alignment,
     required this.isPenetrate,
-    required this.isLoading,
+    required this.animationType,
     required this.maskColor,
     required this.clickBgDismiss,
     required this.highlight,
@@ -57,7 +59,7 @@ class AttachDialogWidget extends StatefulWidget {
 
   /// 是否使用Loading情况；true:内容体使用渐隐动画  false：内容体使用缩放动画
   /// 仅仅针对中间位置的控件
-  final bool isLoading;
+  final SmartAnimationType animationType;
 
   /// 遮罩颜色
   final Color maskColor;
@@ -223,7 +225,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
         //其它的都使用位移动画
         : SizeTransition(axis: _axis, sizeFactor: _ctrlBody, child: child);
 
-    return widget.isLoading
+    return widget.animationType == SmartAnimationType.fade
         ? FadeTransition(opacity: animation, child: child)
         : transition;
   }

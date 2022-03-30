@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
+import '../config/config.dart';
 import '../data/base_dialog.dart';
+import '../smart_dialog.dart';
 
 class CustomLoading extends BaseDialog {
   CustomLoading({
@@ -13,7 +14,7 @@ class CustomLoading extends BaseDialog {
   Future<void> showLoading({
     required Widget widget,
     required bool clickBgDismiss,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required bool isPenetrate,
     required bool isUseAnimation,
     required Duration animationDuration,
@@ -22,13 +23,12 @@ class CustomLoading extends BaseDialog {
     required bool backDismiss,
   }) async {
     DialogProxy.instance.loadingBackDismiss = backDismiss;
-    config.isExist = true;
-    config.isExistLoading = true;
+    config.loading.isExist = true;
 
     return mainDialog.show(
       widget: widget,
       clickBgDismiss: clickBgDismiss,
-      isLoading: isLoading,
+      animationType: animationType,
       alignment: Alignment.center,
       maskColor: maskColor,
       maskWidget: maskWidget,
@@ -46,7 +46,6 @@ class CustomLoading extends BaseDialog {
     if (!DialogProxy.instance.loadingBackDismiss && back) return;
 
     await mainDialog.dismiss();
-    config.isExistLoading = false;
-    if (!config.isExistMain) config.isExist = false;
+    config.loading.isExist = false;
   }
 }

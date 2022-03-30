@@ -1,103 +1,19 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
+import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
-import 'config/config.dart';
-import 'helper/dialog_proxy.dart';
-import 'widget/attach_dialog_widget.dart';
+import '../../flutter_smart_dialog.dart';
+import '../smart_dialog.dart';
+import 'compatible_config.dart';
 
-enum SmartStatus {
-  /// close single dialog：loading（showToast），custom（show）or attach（showAttach）
-  ///
-  /// 关闭单个dialog：loading（showLoading），custom（show）或 attach（showAttach）
-  smart,
-
-  /// close toast（showToast）
-  ///
-  /// 关闭toast（showToast）
-  toast,
-
-  /// close loading（showLoading）
-  ///
-  /// 关闭loading（showLoading）
-  loading,
-
-  /// close single custom dialog（show）
-  ///
-  /// 关闭单个custom dialog（show）
-  custom,
-
-  /// close single attach dialog（showAttach）
-  ///
-  /// 关闭单个attach dialog（showAttach）
-  attach,
-
-  /// close single dialog（attach or custom）
-  ///
-  /// 关闭单个dialog（attach或custom）
-  dialog,
-
-  /// close all custom dialog, but not close toast,loading and attach dialog
-  ///
-  /// 关闭打开的所有custom dialog，但是不关闭toast，loading和attach dialog
-  allCustom,
-
-  /// close all attach dialog, but not close toast,loading and custom dialog
-  ///
-  /// 关闭打开的所有attach dialog，但是不关闭toast，loading和custom dialog
-  allAttach,
-
-  /// close all dialog（attach and custom）, but not close toast and loading
-  ///
-  /// 关闭打开的所有dialog（attach和custom），但是不关闭toast和loading
-  allDialog,
-}
-
-enum SmartToastType {
-  /// Each toast will be displayed, after the current toast disappears，
-  /// the next toast will be displayed
-  ///
-  /// 每一条toast都会显示，当前toast消失之后，后一条toast才会显示
-  normal,
-
-  /// Call toast continuously, during the period when the first toast exists on the screen,
-  /// other toasts called will be invalid
-  ///
-  /// 连续调用toast，在第一条toast存在界面的期间内，调用的其它toast都将无效
-  first,
-
-  /// Call toast continuously, the next toast will top off the previous toast
-  ///
-  /// 连续调用toast，后一条toast会顶掉前一条toast
-  last,
-
-  /// Call toast continuously, the first toast is displayed normally，
-  /// and all toasts generated during the first toast display period，only the last toast is valid
-  ///
-  /// 连续调用toast，第一条toast正常显示，其显示期间产生的所有toast，仅最后一条toast有效
-  firstAndLast,
-}
-
-enum SmartAnimationType {
-  /// FadeTransition
-  ///
-  /// 渐隐动画
-  fade,
-
-  /// SizeTransition
-  ///
-  /// 缩放动画
-  scale,
-
-  /// 中间位置的为渐隐动画, 其他位置为位移缩放动画
-  centerFadeAndOtherScale
-}
-
-class SmartDialog {
+class CompatibleSmartDialog {
   /// SmartDialog global config
   ///
   /// SmartDialog全局配置
-  static Config config = DialogProxy.instance.config;
+
+  static CompatibleConfig config = DialogProxy.instance.config.compatible;
 
   /// custom dialog：param with a suffix of 'temp', indicating that such params can be set to default values in [Config]
   ///
@@ -172,15 +88,15 @@ class SmartDialog {
   /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题
   static Future<void> show({
     required Widget widget,
-    AlignmentGeometry? alignment,
-    bool? clickBgDismiss,
-    bool? usePenetrate,
-    bool? useAnimation,
-    SmartAnimationType? animationType,
-    Duration? animationDuration,
-    Color? maskColor,
-    Widget? maskWidget,
-    bool? debounce,
+    AlignmentGeometry? alignmentTemp,
+    bool? clickBgDismissTemp,
+    bool? isLoadingTemp,
+    bool? isPenetrateTemp,
+    bool? isUseAnimationTemp,
+    Duration? animationDurationTemp,
+    Color? maskColorTemp,
+    Widget? maskWidgetTemp,
+    bool? debounceTemp,
     VoidCallback? onDismiss,
     String? tag,
     bool? backDismiss,
@@ -199,15 +115,17 @@ class SmartDialog {
 
     return DialogProxy.instance.show(
       widget: widget,
-      alignment: alignment ?? config.custom.alignment,
-      clickBgDismiss: clickBgDismiss ?? config.custom.clickBgDismiss,
-      animationType: animationType ?? config.custom.animationType,
-      isPenetrate: usePenetrate ?? config.custom.usePenetrate,
-      isUseAnimation: useAnimation ?? config.custom.useAnimation,
-      animationDuration: animationDuration ?? config.custom.animationDuration,
-      maskColor: maskColor ?? config.custom.maskColor,
-      maskWidget: maskWidget ?? config.custom.maskWidget,
-      debounce: debounce ?? config.custom.debounce,
+      alignment: alignmentTemp ?? config.alignment,
+      clickBgDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
+      animationType: isLoadingTemp ?? config.isLoading
+          ? SmartAnimationType.fade
+          : SmartAnimationType.scale,
+      isPenetrate: isPenetrateTemp ?? config.isPenetrate,
+      isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
+      animationDuration: animationDurationTemp ?? config.animationDuration,
+      maskColor: maskColorTemp ?? config.maskColor,
+      maskWidget: maskWidgetTemp ?? config.maskWidget,
+      debounce: debounceTemp ?? config.debounce,
       onDismiss: onDismiss,
       tag: tag,
       backDismiss: backDismiss ?? true,
@@ -312,15 +230,15 @@ class SmartDialog {
     required BuildContext? targetContext,
     required Widget widget,
     Offset? target,
-    AlignmentGeometry? alignment,
-    bool? clickBgDismiss,
-    SmartAnimationType? animationType,
-    bool? usePenetrate,
-    bool? useAnimation,
-    Duration? animationDuration,
-    Color? maskColor,
-    Widget? maskWidget,
-    bool? debounce,
+    AlignmentGeometry? alignmentTemp,
+    bool? clickBgDismissTemp,
+    bool? isLoadingTemp,
+    bool? isPenetrateTemp,
+    bool? isUseAnimationTemp,
+    Duration? animationDurationTemp,
+    Color? maskColorTemp,
+    Widget? maskWidgetTemp,
+    bool? debounceTemp,
     Positioned? highlight,
     HighlightBuilder? highlightBuilder,
     VoidCallback? onDismiss,
@@ -347,15 +265,17 @@ class SmartDialog {
       targetContext: targetContext,
       target: target,
       widget: widget,
-      alignment: alignment ?? config.attach.alignment,
-      clickBgDismiss: clickBgDismiss ?? config.attach.clickBgDismiss,
-      animationType: animationType ?? config.attach.animationType,
-      isPenetrate: usePenetrate ?? config.attach.usePenetrate,
-      isUseAnimation: useAnimation ?? config.attach.useAnimation,
-      animationDuration: animationDuration ?? config.attach.animationDuration,
-      maskColor: maskColor ?? config.attach.maskColor,
-      maskWidget: maskWidget ?? config.attach.maskWidget,
-      debounce: debounce ?? config.attach.debounce,
+      alignment: alignmentTemp ?? Alignment.bottomCenter,
+      clickBgDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
+      animationType: isLoadingTemp ?? false
+          ? SmartAnimationType.fade
+          : SmartAnimationType.scale,
+      isPenetrate: isPenetrateTemp ?? config.isPenetrate,
+      isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
+      animationDuration: animationDurationTemp ?? config.animationDuration,
+      maskColor: maskColorTemp ?? config.maskColor,
+      maskWidget: maskWidgetTemp ?? config.maskWidget,
+      debounce: debounceTemp ?? config.debounce,
       highlight: highlight ?? Positioned(child: Container()),
       highlightBuilder: highlightBuilder,
       onDismiss: onDismiss,
@@ -424,24 +344,26 @@ class SmartDialog {
   static Future<void> showLoading({
     String msg = 'loading...',
     Color background = Colors.black,
-    bool? clickBgDismiss,
-    SmartAnimationType? animationType,
-    bool? usePenetrate,
-    bool? useAnimation,
-    Duration? animationDuration,
-    Color? maskColor,
-    Widget? maskWidget,
+    bool? clickBgDismissTemp,
+    bool? isLoadingTemp,
+    bool? isPenetrateTemp,
+    bool? isUseAnimationTemp,
+    Duration? animationDurationTemp,
+    Color? maskColorTemp,
+    Widget? maskWidgetTemp,
     bool? backDismiss,
     Widget? widget,
   }) {
     return DialogProxy.instance.showLoading(
-      clickBgDismiss: clickBgDismiss ?? config.loading.clickBgDismiss,
-      animationType: animationType ?? config.loading.animationType,
-      isPenetrate: usePenetrate ?? config.loading.usePenetrate,
-      isUseAnimation: useAnimation ?? config.loading.useAnimation,
-      animationDuration: animationDuration ?? config.loading.animationDuration,
-      maskColor: maskColor ?? config.loading.maskColor,
-      maskWidget: maskWidget ?? config.loading.maskWidget,
+      clickBgDismiss: clickBgDismissTemp ?? false,
+      animationType: isLoadingTemp ?? true
+          ? SmartAnimationType.fade
+          : SmartAnimationType.scale,
+      isPenetrate: isPenetrateTemp ?? false,
+      isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
+      animationDuration: animationDurationTemp ?? config.animationDuration,
+      maskColor: maskColorTemp ?? config.maskColor,
+      maskWidget: maskWidgetTemp ?? config.maskWidget,
       backDismiss: backDismiss ?? true,
       widget: widget ?? DialogProxy.instance.loadingBuilder(msg, background),
     );
@@ -515,52 +437,85 @@ class SmartDialog {
   /// [widget]：可高度定制化toast
   static Future<void> showToast(
     String msg, {
-    bool? clickBgDismiss,
-    SmartAnimationType? animationType,
-    bool? usePenetrate,
-    bool? useAnimation,
-    Duration? animationDuration,
-    Color? maskColor,
-    Widget? maskWidget,
+    bool? clickBgDismissTemp,
+    bool? isLoadingTemp,
+    bool? isPenetrateTemp,
+    bool? isUseAnimationTemp,
+    Duration? animationDurationTemp,
+    Color? maskColorTemp,
+    Widget? maskWidgetTemp,
     AlignmentGeometry alignment = Alignment.bottomCenter,
     bool? consumeEvent,
     Duration? time,
-    bool? debounce,
+    bool? debounceTemp,
     SmartToastType? type,
     Widget? widget,
   }) async {
     return DialogProxy.instance.showToast(
-      clickBgDismiss: clickBgDismiss ?? config.toast.clickBgDismiss,
-      animationType: animationType ?? config.toast.animationType,
-      isPenetrate: usePenetrate ?? config.toast.usePenetrate,
-      isUseAnimation: useAnimation ?? config.toast.useAnimation,
-      animationDuration: animationDuration ?? config.toast.animationDuration,
-      maskColor: maskColor ?? config.toast.maskColor,
-      maskWidget: maskWidget ?? config.toast.maskWidget,
+      clickBgDismiss: clickBgDismissTemp ?? false,
+      animationType: isLoadingTemp ?? true
+          ? SmartAnimationType.fade
+          : SmartAnimationType.scale,
+      isPenetrate: isPenetrateTemp ?? true,
+      isUseAnimation: isUseAnimationTemp ?? true,
+      animationDuration: animationDurationTemp ?? Duration(milliseconds: 200),
+      maskColor: maskColorTemp ?? config.maskColor,
+      maskWidget: maskWidgetTemp ?? config.maskWidget,
       consumeEvent: consumeEvent ?? false,
       time: time ?? Duration(milliseconds: 2000),
-      debounce: debounce ?? config.toast.clickBgDismiss,
+      debounce: debounceTemp ?? config.debounce,
       type: type ?? SmartToastType.normal,
       widget: widget ?? DialogProxy.instance.toastBuilder(msg, alignment),
     );
   }
 
-  /// close dialog
+  /// It is recommended to use the status param,
+  /// and keep the closeType param for compatibility with older versions
   ///
-  /// [status]：For the specific meaning, please refer to the [SmartStatus] note
+  /// [status]：SmartStatus.dialog（only close dialog），SmartStatus.toast（only close toast），
+  /// SmartStatus.loading（only close loading）。
+  /// note: the closeType param will become invalid after setting the value of the status param。
   ///
-  /// [tag]：if you want to close the specified dialog, you can set a 'tag' for it
+  /// [closeType]：0（default：close loading，custom or attach），1（only close dialog），2（only close toast），
+  /// 3（only close loading），other（all close）
+  ///
+  /// tag：if you want to close the specified dialog, you can set a 'tag' for it
   ///
   /// -------------------------------------------------------------------------------
   ///
-  /// [status]：具体含义可参照[SmartStatus]注释
+  /// 推荐使用status参数，保留closeType参数，是为了兼容旧版本用法
+  ///
+  /// [status]：SmartStatus.dialog（仅关闭dialog），SmartStatus.toast（仅关闭toast），
+  /// SmartStatus.loading（仅关闭loading）。
   /// 注意：status参数设置值后，closeType参数将失效。
+  ///
+  /// [closeType]：0（默认：关闭loading，custom或attach），1（仅关闭dialog），2（仅关闭toast），
+  /// 3（仅关闭loading），other（全关闭）
   ///
   /// [tag]：如果你想关闭指定的dialog，你可以给它设置一个tag
   static Future<void> dismiss({
-    SmartStatus status = SmartStatus.smart,
+    SmartStatus? status,
     String? tag,
+    @deprecated int closeType = 0,
   }) async {
-    await DialogProxy.instance.dismiss(status: status, tag: tag);
+    var instance = DialogProxy.instance;
+    if (status == null) {
+      if (closeType == 0) {
+        await instance.dismiss(status: SmartStatus.smart, tag: tag);
+      } else if (closeType == 1) {
+        await instance.dismiss(status: SmartStatus.dialog, tag: tag);
+      } else if (closeType == 2) {
+        await instance.dismiss(status: SmartStatus.toast);
+      } else if (closeType == 3) {
+        await instance.dismiss(status: SmartStatus.loading);
+      } else {
+        await instance.dismiss(status: SmartStatus.loading);
+        await instance.dismiss(status: SmartStatus.allDialog, tag: tag);
+        await instance.dismiss(status: SmartStatus.toast);
+      }
+      return;
+    }
+
+    await instance.dismiss(status: status, tag: tag);
   }
 }

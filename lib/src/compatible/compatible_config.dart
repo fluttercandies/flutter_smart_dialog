@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 ///全局配置统一在此处处理
-class Config {
+class CompatibleConfig {
   /// control the location of the dialog on the screen
   ///
   /// center: the dialog locate the center on the screen，the animation type is selected by the 'isLoading' param：

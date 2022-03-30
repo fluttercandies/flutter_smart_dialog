@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_smart_dialog/src/helper/config.dart';
 
+import '../config/config.dart';
 import '../data/base_dialog.dart';
+import '../smart_dialog.dart';
 
 class CustomToast extends BaseDialog {
   CustomToast({
@@ -22,7 +22,7 @@ class CustomToast extends BaseDialog {
 
   Future<void> showToast({
     required bool clickBgDismiss,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required bool isPenetrate,
     required bool isUseAnimation,
     required Duration animationDuration,
@@ -37,11 +37,11 @@ class CustomToast extends BaseDialog {
     if (debounce) {
       var now = DateTime.now();
       var isShake = _lastTime != null &&
-          now.difference(_lastTime!) < SmartDialog.config.debounceTime;
+          now.difference(_lastTime!) < SmartDialog.config.toast.debounceTime;
       _lastTime = now;
       if (isShake) return;
     }
-    config.isExistToast = true;
+    config.toast.isExist = true;
 
     showToast() {
       mainDialog.show(
@@ -50,7 +50,7 @@ class CustomToast extends BaseDialog {
         maskColor: maskColor,
         maskWidget: maskWidget,
         animationDuration: animationDuration,
-        isLoading: isLoading,
+        animationType: animationType,
         isUseAnimation: isUseAnimation,
         isPenetrate: isPenetrate,
         clickBgDismiss: clickBgDismiss,
@@ -153,7 +153,7 @@ class CustomToast extends BaseDialog {
     await mainDialog.dismiss();
     if (_toastQueue.length > 1) return;
 
-    config.isExistToast = false;
+    config.toast.isExist = false;
   }
 
   Future<void> dismiss() async {

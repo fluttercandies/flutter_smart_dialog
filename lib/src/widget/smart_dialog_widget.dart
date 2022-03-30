@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 
+import '../smart_dialog.dart';
+
 class SmartDialogWidget extends StatefulWidget {
   SmartDialogWidget({
     Key? key,
@@ -13,7 +15,7 @@ class SmartDialogWidget extends StatefulWidget {
     required this.isPenetrate,
     required this.animationDuration,
     required this.isUseAnimation,
-    required this.isLoading,
+    required this.animationType,
     required this.maskColor,
     required this.clickBgDismiss,
     required this.maskWidget,
@@ -42,7 +44,7 @@ class SmartDialogWidget extends StatefulWidget {
 
   /// 是否使用Loading情况；true:内容体使用渐隐动画  false：内容体使用缩放动画
   /// 仅仅针对中间位置的控件
-  final bool isLoading;
+  final SmartAnimationType animationType;
 
   /// 遮罩颜色
   final Color maskColor;
@@ -133,7 +135,7 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   Widget _buildBodyAnimation() {
     var animation = CurvedAnimation(parent: _ctrlBody, curve: Curves.linear);
-    var centerTransition = widget.isLoading
+    var centerTransition = widget.animationType == SmartAnimationType.fade
         ? FadeTransition(opacity: animation, child: widget.child)
         : ScaleTransition(scale: animation, child: widget.child);
 

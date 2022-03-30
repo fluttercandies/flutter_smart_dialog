@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
-import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_widget.dart';
+
+import '../config/config.dart';
+import '../smart_dialog.dart';
 
 ///main function : customize dialog
 class MainDialog {
@@ -37,7 +39,7 @@ class MainDialog {
     required bool isPenetrate,
     required bool isUseAnimation,
     required Duration animationDuration,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required Color maskColor,
     required Widget? maskWidget,
     required bool clickBgDismiss,
@@ -54,7 +56,7 @@ class MainDialog {
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
       animationDuration: animationDuration,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
@@ -75,7 +77,7 @@ class MainDialog {
     required bool isPenetrate,
     required bool isUseAnimation,
     required Duration animationDuration,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required Color maskColor,
     required Widget? maskWidget,
     required Positioned highlight,
@@ -95,7 +97,7 @@ class MainDialog {
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
       animationDuration: animationDuration,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
       highlight: highlight,

@@ -3,12 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
-import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
 import '../../flutter_smart_dialog.dart';
+import '../config/config.dart';
 import '../data/base_dialog.dart';
+import '../smart_dialog.dart';
 import 'main_dialog.dart';
 
 enum DialogType {
@@ -37,7 +38,7 @@ class CustomDialog extends BaseDialog {
     required bool isPenetrate,
     required bool isUseAnimation,
     required Duration animationDuration,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required Color maskColor,
     required bool clickBgDismiss,
     required bool debounce,
@@ -62,7 +63,7 @@ class CustomDialog extends BaseDialog {
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
       animationDuration: animationDuration,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
@@ -84,7 +85,7 @@ class CustomDialog extends BaseDialog {
     required bool isPenetrate,
     required bool isUseAnimation,
     required Duration animationDuration,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required Color maskColor,
     required bool clickBgDismiss,
     required bool debounce,
@@ -113,7 +114,7 @@ class CustomDialog extends BaseDialog {
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
       animationDuration: animationDuration,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       highlight: highlight,
       highlightBuilder: highlightBuilder,
@@ -137,7 +138,7 @@ class CustomDialog extends BaseDialog {
     required bool useSystem,
   }) {
     // debounce
-    if (!_checkDebounce(debounce)) return false;
+    if (!_checkDebounce(debounce, type)) return false;
 
     //handle dialog stack
     _handleDialogStack(
@@ -148,9 +149,8 @@ class CustomDialog extends BaseDialog {
       useSystem: useSystem,
     );
 
-    config.isExist = true;
-    config.isExistMain = true;
-
+    config.custom.isExist = DialogType.custom == type;
+    config.attach.isExist = DialogType.attach == type;
     return true;
   }
 
@@ -201,13 +201,16 @@ class CustomDialog extends BaseDialog {
     );
   }
 
-  bool _checkDebounce(bool debounce) {
+  bool _checkDebounce(bool debounce, DialogType type) {
     if (!debounce) return true;
 
     var proxy = DialogProxy.instance;
     var now = DateTime.now();
+    var debounceTime = type == DialogType.dialog
+        ? SmartDialog.config.custom.debounceTime
+        : SmartDialog.config.attach.debounceTime;
     var isShake = proxy.dialogLastTime != null &&
-        now.difference(proxy.dialogLastTime!) < SmartDialog.config.debounceTime;
+        now.difference(proxy.dialogLastTime!) < debounceTime;
     proxy.dialogLastTime = now;
     if (isShake) return false;
 
@@ -262,12 +265,21 @@ class CustomDialog extends BaseDialog {
     var proxy = DialogProxy.instance;
     proxy.dialogQueue.remove(info);
     var customDialog = info.dialog;
+
+    //check if the queue contains a custom dialog or attach dialog
+    proxy.config.custom.isExist = false;
+    proxy.config.attach.isExist = false;
+    for (var item in proxy.dialogQueue) {
+      if (item.type == DialogType.custom) {
+        proxy.config.custom.isExist = true;
+      } else if (item.type == DialogType.attach) {
+        proxy.config.attach.isExist = true;
+      }
+    }
+
+    //perform a real dismiss
     await customDialog.mainDialog.dismiss(useSystem: info.useSystem);
     customDialog.overlayEntry.remove();
-
-    if (proxy.dialogQueue.isNotEmpty) return;
-    proxy.config.isExistMain = false;
-    if (!proxy.config.isExistLoading) proxy.config.isExist = false;
   }
 
   static DialogInfo? _getDialog(DialogType type, bool back, String? tag) {

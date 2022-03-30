@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
+
+import '../smart_dialog.dart';
 
 typedef PopTestFunc = bool Function();
 

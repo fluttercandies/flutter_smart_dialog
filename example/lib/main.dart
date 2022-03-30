@@ -52,13 +52,12 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showToast() async {
-    await SmartDialog.showToast('test toast', debounceTemp: true);
+    await SmartDialog.showToast('test toast', debounce: true);
     print('--------------------------');
   }
 
   void _show() {
     SmartDialog.show(
-      isLoadingTemp: false,
       widget: Container(
         height: 80,
         width: 180,
@@ -79,8 +78,7 @@ class SmartDialogPage extends StatelessWidget {
     var attachDialog = (BuildContext context) {
       SmartDialog.showAttach(
         targetContext: context,
-        isPenetrateTemp: true,
-        alignmentTemp: Alignment.topCenter,
+        alignment: Alignment.topCenter,
         useSystem: true,
         widget: Container(width: 100, height: 100, color: Colors.red),
       );
@@ -88,7 +86,6 @@ class SmartDialogPage extends StatelessWidget {
 
     //target widget
     SmartDialog.show(
-      isLoadingTemp: false,
       useSystem: true,
       widget: Container(
         height: 300,

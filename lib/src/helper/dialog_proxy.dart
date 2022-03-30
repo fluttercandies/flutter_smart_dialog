@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/config/config.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_loading.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_toast.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 
 import '../dialog.dart';
 import '../smart_dialog.dart';
-import 'config.dart';
 
 class DialogProxy {
   late Config config;
@@ -61,7 +61,7 @@ class DialogProxy {
     required bool isPenetrate,
     required bool isUseAnimation,
     required Duration animationDuration,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required Color maskColor,
     required bool clickBgDismiss,
     required Widget? maskWidget,
@@ -83,7 +83,7 @@ class DialogProxy {
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
       animationDuration: animationDuration,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
@@ -104,7 +104,7 @@ class DialogProxy {
     required bool isPenetrate,
     required bool isUseAnimation,
     required Duration animationDuration,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required Color maskColor,
     required bool clickBgDismiss,
     required Widget? maskWidget,
@@ -130,7 +130,7 @@ class DialogProxy {
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
       animationDuration: animationDuration,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
       highlight: highlight,
@@ -147,7 +147,7 @@ class DialogProxy {
 
   Future<void> showLoading({
     required bool clickBgDismiss,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required bool isPenetrate,
     required bool isUseAnimation,
     required Duration animationDuration,
@@ -158,7 +158,7 @@ class DialogProxy {
   }) {
     return _loading.showLoading(
       clickBgDismiss: clickBgDismiss,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
       isPenetrate: isPenetrate,
@@ -171,7 +171,7 @@ class DialogProxy {
 
   Future<void> showToast({
     required bool clickBgDismiss,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required bool isPenetrate,
     required bool isUseAnimation,
     required Duration animationDuration,
@@ -185,7 +185,7 @@ class DialogProxy {
   }) async {
     return _toast.showToast(
       clickBgDismiss: clickBgDismiss,
-      isLoading: isLoading,
+      animationType: animationType,
       isPenetrate: isPenetrate,
       isUseAnimation: isUseAnimation,
       animationDuration: animationDuration,
