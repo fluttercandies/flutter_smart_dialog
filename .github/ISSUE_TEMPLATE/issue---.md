@@ -1,6 +1,6 @@
 ---
 name: Issue 模板
-about: 请务必填写相关信息，这样能快速定位问题和解决问题
+about: 请务必填写模板信息，这样能快速定位问题和解决问题
 title: ''
 labels: ''
 assignees: ''
