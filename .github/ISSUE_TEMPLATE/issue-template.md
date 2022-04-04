@@ -15,4 +15,4 @@ assignees: ''
 Please describe the bug or requirement accurately
 
 ## Problem demo
-<!-- Provide the simplest demo (executable main file) that can reproduce the problem, which can save a lot of communication time, quickly locate and solve the problem -->
+<!-- Provide the simplest demo (executable main file) that can reproduce the problem, which can save a lot of communication time, and can quickly locate and solve the problem -->
