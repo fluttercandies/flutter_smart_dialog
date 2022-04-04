@@ -21,10 +21,11 @@ class CustomToast extends BaseDialog {
   Completer? _curCompleter;
 
   Future<void> showToast({
+    required AlignmentGeometry alignment,
     required bool clickBgDismiss,
     required SmartAnimationType animationType,
-    required bool isPenetrate,
-    required bool isUseAnimation,
+    required bool usePenetrate,
+    required bool useAnimation,
     required Duration animationDuration,
     required Color maskColor,
     required Widget? maskWidget,
@@ -46,13 +47,13 @@ class CustomToast extends BaseDialog {
     showToast() {
       mainDialog.show(
         widget: widget,
-        alignment: Alignment.center,
+        alignment: alignment,
         maskColor: maskColor,
         maskWidget: maskWidget,
         animationDuration: animationDuration,
         animationType: animationType,
-        isUseAnimation: isUseAnimation,
-        isPenetrate: isPenetrate,
+        useAnimation: useAnimation,
+        usePenetrate: usePenetrate,
         clickBgDismiss: clickBgDismiss,
         onDismiss: null,
         useSystem: false,

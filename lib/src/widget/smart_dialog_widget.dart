@@ -12,9 +12,9 @@ class SmartDialogWidget extends StatefulWidget {
     required this.controller,
     required this.onBgTap,
     required this.alignment,
-    required this.isPenetrate,
+    required this.usePenetrate,
     required this.animationDuration,
-    required this.isUseAnimation,
+    required this.useAnimation,
     required this.animationType,
     required this.maskColor,
     required this.clickBgDismiss,
@@ -34,13 +34,13 @@ class SmartDialogWidget extends StatefulWidget {
   final AlignmentGeometry alignment;
 
   /// 是否穿透背景,交互背景之后控件
-  final bool isPenetrate;
+  final bool usePenetrate;
 
   /// 动画时间
   final Duration animationDuration;
 
   /// 是否使用动画
-  final bool isUseAnimation;
+  final bool useAnimation;
 
   /// 是否使用Loading情况；true:内容体使用渐隐动画  false：内容体使用缩放动画
   /// 仅仅针对中间位置的控件
@@ -106,15 +106,15 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
       //暗色背景widget动画
       _buildBgAnimation(
         onPointerUp: widget.clickBgDismiss ? widget.onBgTap : null,
-        child: (widget.maskWidget != null && !widget.isPenetrate)
+        child: (widget.maskWidget != null && !widget.usePenetrate)
             ? widget.maskWidget
-            : Container(color: widget.isPenetrate ? null : widget.maskColor),
+            : Container(color: widget.usePenetrate ? null : widget.maskColor),
       ),
 
       //内容Widget动画
       Container(
         alignment: widget.alignment,
-        child: widget.isUseAnimation ? _buildBodyAnimation() : widget.child,
+        child: widget.useAnimation ? _buildBodyAnimation() : widget.child,
       ),
     ]);
   }
@@ -184,7 +184,7 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
     _ctrlBg?.reverse();
     _ctrlBody.reverse();
 
-    if (widget.isUseAnimation) {
+    if (widget.useAnimation) {
       await Future.delayed(widget.animationDuration);
     }
   }

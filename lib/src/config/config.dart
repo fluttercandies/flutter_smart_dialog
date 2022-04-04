@@ -5,11 +5,13 @@ import 'package:flutter_smart_dialog/src/config/toast_config.dart';
 
 import 'attach_config.dart';
 
+/// Global configuration is unified here
+///
 /// 全局配置统一在此处处理
 class Config {
   /// show(): custom dialog global config
   ///
-  /// show(): 自定义dialog全局配置项
+  /// show(): custom dialog全局配置项
   CustomConfig custom = CustomConfig();
 
   /// showAttach(): attach dialog global config
@@ -27,9 +29,9 @@ class Config {
   /// showToast(): toast全局配置项
   ToastConfig toast = ToastConfig();
 
-  /// compatible with older versions
+  /// compatible with 3.x versions
   ///
-  /// 兼容老版本配置
+  /// 兼容3.x版本配置
   CompatibleConfig compatible = CompatibleConfig();
 
   /// whether custom dialog，attach and loading  exist on the screen

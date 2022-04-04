@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import 'compatible/compatible_smart_dialog.dart';
 import 'config/config.dart';
 import 'helper/dialog_proxy.dart';
 import 'widget/attach_dialog_widget.dart';
@@ -78,6 +79,9 @@ enum SmartToastType {
   firstAndLast,
 }
 
+/// Different animation types can be set for dialog (appearing and disappearing)
+///
+/// 可给弹窗(出现和消失)设置不同的动画类型
 enum SmartAnimationType {
   /// FadeTransition
   ///
@@ -94,32 +98,37 @@ enum SmartAnimationType {
 }
 
 class SmartDialog {
+  /// Compatible with version 3.x
+  ///
+  /// 兼容3.x版本
+  static CompatibleSmartDialog compatible = CompatibleSmartDialog.instance;
+
   /// SmartDialog global config
   ///
   /// SmartDialog全局配置
   static Config config = DialogProxy.instance.config;
 
-  /// custom dialog：param with a suffix of 'temp', indicating that such params can be set to default values in [Config]
+  /// custom dialog
   ///
   /// [widget]：custom widget
   ///
-  /// [alignmentTemp]：control the location of the dialog
+  /// [alignment]：control the location of the dialog
   ///
-  /// [clickBgDismissTemp]：true（the dialog will be closed after click background），false（not close）
+  /// [clickBgDismiss]：true（the dialog will be closed after click background），false（not close）
   ///
-  /// [isLoadingTemp]：true（use the opacity animation），false（use the scale transition animation）
+  /// [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///
-  /// [isPenetrateTemp]：true（the click event will penetrate background），false（not penetration）
+  /// [usePenetrate]：true（the click event will penetrate background），false（not penetration）
   ///
-  /// [isUseAnimationTemp]：true（use the animation），false（not use）
+  /// [useAnimation]：true（use the animation），false（not use）
   ///
-  /// [animationDurationTemp]：animation duration
+  /// [animationDuration]：animation duration
   ///
-  /// [maskColorTemp]：the color of the mask，it is invalid if [maskWidgetTemp] set the value and [isPenetrateTemp] is true
+  /// [maskColor]：the color of the mask，it is invalid if [maskWidget] set the value and [usePenetrate] is true
   ///
-  /// [maskWidgetTemp]：highly customizable mask
+  /// [maskWidget]：highly customizable mask
   ///
-  /// [debounceTemp]：debounce feature
+  /// [debounce]：debounce feature
   ///
   /// [onDismiss]：the callback will be invoked when the dialog is closed
   ///
@@ -131,32 +140,32 @@ class SmartDialog {
   /// [keepSingle]：Default (false), true (calling [show] multiple times will not generate multiple dialogs,
   /// only single dialog will be kept), false (calling [show] multiple times will generate multiple dialogs)
   ///
-  /// [useSystem]: default (false), true (using the system dialog, [isPenetrateTemp] is invalid, [tag] and [keepSingle] are prohibited),
+  /// [useSystem]: default (false), true (using the system dialog, [usePenetrate] is invalid, [tag] and [keepSingle] are prohibited),
   /// false (using SmartDialog), this param can completely solve the page jump scene on the dialog
   ///
   /// -------------------------------------------------------------------------------
   ///
-  /// 提供自定义弹窗：以 'temp' 后缀的参数，表示此类参数都可在[Config]中设置默认值
+  /// 自定义弹窗
   ///
   /// [widget]：自定义 widget
   ///
-  /// [alignmentTemp]：控制弹窗的位置
+  /// [alignment]：控制弹窗的位置
   ///
-  /// [clickBgDismissTemp]：true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  /// [clickBgDismiss]：true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
   ///
-  /// [isLoadingTemp]：true（使用透明动画），false（使用尺寸缩放动画）
+  /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
-  /// [isPenetrateTemp]：true（点击事件将穿透背景），false（不穿透）
+  /// [usePenetrate]：true（点击事件将穿透背景），false（不穿透）
   ///
-  /// [isUseAnimationTemp]：true（使用动画），false（不使用）
+  /// [useAnimation]：true（使用动画），false（不使用）
   ///
-  /// [animationDurationTemp]：动画持续时间
+  /// [animationDuration]：动画持续时间
   ///
-  /// [maskColorTemp]：遮罩颜色，如果给[maskWidgetTemp]设置了值，该参数将会失效
+  /// [maskColor]：遮罩颜色，如果给[maskWidget]设置了值，该参数将会失效
   ///
-  /// [maskWidgetTemp]：可高度定制遮罩
+  /// [maskWidget]：可高度定制遮罩
   ///
-  /// [debounceTemp]：防抖功能（debounce）
+  /// [debounce]：防抖功能
   ///
   /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
   ///
@@ -168,7 +177,7 @@ class SmartDialog {
   /// [keepSingle]：默认（false），true（多次调用[show]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[show]会生成多个dialog）
   ///
-  /// [useSystem]：默认（false），true（使用系统dialog，[isPenetrateTemp]功能失效,[tag]和[keepSingle]禁止使用），
+  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效,[tag]和[keepSingle]禁止使用），
   /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题
   static Future<void> show({
     required Widget widget,
@@ -202,8 +211,8 @@ class SmartDialog {
       alignment: alignment ?? config.custom.alignment,
       clickBgDismiss: clickBgDismiss ?? config.custom.clickBgDismiss,
       animationType: animationType ?? config.custom.animationType,
-      isPenetrate: usePenetrate ?? config.custom.usePenetrate,
-      isUseAnimation: useAnimation ?? config.custom.useAnimation,
+      usePenetrate: usePenetrate ?? config.custom.usePenetrate,
+      useAnimation: useAnimation ?? config.custom.useAnimation,
       animationDuration: animationDuration ?? config.custom.animationDuration,
       maskColor: maskColor ?? config.custom.maskColor,
       maskWidget: maskWidget ?? config.custom.maskWidget,
@@ -216,8 +225,7 @@ class SmartDialog {
     );
   }
 
-  /// custom dialog for specific locations：param with a suffix of 'temp',
-  /// indicating that such params can be set to default values in [Config]
+  /// attach dialog
   ///
   /// [targetContext]：BuildContext with target widget
   ///
@@ -226,23 +234,23 @@ class SmartDialog {
   /// [target]：target offset，when the target is set to value，
   /// the targetContext param will be invalid
   ///
-  /// [alignmentTemp]：control the location of the dialog
+  /// [alignment]：control the location of the dialog
   ///
-  /// [clickBgDismissTemp]：true（the dialog will be closed after click background），false（not close）
+  /// [clickBgDismiss]：true（the dialog will be closed after click background），false（not close）
   ///
-  /// [isLoadingTemp]：true（use the opacity animation），false（use the scale transition animation）
+  /// [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///
-  /// [isPenetrateTemp]：true（the click event will penetrate background），false（not penetration）
+  /// [usePenetrate]：true（the click event will penetrate background），false（not penetration）
   ///
-  /// [isUseAnimationTemp]：true（use the animation），false（not use）
+  /// [useAnimation]：true（use the animation），false（not use）
   ///
-  /// [animationDurationTemp]：animation duration
+  /// [animationDuration]：animation duration
   ///
-  /// [maskColorTemp]：the color of the mask，it is invalid if [maskWidgetTemp] set the value and [isPenetrateTemp] is true
+  /// [maskColor]：the color of the mask，it is invalid if [maskWidget] set the value and [usePenetrate] is true
   ///
-  /// [maskWidgetTemp]：highly customizable mask
+  /// [maskWidget]：highly customizable mask
   ///
-  /// [debounceTemp]：debounce feature
+  /// [debounce]：debounce feature
   ///
   /// [highlight]：highlight feature, dissolve the mask of a specific area
   ///
@@ -260,12 +268,12 @@ class SmartDialog {
   /// [keepSingle]：Default (false), true (calling [showAttach] multiple times will not generate multiple dialogs,
   /// only single dialog will be kept), false (calling [showAttach] multiple times will generate multiple dialogs)
   ///
-  /// [useSystem]: default (false), true (using the system dialog, [isPenetrateTemp] is invalid, [tag] and [keepSingle] are prohibited),
+  /// [useSystem]: default (false), true (using the system dialog, [usePenetrate] is invalid, [tag] and [keepSingle] are prohibited),
   /// false (using SmartDialog), this param can completely solve the page jump scene on the dialog
   ///
   /// -------------------------------------------------------------------------------
   ///
-  /// 提供自定义特定位置弹窗：以 'temp' 后缀的参数，表示此类参数都可在[Config]中设置默认值
+  /// 定位弹窗
   ///
   /// [targetContext]：伴随位置widget的BuildContext
   ///
@@ -273,23 +281,23 @@ class SmartDialog {
   ///
   /// [target]：target offset，当target被设置数据，targetContext参数将失效
   ///
-  /// [alignmentTemp]：控制弹窗的位置
+  /// [alignment]：控制弹窗的位置
   ///
-  /// [clickBgDismissTemp]：true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  /// [clickBgDismiss]：true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
   ///
-  /// [isLoadingTemp]：true（使用透明动画），false（使用尺寸缩放动画）
+  /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
-  /// [isPenetrateTemp]：true（点击事件将穿透背景），false（不穿透）
+  /// [usePenetrate]：true（点击事件将穿透背景），false（不穿透）
   ///
-  /// [isUseAnimationTemp]：true（使用动画），false（不使用）
+  /// [useAnimation]：true（使用动画），false（不使用）
   ///
-  /// [animationDurationTemp]：动画持续时间
+  /// [animationDuration]：动画持续时间
   ///
-  /// [maskColorTemp]：遮罩颜色，如果给[maskWidgetTemp]设置了值，该参数将会失效
+  /// [maskColor]：遮罩颜色，如果给[maskWidget]设置了值，该参数将会失效
   ///
-  /// [maskWidgetTemp]：可高度定制遮罩
+  /// [maskWidget]：可高度定制遮罩
   ///
-  /// [debounceTemp]：防抖功能（debounce）
+  /// [debounce]：防抖功能
   ///
   /// [highlight]：高亮功能，溶解特定区域的遮罩
   ///
@@ -306,7 +314,7 @@ class SmartDialog {
   /// [keepSingle]：默认（false），true（多次调用[showAttach]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[showAttach]会生成多个dialog）
   ///
-  /// [useSystem]：默认（false），true（使用系统dialog，[isPenetrateTemp]功能失效,[tag]和[keepSingle]禁止使用），
+  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效,[tag]和[keepSingle]禁止使用），
   /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题
   static Future<void> showAttach({
     required BuildContext? targetContext,
@@ -350,8 +358,8 @@ class SmartDialog {
       alignment: alignment ?? config.attach.alignment,
       clickBgDismiss: clickBgDismiss ?? config.attach.clickBgDismiss,
       animationType: animationType ?? config.attach.animationType,
-      isPenetrate: usePenetrate ?? config.attach.usePenetrate,
-      isUseAnimation: useAnimation ?? config.attach.useAnimation,
+      usePenetrate: usePenetrate ?? config.attach.usePenetrate,
+      useAnimation: useAnimation ?? config.attach.useAnimation,
       animationDuration: animationDuration ?? config.attach.animationDuration,
       maskColor: maskColor ?? config.attach.maskColor,
       maskWidget: maskWidget ?? config.attach.maskWidget,
@@ -366,28 +374,27 @@ class SmartDialog {
     );
   }
 
-  /// loading dialog：param with a suffix of 'temp', indicating that such params can be set to default values in [Config]
+  /// loading dialog
   ///
   /// [msg]：loading msg (Use the 'widget' param, this param will be invalid)
   ///
   /// [background]：the rectangle background color of msg (Use the 'widget' param, this param will be invalid)
   ///
-  /// [clickBgDismissTemp]：default（false），true（loading will be closed after click background），
+  /// [clickBgDismiss]：default（false），true（loading will be closed after click background），
   /// false（not close）
   ///
-  /// [isLoadingTemp]：default（true），true（use the opacity animation），
-  /// false（use the scale transition animation）
+  /// [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///
-  /// [isPenetrateTemp]：default（false），true（the click event will penetrate background），
+  /// [usePenetrate]：default（false），true（the click event will penetrate background），
   /// false（not penetration）
   ///
-  /// [isUseAnimationTemp]：true（use the animation），false（not use）
+  /// [useAnimation]：true（use the animation），false（not use）
   ///
-  /// [animationDurationTemp]：animation duration
+  /// [animationDuration]：animation duration
   ///
-  /// [maskColorTemp]：the color of the mask，it is invalid if [maskWidgetTemp] set the value
+  /// [maskColor]：the color of the mask，it is invalid if [maskWidget] set the value
   ///
-  /// [maskWidgetTemp]：highly customizable mask
+  /// [maskWidget]：highly customizable mask
   ///
   /// [widget]：the custom loading
   ///
@@ -397,25 +404,25 @@ class SmartDialog {
   ///
   /// -------------------------------------------------------------------------------
   ///
-  /// loading弹窗：以 'temp' 后缀的参数，表示此类参数都可在[Config]中设置默认值
+  /// loading弹窗
   ///
   /// [msg]：loading 的信息（使用 'widget' 参数，该参数将失效）
   ///
   /// [background]：loading信息后面的矩形背景颜色（使用 'widget' 参数，该参数将失效）
   ///
-  /// [clickBgDismissTemp]：默认（false），true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  /// [clickBgDismiss]：默认（false），true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
   ///
-  /// [isLoadingTemp]：默认（true），true（使用透明动画），false（使用尺寸缩放动画）
+  /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
-  /// [isPenetrateTemp]：默认（false），true（点击事件将穿透背景），false（不穿透）
+  /// [usePenetrate]：默认（false），true（点击事件将穿透背景），false（不穿透）
   ///
-  /// [isUseAnimationTemp]：true（使用动画），false（不使用）
+  /// [useAnimation]：true（使用动画），false（不使用）
   ///
-  /// [animationDurationTemp]：动画持续时间
+  /// [animationDuration]：动画持续时间
   ///
-  /// [maskColorTemp]：遮罩颜色，如果给[maskWidgetTemp]设置了值，该参数将会失效
+  /// [maskColor]：遮罩颜色，如果给[maskWidget]设置了值，该参数将会失效
   ///
-  /// [maskWidgetTemp]：可高度定制遮罩
+  /// [maskWidget]：可高度定制遮罩
   ///
   /// [widget]：the custom loading
   ///
@@ -437,8 +444,8 @@ class SmartDialog {
     return DialogProxy.instance.showLoading(
       clickBgDismiss: clickBgDismiss ?? config.loading.clickBgDismiss,
       animationType: animationType ?? config.loading.animationType,
-      isPenetrate: usePenetrate ?? config.loading.usePenetrate,
-      isUseAnimation: useAnimation ?? config.loading.useAnimation,
+      usePenetrate: usePenetrate ?? config.loading.usePenetrate,
+      useAnimation: useAnimation ?? config.loading.useAnimation,
       animationDuration: animationDuration ?? config.loading.animationDuration,
       maskColor: maskColor ?? config.loading.maskColor,
       maskWidget: maskWidget ?? config.loading.maskWidget,
@@ -447,35 +454,36 @@ class SmartDialog {
     );
   }
 
-  /// toast message: param with a suffix of 'temp', indicating that such params can be set to default values in [Config]
+  /// toast message
   ///
   /// [msg]：msg presented to users(Use the 'widget' param, this param will be invalid)
   ///
-  /// [clickBgDismissTemp]：default（false），true（loading will be closed after click background），
+  /// [alignment]：control the location of the dialog
+  ///
+  /// [clickBgDismiss]：default（false），true（loading will be closed after click background），
   /// false（not close）
   ///
-  /// [isLoadingTemp]：default（true），true（use the opacity animation），
-  /// false（use the scale transition animation）
+  /// [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///
-  /// [isPenetrateTemp]：default（true），true（the click event will penetrate background），
+  /// [usePenetrate]：default（true），true（the click event will penetrate background），
   /// false（not penetration）
   ///
-  /// [isUseAnimationTemp]：true（use the animation），false（not use）
+  /// [useAnimation]：true（use the animation），false（not use）
   ///
-  /// [animationDurationTemp]：animation duration
+  /// [animationDuration]：animation duration
   ///
-  /// [maskColorTemp]：the color of the mask，it is invalid if [maskWidgetTemp] set the value
+  /// [maskColor]：the color of the mask，it is invalid if [maskWidget] set the value
   ///
-  /// [maskWidgetTemp]：highly customizable mask
+  /// [maskWidget]：highly customizable mask
   ///
-  /// [alignment]：control the location of toast on the screen
+  /// [location]：control the location of toast on the screen
   ///
   /// [consumeEvent]： default (false), true (toast will consume touch events),
   /// false (toast no longer consumes events, touch events can penetrate toast)
   ///
   /// [time]：toast display time on the screen(Use the 'widget' param, this param will be invalid)
   ///
-  /// [debounceTemp]：debounce feature
+  /// [debounce]：debounce feature
   ///
   /// [type]：provider multiple display logic，
   /// please refer to [SmartToastType] comment for detailed description
@@ -484,37 +492,40 @@ class SmartDialog {
   ///
   /// -------------------------------------------------------------------------------
   ///
-  /// toast消息：以 'temp' 后缀的参数，表示此类参数都可在[Config]中设置默认值
+  /// toast消息
   ///
   /// [msg]：呈现给用户的信息（使用 'widget' 参数，该参数将失效）
   ///
-  /// [clickBgDismissTemp]：默认（false），true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  /// [alignment]：控制弹窗的位置
   ///
-  /// [isLoadingTemp]：默认（true），true（使用透明动画），false（使用尺寸缩放动画）
+  /// [clickBgDismiss]：默认（false），true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
   ///
-  /// [isPenetrateTemp]：默认（true），true（点击事件将穿透背景），false（不穿透）
+  /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
-  /// [isUseAnimationTemp]：true（使用动画），false（不使用）
+  /// [usePenetrate]：默认（true），true（点击事件将穿透背景），false（不穿透）
   ///
-  /// [animationDurationTemp]：动画持续时间
+  /// [useAnimation]：true（使用动画），false（不使用）
   ///
-  /// [maskColorTemp]：遮罩颜色，如果给[maskWidgetTemp]设置了值，该参数将会失效
+  /// [animationDuration]：动画持续时间
   ///
-  /// [maskWidgetTemp]：可高度定制遮罩
+  /// [maskColor]：遮罩颜色，如果给[maskWidget]设置了值，该参数将会失效
   ///
-  /// [alignment]：控制toast在屏幕上的显示位置（使用 'widget' 参数，该参数将失效）
+  /// [maskWidget]：可高度定制遮罩
+  ///
+  /// [location]：控制toast在屏幕上的显示位置（使用 'widget' 参数，该参数将失效）
   ///
   /// [consumeEvent]：默认（false），true（toast会消耗触摸事件），false（toast不再消耗事件，触摸事件能穿透toast）
   ///
   /// [time]：toast在屏幕上的显示时间
   ///
-  /// [debounceTemp]：防抖功能（debounce）
+  /// [debounce]：防抖功能
   ///
   /// [type]：提供多种显示逻辑，详细描述请查看 [SmartToastType] 注释
   ///
   /// [widget]：可高度定制化toast
   static Future<void> showToast(
     String msg, {
+    AlignmentGeometry? alignment,
     bool? clickBgDismiss,
     SmartAnimationType? animationType,
     bool? usePenetrate,
@@ -522,7 +533,7 @@ class SmartDialog {
     Duration? animationDuration,
     Color? maskColor,
     Widget? maskWidget,
-    AlignmentGeometry alignment = Alignment.bottomCenter,
+    AlignmentGeometry location = Alignment.bottomCenter,
     bool? consumeEvent,
     Duration? time,
     bool? debounce,
@@ -530,10 +541,11 @@ class SmartDialog {
     Widget? widget,
   }) async {
     return DialogProxy.instance.showToast(
+      alignment: alignment ?? config.toast.alignment,
       clickBgDismiss: clickBgDismiss ?? config.toast.clickBgDismiss,
       animationType: animationType ?? config.toast.animationType,
-      isPenetrate: usePenetrate ?? config.toast.usePenetrate,
-      isUseAnimation: useAnimation ?? config.toast.useAnimation,
+      usePenetrate: usePenetrate ?? config.toast.usePenetrate,
+      useAnimation: useAnimation ?? config.toast.useAnimation,
       animationDuration: animationDuration ?? config.toast.animationDuration,
       maskColor: maskColor ?? config.toast.maskColor,
       maskWidget: maskWidget ?? config.toast.maskWidget,
@@ -541,7 +553,7 @@ class SmartDialog {
       time: time ?? Duration(milliseconds: 2000),
       debounce: debounce ?? config.toast.clickBgDismiss,
       type: type ?? SmartToastType.normal,
-      widget: widget ?? DialogProxy.instance.toastBuilder(msg, alignment),
+      widget: widget ?? DialogProxy.instance.toastBuilder(msg, location),
     );
   }
 
@@ -552,6 +564,7 @@ class SmartDialog {
   /// [tag]：if you want to close the specified dialog, you can set a 'tag' for it
   ///
   /// -------------------------------------------------------------------------------
+  /// 关闭dialog
   ///
   /// [status]：具体含义可参照[SmartStatus]注释
   /// 注意：status参数设置值后，closeType参数将失效。

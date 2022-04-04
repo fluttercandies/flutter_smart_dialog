@@ -19,10 +19,10 @@ class AttachDialogWidget extends StatefulWidget {
     required this.target,
     required this.controller,
     required this.animationDuration,
-    required this.isUseAnimation,
+    required this.useAnimation,
     required this.onBgTap,
     required this.alignment,
-    required this.isPenetrate,
+    required this.usePenetrate,
     required this.animationType,
     required this.maskColor,
     required this.clickBgDismiss,
@@ -37,7 +37,7 @@ class AttachDialogWidget extends StatefulWidget {
   final Offset? target;
 
   /// 是否使用动画
-  final bool isUseAnimation;
+  final bool useAnimation;
 
   ///动画时间
   final Duration animationDuration;
@@ -55,7 +55,7 @@ class AttachDialogWidget extends StatefulWidget {
   final AlignmentGeometry alignment;
 
   /// 是否穿透背景,交互背景之后控件
-  final bool isPenetrate;
+  final bool usePenetrate;
 
   /// 是否使用Loading情况；true:内容体使用渐隐动画  false：内容体使用缩放动画
   /// 仅仅针对中间位置的控件
@@ -149,9 +149,9 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       //暗色背景widget动画
       _buildBgAnimation(
         onPointerUp: widget.clickBgDismiss ? widget.onBgTap : null,
-        child: (widget.maskWidget != null && !widget.isPenetrate)
+        child: (widget.maskWidget != null && !widget.usePenetrate)
             ? widget.maskWidget
-            : widget.isPenetrate
+            : widget.usePenetrate
                 ? Container()
                 : ColorFiltered(
                     colorFilter: ColorFilter.mode(
@@ -198,7 +198,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
         right: _targetRect?.right,
         top: _targetRect?.top,
         bottom: _targetRect?.bottom,
-        child: widget.isUseAnimation ? _buildBodyAnimation(child) : child,
+        child: widget.useAnimation ? _buildBodyAnimation(child) : child,
       ),
     ]);
   }
@@ -301,7 +301,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     _ctrlBg?.reverse();
     _ctrlBody.reverse();
 
-    if (widget.isUseAnimation) {
+    if (widget.useAnimation) {
       await Future.delayed(widget.animationDuration);
     }
   }

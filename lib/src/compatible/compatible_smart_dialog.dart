@@ -9,11 +9,18 @@ import '../smart_dialog.dart';
 import 'compatible_config.dart';
 
 class CompatibleSmartDialog {
+  factory CompatibleSmartDialog() => instance;
+  static CompatibleSmartDialog? _instance;
+
+  static CompatibleSmartDialog get instance =>
+      _instance ??= CompatibleSmartDialog._();
+
+  CompatibleSmartDialog._();
+
   /// SmartDialog global config
   ///
   /// SmartDialog全局配置
-
-  static CompatibleConfig config = DialogProxy.instance.config.compatible;
+  CompatibleConfig config = DialogProxy.instance.config.compatible;
 
   /// custom dialog：param with a suffix of 'temp', indicating that such params can be set to default values in [Config]
   ///
@@ -86,7 +93,7 @@ class CompatibleSmartDialog {
   ///
   /// [useSystem]：默认（false），true（使用系统dialog，[isPenetrateTemp]功能失效,[tag]和[keepSingle]禁止使用），
   /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题
-  static Future<void> show({
+  Future<void> show({
     required Widget widget,
     AlignmentGeometry? alignmentTemp,
     bool? clickBgDismissTemp,
@@ -120,8 +127,8 @@ class CompatibleSmartDialog {
       animationType: isLoadingTemp ?? config.isLoading
           ? SmartAnimationType.fade
           : SmartAnimationType.scale,
-      isPenetrate: isPenetrateTemp ?? config.isPenetrate,
-      isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
+      usePenetrate: isPenetrateTemp ?? config.isPenetrate,
+      useAnimation: isUseAnimationTemp ?? config.isUseAnimation,
       animationDuration: animationDurationTemp ?? config.animationDuration,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
@@ -226,7 +233,7 @@ class CompatibleSmartDialog {
   ///
   /// [useSystem]：默认（false），true（使用系统dialog，[isPenetrateTemp]功能失效,[tag]和[keepSingle]禁止使用），
   /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题
-  static Future<void> showAttach({
+  Future<void> showAttach({
     required BuildContext? targetContext,
     required Widget widget,
     Offset? target,
@@ -270,8 +277,8 @@ class CompatibleSmartDialog {
       animationType: isLoadingTemp ?? false
           ? SmartAnimationType.fade
           : SmartAnimationType.scale,
-      isPenetrate: isPenetrateTemp ?? config.isPenetrate,
-      isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
+      usePenetrate: isPenetrateTemp ?? config.isPenetrate,
+      useAnimation: isUseAnimationTemp ?? config.isUseAnimation,
       animationDuration: animationDurationTemp ?? config.animationDuration,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
@@ -341,7 +348,7 @@ class CompatibleSmartDialog {
   ///
   /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），
   /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭loading
-  static Future<void> showLoading({
+  Future<void> showLoading({
     String msg = 'loading...',
     Color background = Colors.black,
     bool? clickBgDismissTemp,
@@ -359,8 +366,8 @@ class CompatibleSmartDialog {
       animationType: isLoadingTemp ?? true
           ? SmartAnimationType.fade
           : SmartAnimationType.scale,
-      isPenetrate: isPenetrateTemp ?? false,
-      isUseAnimation: isUseAnimationTemp ?? config.isUseAnimation,
+      usePenetrate: isPenetrateTemp ?? false,
+      useAnimation: isUseAnimationTemp ?? config.isUseAnimation,
       animationDuration: animationDurationTemp ?? config.animationDuration,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
@@ -435,7 +442,7 @@ class CompatibleSmartDialog {
   /// [type]：提供多种显示逻辑，详细描述请查看 [SmartToastType] 注释
   ///
   /// [widget]：可高度定制化toast
-  static Future<void> showToast(
+  Future<void> showToast(
     String msg, {
     bool? clickBgDismissTemp,
     bool? isLoadingTemp,
@@ -452,12 +459,13 @@ class CompatibleSmartDialog {
     Widget? widget,
   }) async {
     return DialogProxy.instance.showToast(
+      alignment: Alignment.bottomCenter,
       clickBgDismiss: clickBgDismissTemp ?? false,
       animationType: isLoadingTemp ?? true
           ? SmartAnimationType.fade
           : SmartAnimationType.scale,
-      isPenetrate: isPenetrateTemp ?? true,
-      isUseAnimation: isUseAnimationTemp ?? true,
+      usePenetrate: isPenetrateTemp ?? true,
+      useAnimation: isUseAnimationTemp ?? true,
       animationDuration: animationDurationTemp ?? Duration(milliseconds: 200),
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
@@ -493,7 +501,7 @@ class CompatibleSmartDialog {
   /// 3（仅关闭loading），other（全关闭）
   ///
   /// [tag]：如果你想关闭指定的dialog，你可以给它设置一个tag
-  static Future<void> dismiss({
+  Future<void> dismiss({
     SmartStatus? status,
     String? tag,
     @deprecated int closeType = 0,
