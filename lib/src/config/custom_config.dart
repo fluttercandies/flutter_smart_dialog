@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/src/smart_dialog.dart';
+
+import 'enum_config.dart';
 
 ///show() global config
 ///
@@ -16,6 +17,7 @@ class CustomConfig {
     this.clickBgDismiss = true,
     this.debounce = false,
     this.debounceTime = const Duration(milliseconds: 300),
+    this.isExist =false,
   });
 
   /// control the location of the dialog on the screen
@@ -84,7 +86,7 @@ class CustomConfig {
 
   /// debounce feature，it works on toast and dialog：default（false）;
   ///
-  /// 防抖功能（debounce），它作用于toast和dialog上：默认（false）;
+  /// 防抖功能，它作用于toast和dialog上：默认（false）;
   bool debounce;
 
   /// [debounceTime]：Within the debounce time, multiple clicks will only respond to the first time,
@@ -96,5 +98,5 @@ class CustomConfig {
   /// whether custom dialog(show()) exist on the screen
   ///
   /// 自定义dialog(show())，是否存在在界面上
-  bool isExist = false;
+  bool isExist;
 }

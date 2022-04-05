@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 
 import '../config/config.dart';
+import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
 import '../smart_dialog.dart';
 
@@ -157,9 +158,10 @@ class CustomToast extends BaseDialog {
     config.toast.isExist = false;
   }
 
-  Future<void> dismiss() async {
+  Future<T?> dismiss<T>() async {
     _curTime?.cancel();
     if (!(_curCompleter?.isCompleted ?? true)) _curCompleter?.complete();
     await Future.delayed(Duration(milliseconds: 1));
+    return null;
   }
 }

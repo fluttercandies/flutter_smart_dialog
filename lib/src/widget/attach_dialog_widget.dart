@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/location.dart';
 
-import '../smart_dialog.dart';
+import '../config/enum_config.dart';
 
 typedef HighlightBuilder = Positioned Function(
   Offset targetOffset,
@@ -26,7 +26,6 @@ class AttachDialogWidget extends StatefulWidget {
     required this.animationType,
     required this.maskColor,
     required this.clickBgDismiss,
-    required this.highlight,
     required this.highlightBuilder,
     required this.maskWidget,
   }) : super(key: key);
@@ -68,8 +67,7 @@ class AttachDialogWidget extends StatefulWidget {
   final Widget? maskWidget;
 
   /// 溶解遮罩,设置高亮位置
-  final Positioned highlight;
-  final HighlightBuilder? highlightBuilder;
+  final HighlightBuilder highlightBuilder;
 
   /// 点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
   final bool clickBgDismiss;
@@ -169,9 +167,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
                       ),
 
                       //dissolve mask, highlight location
-                      widget.highlightBuilder == null
-                          ? widget.highlight
-                          : widget.highlightBuilder!(targetOffset, targetSize),
+                      widget.highlightBuilder(targetOffset, targetSize)
                     ]),
                   ),
       ),
@@ -225,7 +221,10 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
         //其它的都使用位移动画
         : SizeTransition(axis: _axis, sizeFactor: _ctrlBody, child: child);
 
-    return widget.animationType == SmartAnimationType.fade
+    bool useFade = (widget.animationType == SmartAnimationType.fade) ||
+        (widget.animationType == SmartAnimationType.centerFadeAndOtherScale &&
+            widget.alignment == Alignment.center);
+    return useFade
         ? FadeTransition(opacity: animation, child: child)
         : transition;
   }

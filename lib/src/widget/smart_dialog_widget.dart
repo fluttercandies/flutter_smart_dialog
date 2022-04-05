@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 
-import '../smart_dialog.dart';
+import '../config/enum_config.dart';
 
 class SmartDialogWidget extends StatefulWidget {
   SmartDialogWidget({
@@ -135,21 +135,19 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   Widget _buildBodyAnimation() {
     var animation = CurvedAnimation(parent: _ctrlBody, curve: Curves.linear);
-    var centerTransition = widget.animationType == SmartAnimationType.fade
-        ? FadeTransition(opacity: animation, child: widget.child)
-        : ScaleTransition(scale: animation, child: widget.child);
+    var tw = Tween<Offset>(begin: _offset, end: Offset.zero);
+    var transition = widget.alignment == Alignment.center
+        //中间弹窗动画使用缩放
+        ? ScaleTransition(scale: animation, child: widget.child)
+        //其它的都使用位移动画
+        : SlideTransition(position: tw.animate(_ctrlBody), child: widget.child);
 
-    return widget.alignment == Alignment.center
-        //中间弹窗动画的使用需要分情况 渐隐和缩放俩种
-        ? centerTransition
-        //除了中间弹窗,其它的都使用位移动画
-        : SlideTransition(
-            position: Tween<Offset>(
-              begin: _offset,
-              end: Offset.zero,
-            ).animate(_ctrlBody),
-            child: widget.child,
-          );
+    bool useFade = (widget.animationType == SmartAnimationType.fade) ||
+        (widget.animationType == SmartAnimationType.centerFadeAndOtherScale &&
+            widget.alignment == Alignment.center);
+    return useFade
+        ? FadeTransition(opacity: animation, child: widget.child)
+        : transition;
   }
 
   ///处理下内容widget动画方向

@@ -57,8 +57,8 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _show() {
-    SmartDialog.show(
-      widget: Container(
+    SmartDialog.show(builder: (_) {
+      return Container(
         height: 80,
         width: 180,
         decoration: BoxDecoration(
@@ -70,8 +70,8 @@ class SmartDialogPage extends StatelessWidget {
           'easy custom dialog',
           style: TextStyle(color: Colors.white),
         ),
-      ),
-    );
+      );
+    });
   }
 
   void _showAttach(BuildContext ctx) {
@@ -80,28 +80,32 @@ class SmartDialogPage extends StatelessWidget {
         targetContext: context,
         alignment: Alignment.topCenter,
         useSystem: true,
-        widget: Container(width: 100, height: 100, color: Colors.red),
+        builder: (_) {
+          return Container(width: 100, height: 100, color: Colors.red);
+        },
       );
     };
 
     //target widget
     SmartDialog.show(
       useSystem: true,
-      widget: Container(
-        height: 300,
-        width: 500,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
-        ),
-        alignment: Alignment.center,
-        child: Builder(builder: (context) {
-          return ElevatedButton(
-            onPressed: () => attachDialog(context),
-            child: Text('target widget'),
-          );
-        }),
-      ),
+      builder: (_) {
+        return Container(
+          height: 300,
+          width: 500,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white,
+          ),
+          alignment: Alignment.center,
+          child: Builder(builder: (context) {
+            return ElevatedButton(
+              onPressed: () => attachDialog(context),
+              child: Text('target widget'),
+            );
+          }),
+        );
+      },
     );
   }
 

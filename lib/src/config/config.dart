@@ -29,9 +29,9 @@ class Config {
   /// showToast(): toast全局配置项
   ToastConfig toast = ToastConfig();
 
-  /// compatible with 3.x versions
+  /// Compatible with older versions
   ///
-  /// 兼容3.x版本配置
+  /// 兼容老版本配置
   CompatibleConfig compatible = CompatibleConfig();
 
   /// whether custom dialog，attach and loading  exist on the screen

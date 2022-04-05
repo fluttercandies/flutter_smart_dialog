@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../smart_dialog.dart';
+import 'enum_config.dart';
 
 ///showToast() global config
 ///
@@ -17,6 +17,9 @@ class ToastConfig {
     this.clickBgDismiss = false,
     this.debounce = false,
     this.debounceTime = const Duration(milliseconds: 300),
+    this.consumeEvent = false,
+    this.displayTime = const Duration(milliseconds: 2000),
+    this.isExist = false,
   });
 
   /// control the location of the dialog on the screen
@@ -85,7 +88,7 @@ class ToastConfig {
 
   /// debounce feature，it works on toast and dialog：default（false）;
   ///
-  /// 防抖功能（debounce），它作用于toast和dialog上：默认（false）;
+  /// 防抖功能，它作用于toast和dialog上：默认（false）;
   bool debounce;
 
   /// [debounceTime]：Within the debounce time, multiple clicks will only respond to the first time,
@@ -94,8 +97,18 @@ class ToastConfig {
   /// [debounceTime]：防抖时间内，多次点击只会响应第一次，第二次无效点击会触发防抖时间重新计时
   Duration debounceTime;
 
-  /// whether toast exist on the screen
+  /// true (toast will consume touch events), false (toast no longer consumes events, touch events can penetrate toast)
   ///
-  /// toast是否存在在界面上
-  bool isExist = false;
+  /// true（toast会消耗触摸事件），false（toast不再消耗事件，触摸事件能穿透toast）
+  bool consumeEvent;
+
+  /// toast display time on the screen
+  ///
+  /// toast在屏幕上的显示时间
+  Duration displayTime;
+
+  /// whether toast(showToast()) exist on the screen
+  ///
+  /// toast(showToast())是否存在在界面上
+  bool isExist;
 }

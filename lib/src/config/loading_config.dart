@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../smart_dialog.dart';
+import 'enum_config.dart';
 
 ///showLoading() global config
 ///
@@ -15,6 +15,7 @@ class LoadingConfig {
     this.maskColor = const Color.fromRGBO(0, 0, 0, 0.35),
     this.maskWidget,
     this.clickBgDismiss = false,
+    this.isExist = false,
   });
 
   /// control the location of the dialog on the screen
@@ -81,23 +82,8 @@ class LoadingConfig {
   /// 点击遮罩，是否关闭dialog（默认：true）：true（点击遮罩关闭dialog），false（不关闭）
   bool clickBgDismiss;
 
-  /// whether loading and custom dialog exist on the screen
+  /// whether loading(showLoading()) exist on the screen
   ///
-  /// loading，自定义dialog和attach，是否存在在界面上
-  bool isExist = false;
-
-  /// whether custom dialog exist on the screen
-  ///
-  /// 自定义dialog和attach是否存在在界面上
-  bool isExistMain = false;
-
-  /// whether loading exist on the screen
-  ///
-  /// loading是否存在界面上
-  bool isExistLoading = false;
-
-  /// whether toast exist on the screen
-  ///
-  /// toast是否存在在界面上
-  bool isExistToast = false;
+  /// loading(showLoading())是否存在在界面上
+  bool isExist;
 }

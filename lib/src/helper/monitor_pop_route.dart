@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 
-import '../smart_dialog.dart';
+import '../config/enum_config.dart';
 
 typedef PopTestFunc = bool Function();
 

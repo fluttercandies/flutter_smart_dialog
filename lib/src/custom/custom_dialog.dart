@@ -8,6 +8,7 @@ import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
 import '../../flutter_smart_dialog.dart';
 import '../config/config.dart';
+import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
 import '../smart_dialog.dart';
 import 'main_dialog.dart';
@@ -32,7 +33,7 @@ class CustomDialog extends BaseDialog {
 
   DateTime? clickBgLastTime;
 
-  Future<void> show({
+  Future<T?> show<T>({
     required Widget widget,
     required AlignmentGeometry alignment,
     required bool usePenetrate,
@@ -48,7 +49,7 @@ class CustomDialog extends BaseDialog {
     required bool backDismiss,
     required bool keepSingle,
     required bool useSystem,
-  }) async {
+  }) {
     if (!_handleMustOperate(
       tag: tag,
       backDismiss: backDismiss,
@@ -56,8 +57,8 @@ class CustomDialog extends BaseDialog {
       debounce: debounce,
       type: DialogType.custom,
       useSystem: useSystem,
-    )) return;
-    return mainDialog.show(
+    )) return Future.value(null);
+    return mainDialog.show<T>(
       widget: widget,
       alignment: alignment,
       usePenetrate: usePenetrate,
@@ -77,7 +78,7 @@ class CustomDialog extends BaseDialog {
     );
   }
 
-  Future<void> showAttach({
+  Future<T?>? showAttach<T>({
     required BuildContext? targetContext,
     required Offset? target,
     required Widget widget,
@@ -90,14 +91,13 @@ class CustomDialog extends BaseDialog {
     required bool clickBgDismiss,
     required bool debounce,
     required Widget? maskWidget,
-    required Positioned highlight,
-    required HighlightBuilder? highlightBuilder,
+    required HighlightBuilder highlightBuilder,
     required VoidCallback? onDismiss,
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
     required bool useSystem,
-  }) async {
+  }) {
     if (!_handleMustOperate(
       tag: tag,
       backDismiss: backDismiss,
@@ -105,8 +105,8 @@ class CustomDialog extends BaseDialog {
       debounce: debounce,
       type: DialogType.attach,
       useSystem: useSystem,
-    )) return;
-    return mainDialog.showAttach(
+    )) return null;
+    return mainDialog.showAttach<T>(
       targetContext: targetContext,
       target: target,
       widget: widget,
@@ -116,7 +116,6 @@ class CustomDialog extends BaseDialog {
       animationDuration: animationDuration,
       animationType: animationType,
       maskColor: maskColor,
-      highlight: highlight,
       highlightBuilder: highlightBuilder,
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
@@ -227,36 +226,44 @@ class CustomDialog extends BaseDialog {
     return true;
   }
 
-  static Future<void> dismiss({
+  static Future<void>? dismiss<T>([
     DialogType type = DialogType.dialog,
     bool back = false,
     String? tag,
-  }) async {
+    T? result,
+  ]) {
     if (type == DialogType.dialog) {
-      await _closeSingle(DialogType.dialog, back, tag);
+      return _closeSingle<T>(DialogType.dialog, back, tag, result);
     } else if (type == DialogType.custom) {
-      await _closeSingle(DialogType.custom, back, tag);
+      return _closeSingle<T>(DialogType.custom, back, tag, result);
     } else if (type == DialogType.attach) {
-      await _closeSingle(DialogType.attach, back, tag);
+      return _closeSingle<T>(DialogType.attach, back, tag, result);
     } else if (type == DialogType.allDialog) {
-      await _closeAll(DialogType.dialog, back, tag);
+      return _closeAll<T>(DialogType.dialog, back, tag, result);
     } else if (type == DialogType.allCustom) {
-      await _closeAll(DialogType.custom, back, tag);
+      return _closeAll<T>(DialogType.custom, back, tag, result);
     } else if (type == DialogType.allAttach) {
-      await _closeAll(DialogType.attach, back, tag);
+      return _closeAll<T>(DialogType.attach, back, tag, result);
     }
+    return null;
   }
 
-  static Future<void> _closeAll(DialogType type, bool back, String? tag) async {
-    for (int i = DialogProxy.instance.dialogQueue.length; i > 0; i--) {
-      await _closeSingle(type, back, tag);
-    }
-  }
-
-  static Future<void> _closeSingle(
+  static Future<void> _closeAll<T>(
     DialogType type,
     bool back,
     String? tag,
+    T? result,
+  ) async {
+    for (int i = DialogProxy.instance.dialogQueue.length; i > 0; i--) {
+      await _closeSingle(type, back, tag, result);
+    }
+  }
+
+  static Future<void> _closeSingle<T>(
+    DialogType type,
+    bool back,
+    String? tag,
+    T? result,
   ) async {
     var info = _getDialog(type, back, tag);
     if (info == null) return;

@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
-import '../../flutter_smart_dialog.dart';
-import '../smart_dialog.dart';
+import '../config/enum_config.dart';
 import 'compatible_config.dart';
 
 class CompatibleSmartDialog {
@@ -109,7 +108,7 @@ class CompatibleSmartDialog {
     bool? backDismiss,
     bool? keepSingle,
     bool? useSystem,
-  }) {
+  }) async {
     assert(
       (useSystem == true && keepSingle == null && tag == null) ||
           (useSystem == null || useSystem == false),
@@ -120,7 +119,7 @@ class CompatibleSmartDialog {
       'keepSingle is true, tag prohibit setting values',
     );
 
-    return DialogProxy.instance.show(
+    await DialogProxy.instance.show(
       widget: widget,
       alignment: alignmentTemp ?? config.alignment,
       clickBgDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
@@ -253,7 +252,7 @@ class CompatibleSmartDialog {
     bool? backDismiss,
     bool? keepSingle,
     bool? useSystem,
-  }) {
+  }) async {
     assert(
       targetContext != null || target != null,
       'targetContext and target, cannot both be null',
@@ -268,7 +267,7 @@ class CompatibleSmartDialog {
       'keepSingle is true, tag prohibit setting values',
     );
 
-    return DialogProxy.instance.showAttach(
+    await DialogProxy.instance.showAttach(
       targetContext: targetContext,
       target: target,
       widget: widget,
@@ -283,8 +282,11 @@ class CompatibleSmartDialog {
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       debounce: debounceTemp ?? config.debounce,
-      highlight: highlight ?? Positioned(child: Container()),
-      highlightBuilder: highlightBuilder,
+      highlightBuilder: highlightBuilder != null
+          ? highlightBuilder
+          : (Offset targetOffset, Size targetSize) {
+              return highlight ?? Positioned(child: Container());
+            },
       onDismiss: onDismiss,
       tag: tag,
       backDismiss: backDismiss ?? true,

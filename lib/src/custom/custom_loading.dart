@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
 import '../config/config.dart';
+import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
-import '../smart_dialog.dart';
 
 class CustomLoading extends BaseDialog {
   CustomLoading({
@@ -42,10 +42,12 @@ class CustomLoading extends BaseDialog {
     );
   }
 
-  Future<void> dismiss({bool back = false}) async {
-    if (!DialogProxy.instance.loadingBackDismiss && back) return;
+  Future<T?> dismiss<T>({bool back = false}) async {
+    if (!DialogProxy.instance.loadingBackDismiss && back) return null;
 
     await mainDialog.dismiss();
     config.loading.isExist = false;
+
+    return null;
   }
 }

@@ -9,8 +9,8 @@ import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 
+import '../config/enum_config.dart';
 import '../dialog.dart';
-import '../smart_dialog.dart';
 
 class DialogProxy {
   late Config config;
@@ -55,7 +55,7 @@ class DialogProxy {
     _toast = CustomToast(config: config, overlayEntry: entryToast);
   }
 
-  Future<void> show({
+  Future<T?>? show<T>({
     required Widget widget,
     required AlignmentGeometry alignment,
     required bool usePenetrate,
@@ -77,7 +77,7 @@ class DialogProxy {
       builder: (BuildContext context) => dialog!.getWidget(),
     );
     dialog = CustomDialog(config: config, overlayEntry: entry);
-    return dialog.show(
+    return dialog.show<T>(
       widget: widget,
       alignment: alignment,
       usePenetrate: usePenetrate,
@@ -96,7 +96,7 @@ class DialogProxy {
     );
   }
 
-  Future<void> showAttach({
+  Future<T?>? showAttach<T>({
     required BuildContext? targetContext,
     required Widget widget,
     required Offset? target,
@@ -108,8 +108,7 @@ class DialogProxy {
     required Color maskColor,
     required bool clickBgDismiss,
     required Widget? maskWidget,
-    required Positioned highlight,
-    required HighlightBuilder? highlightBuilder,
+    required HighlightBuilder highlightBuilder,
     required bool debounce,
     required VoidCallback? onDismiss,
     required String? tag,
@@ -122,7 +121,7 @@ class DialogProxy {
       builder: (BuildContext context) => dialog!.getWidget(),
     );
     dialog = CustomDialog(config: config, overlayEntry: entry);
-    return dialog.showAttach(
+    return dialog.showAttach<T>(
       targetContext: targetContext,
       target: target,
       widget: widget,
@@ -133,7 +132,6 @@ class DialogProxy {
       animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
-      highlight: highlight,
       highlightBuilder: highlightBuilder,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
@@ -200,31 +198,34 @@ class DialogProxy {
     );
   }
 
-  Future<void> dismiss({
+  Future<void>? dismiss<T>({
     required SmartStatus status,
-    String? tag,
     bool back = false,
-  }) async {
+    String? tag,
+    T? result,
+  }) {
     if (status == SmartStatus.smart) {
       var loading = config.isExistLoading;
-      if (!loading) await CustomDialog.dismiss(tag: tag, back: back);
-      if (loading) await _loading.dismiss(back: back);
+      if (!loading)
+        return CustomDialog.dismiss(DialogType.dialog, back, tag, result);
+      if (loading) return _loading.dismiss(back: back);
     } else if (status == SmartStatus.toast) {
-      await _toast.dismiss();
+      return _toast.dismiss();
     } else if (status == SmartStatus.loading) {
-      await _loading.dismiss(back: back);
+      return _loading.dismiss(back: back);
     } else if (status == SmartStatus.dialog) {
-      await CustomDialog.dismiss(tag: tag, back: back);
+      return CustomDialog.dismiss(DialogType.dialog, back, tag, result);
     } else if (status == SmartStatus.custom) {
-      await CustomDialog.dismiss(type: DialogType.custom, tag: tag);
+      return CustomDialog.dismiss(DialogType.custom, back, tag, result);
     } else if (status == SmartStatus.attach) {
-      await CustomDialog.dismiss(type: DialogType.attach, tag: tag);
+      return CustomDialog.dismiss(DialogType.attach, back, tag, result);
     } else if (status == SmartStatus.allDialog) {
-      await CustomDialog.dismiss(type: DialogType.allDialog);
+      return CustomDialog.dismiss(DialogType.allDialog, back, tag, result);
     } else if (status == SmartStatus.allCustom) {
-      await CustomDialog.dismiss(type: DialogType.allCustom);
+      return CustomDialog.dismiss(DialogType.allCustom, back, tag, result);
     } else if (status == SmartStatus.allAttach) {
-      await CustomDialog.dismiss(type: DialogType.allAttach);
+      return CustomDialog.dismiss(DialogType.allAttach, back, tag, result);
     }
+    return null;
   }
 }
