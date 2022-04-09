@@ -14,11 +14,15 @@ class CustomToast extends BaseDialog {
   }) : super(config: config, overlayEntry: overlayEntry);
 
   Queue<Future<void> Function()> _toastQueue = ListQueue();
+  Queue<_ToastInfo> _tempQueue = ListQueue();
 
   DateTime? _lastTime;
 
   Timer? _curTime;
   Completer? _curCompleter;
+
+  ///type
+  SmartToastType? _lastType;
 
   Future<void> showToast({
     required bool clickBgDismiss,
@@ -61,16 +65,21 @@ class CustomToast extends BaseDialog {
       );
     }
 
-    // provider multiple toast display logic
-    if (type == SmartToastType.normal) {
-      await _normalToast(time: time, onShowToast: showToast);
-    } else if (type == SmartToastType.first) {
-      await _firstToast(time: time, onShowToast: showToast);
-    } else if (type == SmartToastType.last) {
-      await _lastToast(time: time, onShowToast: showToast);
-    } else if (type == SmartToastType.firstAndLast) {
-      await _firstAndLastToast(time: time, onShowToast: showToast);
+    multiToast() async {
+      // provider multiple toast display logic
+      if (type == SmartToastType.normal) {
+        await _normalToast(time: time, onShowToast: showToast);
+      } else if (type == SmartToastType.first) {
+        await _firstToast(time: time, onShowToast: showToast);
+      } else if (type == SmartToastType.last) {
+        await _lastToast(time: time, onShowToast: showToast);
+      } else if (type == SmartToastType.firstAndLast) {
+        await _firstAndLastToast(time: time, onShowToast: showToast);
+      }
     }
+
+    //handling different types of toast
+    handleMultiTypeToast(curType: type, fun: multiToast);
   }
 
   Future<void> _normalToast({
@@ -141,6 +150,36 @@ class CustomToast extends BaseDialog {
     if (_toastQueue.length > 2) _toastQueue.remove(_toastQueue.elementAt(1));
   }
 
+  void handleMultiTypeToast({
+    required SmartToastType curType,
+    required Function() fun,
+  }) async {
+    _lastType = _lastType ?? curType;
+    if (_lastType != curType || _tempQueue.isNotEmpty) {
+      _tempQueue.add(_ToastInfo(type: curType, fun: fun));
+    } else {
+      fun();
+    }
+    _lastType = curType;
+  }
+
+  void afterDismiss() {
+    if (_tempQueue.isEmpty) return;
+
+    _ToastInfo lastToast = _tempQueue.first;
+    List<_ToastInfo> list = [];
+    for (var item in _tempQueue) {
+      if (item.type != lastToast.type) break;
+      lastToast = item;
+      list.add(item);
+      item.fun();
+    }
+
+    for (var item in list) {
+      _tempQueue.removeWhere((element) => item == element);
+    }
+  }
+
   Future _toastDelay(Duration duration) {
     var completer = _curCompleter = Completer();
     _curTime = Timer(duration, () {
@@ -151,8 +190,8 @@ class CustomToast extends BaseDialog {
 
   Future<void> _realDismiss() async {
     await mainDialog.dismiss();
+    afterDismiss();
     if (_toastQueue.length > 1) return;
-
     config.isExistToast = false;
   }
 
@@ -161,4 +200,11 @@ class CustomToast extends BaseDialog {
     if (!(_curCompleter?.isCompleted ?? true)) _curCompleter?.complete();
     await Future.delayed(Duration(milliseconds: 1));
   }
+}
+
+class _ToastInfo {
+  _ToastInfo({required this.type, required this.fun});
+
+  SmartToastType type;
+  Function() fun;
 }
