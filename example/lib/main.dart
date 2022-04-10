@@ -72,22 +72,6 @@ class SmartDialogPage extends StatelessWidget {
         ),
       );
     });
-
-    SmartDialog.compatible.show(
-      widget: Container(
-        height: 80,
-        width: 180,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          'easy custom dialog',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-    );
   }
 
   void _showAttach(BuildContext ctx) {
