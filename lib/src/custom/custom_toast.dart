@@ -65,7 +65,7 @@ class CustomToast extends BaseDialog {
       );
     }
 
-    multiToast() async {
+    multiTypeToast() async {
       // provider multiple toast display logic
       if (type == SmartToastType.normal) {
         await _normalToast(time: time, onShowToast: showToast);
@@ -76,10 +76,12 @@ class CustomToast extends BaseDialog {
       } else if (type == SmartToastType.firstAndLast) {
         await _firstAndLastToast(time: time, onShowToast: showToast);
       }
+
+      afterDismiss();
     }
 
     //handling different types of toast
-    handleMultiTypeToast(curType: type, fun: multiToast);
+    handleMultiTypeToast(curType: type, fun: multiTypeToast);
   }
 
   Future<void> _normalToast({
@@ -95,7 +97,7 @@ class CustomToast extends BaseDialog {
       //remove current toast
       if (_toastQueue.isNotEmpty) _toastQueue.removeFirst();
       //invoke next toast
-      if (_toastQueue.isNotEmpty) _toastQueue.first();
+      if (_toastQueue.isNotEmpty) await _toastQueue.first();
     });
 
     if (_toastQueue.length == 1) await _toastQueue.first();
@@ -164,7 +166,13 @@ class CustomToast extends BaseDialog {
   }
 
   void afterDismiss() {
-    if (_tempQueue.isEmpty) return;
+    if (_tempQueue.isEmpty && _toastQueue.isEmpty) {
+      _lastType = null;
+      //reset _table of ListQueue
+      _tempQueue = ListQueue();
+      _toastQueue = ListQueue();
+    }
+    if (_tempQueue.isEmpty || _toastQueue.isNotEmpty) return;
 
     _ToastInfo lastToast = _tempQueue.first;
     List<_ToastInfo> list = [];
@@ -175,9 +183,7 @@ class CustomToast extends BaseDialog {
       item.fun();
     }
 
-    for (var item in list) {
-      _tempQueue.removeWhere((element) => item == element);
-    }
+    list.forEach((element) => _tempQueue.remove(element));
   }
 
   Future _toastDelay(Duration duration) {
@@ -190,7 +196,6 @@ class CustomToast extends BaseDialog {
 
   Future<void> _realDismiss() async {
     await mainDialog.dismiss();
-    afterDismiss();
     if (_toastQueue.length > 1) return;
     config.isExistToast = false;
   }
