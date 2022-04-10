@@ -5,7 +5,6 @@ description:
   Make the use of the dialog easier!
 version: 3.4.2
 homepage: https://github.com/fluttercandies/flutter_smart_dialog
-#publish_to: https://pub.dartlang.org
 #flutter pub publish --server=https://pub.dartlang.org
 
 environment:
