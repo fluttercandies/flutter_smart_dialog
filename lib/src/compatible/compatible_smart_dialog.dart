@@ -64,7 +64,7 @@ class CompatibleSmartDialog {
   ///
   /// [alignmentTemp]：控制弹窗的位置
   ///
-  /// [clickBgDismissTemp]：true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  /// [clickBgDismissTemp]：true（点击半透明的暗色背景后，将关闭dialog），false（不关闭）
   ///
   /// [isLoadingTemp]：true（使用透明动画），false（使用尺寸缩放动画）
   ///
@@ -128,7 +128,7 @@ class CompatibleSmartDialog {
           : SmartAnimationType.scale,
       usePenetrate: isPenetrateTemp ?? config.isPenetrate,
       useAnimation: isUseAnimationTemp ?? config.isUseAnimation,
-      animationDuration: animationDurationTemp ?? config.animationDuration,
+      animationTime: animationDurationTemp ?? config.animationDuration,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       debounce: debounceTemp ?? config.debounce,
@@ -199,7 +199,7 @@ class CompatibleSmartDialog {
   ///
   /// [alignmentTemp]：控制弹窗的位置
   ///
-  /// [clickBgDismissTemp]：true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  /// [clickBgDismissTemp]：true（点击半透明的暗色背景后，将关闭dialog），false（不关闭）
   ///
   /// [isLoadingTemp]：true（使用透明动画），false（使用尺寸缩放动画）
   ///
@@ -278,7 +278,7 @@ class CompatibleSmartDialog {
           : SmartAnimationType.scale,
       usePenetrate: isPenetrateTemp ?? config.isPenetrate,
       useAnimation: isUseAnimationTemp ?? config.isUseAnimation,
-      animationDuration: animationDurationTemp ?? config.animationDuration,
+      animationTime: animationDurationTemp ?? config.animationDuration,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       debounce: debounceTemp ?? config.debounce,
@@ -352,7 +352,6 @@ class CompatibleSmartDialog {
   /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭loading
   Future<void> showLoading({
     String msg = 'loading...',
-    Color background = Colors.black,
     bool? clickBgDismissTemp,
     bool? isLoadingTemp,
     bool? isPenetrateTemp,
@@ -370,11 +369,11 @@ class CompatibleSmartDialog {
           : SmartAnimationType.scale,
       usePenetrate: isPenetrateTemp ?? false,
       useAnimation: isUseAnimationTemp ?? config.isUseAnimation,
-      animationDuration: animationDurationTemp ?? config.animationDuration,
+      animationTime: animationDurationTemp ?? config.animationDuration,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       backDismiss: backDismiss ?? true,
-      widget: widget ?? DialogProxy.instance.loadingBuilder(msg, background),
+      widget: widget ?? DialogProxy.instance.loadingBuilder(msg),
     );
   }
 
@@ -382,7 +381,7 @@ class CompatibleSmartDialog {
   ///
   /// [msg]：msg presented to users(Use the 'widget' param, this param will be invalid)
   ///
-  /// [clickBgDismissTemp]：default（false），true（loading will be closed after click background），
+  /// [clickBgDismissTemp]：default（false），true（toast will be closed after click background），
   /// false（not close）
   ///
   /// [isLoadingTemp]：default（true），true（use the opacity animation），
@@ -419,7 +418,7 @@ class CompatibleSmartDialog {
   ///
   /// [msg]：呈现给用户的信息（使用 'widget' 参数，该参数将失效）
   ///
-  /// [clickBgDismissTemp]：默认（false），true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  /// [clickBgDismissTemp]：默认（false），true（点击半透明的暗色背景后，将关闭toast），false（不关闭）
   ///
   /// [isLoadingTemp]：默认（true），true（使用透明动画），false（使用尺寸缩放动画）
   ///
@@ -453,7 +452,6 @@ class CompatibleSmartDialog {
     Duration? animationDurationTemp,
     Color? maskColorTemp,
     Widget? maskWidgetTemp,
-    AlignmentGeometry alignment = Alignment.bottomCenter,
     bool? consumeEvent,
     Duration? time,
     bool? debounceTemp,
@@ -468,14 +466,14 @@ class CompatibleSmartDialog {
           : SmartAnimationType.scale,
       usePenetrate: isPenetrateTemp ?? true,
       useAnimation: isUseAnimationTemp ?? true,
-      animationDuration: animationDurationTemp ?? Duration(milliseconds: 200),
+      animationTime: animationDurationTemp ?? Duration(milliseconds: 200),
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       consumeEvent: consumeEvent ?? false,
-      time: time ?? Duration(milliseconds: 2000),
+      displayTime: time ?? Duration(milliseconds: 2000),
       debounce: debounceTemp ?? config.debounce,
       type: type ?? SmartToastType.normal,
-      widget: widget ?? DialogProxy.instance.toastBuilder(msg, alignment),
+      widget: widget ?? DialogProxy.instance.toastBuilder(msg),
     );
   }
 

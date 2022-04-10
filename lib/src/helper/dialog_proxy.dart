@@ -10,7 +10,7 @@ import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 
 import '../config/enum_config.dart';
-import '../dialog.dart';
+import '../init_dialog.dart';
 
 class DialogProxy {
   late Config config;
@@ -60,7 +60,7 @@ class DialogProxy {
     required AlignmentGeometry alignment,
     required bool usePenetrate,
     required bool useAnimation,
-    required Duration animationDuration,
+    required Duration animationTime,
     required SmartAnimationType animationType,
     required Color maskColor,
     required bool clickBgDismiss,
@@ -82,7 +82,7 @@ class DialogProxy {
       alignment: alignment,
       usePenetrate: usePenetrate,
       useAnimation: useAnimation,
-      animationDuration: animationDuration,
+      animationTime: animationTime,
       animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
@@ -103,7 +103,7 @@ class DialogProxy {
     required AlignmentGeometry alignment,
     required bool usePenetrate,
     required bool useAnimation,
-    required Duration animationDuration,
+    required Duration animationTime,
     required SmartAnimationType animationType,
     required Color maskColor,
     required bool clickBgDismiss,
@@ -128,7 +128,7 @@ class DialogProxy {
       alignment: alignment,
       usePenetrate: usePenetrate,
       useAnimation: useAnimation,
-      animationDuration: animationDuration,
+      animationTime: animationTime,
       animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
@@ -148,7 +148,7 @@ class DialogProxy {
     required SmartAnimationType animationType,
     required bool usePenetrate,
     required bool useAnimation,
-    required Duration animationDuration,
+    required Duration animationTime,
     required Color maskColor,
     required Widget? maskWidget,
     required bool backDismiss,
@@ -161,7 +161,7 @@ class DialogProxy {
       maskWidget: maskWidget,
       usePenetrate: usePenetrate,
       useAnimation: useAnimation,
-      animationDuration: animationDuration,
+      animationTime: animationTime,
       backDismiss: backDismiss,
       widget: widget,
     );
@@ -173,11 +173,11 @@ class DialogProxy {
     required SmartAnimationType animationType,
     required bool usePenetrate,
     required bool useAnimation,
-    required Duration animationDuration,
+    required Duration animationTime,
     required Color maskColor,
     required Widget? maskWidget,
     required bool consumeEvent,
-    required Duration time,
+    required Duration displayTime,
     required bool debounce,
     required SmartToastType type,
     required Widget widget,
@@ -188,10 +188,10 @@ class DialogProxy {
       animationType: animationType,
       usePenetrate: usePenetrate,
       useAnimation: useAnimation,
-      animationDuration: animationDuration,
+      animationTime: animationTime,
       maskColor: maskColor,
       maskWidget: maskWidget,
-      time: time,
+      displayTime: displayTime,
       debounce: debounce,
       type: type,
       widget: ToastHelper(consumeEvent: consumeEvent, child: widget),

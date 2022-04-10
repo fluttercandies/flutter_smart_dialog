@@ -67,7 +67,7 @@ SmartDialog.config
   ..clickBgDismiss = true
   ..maskColor = Colors.black.withOpacity(0.35)
   ..maskWidget = null
-  ..animationDuration = Duration(milliseconds: 260)
+  ..animationTime = Duration(milliseconds: 260)
   ..isUseAnimation = true
   ..isLoading = true
   ..debounce = false

@@ -9,7 +9,7 @@ class ToastConfig {
   ToastConfig({
     this.alignment = Alignment.center,
     this.animationType = SmartAnimationType.fade,
-    this.animationDuration = const Duration(milliseconds: 200),
+    this.animationTime = const Duration(milliseconds: 200),
     this.useAnimation = true,
     this.usePenetrate = true,
     this.maskColor = const Color.fromRGBO(0, 0, 0, 0.35),
@@ -19,6 +19,7 @@ class ToastConfig {
     this.debounceTime = const Duration(milliseconds: 300),
     this.consumeEvent = false,
     this.displayTime = const Duration(milliseconds: 2000),
+    this.gapTime = const Duration(milliseconds: 150),
     this.isExist = false,
   });
 
@@ -51,10 +52,10 @@ class ToastConfig {
   /// centerRight：dialog位于屏幕左边，动画默认为位移动画，自右而左，
   AlignmentGeometry alignment;
 
-  /// [animationDuration]：The animation time can be set
+  /// [animationTime]：The animation time can be set
   ///
-  /// [animationDuration]：可设置动画时间
-  Duration animationDuration;
+  /// [animationTime]：可设置动画时间
+  Duration animationTime;
 
   /// Animation type [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///
@@ -106,6 +107,11 @@ class ToastConfig {
   ///
   /// toast在屏幕上的显示时间
   Duration displayTime;
+
+  /// Multiple toasts are displayed continuously, and the gap time between each toast is displayed
+  ///
+  /// 多个toast连续显示,每个toast之间显示的间隔时间
+  Duration gapTime;
 
   /// whether toast(showToast()) exist on the screen
   ///

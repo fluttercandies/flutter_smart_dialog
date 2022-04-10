@@ -31,10 +31,10 @@ class CustomToast extends BaseDialog {
     required SmartAnimationType animationType,
     required bool usePenetrate,
     required bool useAnimation,
-    required Duration animationDuration,
+    required Duration animationTime,
     required Color maskColor,
     required Widget? maskWidget,
-    required Duration time,
+    required Duration displayTime,
     required bool debounce,
     required SmartToastType type,
     required Widget widget,
@@ -55,7 +55,7 @@ class CustomToast extends BaseDialog {
         alignment: alignment,
         maskColor: maskColor,
         maskWidget: maskWidget,
-        animationDuration: animationDuration,
+        animationTime: animationTime,
         animationType: animationType,
         useAnimation: useAnimation,
         usePenetrate: usePenetrate,
@@ -70,13 +70,13 @@ class CustomToast extends BaseDialog {
     multiTypeToast() async {
       // provider multiple toast display logic
       if (type == SmartToastType.normal) {
-        await _normalToast(time: time, onShowToast: showToast);
+        await _normalToast(time: displayTime, onShowToast: showToast);
       } else if (type == SmartToastType.first) {
-        await _firstToast(time: time, onShowToast: showToast);
+        await _firstToast(time: displayTime, onShowToast: showToast);
       } else if (type == SmartToastType.last) {
-        await _lastToast(time: time, onShowToast: showToast);
+        await _lastToast(time: displayTime, onShowToast: showToast);
       } else if (type == SmartToastType.firstAndLast) {
-        await _firstAndLastToast(time: time, onShowToast: showToast);
+        await _firstAndLastToast(time: displayTime, onShowToast: showToast);
       }
 
       afterDismiss();
@@ -198,6 +198,7 @@ class CustomToast extends BaseDialog {
 
   Future<void> _realDismiss() async {
     await mainDialog.dismiss();
+    await Future.delayed(SmartDialog.config.toast.gapTime);
     if (_toastQueue.length > 1) return;
     config.toast.isExist = false;
   }

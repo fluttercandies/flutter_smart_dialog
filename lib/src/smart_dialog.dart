@@ -33,7 +33,7 @@ class SmartDialog {
   ///
   /// [useAnimation]：true（use the animation），false（not use）
   ///
-  /// [animationDuration]：animation duration
+  /// [animationTime]：animation duration
   ///
   /// [maskColor]：the color of the mask，it is invalid if [maskWidget] set the value and [usePenetrate] is true
   ///
@@ -62,7 +62,7 @@ class SmartDialog {
   ///
   /// [alignment]：控制弹窗的位置
   ///
-  /// [clickBgDismiss]：true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  /// [clickBgDismiss]：true（点击半透明的暗色背景后，将关闭dialog），false（不关闭）
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
@@ -70,7 +70,7 @@ class SmartDialog {
   ///
   /// [useAnimation]：true（使用动画），false（不使用）
   ///
-  /// [animationDuration]：动画持续时间
+  /// [animationTime]：动画持续时间
   ///
   /// [maskColor]：遮罩颜色，如果给[maskWidget]设置了值，该参数将会失效
   ///
@@ -97,7 +97,7 @@ class SmartDialog {
     bool? usePenetrate,
     bool? useAnimation,
     SmartAnimationType? animationType,
-    Duration? animationDuration,
+    Duration? animationTime,
     Color? maskColor,
     Widget? maskWidget,
     bool? debounce,
@@ -124,7 +124,7 @@ class SmartDialog {
       animationType: animationType ?? config.custom.animationType,
       usePenetrate: usePenetrate ?? config.custom.usePenetrate,
       useAnimation: useAnimation ?? config.custom.useAnimation,
-      animationDuration: animationDuration ?? config.custom.animationDuration,
+      animationTime: animationTime ?? config.custom.animationTime,
       maskColor: maskColor ?? config.custom.maskColor,
       maskWidget: maskWidget ?? config.custom.maskWidget,
       debounce: debounce ?? config.custom.debounce,
@@ -155,7 +155,7 @@ class SmartDialog {
   ///
   /// [useAnimation]：true（use the animation），false（not use）
   ///
-  /// [animationDuration]：animation duration
+  /// [animationTime]：animation duration
   ///
   /// [maskColor]：the color of the mask，it is invalid if [maskWidget] set the value and [usePenetrate] is true
   ///
@@ -191,7 +191,7 @@ class SmartDialog {
   ///
   /// [alignment]：控制弹窗的位置
   ///
-  /// [clickBgDismiss]：true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  /// [clickBgDismiss]：true（点击半透明的暗色背景后，将关闭dialog），false（不关闭）
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
@@ -199,7 +199,7 @@ class SmartDialog {
   ///
   /// [useAnimation]：true（使用动画），false（不使用）
   ///
-  /// [animationDuration]：动画持续时间
+  /// [animationTime]：动画持续时间
   ///
   /// [maskColor]：遮罩颜色，如果给[maskWidget]设置了值，该参数将会失效
   ///
@@ -230,7 +230,7 @@ class SmartDialog {
     SmartAnimationType? animationType,
     bool? usePenetrate,
     bool? useAnimation,
-    Duration? animationDuration,
+    Duration? animationTime,
     Color? maskColor,
     Widget? maskWidget,
     bool? debounce,
@@ -265,7 +265,7 @@ class SmartDialog {
       animationType: animationType ?? config.attach.animationType,
       usePenetrate: usePenetrate ?? config.attach.usePenetrate,
       useAnimation: useAnimation ?? config.attach.useAnimation,
-      animationDuration: animationDuration ?? config.attach.animationDuration,
+      animationTime: animationTime ?? config.attach.animationTime,
       maskColor: maskColor ?? config.attach.maskColor,
       maskWidget: maskWidget ?? config.attach.maskWidget,
       debounce: debounce ?? config.attach.debounce,
@@ -294,7 +294,7 @@ class SmartDialog {
   ///
   /// [useAnimation]：true（use the animation），false（not use）
   ///
-  /// [animationDuration]：animation duration
+  /// [animationTime]：animation duration
   ///
   /// [maskColor]：the color of the mask，it is invalid if [maskWidget] set the value
   ///
@@ -321,7 +321,7 @@ class SmartDialog {
   ///
   /// [useAnimation]：true（使用动画），false（不使用）
   ///
-  /// [animationDuration]：动画持续时间
+  /// [animationTime]：动画持续时间
   ///
   /// [maskColor]：遮罩颜色，如果给[maskWidget]设置了值，该参数将会失效
   ///
@@ -333,12 +333,11 @@ class SmartDialog {
   /// [builder]：the custom loading
   static Future<void> showLoading({
     String msg = 'loading...',
-    Color background = Colors.black,
     bool? clickBgDismiss,
     SmartAnimationType? animationType,
     bool? usePenetrate,
     bool? useAnimation,
-    Duration? animationDuration,
+    Duration? animationTime,
     Color? maskColor,
     Widget? maskWidget,
     bool? backDismiss,
@@ -349,13 +348,13 @@ class SmartDialog {
       animationType: animationType ?? config.loading.animationType,
       usePenetrate: usePenetrate ?? config.loading.usePenetrate,
       useAnimation: useAnimation ?? config.loading.useAnimation,
-      animationDuration: animationDuration ?? config.loading.animationDuration,
+      animationTime: animationTime ?? config.loading.animationTime,
       maskColor: maskColor ?? config.loading.maskColor,
       maskWidget: maskWidget ?? config.loading.maskWidget,
       backDismiss: backDismiss ?? true,
       widget: builder != null
           ? Builder(builder: (context) => builder(context))
-          : DialogProxy.instance.loadingBuilder(msg, background),
+          : DialogProxy.instance.loadingBuilder(msg),
     );
   }
 
@@ -363,9 +362,11 @@ class SmartDialog {
   ///
   /// [msg]：msg presented to users (Use the [builder] param to customize the toast, this param will be invalid)
   ///
+  /// [displayTime]：toast display time on the screen
+  ///
   /// [alignment]：control the location of the dialog
   ///
-  /// [clickBgDismiss]：true（loading will be closed after click background），
+  /// [clickBgDismiss]：true（toast will be closed after click background），
   /// false（not close）
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
@@ -375,15 +376,13 @@ class SmartDialog {
   ///
   /// [useAnimation]：true（use the animation），false（not use）
   ///
-  /// [animationDuration]：animation duration
+  /// [animationTime]：animation duration
   ///
   /// [maskColor]：the color of the mask，it is invalid if [maskWidget] set the value
   ///
   /// [maskWidget]：highly customizable mask
   ///
   /// [location]：control the location of toast on the screen (Use the [builder] param to customize the toast, this param will be invalid)
-  ///
-  /// [time]：toast display time on the screen
   ///
   /// [debounce]：debounce feature
   ///
@@ -400,9 +399,11 @@ class SmartDialog {
   ///
   /// [msg]：呈现给用户的信息（使用[builder]参数自定义toast，该参数将失效）
   ///
+  /// [displayTime]：toast在屏幕上的显示时间
+  ///
   /// [alignment]：控制弹窗的位置
   ///
-  /// [clickBgDismiss]：true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  /// [clickBgDismiss]：true（点击半透明的暗色背景后，将关闭toast），false（不关闭）
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
@@ -410,15 +411,13 @@ class SmartDialog {
   ///
   /// [useAnimation]：true（使用动画），false（不使用）
   ///
-  /// [animationDuration]：动画持续时间
+  /// [animationTime]：动画持续时间
   ///
   /// [maskColor]：遮罩颜色，如果给[maskWidget]设置了值，该参数将会失效
   ///
   /// [maskWidget]：可高度定制遮罩
   ///
   /// [location]：控制toast在屏幕上的显示位置（使用[builder]参数自定义toast，该参数将失效）
-  ///
-  /// [time]：toast在屏幕上的显示时间
   ///
   /// [debounce]：防抖功能
   ///
@@ -429,37 +428,36 @@ class SmartDialog {
   /// [builder]：可高度定制化toast
   static Future<void> showToast(
     String msg, {
+    Duration? displayTime,
     AlignmentGeometry? alignment,
     bool? clickBgDismiss,
     SmartAnimationType? animationType,
     bool? usePenetrate,
     bool? useAnimation,
-    Duration? animationDuration,
+    Duration? animationTime,
     Color? maskColor,
     Widget? maskWidget,
-    AlignmentGeometry location = Alignment.bottomCenter,
     bool? consumeEvent,
-    Duration? time,
     bool? debounce,
     SmartToastType? type,
     WidgetBuilder? builder,
   }) async {
     return DialogProxy.instance.showToast(
+      displayTime: displayTime ?? config.toast.displayTime,
       alignment: alignment ?? config.toast.alignment,
       clickBgDismiss: clickBgDismiss ?? config.toast.clickBgDismiss,
       animationType: animationType ?? config.toast.animationType,
       usePenetrate: usePenetrate ?? config.toast.usePenetrate,
       useAnimation: useAnimation ?? config.toast.useAnimation,
-      animationDuration: animationDuration ?? config.toast.animationDuration,
+      animationTime: animationTime ?? config.toast.animationTime,
       maskColor: maskColor ?? config.toast.maskColor,
       maskWidget: maskWidget ?? config.toast.maskWidget,
-      time: time ?? config.toast.displayTime,
       debounce: debounce ?? config.toast.debounce,
       type: type ?? SmartToastType.normal,
       consumeEvent: consumeEvent ?? config.toast.consumeEvent,
       widget: builder != null
           ? Builder(builder: (context) => builder(context))
-          : DialogProxy.instance.toastBuilder(msg, location),
+          : DialogProxy.instance.toastBuilder(msg),
     );
   }
 
@@ -467,7 +465,9 @@ class SmartDialog {
   ///
   /// [status]：For the specific meaning, please refer to the [SmartStatus] note
   ///
-  /// [tag]：if you want to close the specified dialog, you can set a 'tag' for it
+  /// [tag]：If you want to close the specified dialog, you can set a 'tag' for it
+  ///
+  /// [result]：Set a return value and accept it at the place where the dialog is called
   ///
   /// -------------------------------------------------------------------------------
   /// 关闭dialog
@@ -476,6 +476,8 @@ class SmartDialog {
   /// 注意：status参数设置值后，closeType参数将失效。
   ///
   /// [tag]：如果你想关闭指定的dialog，你可以给它设置一个tag
+  ///
+  /// [result]：设置一个返回值,可在调用弹窗的地方接受
   static Future<void> dismiss<T>({
     SmartStatus status = SmartStatus.smart,
     String? tag,

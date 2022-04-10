@@ -9,7 +9,7 @@ class AttachConfig {
   AttachConfig({
     this.alignment = Alignment.bottomCenter,
     this.animationType = SmartAnimationType.scale,
-    this.animationDuration = const Duration(milliseconds: 260),
+    this.animationTime = const Duration(milliseconds: 260),
     this.useAnimation = true,
     this.usePenetrate = false,
     this.maskColor = const Color.fromRGBO(0, 0, 0, 0.35),
@@ -49,10 +49,10 @@ class AttachConfig {
   /// centerRight：dialog位于屏幕左边，动画默认为位移动画，自右而左，
   AlignmentGeometry alignment = Alignment.center;
 
-  /// [animationDuration]：The animation time can be set
+  /// [animationTime]：The animation time can be set
   ///
-  /// [animationDuration]：可设置动画时间
-  Duration animationDuration;
+  /// [animationTime]：可设置动画时间
+  Duration animationTime;
 
   /// Animation type [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///

@@ -6,14 +6,8 @@ import 'helper/dialog_proxy.dart';
 import 'helper/monitor_pop_route.dart';
 import 'widget/loading_widget.dart';
 
-typedef FlutterSmartToastBuilder = Widget Function(
-  String msg,
-  AlignmentGeometry location,
-);
-typedef FlutterSmartLoadingBuilder = Widget Function(
-  String msg,
-  Color background,
-);
+typedef FlutterSmartToastBuilder = Widget Function(String msg);
+typedef FlutterSmartLoadingBuilder = Widget Function(String msg);
 typedef FlutterSmartStyleBuilder = Widget Function(Widget child);
 
 class FlutterSmartDialog extends StatefulWidget {
@@ -90,12 +84,12 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
     var proxy = DialogProxy.instance;
     // solve Flutter Inspector -> select widget mode function failure problem
     proxy.initialize();
-    defaultToast(String msg, AlignmentGeometry alignment) {
-      return ToastWidget(msg: msg, alignment: alignment);
+    defaultToast(String msg) {
+      return ToastWidget(msg: msg);
     }
 
-    defaultLoading(String msg, Color background) {
-      return LoadingWidget(msg: msg, background: background);
+    defaultLoading(String msg) {
+      return LoadingWidget(msg: msg);
     }
 
     proxy.toastBuilder = widget.toastBuilder ?? defaultToast;

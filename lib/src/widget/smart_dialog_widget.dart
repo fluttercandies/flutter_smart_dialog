@@ -13,7 +13,7 @@ class SmartDialogWidget extends StatefulWidget {
     required this.onBgTap,
     required this.alignment,
     required this.usePenetrate,
-    required this.animationDuration,
+    required this.animationTime,
     required this.useAnimation,
     required this.animationType,
     required this.maskColor,
@@ -37,7 +37,7 @@ class SmartDialogWidget extends StatefulWidget {
   final bool usePenetrate;
 
   /// 动画时间
-  final Duration animationDuration;
+  final Duration animationTime;
 
   /// 是否使用动画
   final bool useAnimation;
@@ -75,7 +75,7 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
   void _resetState() {
     _dealContentAnimate();
 
-    var duration = widget.animationDuration;
+    var duration = widget.animationTime;
     if (_ctrlBg == null) {
       _ctrlBg = AnimationController(vsync: this, duration: duration);
       _ctrlBody = AnimationController(vsync: this, duration: duration);
@@ -183,7 +183,7 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
     _ctrlBody.reverse();
 
     if (widget.useAnimation) {
-      await Future.delayed(widget.animationDuration);
+      await Future.delayed(widget.animationTime);
     }
   }
 

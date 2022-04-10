@@ -9,5 +9,5 @@ export 'src/config/loading_config.dart';
 export 'src/config/toast_config.dart';
 
 /// dialog
-export 'src/dialog.dart';
+export 'src/init_dialog.dart';
 export 'src/smart_dialog.dart';

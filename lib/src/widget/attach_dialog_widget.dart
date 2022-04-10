@@ -18,7 +18,7 @@ class AttachDialogWidget extends StatefulWidget {
     required this.targetContext,
     required this.target,
     required this.controller,
-    required this.animationDuration,
+    required this.animationTime,
     required this.useAnimation,
     required this.onBgTap,
     required this.alignment,
@@ -39,7 +39,7 @@ class AttachDialogWidget extends StatefulWidget {
   final bool useAnimation;
 
   ///动画时间
-  final Duration animationDuration;
+  final Duration animationTime;
 
   ///自定义的主体布局
   final Widget child;
@@ -99,7 +99,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   }
 
   void _resetState() {
-    var duration = widget.animationDuration;
+    var duration = widget.animationTime;
     if (_ctrlBg == null) {
       _ctrlBg = AnimationController(vsync: this, duration: duration);
       _ctrlBody = AnimationController(vsync: this, duration: duration);
@@ -301,7 +301,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     _ctrlBody.reverse();
 
     if (widget.useAnimation) {
-      await Future.delayed(widget.animationDuration);
+      await Future.delayed(widget.animationTime);
     }
   }
 
