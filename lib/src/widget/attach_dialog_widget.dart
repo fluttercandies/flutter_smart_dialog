@@ -323,7 +323,13 @@ class AttachDialogController extends BaseController {
   @override
   Future<void> dismiss() async {
     await Future.delayed(Duration(milliseconds: 1));
-    await _state?.dismiss();
+    try {
+      await _state?.dismiss();
+    } catch (e) {
+      print("-------------------------------------------------------------");
+      print("SmartDialog error: ${e.toString()}");
+      print("-------------------------------------------------------------");
+    }
     _state = null;
   }
 }
