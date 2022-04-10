@@ -3,12 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
-import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
 import '../../flutter_smart_dialog.dart';
+import '../config/config.dart';
+import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
+import '../smart_dialog.dart';
 import 'main_dialog.dart';
 
 enum DialogType {
@@ -31,13 +33,13 @@ class CustomDialog extends BaseDialog {
 
   DateTime? clickBgLastTime;
 
-  Future<void> show({
+  Future<T?> show<T>({
     required Widget widget,
     required AlignmentGeometry alignment,
-    required bool isPenetrate,
-    required bool isUseAnimation,
+    required bool usePenetrate,
+    required bool useAnimation,
     required Duration animationDuration,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required Color maskColor,
     required bool clickBgDismiss,
     required bool debounce,
@@ -47,7 +49,7 @@ class CustomDialog extends BaseDialog {
     required bool backDismiss,
     required bool keepSingle,
     required bool useSystem,
-  }) async {
+  }) {
     if (!_handleMustOperate(
       tag: tag,
       backDismiss: backDismiss,
@@ -55,14 +57,14 @@ class CustomDialog extends BaseDialog {
       debounce: debounce,
       type: DialogType.custom,
       useSystem: useSystem,
-    )) return;
-    return mainDialog.show(
+    )) return Future.value(null);
+    return mainDialog.show<T>(
       widget: widget,
       alignment: alignment,
-      isPenetrate: isPenetrate,
-      isUseAnimation: isUseAnimation,
+      usePenetrate: usePenetrate,
+      useAnimation: useAnimation,
       animationDuration: animationDuration,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
@@ -76,27 +78,26 @@ class CustomDialog extends BaseDialog {
     );
   }
 
-  Future<void> showAttach({
+  Future<T?>? showAttach<T>({
     required BuildContext? targetContext,
     required Offset? target,
     required Widget widget,
     required AlignmentGeometry alignment,
-    required bool isPenetrate,
-    required bool isUseAnimation,
+    required bool usePenetrate,
+    required bool useAnimation,
     required Duration animationDuration,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required Color maskColor,
     required bool clickBgDismiss,
     required bool debounce,
     required Widget? maskWidget,
-    required Positioned highlight,
-    required HighlightBuilder? highlightBuilder,
+    required HighlightBuilder highlightBuilder,
     required VoidCallback? onDismiss,
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
     required bool useSystem,
-  }) async {
+  }) {
     if (!_handleMustOperate(
       tag: tag,
       backDismiss: backDismiss,
@@ -104,18 +105,17 @@ class CustomDialog extends BaseDialog {
       debounce: debounce,
       type: DialogType.attach,
       useSystem: useSystem,
-    )) return;
-    return mainDialog.showAttach(
+    )) return null;
+    return mainDialog.showAttach<T>(
       targetContext: targetContext,
       target: target,
       widget: widget,
       alignment: alignment,
-      isPenetrate: isPenetrate,
-      isUseAnimation: isUseAnimation,
+      usePenetrate: usePenetrate,
+      useAnimation: useAnimation,
       animationDuration: animationDuration,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
-      highlight: highlight,
       highlightBuilder: highlightBuilder,
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
@@ -137,7 +137,7 @@ class CustomDialog extends BaseDialog {
     required bool useSystem,
   }) {
     // debounce
-    if (!_checkDebounce(debounce)) return false;
+    if (!_checkDebounce(debounce, type)) return false;
 
     //handle dialog stack
     _handleDialogStack(
@@ -148,9 +148,8 @@ class CustomDialog extends BaseDialog {
       useSystem: useSystem,
     );
 
-    config.isExist = true;
-    config.isExistMain = true;
-
+    config.custom.isExist = DialogType.custom == type;
+    config.attach.isExist = DialogType.attach == type;
     return true;
   }
 
@@ -201,13 +200,16 @@ class CustomDialog extends BaseDialog {
     );
   }
 
-  bool _checkDebounce(bool debounce) {
+  bool _checkDebounce(bool debounce, DialogType type) {
     if (!debounce) return true;
 
     var proxy = DialogProxy.instance;
     var now = DateTime.now();
+    var debounceTime = type == DialogType.dialog
+        ? SmartDialog.config.custom.debounceTime
+        : SmartDialog.config.attach.debounceTime;
     var isShake = proxy.dialogLastTime != null &&
-        now.difference(proxy.dialogLastTime!) < SmartDialog.config.debounceTime;
+        now.difference(proxy.dialogLastTime!) < debounceTime;
     proxy.dialogLastTime = now;
     if (isShake) return false;
 
@@ -224,36 +226,44 @@ class CustomDialog extends BaseDialog {
     return true;
   }
 
-  static Future<void> dismiss({
+  static Future<void>? dismiss<T>([
     DialogType type = DialogType.dialog,
     bool back = false,
     String? tag,
-  }) async {
+    T? result,
+  ]) {
     if (type == DialogType.dialog) {
-      await _closeSingle(DialogType.dialog, back, tag);
+      return _closeSingle<T>(DialogType.dialog, back, tag, result);
     } else if (type == DialogType.custom) {
-      await _closeSingle(DialogType.custom, back, tag);
+      return _closeSingle<T>(DialogType.custom, back, tag, result);
     } else if (type == DialogType.attach) {
-      await _closeSingle(DialogType.attach, back, tag);
+      return _closeSingle<T>(DialogType.attach, back, tag, result);
     } else if (type == DialogType.allDialog) {
-      await _closeAll(DialogType.dialog, back, tag);
+      return _closeAll<T>(DialogType.dialog, back, tag, result);
     } else if (type == DialogType.allCustom) {
-      await _closeAll(DialogType.custom, back, tag);
+      return _closeAll<T>(DialogType.custom, back, tag, result);
     } else if (type == DialogType.allAttach) {
-      await _closeAll(DialogType.attach, back, tag);
+      return _closeAll<T>(DialogType.attach, back, tag, result);
     }
+    return null;
   }
 
-  static Future<void> _closeAll(DialogType type, bool back, String? tag) async {
-    for (int i = DialogProxy.instance.dialogQueue.length; i > 0; i--) {
-      await _closeSingle(type, back, tag);
-    }
-  }
-
-  static Future<void> _closeSingle(
+  static Future<void> _closeAll<T>(
     DialogType type,
     bool back,
     String? tag,
+    T? result,
+  ) async {
+    for (int i = DialogProxy.instance.dialogQueue.length; i > 0; i--) {
+      await _closeSingle(type, back, tag, result);
+    }
+  }
+
+  static Future<void> _closeSingle<T>(
+    DialogType type,
+    bool back,
+    String? tag,
+    T? result,
   ) async {
     var info = _getDialog(type, back, tag);
     if (info == null) return;
@@ -262,12 +272,21 @@ class CustomDialog extends BaseDialog {
     var proxy = DialogProxy.instance;
     proxy.dialogQueue.remove(info);
     var customDialog = info.dialog;
+
+    //check if the queue contains a custom dialog or attach dialog
+    proxy.config.custom.isExist = false;
+    proxy.config.attach.isExist = false;
+    for (var item in proxy.dialogQueue) {
+      if (item.type == DialogType.custom) {
+        proxy.config.custom.isExist = true;
+      } else if (item.type == DialogType.attach) {
+        proxy.config.attach.isExist = true;
+      }
+    }
+
+    //perform a real dismiss
     await customDialog.mainDialog.dismiss(useSystem: info.useSystem);
     customDialog.overlayEntry.remove();
-
-    if (proxy.dialogQueue.isNotEmpty) return;
-    proxy.config.isExistMain = false;
-    if (!proxy.config.isExistLoading) proxy.config.isExist = false;
   }
 
   static DialogInfo? _getDialog(DialogType type, bool back, String? tag) {

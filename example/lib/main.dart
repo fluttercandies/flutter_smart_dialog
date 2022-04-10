@@ -52,18 +52,13 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showToast() async {
-    SmartDialog.showToast('last', type: SmartToastType.last);
-    await Future.delayed(Duration(seconds: 1));
-    SmartDialog.showToast('normal');
-
-    // await SmartDialog.showToast('test toast', debounceTemp: true);
-    // print('--------------------------');
+    await SmartDialog.showToast('test toast', debounce: true);
+    print('--------------------------');
   }
 
   void _show() {
-    SmartDialog.show(
-      isLoadingTemp: false,
-      widget: Container(
+    SmartDialog.show(builder: (_) {
+      return Container(
         height: 80,
         width: 180,
         decoration: BoxDecoration(
@@ -75,40 +70,42 @@ class SmartDialogPage extends StatelessWidget {
           'easy custom dialog',
           style: TextStyle(color: Colors.white),
         ),
-      ),
-    );
+      );
+    });
   }
 
   void _showAttach(BuildContext ctx) {
     var attachDialog = (BuildContext context) {
       SmartDialog.showAttach(
         targetContext: context,
-        isPenetrateTemp: true,
-        alignmentTemp: Alignment.topCenter,
+        alignment: Alignment.topCenter,
         useSystem: true,
-        widget: Container(width: 100, height: 100, color: Colors.red),
+        builder: (_) {
+          return Container(width: 100, height: 100, color: Colors.red);
+        },
       );
     };
 
     //target widget
     SmartDialog.show(
-      isLoadingTemp: false,
       useSystem: true,
-      widget: Container(
-        height: 300,
-        width: 500,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          color: Colors.white,
-        ),
-        alignment: Alignment.center,
-        child: Builder(builder: (context) {
-          return ElevatedButton(
-            onPressed: () => attachDialog(context),
-            child: Text('target widget'),
-          );
-        }),
-      ),
+      builder: (_) {
+        return Container(
+          height: 300,
+          width: 500,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white,
+          ),
+          alignment: Alignment.center,
+          child: Builder(builder: (context) {
+            return ElevatedButton(
+              onPressed: () => attachDialog(context),
+              child: Text('target widget'),
+            );
+          }),
+        );
+      },
     );
   }
 

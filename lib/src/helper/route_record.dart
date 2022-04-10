@@ -5,6 +5,8 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
+import '../smart_dialog.dart';
+
 class RouteRecord {
   factory RouteRecord() => instance;
   static RouteRecord? _instance;

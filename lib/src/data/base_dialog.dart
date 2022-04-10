@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/src/helper/config.dart';
 
+import '../config/config.dart';
 import '../custom/main_dialog.dart';
 
 /// base dialog：encapsulate common logic

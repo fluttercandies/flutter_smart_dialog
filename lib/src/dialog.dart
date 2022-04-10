@@ -8,7 +8,7 @@ import 'widget/loading_widget.dart';
 
 typedef FlutterSmartToastBuilder = Widget Function(
   String msg,
-  AlignmentGeometry alignment,
+  AlignmentGeometry location,
 );
 typedef FlutterSmartLoadingBuilder = Widget Function(
   String msg,

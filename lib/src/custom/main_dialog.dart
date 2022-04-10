@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
-import 'package:flutter_smart_dialog/src/helper/config.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_widget.dart';
+
+import '../config/config.dart';
+import '../config/enum_config.dart';
 
 ///main function : customize dialog
 class MainDialog {
@@ -31,13 +33,13 @@ class MainDialog {
   //refuse repeat close
   bool repeatClose = false;
 
-  Future<void> show({
+  Future<T?> show<T>({
     required Widget widget,
     required AlignmentGeometry alignment,
-    required bool isPenetrate,
-    required bool isUseAnimation,
+    required bool usePenetrate,
+    required bool useAnimation,
     required Duration animationDuration,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required Color maskColor,
     required Widget? maskWidget,
     required bool clickBgDismiss,
@@ -45,16 +47,16 @@ class MainDialog {
     required VoidCallback? onDismiss,
     required bool useSystem,
     required bool reuse,
-  }) async {
+  }) {
     //custom dialog
     _widget = SmartDialogWidget(
       key: reuse ? _uniqueKey : UniqueKey(),
       controller: _controller = SmartDialogController(),
       alignment: alignment,
-      isPenetrate: isPenetrate,
-      isUseAnimation: isUseAnimation,
+      usePenetrate: usePenetrate,
+      useAnimation: useAnimation,
       animationDuration: animationDuration,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
@@ -64,27 +66,28 @@ class MainDialog {
 
     _handleCommonOperate(onDismiss: onDismiss, useSystem: useSystem);
 
-    return _completer!.future;
+    //wait dialog dismiss
+    var completer = _completer = Completer<T>();
+    return completer.future;
   }
 
-  Future<void> showAttach({
+  Future<T?> showAttach<T>({
     required BuildContext? targetContext,
     required Widget widget,
     required Offset? target,
     required AlignmentGeometry alignment,
-    required bool isPenetrate,
-    required bool isUseAnimation,
+    required bool usePenetrate,
+    required bool useAnimation,
     required Duration animationDuration,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required Color maskColor,
     required Widget? maskWidget,
-    required Positioned highlight,
-    required HighlightBuilder? highlightBuilder,
+    required HighlightBuilder highlightBuilder,
     required bool clickBgDismiss,
     required VoidCallback onBgTap,
     required VoidCallback? onDismiss,
     required bool useSystem,
-  }) async {
+  }) {
     //attach dialog
     _widget = AttachDialogWidget(
       key: _uniqueKey,
@@ -92,13 +95,12 @@ class MainDialog {
       target: target,
       controller: _controller = AttachDialogController(),
       alignment: alignment,
-      isPenetrate: isPenetrate,
-      isUseAnimation: isUseAnimation,
+      usePenetrate: usePenetrate,
+      useAnimation: useAnimation,
       animationDuration: animationDuration,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
-      highlight: highlight,
       highlightBuilder: highlightBuilder,
       clickBgDismiss: clickBgDismiss,
       child: widget,
@@ -107,7 +109,9 @@ class MainDialog {
 
     _handleCommonOperate(onDismiss: onDismiss, useSystem: useSystem);
 
-    return _completer!.future;
+    //wait dialog dismiss
+    var completer = _completer = Completer<T>();
+    return completer.future;
   }
 
   void _handleCommonOperate({
@@ -132,12 +136,12 @@ class MainDialog {
 
     //refresh dialog
     overlayEntry.markNeedsBuild();
-
-    //wait dialog dismiss
-    _completer = Completer();
   }
 
-  Future<void> dismiss({bool useSystem = false}) async {
+  Future<void> dismiss<T>({
+    bool useSystem = false,
+    T? result,
+  }) async {
     //dialog prepare dismiss
     _onDismiss?.call();
 
@@ -154,7 +158,7 @@ class MainDialog {
 
     //end waiting
     if (!(_completer?.isCompleted ?? true)) {
-      _completer?.complete();
+      _completer?.complete(result);
     }
   }
 

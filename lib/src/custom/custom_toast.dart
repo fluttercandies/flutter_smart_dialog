@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_smart_dialog/src/helper/config.dart';
 
+import '../config/config.dart';
+import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
+import '../smart_dialog.dart';
 
 class CustomToast extends BaseDialog {
   CustomToast({
@@ -25,10 +26,11 @@ class CustomToast extends BaseDialog {
   SmartToastType? _lastType;
 
   Future<void> showToast({
+    required AlignmentGeometry alignment,
     required bool clickBgDismiss,
-    required bool isLoading,
-    required bool isPenetrate,
-    required bool isUseAnimation,
+    required SmartAnimationType animationType,
+    required bool usePenetrate,
+    required bool useAnimation,
     required Duration animationDuration,
     required Color maskColor,
     required Widget? maskWidget,
@@ -41,22 +43,22 @@ class CustomToast extends BaseDialog {
     if (debounce) {
       var now = DateTime.now();
       var isShake = _lastTime != null &&
-          now.difference(_lastTime!) < SmartDialog.config.debounceTime;
+          now.difference(_lastTime!) < SmartDialog.config.toast.debounceTime;
       _lastTime = now;
       if (isShake) return;
     }
-    config.isExistToast = true;
+    config.toast.isExist = true;
 
     showToast() {
       mainDialog.show(
         widget: widget,
-        alignment: Alignment.center,
+        alignment: alignment,
         maskColor: maskColor,
         maskWidget: maskWidget,
         animationDuration: animationDuration,
-        isLoading: isLoading,
-        isUseAnimation: isUseAnimation,
-        isPenetrate: isPenetrate,
+        animationType: animationType,
+        useAnimation: useAnimation,
+        usePenetrate: usePenetrate,
         clickBgDismiss: clickBgDismiss,
         onDismiss: null,
         useSystem: false,
@@ -197,13 +199,14 @@ class CustomToast extends BaseDialog {
   Future<void> _realDismiss() async {
     await mainDialog.dismiss();
     if (_toastQueue.length > 1) return;
-    config.isExistToast = false;
+    config.toast.isExist = false;
   }
 
-  Future<void> dismiss() async {
+  Future<T?> dismiss<T>() async {
     _curTime?.cancel();
     if (!(_curCompleter?.isCompleted ?? true)) _curCompleter?.complete();
     await Future.delayed(Duration(milliseconds: 1));
+    return null;
   }
 }
 

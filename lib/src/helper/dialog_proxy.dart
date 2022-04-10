@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/config/config.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_loading.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_toast.dart';
@@ -8,9 +9,8 @@ import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 
+import '../config/enum_config.dart';
 import '../dialog.dart';
-import '../smart_dialog.dart';
-import 'config.dart';
 
 class DialogProxy {
   late Config config;
@@ -55,13 +55,13 @@ class DialogProxy {
     _toast = CustomToast(config: config, overlayEntry: entryToast);
   }
 
-  Future<void> show({
+  Future<T?>? show<T>({
     required Widget widget,
     required AlignmentGeometry alignment,
-    required bool isPenetrate,
-    required bool isUseAnimation,
+    required bool usePenetrate,
+    required bool useAnimation,
     required Duration animationDuration,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required Color maskColor,
     required bool clickBgDismiss,
     required Widget? maskWidget,
@@ -77,13 +77,13 @@ class DialogProxy {
       builder: (BuildContext context) => dialog!.getWidget(),
     );
     dialog = CustomDialog(config: config, overlayEntry: entry);
-    return dialog.show(
+    return dialog.show<T>(
       widget: widget,
       alignment: alignment,
-      isPenetrate: isPenetrate,
-      isUseAnimation: isUseAnimation,
+      usePenetrate: usePenetrate,
+      useAnimation: useAnimation,
       animationDuration: animationDuration,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
       clickBgDismiss: clickBgDismiss,
@@ -96,20 +96,19 @@ class DialogProxy {
     );
   }
 
-  Future<void> showAttach({
+  Future<T?>? showAttach<T>({
     required BuildContext? targetContext,
     required Widget widget,
     required Offset? target,
     required AlignmentGeometry alignment,
-    required bool isPenetrate,
-    required bool isUseAnimation,
+    required bool usePenetrate,
+    required bool useAnimation,
     required Duration animationDuration,
-    required bool isLoading,
+    required SmartAnimationType animationType,
     required Color maskColor,
     required bool clickBgDismiss,
     required Widget? maskWidget,
-    required Positioned highlight,
-    required HighlightBuilder? highlightBuilder,
+    required HighlightBuilder highlightBuilder,
     required bool debounce,
     required VoidCallback? onDismiss,
     required String? tag,
@@ -122,18 +121,17 @@ class DialogProxy {
       builder: (BuildContext context) => dialog!.getWidget(),
     );
     dialog = CustomDialog(config: config, overlayEntry: entry);
-    return dialog.showAttach(
+    return dialog.showAttach<T>(
       targetContext: targetContext,
       target: target,
       widget: widget,
       alignment: alignment,
-      isPenetrate: isPenetrate,
-      isUseAnimation: isUseAnimation,
+      usePenetrate: usePenetrate,
+      useAnimation: useAnimation,
       animationDuration: animationDuration,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
-      highlight: highlight,
       highlightBuilder: highlightBuilder,
       clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
@@ -147,9 +145,9 @@ class DialogProxy {
 
   Future<void> showLoading({
     required bool clickBgDismiss,
-    required bool isLoading,
-    required bool isPenetrate,
-    required bool isUseAnimation,
+    required SmartAnimationType animationType,
+    required bool usePenetrate,
+    required bool useAnimation,
     required Duration animationDuration,
     required Color maskColor,
     required Widget? maskWidget,
@@ -158,11 +156,11 @@ class DialogProxy {
   }) {
     return _loading.showLoading(
       clickBgDismiss: clickBgDismiss,
-      isLoading: isLoading,
+      animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
-      isPenetrate: isPenetrate,
-      isUseAnimation: isUseAnimation,
+      usePenetrate: usePenetrate,
+      useAnimation: useAnimation,
       animationDuration: animationDuration,
       backDismiss: backDismiss,
       widget: widget,
@@ -170,10 +168,11 @@ class DialogProxy {
   }
 
   Future<void> showToast({
+    required AlignmentGeometry alignment,
     required bool clickBgDismiss,
-    required bool isLoading,
-    required bool isPenetrate,
-    required bool isUseAnimation,
+    required SmartAnimationType animationType,
+    required bool usePenetrate,
+    required bool useAnimation,
     required Duration animationDuration,
     required Color maskColor,
     required Widget? maskWidget,
@@ -184,10 +183,11 @@ class DialogProxy {
     required Widget widget,
   }) async {
     return _toast.showToast(
+      alignment: alignment,
       clickBgDismiss: clickBgDismiss,
-      isLoading: isLoading,
-      isPenetrate: isPenetrate,
-      isUseAnimation: isUseAnimation,
+      animationType: animationType,
+      usePenetrate: usePenetrate,
+      useAnimation: useAnimation,
       animationDuration: animationDuration,
       maskColor: maskColor,
       maskWidget: maskWidget,
@@ -198,31 +198,34 @@ class DialogProxy {
     );
   }
 
-  Future<void> dismiss({
+  Future<void>? dismiss<T>({
     required SmartStatus status,
-    String? tag,
     bool back = false,
-  }) async {
+    String? tag,
+    T? result,
+  }) {
     if (status == SmartStatus.smart) {
       var loading = config.isExistLoading;
-      if (!loading) await CustomDialog.dismiss(tag: tag, back: back);
-      if (loading) await _loading.dismiss(back: back);
+      if (!loading)
+        return CustomDialog.dismiss(DialogType.dialog, back, tag, result);
+      if (loading) return _loading.dismiss(back: back);
     } else if (status == SmartStatus.toast) {
-      await _toast.dismiss();
+      return _toast.dismiss();
     } else if (status == SmartStatus.loading) {
-      await _loading.dismiss(back: back);
+      return _loading.dismiss(back: back);
     } else if (status == SmartStatus.dialog) {
-      await CustomDialog.dismiss(tag: tag, back: back);
+      return CustomDialog.dismiss(DialogType.dialog, back, tag, result);
     } else if (status == SmartStatus.custom) {
-      await CustomDialog.dismiss(type: DialogType.custom, tag: tag);
+      return CustomDialog.dismiss(DialogType.custom, back, tag, result);
     } else if (status == SmartStatus.attach) {
-      await CustomDialog.dismiss(type: DialogType.attach, tag: tag);
+      return CustomDialog.dismiss(DialogType.attach, back, tag, result);
     } else if (status == SmartStatus.allDialog) {
-      await CustomDialog.dismiss(type: DialogType.allDialog);
+      return CustomDialog.dismiss(DialogType.allDialog, back, tag, result);
     } else if (status == SmartStatus.allCustom) {
-      await CustomDialog.dismiss(type: DialogType.allCustom);
+      return CustomDialog.dismiss(DialogType.allCustom, back, tag, result);
     } else if (status == SmartStatus.allAttach) {
-      await CustomDialog.dismiss(type: DialogType.allAttach);
+      return CustomDialog.dismiss(DialogType.allAttach, back, tag, result);
     }
+    return null;
   }
 }

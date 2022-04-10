@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/location.dart';
 
+import '../config/enum_config.dart';
+
 typedef HighlightBuilder = Positioned Function(
   Offset targetOffset,
   Size targetSize,
@@ -17,14 +19,13 @@ class AttachDialogWidget extends StatefulWidget {
     required this.target,
     required this.controller,
     required this.animationDuration,
-    required this.isUseAnimation,
+    required this.useAnimation,
     required this.onBgTap,
     required this.alignment,
-    required this.isPenetrate,
-    required this.isLoading,
+    required this.usePenetrate,
+    required this.animationType,
     required this.maskColor,
     required this.clickBgDismiss,
-    required this.highlight,
     required this.highlightBuilder,
     required this.maskWidget,
   }) : super(key: key);
@@ -35,7 +36,7 @@ class AttachDialogWidget extends StatefulWidget {
   final Offset? target;
 
   /// 是否使用动画
-  final bool isUseAnimation;
+  final bool useAnimation;
 
   ///动画时间
   final Duration animationDuration;
@@ -53,11 +54,11 @@ class AttachDialogWidget extends StatefulWidget {
   final AlignmentGeometry alignment;
 
   /// 是否穿透背景,交互背景之后控件
-  final bool isPenetrate;
+  final bool usePenetrate;
 
   /// 是否使用Loading情况；true:内容体使用渐隐动画  false：内容体使用缩放动画
   /// 仅仅针对中间位置的控件
-  final bool isLoading;
+  final SmartAnimationType animationType;
 
   /// 遮罩颜色
   final Color maskColor;
@@ -66,8 +67,7 @@ class AttachDialogWidget extends StatefulWidget {
   final Widget? maskWidget;
 
   /// 溶解遮罩,设置高亮位置
-  final Positioned highlight;
-  final HighlightBuilder? highlightBuilder;
+  final HighlightBuilder highlightBuilder;
 
   /// 点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
   final bool clickBgDismiss;
@@ -147,9 +147,9 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       //暗色背景widget动画
       _buildBgAnimation(
         onPointerUp: widget.clickBgDismiss ? widget.onBgTap : null,
-        child: (widget.maskWidget != null && !widget.isPenetrate)
+        child: (widget.maskWidget != null && !widget.usePenetrate)
             ? widget.maskWidget
-            : widget.isPenetrate
+            : widget.usePenetrate
                 ? Container()
                 : ColorFiltered(
                     colorFilter: ColorFilter.mode(
@@ -167,9 +167,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
                       ),
 
                       //dissolve mask, highlight location
-                      widget.highlightBuilder == null
-                          ? widget.highlight
-                          : widget.highlightBuilder!(targetOffset, targetSize),
+                      widget.highlightBuilder(targetOffset, targetSize)
                     ]),
                   ),
       ),
@@ -196,7 +194,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
         right: _targetRect?.right,
         top: _targetRect?.top,
         bottom: _targetRect?.bottom,
-        child: widget.isUseAnimation ? _buildBodyAnimation(child) : child,
+        child: widget.useAnimation ? _buildBodyAnimation(child) : child,
       ),
     ]);
   }
@@ -223,7 +221,10 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
         //其它的都使用位移动画
         : SizeTransition(axis: _axis, sizeFactor: _ctrlBody, child: child);
 
-    return widget.isLoading
+    bool useFade = (widget.animationType == SmartAnimationType.fade) ||
+        (widget.animationType == SmartAnimationType.centerFadeAndOtherScale &&
+            widget.alignment == Alignment.center);
+    return useFade
         ? FadeTransition(opacity: animation, child: child)
         : transition;
   }
@@ -299,7 +300,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     _ctrlBg?.reverse();
     _ctrlBody.reverse();
 
-    if (widget.isUseAnimation) {
+    if (widget.useAnimation) {
       await Future.delayed(widget.animationDuration);
     }
   }

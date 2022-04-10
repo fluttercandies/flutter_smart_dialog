@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 
+import '../config/enum_config.dart';
+
 class SmartDialogWidget extends StatefulWidget {
   SmartDialogWidget({
     Key? key,
@@ -10,10 +12,10 @@ class SmartDialogWidget extends StatefulWidget {
     required this.controller,
     required this.onBgTap,
     required this.alignment,
-    required this.isPenetrate,
+    required this.usePenetrate,
     required this.animationDuration,
-    required this.isUseAnimation,
-    required this.isLoading,
+    required this.useAnimation,
+    required this.animationType,
     required this.maskColor,
     required this.clickBgDismiss,
     required this.maskWidget,
@@ -32,17 +34,17 @@ class SmartDialogWidget extends StatefulWidget {
   final AlignmentGeometry alignment;
 
   /// 是否穿透背景,交互背景之后控件
-  final bool isPenetrate;
+  final bool usePenetrate;
 
   /// 动画时间
   final Duration animationDuration;
 
   /// 是否使用动画
-  final bool isUseAnimation;
+  final bool useAnimation;
 
   /// 是否使用Loading情况；true:内容体使用渐隐动画  false：内容体使用缩放动画
   /// 仅仅针对中间位置的控件
-  final bool isLoading;
+  final SmartAnimationType animationType;
 
   /// 遮罩颜色
   final Color maskColor;
@@ -104,15 +106,15 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
       //暗色背景widget动画
       _buildBgAnimation(
         onPointerUp: widget.clickBgDismiss ? widget.onBgTap : null,
-        child: (widget.maskWidget != null && !widget.isPenetrate)
+        child: (widget.maskWidget != null && !widget.usePenetrate)
             ? widget.maskWidget
-            : Container(color: widget.isPenetrate ? null : widget.maskColor),
+            : Container(color: widget.usePenetrate ? null : widget.maskColor),
       ),
 
       //内容Widget动画
       Container(
         alignment: widget.alignment,
-        child: widget.isUseAnimation ? _buildBodyAnimation() : widget.child,
+        child: widget.useAnimation ? _buildBodyAnimation() : widget.child,
       ),
     ]);
   }
@@ -133,21 +135,19 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   Widget _buildBodyAnimation() {
     var animation = CurvedAnimation(parent: _ctrlBody, curve: Curves.linear);
-    var centerTransition = widget.isLoading
-        ? FadeTransition(opacity: animation, child: widget.child)
-        : ScaleTransition(scale: animation, child: widget.child);
+    var tw = Tween<Offset>(begin: _offset, end: Offset.zero);
+    var transition = widget.alignment == Alignment.center
+        //中间弹窗动画使用缩放
+        ? ScaleTransition(scale: animation, child: widget.child)
+        //其它的都使用位移动画
+        : SlideTransition(position: tw.animate(_ctrlBody), child: widget.child);
 
-    return widget.alignment == Alignment.center
-        //中间弹窗动画的使用需要分情况 渐隐和缩放俩种
-        ? centerTransition
-        //除了中间弹窗,其它的都使用位移动画
-        : SlideTransition(
-            position: Tween<Offset>(
-              begin: _offset,
-              end: Offset.zero,
-            ).animate(_ctrlBody),
-            child: widget.child,
-          );
+    bool useFade = (widget.animationType == SmartAnimationType.fade) ||
+        (widget.animationType == SmartAnimationType.centerFadeAndOtherScale &&
+            widget.alignment == Alignment.center);
+    return useFade
+        ? FadeTransition(opacity: animation, child: widget.child)
+        : transition;
   }
 
   ///处理下内容widget动画方向
@@ -182,7 +182,7 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
     _ctrlBg?.reverse();
     _ctrlBody.reverse();
 
-    if (widget.isUseAnimation) {
+    if (widget.useAnimation) {
       await Future.delayed(widget.animationDuration);
     }
   }
