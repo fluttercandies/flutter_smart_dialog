@@ -52,12 +52,8 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showToast() async {
-    SmartDialog.showToast('last', type: SmartToastType.last);
-    await Future.delayed(Duration(seconds: 1));
-    SmartDialog.showToast('normal');
-
-    // await SmartDialog.showToast('test toast', debounceTemp: true);
-    // print('--------------------------');
+    await SmartDialog.showToast('test toast', debounceTemp: true);
+    print('--------------------------');
   }
 
   void _show() {
