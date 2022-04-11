@@ -210,7 +210,7 @@ class CustomToast extends BaseDialog {
     if (closeAll) _toastQueue.clear();
     _curTime?.cancel();
     if (!(_curCompleter?.isCompleted ?? true)) _curCompleter?.complete();
-    await Future.delayed(SmartDialog.config.animationDuration);
+    await Future.delayed(SmartDialog.config.toast.animationTime);
     await Future.delayed(const Duration(milliseconds: 50));
     return null;
   }

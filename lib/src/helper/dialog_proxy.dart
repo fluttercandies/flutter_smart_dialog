@@ -8,6 +8,7 @@ import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 
+import '../config/config.dart';
 import '../config/enum_config.dart';
 import '../init_dialog.dart';
 
@@ -209,9 +210,9 @@ class DialogProxy {
         return CustomDialog.dismiss(DialogType.dialog, back, tag, result);
       if (loading) return _loading.dismiss(back: back);
     } else if (status == SmartStatus.toast) {
-      return  _toast.dismiss();
+      return _toast.dismiss();
     } else if (status == SmartStatus.allToast) {
-      return  _toast.dismiss(closeAll: true);
+      return _toast.dismiss(closeAll: true);
     } else if (status == SmartStatus.loading) {
       return _loading.dismiss(back: back);
     } else if (status == SmartStatus.dialog) {
