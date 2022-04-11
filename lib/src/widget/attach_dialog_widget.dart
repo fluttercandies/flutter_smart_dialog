@@ -295,8 +295,9 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   ///等待动画结束,关闭动画资源
   Future<void> dismiss() async {
+    if (_ctrlBg == null) return;
     //over animation
-    _ctrlBg?.reverse();
+    _ctrlBg!.reverse();
     _ctrlBody.reverse();
 
     if (widget.isUseAnimation) {
@@ -307,6 +308,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   @override
   void dispose() {
     _ctrlBg?.dispose();
+    _ctrlBg = null;
     _ctrlBody.dispose();
     super.dispose();
   }
@@ -321,7 +323,6 @@ class AttachDialogController extends BaseController {
 
   @override
   Future<void> dismiss() async {
-    await Future.delayed(Duration(milliseconds: 1));
     try {
       await _state?.dismiss();
     } catch (e) {

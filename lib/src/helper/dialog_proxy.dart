@@ -209,6 +209,8 @@ class DialogProxy {
       if (loading) await _loading.dismiss(back: back);
     } else if (status == SmartStatus.toast) {
       await _toast.dismiss();
+    } else if (status == SmartStatus.allToast) {
+      await _toast.dismiss(closeAll: true);
     } else if (status == SmartStatus.loading) {
       await _loading.dismiss(back: back);
     } else if (status == SmartStatus.dialog) {

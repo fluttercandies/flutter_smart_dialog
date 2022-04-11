@@ -84,6 +84,8 @@ class CustomToast extends BaseDialog {
     handleMultiTypeToast(curType: type, fun: multiTypeToast);
   }
 
+  ///--------------------------multi type toast--------------------------
+
   Future<void> _normalToast({
     required Duration time,
     required Function() onShowToast,
@@ -114,7 +116,7 @@ class CustomToast extends BaseDialog {
     await _toastDelay(time);
     await _realDismiss();
 
-    _toastQueue.removeLast();
+    if (_toastQueue.isNotEmpty) _toastQueue.removeLast();
   }
 
   Future<void> _lastToast({
@@ -126,7 +128,7 @@ class CustomToast extends BaseDialog {
     await _toastDelay(time);
     if (_toastQueue.length == 1) await _realDismiss();
 
-    _toastQueue.removeLast();
+    if (_toastQueue.isNotEmpty) _toastQueue.removeLast();
   }
 
   Future<void> _firstAndLastToast({
@@ -148,9 +150,10 @@ class CustomToast extends BaseDialog {
     });
 
     if (_toastQueue.length == 1) await _toastQueue.first();
-
     if (_toastQueue.length > 2) _toastQueue.remove(_toastQueue.elementAt(1));
   }
+
+  ///--------------------------multi type toast--------------------------
 
   void handleMultiTypeToast({
     required SmartToastType curType,
@@ -200,10 +203,12 @@ class CustomToast extends BaseDialog {
     config.isExistToast = false;
   }
 
-  Future<void> dismiss() async {
+  Future<void> dismiss({bool closeAll = false}) async {
+    if (closeAll) _toastQueue.clear();
     _curTime?.cancel();
     if (!(_curCompleter?.isCompleted ?? true)) _curCompleter?.complete();
-    await Future.delayed(Duration(milliseconds: 1));
+    await Future.delayed(SmartDialog.config.animationDuration);
+    await Future.delayed(const Duration(milliseconds: 50));
   }
 }
 

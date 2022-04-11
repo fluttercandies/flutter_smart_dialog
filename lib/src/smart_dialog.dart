@@ -17,6 +17,11 @@ enum SmartStatus {
   /// 关闭toast（showToast）
   toast,
 
+  /// close all toasts（showToast）
+  ///
+  /// 关闭所有toast（showToast）
+  allToast,
+
   /// close loading（showLoading）
   ///
   /// 关闭loading（showLoading）
