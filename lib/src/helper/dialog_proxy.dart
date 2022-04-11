@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/src/config/config.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_loading.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_toast.dart';
@@ -210,7 +209,9 @@ class DialogProxy {
         return CustomDialog.dismiss(DialogType.dialog, back, tag, result);
       if (loading) return _loading.dismiss(back: back);
     } else if (status == SmartStatus.toast) {
-      return _toast.dismiss();
+      return  _toast.dismiss();
+    } else if (status == SmartStatus.allToast) {
+      return  _toast.dismiss(closeAll: true);
     } else if (status == SmartStatus.loading) {
       return _loading.dismiss(back: back);
     } else if (status == SmartStatus.dialog) {
