@@ -7,7 +7,7 @@ import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
 import '../../flutter_smart_dialog.dart';
-import '../config/config.dart';
+import '../config/smart_config.dart';
 import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
 import '../smart_dialog.dart';
@@ -25,7 +25,7 @@ enum DialogType {
 ///main function : custom dialog
 class CustomDialog extends BaseDialog {
   CustomDialog({
-    required Config config,
+    required SmartConfig config,
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
 

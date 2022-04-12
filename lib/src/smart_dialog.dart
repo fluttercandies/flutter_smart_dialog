@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'compatible/compatible_smart_dialog.dart';
-import 'config/config.dart';
+import 'config/smart_config.dart';
 import 'config/enum_config.dart';
 import 'helper/dialog_proxy.dart';
 import 'widget/attach_dialog_widget.dart';
@@ -17,7 +17,7 @@ class SmartDialog {
   /// SmartDialog global config
   ///
   /// SmartDialog全局配置
-  static Config config = DialogProxy.instance.config;
+  static SmartConfig config = DialogProxy.instance.config;
 
   /// custom dialog
   ///
@@ -130,7 +130,7 @@ class SmartDialog {
       debounce: debounce ?? config.custom.debounce,
       onDismiss: onDismiss,
       tag: tag,
-      backDismiss: backDismiss ?? true,
+      backDismiss: backDismiss ?? config.custom.backDismiss,
       keepSingle: keepSingle ?? false,
       useSystem: useSystem ?? false,
     );
@@ -272,7 +272,7 @@ class SmartDialog {
       highlightBuilder: highlight ?? (_, __) => Positioned(child: Container()),
       onDismiss: onDismiss,
       tag: tag,
-      backDismiss: backDismiss ?? true,
+      backDismiss: backDismiss ?? config.attach.backDismiss,
       keepSingle: keepSingle ?? false,
       useSystem: useSystem ?? false,
     );
@@ -300,7 +300,7 @@ class SmartDialog {
   ///
   /// [maskWidget]：highly customizable mask
   ///
-  /// [backDismiss]：default（true），true（the back event will close the loading but not close the page），
+  /// [backDismiss]：true（the back event will close the loading but not close the page），
   /// false（the back event not close the loading and not close page），
   /// you still can use the dismiss method to close the loading
   ///
@@ -327,8 +327,8 @@ class SmartDialog {
   ///
   /// [maskWidget]：可高度定制遮罩
   ///
-  /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），
-  /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭loading
+  /// [backDismiss]：true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
+  /// 你仍然可以使用dismiss方法来关闭loading
   ///
   /// [builder]：the custom loading
   static Future<void> showLoading({
@@ -351,7 +351,7 @@ class SmartDialog {
       animationTime: animationTime ?? config.loading.animationTime,
       maskColor: maskColor ?? config.loading.maskColor,
       maskWidget: maskWidget ?? config.loading.maskWidget,
-      backDismiss: backDismiss ?? true,
+      backDismiss: backDismiss ?? config.loading.backDismiss,
       widget: builder != null
           ? Builder(builder: (context) => builder(context))
           : DialogProxy.instance.loadingBuilder(msg),
@@ -453,7 +453,7 @@ class SmartDialog {
       maskColor: maskColor ?? config.toast.maskColor,
       maskWidget: maskWidget ?? config.toast.maskWidget,
       debounce: debounce ?? config.toast.debounce,
-      type: type ?? SmartToastType.normal,
+      type: type ?? config.toast.type,
       consumeEvent: consumeEvent ?? config.toast.consumeEvent,
       widget: builder != null
           ? Builder(builder: (context) => builder(context))

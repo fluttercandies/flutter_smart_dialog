@@ -2,25 +2,23 @@ import 'package:flutter/material.dart';
 
 import 'enum_config.dart';
 
-///showToast() global config
+///show() global config
 ///
-///showToast() 全局配置
-class ToastConfig {
-  ToastConfig({
+///show() 全局配置
+class SmartConfigCustom {
+  SmartConfigCustom({
     this.alignment = Alignment.center,
-    this.animationType = SmartAnimationType.fade,
-    this.animationTime = const Duration(milliseconds: 200),
+    this.animationType = SmartAnimationType.scale,
+    this.animationTime = const Duration(milliseconds: 260),
     this.useAnimation = true,
-    this.usePenetrate = true,
+    this.usePenetrate = false,
     this.maskColor = const Color.fromRGBO(0, 0, 0, 0.35),
     this.maskWidget,
-    this.clickBgDismiss = false,
+    this.clickBgDismiss = true,
     this.debounce = false,
     this.debounceTime = const Duration(milliseconds: 300),
-    this.consumeEvent = false,
-    this.displayTime = const Duration(milliseconds: 2000),
-    this.gapTime = const Duration(milliseconds: 150),
-    this.isExist = false,
+    this.backDismiss = true,
+    this.isExist =false,
   });
 
   /// control the location of the dialog on the screen
@@ -50,7 +48,7 @@ class ToastConfig {
   /// centerLeft：dialog位于屏幕左边，动画默认为位移动画，自左而右，
   ///
   /// centerRight：dialog位于屏幕左边，动画默认为位移动画，自右而左，
-  AlignmentGeometry alignment;
+  AlignmentGeometry alignment = Alignment.center;
 
   /// [animationTime]：The animation time can be set
   ///
@@ -98,23 +96,16 @@ class ToastConfig {
   /// [debounceTime]：防抖时间内，多次点击只会响应第一次，第二次无效点击会触发防抖时间重新计时
   Duration debounceTime;
 
-  /// true (toast will consume touch events), false (toast no longer consumes events, touch events can penetrate toast)
+  /// true（the back event will close the loading but not close the page），
+  /// false（the back event not close the loading and not close page），
+  /// you still can use the dismiss method to close the loading
   ///
-  /// true（toast会消耗触摸事件），false（toast不再消耗事件，触摸事件能穿透toast）
-  bool consumeEvent;
+  /// true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
+  /// 你仍然可以使用dismiss方法来关闭loading
+  bool backDismiss;
 
-  /// toast display time on the screen
+  /// whether custom dialog(show()) exist on the screen
   ///
-  /// toast在屏幕上的显示时间
-  Duration displayTime;
-
-  /// Multiple toasts are displayed continuously, and the gap time between each toast is displayed
-  ///
-  /// 多个toast连续显示,每个toast之间显示的间隔时间
-  Duration gapTime;
-
-  /// whether toast(showToast()) exist on the screen
-  ///
-  /// toast(showToast())是否存在在界面上
+  /// 自定义dialog(show())，是否存在在界面上
   bool isExist;
 }

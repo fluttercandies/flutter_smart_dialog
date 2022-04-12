@@ -3,14 +3,14 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
-import '../config/config.dart';
+import '../config/smart_config.dart';
 import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
 import '../smart_dialog.dart';
 
 class CustomToast extends BaseDialog {
   CustomToast({
-    required Config config,
+    required SmartConfig config,
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
 

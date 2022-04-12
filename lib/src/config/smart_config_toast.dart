@@ -2,22 +2,26 @@ import 'package:flutter/material.dart';
 
 import 'enum_config.dart';
 
-///show() global config
+///showToast() global config
 ///
-///show() 全局配置
-class CustomConfig {
-  CustomConfig({
+///showToast() 全局配置
+class SmartConfigToast {
+  SmartConfigToast({
     this.alignment = Alignment.center,
-    this.animationType = SmartAnimationType.scale,
-    this.animationTime = const Duration(milliseconds: 260),
+    this.animationType = SmartAnimationType.fade,
+    this.animationTime = const Duration(milliseconds: 200),
     this.useAnimation = true,
-    this.usePenetrate = false,
+    this.usePenetrate = true,
     this.maskColor = const Color.fromRGBO(0, 0, 0, 0.35),
     this.maskWidget,
-    this.clickBgDismiss = true,
+    this.clickBgDismiss = false,
     this.debounce = false,
     this.debounceTime = const Duration(milliseconds: 300),
-    this.isExist =false,
+    this.type = SmartToastType.normal,
+    this.consumeEvent = false,
+    this.displayTime = const Duration(milliseconds: 2000),
+    this.gapTime = const Duration(milliseconds: 150),
+    this.isExist = false,
   });
 
   /// control the location of the dialog on the screen
@@ -47,7 +51,7 @@ class CustomConfig {
   /// centerLeft：dialog位于屏幕左边，动画默认为位移动画，自左而右，
   ///
   /// centerRight：dialog位于屏幕左边，动画默认为位移动画，自右而左，
-  AlignmentGeometry alignment = Alignment.center;
+  AlignmentGeometry alignment;
 
   /// [animationTime]：The animation time can be set
   ///
@@ -95,8 +99,28 @@ class CustomConfig {
   /// [debounceTime]：防抖时间内，多次点击只会响应第一次，第二次无效点击会触发防抖时间重新计时
   Duration debounceTime;
 
-  /// whether custom dialog(show()) exist on the screen
+  /// provider multiple display logic，please refer to [SmartToastType] comment for detailed description
   ///
-  /// 自定义dialog(show())，是否存在在界面上
+  /// 提供多种显示逻辑，详细描述请查看 [SmartToastType] 注释
+  SmartToastType type;
+
+  /// true (toast will consume touch events), false (toast no longer consumes events, touch events can penetrate toast)
+  ///
+  /// true（toast会消耗触摸事件），false（toast不再消耗事件，触摸事件能穿透toast）
+  bool consumeEvent;
+
+  /// toast display time on the screen
+  ///
+  /// toast在屏幕上的显示时间
+  Duration displayTime;
+
+  /// Multiple toasts are displayed continuously, and the gap time between each toast is displayed
+  ///
+  /// 多个toast连续显示,每个toast之间显示的间隔时间
+  Duration gapTime;
+
+  /// whether toast(showToast()) exist on the screen
+  ///
+  /// toast(showToast())是否存在在界面上
   bool isExist;
 }

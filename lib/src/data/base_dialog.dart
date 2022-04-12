@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../config/config.dart';
+import '../config/smart_config.dart';
 import '../custom/main_dialog.dart';
 
 /// base dialog：encapsulate common logic
@@ -14,7 +14,7 @@ class BaseDialog {
   final OverlayEntry overlayEntry;
 
   ///config info
-  final Config config;
+  final SmartConfig config;
 
   MainDialog mainDialog;
 

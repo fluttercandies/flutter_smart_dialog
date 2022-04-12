@@ -5,8 +5,8 @@ import 'enum_config.dart';
 ///showAttach() global config
 ///
 ///showAttach() 全局配置
-class AttachConfig {
-  AttachConfig({
+class SmartConfigAttach {
+  SmartConfigAttach({
     this.alignment = Alignment.bottomCenter,
     this.animationType = SmartAnimationType.scale,
     this.animationTime = const Duration(milliseconds: 260),
@@ -17,6 +17,7 @@ class AttachConfig {
     this.clickBgDismiss = true,
     this.debounce = false,
     this.debounceTime = const Duration(milliseconds: 300),
+    this.backDismiss = true,
     this.isExist = false,
   });
 
@@ -94,6 +95,14 @@ class AttachConfig {
   ///
   /// [debounceTime]：防抖时间内，多次点击只会响应第一次，第二次无效点击会触发防抖时间重新计时
   Duration debounceTime;
+
+  /// true（the back event will close the loading but not close the page），
+  /// false（the back event not close the loading and not close page），
+  /// you still can use the dismiss method to close the loading
+  ///
+  /// true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
+  /// 你仍然可以使用dismiss方法来关闭loading
+  bool backDismiss;
 
   /// whether attach dialog(showAttach()) exist on the screen
   ///

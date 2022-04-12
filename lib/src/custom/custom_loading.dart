@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
-import '../config/config.dart';
+import '../config/smart_config.dart';
 import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
 
 class CustomLoading extends BaseDialog {
   CustomLoading({
-    required Config config,
+    required SmartConfig config,
     required OverlayEntry overlayEntry,
   }) : super(config: config, overlayEntry: overlayEntry);
 

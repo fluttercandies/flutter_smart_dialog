@@ -3,7 +3,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/compatible/compatible_smart_dialog.dart';
 
 ///全局配置统一在此处处理
-class CompatibleConfig {
+class SmartConfigCompatible {
   /// control the location of the dialog on the screen
   ///
   /// center: the dialog locate the center on the screen，the animation type is selected by the 'isLoading' param：

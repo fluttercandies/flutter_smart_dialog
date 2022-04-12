@@ -7,7 +7,7 @@ import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_widget.dart';
 
-import '../config/config.dart';
+import '../config/smart_config.dart';
 import '../config/enum_config.dart';
 
 ///main function : customize dialog
@@ -21,7 +21,7 @@ class MainDialog {
   final OverlayEntry overlayEntry;
 
   ///config info
-  final Config config;
+  final SmartConfig config;
 
   final _uniqueKey = UniqueKey();
 

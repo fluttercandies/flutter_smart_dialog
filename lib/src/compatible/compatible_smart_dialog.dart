@@ -5,7 +5,7 @@ import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
 import '../config/enum_config.dart';
-import 'compatible_config.dart';
+import 'smart_config_compatible.dart';
 
 class CompatibleSmartDialog {
   factory CompatibleSmartDialog() => instance;
@@ -19,7 +19,7 @@ class CompatibleSmartDialog {
   /// SmartDialog global config
   ///
   /// SmartDialog全局配置
-  CompatibleConfig config = DialogProxy.instance.config.compatible;
+  SmartConfigCompatible config = DialogProxy.instance.config.compatible;
 
   /// custom dialog：param with a suffix of 'temp', indicating that such params can be set to default values in [Config]
   ///

@@ -1,38 +1,38 @@
-import 'package:flutter_smart_dialog/src/compatible/compatible_config.dart';
-import 'package:flutter_smart_dialog/src/config/custom_config.dart';
-import 'package:flutter_smart_dialog/src/config/loading_config.dart';
-import 'package:flutter_smart_dialog/src/config/toast_config.dart';
+import 'package:flutter_smart_dialog/src/compatible/smart_config_compatible.dart';
+import 'package:flutter_smart_dialog/src/config/smart_config_custom.dart';
+import 'package:flutter_smart_dialog/src/config/smart_config_loading.dart';
+import 'package:flutter_smart_dialog/src/config/smart_config_toast.dart';
 
-import 'attach_config.dart';
+import 'smart_config_attach.dart';
 
 /// Global configuration is unified here
 ///
 /// 全局配置统一在此处处理
-class Config {
+class SmartConfig {
   /// show(): custom dialog global config
   ///
   /// show(): custom dialog全局配置项
-  CustomConfig custom = CustomConfig();
+  SmartConfigCustom custom = SmartConfigCustom();
 
   /// showAttach(): attach dialog global config
   ///
   /// showAttach(): attach dialog全局配置项
-  AttachConfig attach = AttachConfig();
+  SmartConfigAttach attach = SmartConfigAttach();
 
   /// showLoading(): loading global config
   ///
   /// showLoading(): loading全局配置项
-  LoadingConfig loading = LoadingConfig();
+  SmartConfigLoading loading = SmartConfigLoading();
 
   /// showToast(): toast global config
   ///
   /// showToast(): toast全局配置项
-  ToastConfig toast = ToastConfig();
+  SmartConfigToast toast = SmartConfigToast();
 
   /// Compatible with older versions
   ///
   /// 兼容老版本配置
-  CompatibleConfig compatible = CompatibleConfig();
+  SmartConfigCompatible compatible = SmartConfigCompatible();
 
   /// whether custom dialog，attach and loading  exist on the screen
   ///
