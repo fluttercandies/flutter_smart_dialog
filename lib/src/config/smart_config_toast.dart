@@ -20,7 +20,7 @@ class SmartConfigToast {
     this.type = SmartToastType.normal,
     this.consumeEvent = false,
     this.displayTime = const Duration(milliseconds: 2000),
-    this.gapTime = const Duration(milliseconds: 150),
+    this.intervalTime = const Duration(milliseconds: 150),
     this.isExist = false,
   });
 
@@ -114,10 +114,10 @@ class SmartConfigToast {
   /// toast在屏幕上的显示时间
   Duration displayTime;
 
-  /// Multiple toasts are displayed continuously, and the gap time between each toast is displayed
+  /// Multiple toasts are displayed continuously, and the interval time between each toast is displayed
   ///
   /// 多个toast连续显示,每个toast之间显示的间隔时间
-  Duration gapTime;
+  Duration intervalTime;
 
   /// whether toast(showToast()) exist on the screen
   ///

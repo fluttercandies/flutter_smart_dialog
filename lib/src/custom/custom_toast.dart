@@ -201,7 +201,7 @@ class CustomToast extends BaseDialog {
 
   Future<void> _realDismiss() async {
     await mainDialog.dismiss();
-    await Future.delayed(SmartDialog.config.toast.gapTime);
+    await Future.delayed(SmartDialog.config.toast.intervalTime);
     if (_toastQueue.length > 1) return;
     config.toast.isExist = false;
   }
