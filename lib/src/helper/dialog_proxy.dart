@@ -44,15 +44,10 @@ class DialogProxy {
   }
 
   void initialize() {
-    entryLoading = OverlayEntry(
-      builder: (BuildContext context) => _loading.getWidget(),
-    );
-    entryToast = OverlayEntry(
-      builder: (BuildContext context) => _toast.getWidget(),
-    );
-
-    _loading = CustomLoading(config: config, overlayEntry: entryLoading);
-    _toast = CustomToast(config: config, overlayEntry: entryToast);
+    entryLoading = OverlayEntry(builder: (_) => _loading.getWidget());
+    _loading = CustomLoading(overlayEntry: entryLoading);
+    entryToast = OverlayEntry(builder: (_) => _toast.getWidget());
+    _toast = CustomToast(overlayEntry: entryToast);
   }
 
   Future<T?>? show<T>({
@@ -63,20 +58,22 @@ class DialogProxy {
     required Duration animationTime,
     required SmartAnimationType animationType,
     required Color maskColor,
-    required bool clickBgDismiss,
+    required bool clickMaskDismiss,
     required Widget? maskWidget,
     required bool debounce,
     required VoidCallback? onDismiss,
+    required VoidCallback? onMask,
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
     required bool useSystem,
+    required bool bindPage,
   }) {
     CustomDialog? dialog;
     var entry = OverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
     );
-    dialog = CustomDialog(config: config, overlayEntry: entry);
+    dialog = CustomDialog(overlayEntry: entry);
     return dialog.show<T>(
       widget: widget,
       alignment: alignment,
@@ -86,13 +83,15 @@ class DialogProxy {
       animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
-      clickBgDismiss: clickBgDismiss,
+      clickMaskDismiss: clickMaskDismiss,
       onDismiss: onDismiss,
+      onMask: onMask,
       debounce: debounce,
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
       useSystem: useSystem,
+      bindPage: bindPage,
     );
   }
 
@@ -106,21 +105,23 @@ class DialogProxy {
     required Duration animationTime,
     required SmartAnimationType animationType,
     required Color maskColor,
-    required bool clickBgDismiss,
+    required bool clickMaskDismiss,
     required Widget? maskWidget,
     required HighlightBuilder highlightBuilder,
     required bool debounce,
     required VoidCallback? onDismiss,
+    required VoidCallback? onMask,
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
     required bool useSystem,
+    required bool bindPage,
   }) {
     CustomDialog? dialog;
     var entry = OverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
     );
-    dialog = CustomDialog(config: config, overlayEntry: entry);
+    dialog = CustomDialog(overlayEntry: entry);
     return dialog.showAttach<T>(
       targetContext: targetContext,
       target: target,
@@ -133,18 +134,20 @@ class DialogProxy {
       maskColor: maskColor,
       maskWidget: maskWidget,
       highlightBuilder: highlightBuilder,
-      clickBgDismiss: clickBgDismiss,
+      clickMaskDismiss: clickMaskDismiss,
       onDismiss: onDismiss,
+      onMask: onMask,
       debounce: debounce,
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
       useSystem: useSystem,
+      bindPage: bindPage,
     );
   }
 
   Future<void> showLoading({
-    required bool clickBgDismiss,
+    required bool clickMaskDismiss,
     required SmartAnimationType animationType,
     required bool usePenetrate,
     required bool useAnimation,
@@ -155,7 +158,7 @@ class DialogProxy {
     required Widget widget,
   }) {
     return _loading.showLoading(
-      clickBgDismiss: clickBgDismiss,
+      clickMaskDismiss: clickMaskDismiss,
       animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
@@ -169,7 +172,7 @@ class DialogProxy {
 
   Future<void> showToast({
     required AlignmentGeometry alignment,
-    required bool clickBgDismiss,
+    required bool clickMaskDismiss,
     required SmartAnimationType animationType,
     required bool usePenetrate,
     required bool useAnimation,
@@ -179,12 +182,12 @@ class DialogProxy {
     required bool consumeEvent,
     required Duration displayTime,
     required bool debounce,
-    required SmartToastType type,
+    required SmartToastType displayType,
     required Widget widget,
   }) async {
     return _toast.showToast(
       alignment: alignment,
-      clickBgDismiss: clickBgDismiss,
+      clickMaskDismiss: clickMaskDismiss,
       animationType: animationType,
       usePenetrate: usePenetrate,
       useAnimation: useAnimation,
@@ -193,7 +196,7 @@ class DialogProxy {
       maskWidget: maskWidget,
       displayTime: displayTime,
       debounce: debounce,
-      type: type,
+      displayType: displayType,
       widget: ToastHelper(consumeEvent: consumeEvent, child: widget),
     );
   }

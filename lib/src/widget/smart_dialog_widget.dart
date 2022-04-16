@@ -4,22 +4,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 
 import '../config/enum_config.dart';
+import '../custom/main_dialog.dart';
 
 class SmartDialogWidget extends StatefulWidget {
-  SmartDialogWidget({
+  const SmartDialogWidget({
     Key? key,
+    required this.param,
     required this.child,
     required this.controller,
-    required this.onBgTap,
+    required this.onMask,
     required this.alignment,
     required this.usePenetrate,
     required this.animationTime,
     required this.useAnimation,
     required this.animationType,
     required this.maskColor,
-    required this.clickBgDismiss,
     required this.maskWidget,
   }) : super(key: key);
+
+  /// 外部控制内部的参数
+  final DialogParam param;
 
   /// 内容widget
   final Widget child;
@@ -27,8 +31,8 @@ class SmartDialogWidget extends StatefulWidget {
   ///widget controller
   final SmartDialogController controller;
 
-  /// 点击背景
-  final VoidCallback onBgTap;
+  /// 点击遮罩
+  final VoidCallback onMask;
 
   /// 内容控件方向
   final AlignmentGeometry alignment;
@@ -51,9 +55,6 @@ class SmartDialogWidget extends StatefulWidget {
 
   /// 自定义遮罩Widget
   final Widget? maskWidget;
-
-  /// 点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
-  final bool clickBgDismiss;
 
   @override
   _SmartDialogWidgetState createState() => _SmartDialogWidgetState();
@@ -95,8 +96,8 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   @override
   void didUpdateWidget(covariant SmartDialogWidget oldWidget) {
+    if (widget.param.forbidAnimation) return;
     if (oldWidget.child != widget.child) _resetState();
-
     super.didUpdateWidget(oldWidget);
   }
 
@@ -105,7 +106,7 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
     return Stack(children: [
       //暗色背景widget动画
       _buildBgAnimation(
-        onPointerUp: widget.clickBgDismiss ? widget.onBgTap : null,
+        onPointerUp: widget.onMask,
         child: (widget.maskWidget != null && !widget.usePenetrate)
             ? widget.maskWidget
             : Container(color: widget.usePenetrate ? null : widget.maskColor),

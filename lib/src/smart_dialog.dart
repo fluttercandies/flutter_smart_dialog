@@ -25,11 +25,11 @@ class SmartDialog {
   ///
   /// [alignment]：control the location of the dialog
   ///
-  /// [clickBgDismiss]：true（the dialog will be closed after click background），false（not close）
+  /// [clickMaskDismiss]：true（the dialog will be closed after click mask），false（not close）
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///
-  /// [usePenetrate]：true（the click event will penetrate background），false（not penetration）
+  /// [usePenetrate]：true（the click event will penetrate mask），false（not penetration）
   ///
   /// [useAnimation]：true（use the animation），false（not use）
   ///
@@ -43,16 +43,21 @@ class SmartDialog {
   ///
   /// [onDismiss]：the callback will be invoked when the dialog is closed
   ///
-  /// [tag]：if you set a tag for the dialog, you can turn it off in a targeted manner
+  /// [onMask]：This callback will be triggered when the mask is clicked
   ///
-  /// [backDismiss]：default（true），true（the back event will close the dialog but not close the page），
+  /// [tag]：If you set a tag for the dialog, you can turn it off in a targeted manner
+  ///
+  /// [backDismiss]：true（the back event will close the dialog but not close the page），
   /// false（the back event not close the dialog and not close page），you still can use the dismiss method to close the dialog
   ///
   /// [keepSingle]：Default (false), true (calling [show] multiple times will not generate multiple dialogs,
   /// only single dialog will be kept), false (calling [show] multiple times will generate multiple dialogs)
   ///
-  /// [useSystem]: default (false), true (using the system dialog, [usePenetrate] is invalid, [tag] and [keepSingle] are prohibited),
+  /// [useSystem]：Default (false), true (using the system dialog, [usePenetrate] is invalid, [tag] and [keepSingle] are prohibited),
   /// false (using SmartDialog), this param can completely solve the page jump scene on the dialog
+  ///
+  /// [bindPage]：Bind the dialog to the current page, the bound page is not on the top of the stack,
+  /// the dialog is automatically hidden, the bound page is placed on the top of the stack, and the dialog is automatically displayed
   ///
   /// -------------------------------------------------------------------------------
   ///
@@ -62,11 +67,11 @@ class SmartDialog {
   ///
   /// [alignment]：控制弹窗的位置
   ///
-  /// [clickBgDismiss]：true（点击半透明的暗色背景后，将关闭dialog），false（不关闭）
+  /// [clickMaskDismiss]：true（点击遮罩后，将关闭dialog），false（不关闭）
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
-  /// [usePenetrate]：true（点击事件将穿透背景），false（不穿透）
+  /// [usePenetrate]：true（点击事件将穿透遮罩），false（不穿透）
   ///
   /// [useAnimation]：true（使用动画），false（不使用）
   ///
@@ -80,20 +85,24 @@ class SmartDialog {
   ///
   /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
   ///
+  /// [onMask]：点击遮罩时，该回调将会被触发
+  ///
   /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
   ///
-  /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），
+  /// [backDismiss]：true（返回事件将关闭loading，但是不会关闭页面），
   /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭loading
   ///
   /// [keepSingle]：默认（false），true（多次调用[show]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[show]会生成多个dialog）
   ///
   /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效,[tag]和[keepSingle]禁止使用），
-  /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题
+  /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题(可与路由页面,flutter自带dialog合理交互)
+  ///
+  /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示
   static Future<T?>? show<T>({
     required WidgetBuilder builder,
     AlignmentGeometry? alignment,
-    bool? clickBgDismiss,
+    bool? clickMaskDismiss,
     bool? usePenetrate,
     bool? useAnimation,
     SmartAnimationType? animationType,
@@ -102,10 +111,12 @@ class SmartDialog {
     Widget? maskWidget,
     bool? debounce,
     VoidCallback? onDismiss,
+    VoidCallback? onMask,
     String? tag,
     bool? backDismiss,
     bool? keepSingle,
     bool? useSystem,
+    bool? bindPage,
   }) {
     assert(
       (useSystem == true && keepSingle == null && tag == null) ||
@@ -120,7 +131,7 @@ class SmartDialog {
     return DialogProxy.instance.show<T>(
       widget: Builder(builder: (context) => builder(context)),
       alignment: alignment ?? config.custom.alignment,
-      clickBgDismiss: clickBgDismiss ?? config.custom.clickBgDismiss,
+      clickMaskDismiss: clickMaskDismiss ?? config.custom.clickMaskDismiss,
       animationType: animationType ?? config.custom.animationType,
       usePenetrate: usePenetrate ?? config.custom.usePenetrate,
       useAnimation: useAnimation ?? config.custom.useAnimation,
@@ -129,10 +140,12 @@ class SmartDialog {
       maskWidget: maskWidget ?? config.custom.maskWidget,
       debounce: debounce ?? config.custom.debounce,
       onDismiss: onDismiss,
+      onMask: onMask,
       tag: tag,
       backDismiss: backDismiss ?? config.custom.backDismiss,
       keepSingle: keepSingle ?? false,
       useSystem: useSystem ?? false,
+      bindPage: bindPage ?? config.custom.bindPage,
     );
   }
 
@@ -147,11 +160,11 @@ class SmartDialog {
   ///
   /// [alignment]：control the location of the dialog
   ///
-  /// [clickBgDismiss]：true（the dialog will be closed after click background），false（not close）
+  /// [clickMaskDismiss]：true（the dialog will be closed after click mask），false（not close）
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///
-  /// [usePenetrate]：true（the click event will penetrate background），false（not penetration）
+  /// [usePenetrate]：true（the click event will penetrate mask），false（not penetration）
   ///
   /// [useAnimation]：true（use the animation），false（not use）
   ///
@@ -168,16 +181,21 @@ class SmartDialog {
   ///
   /// [onDismiss]：the callback will be invoked when the dialog is closed
   ///
+  /// [onMask]：This callback will be triggered when the mask is clicked
+  ///
   /// [tag]：if you set a tag for the dialog, you can turn it off in a targeted manner
   ///
-  /// [backDismiss]：default（true），true（the back event will close the dialog but not close the page），
+  /// [backDismiss]：true（the back event will close the dialog but not close the page），
   /// false（the back event not close the dialog and not close page），you still can use the dismiss method to close the dialog
   ///
   /// [keepSingle]：Default (false), true (calling [showAttach] multiple times will not generate multiple dialogs,
   /// only single dialog will be kept), false (calling [showAttach] multiple times will generate multiple dialogs)
   ///
-  /// [useSystem]: default (false), true (using the system dialog, [usePenetrate] is invalid, [tag] and [keepSingle] are prohibited),
+  /// [useSystem]: Default (false), true (using the system dialog, [usePenetrate] is invalid, [tag] and [keepSingle] are prohibited),
   /// false (using SmartDialog), this param can completely solve the page jump scene on the dialog
+  ///
+  /// [bindPage]：Bind the dialog to the current page, the bound page is not on the top of the stack,
+  /// the dialog is automatically hidden, the bound page is placed on the top of the stack, and the dialog is automatically displayed
   ///
   /// -------------------------------------------------------------------------------
   ///
@@ -191,11 +209,11 @@ class SmartDialog {
   ///
   /// [alignment]：控制弹窗的位置
   ///
-  /// [clickBgDismiss]：true（点击半透明的暗色背景后，将关闭dialog），false（不关闭）
+  /// [clickMaskDismiss]：true（点击遮罩后，将关闭dialog），false（不关闭）
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
-  /// [usePenetrate]：true（点击事件将穿透背景），false（不穿透）
+  /// [usePenetrate]：true（点击事件将穿透遮罩），false（不穿透）
   ///
   /// [useAnimation]：true（使用动画），false（不使用）
   ///
@@ -211,22 +229,26 @@ class SmartDialog {
   ///
   /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
   ///
+  /// [onMask]：点击遮罩时，该回调将会被触发
+  ///
   /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
   ///
-  /// [backDismiss]：默认（true），true（返回事件将关闭loading，但是不会关闭页面），
+  /// [backDismiss]：true（返回事件将关闭loading，但是不会关闭页面），
   /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭loading
   ///
   /// [keepSingle]：默认（false），true（多次调用[showAttach]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[showAttach]会生成多个dialog）
   ///
   /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效,[tag]和[keepSingle]禁止使用），
-  /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题
+  /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题(可与路由页面,flutter自带dialog合理交互)
+  ///
+  /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示
   static Future<T?>? showAttach<T>({
     required BuildContext? targetContext,
     required WidgetBuilder builder,
     Offset? target,
     AlignmentGeometry? alignment,
-    bool? clickBgDismiss,
+    bool? clickMaskDismiss,
     SmartAnimationType? animationType,
     bool? usePenetrate,
     bool? useAnimation,
@@ -236,10 +258,12 @@ class SmartDialog {
     bool? debounce,
     HighlightBuilder? highlightBuilder,
     VoidCallback? onDismiss,
+    VoidCallback? onMask,
     String? tag,
     bool? backDismiss,
     bool? keepSingle,
     bool? useSystem,
+    bool? bindPage,
   }) {
     assert(
       targetContext != null || target != null,
@@ -261,7 +285,7 @@ class SmartDialog {
       widget: Builder(builder: (context) => builder(context)),
       target: target,
       alignment: alignment ?? config.attach.alignment,
-      clickBgDismiss: clickBgDismiss ?? config.attach.clickBgDismiss,
+      clickMaskDismiss: clickMaskDismiss ?? config.attach.clickMaskDismiss,
       animationType: animationType ?? config.attach.animationType,
       usePenetrate: usePenetrate ?? config.attach.usePenetrate,
       useAnimation: useAnimation ?? config.attach.useAnimation,
@@ -271,10 +295,12 @@ class SmartDialog {
       debounce: debounce ?? config.attach.debounce,
       highlightBuilder: highlight ?? (_, __) => Positioned(child: Container()),
       onDismiss: onDismiss,
+      onMask: onMask,
       tag: tag,
       backDismiss: backDismiss ?? config.attach.backDismiss,
       keepSingle: keepSingle ?? false,
       useSystem: useSystem ?? false,
+      bindPage: bindPage ?? config.attach.bindPage,
     );
   }
 
@@ -284,12 +310,11 @@ class SmartDialog {
   ///
   /// [background]：the rectangle background color of msg  (Use the [builder] param, this param will be invalid)
   ///
-  /// [clickBgDismiss]：true（loading will be closed after click background），
-  /// false（not close）
+  /// [clickMaskDismiss]：true（loading will be closed after click mask），false（not close）
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///
-  /// [usePenetrate]：true（the click event will penetrate background），
+  /// [usePenetrate]：true（the click event will penetrate mask），
   /// false（not penetration）
   ///
   /// [useAnimation]：true（use the animation），false（not use）
@@ -313,11 +338,11 @@ class SmartDialog {
   ///
   /// [background]：loading信息后面的矩形背景颜色（使用[builder]参数，该参数将失效）
   ///
-  /// [clickBgDismiss]：true（点击半透明的暗色背景后，将关闭loading），false（不关闭）
+  /// [clickMaskDismiss]：true（点击遮罩后，将关闭loading），false（不关闭）
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
-  /// [usePenetrate]：true（点击事件将穿透背景），false（不穿透）
+  /// [usePenetrate]：true（点击事件将穿透遮罩），false（不穿透）
   ///
   /// [useAnimation]：true（使用动画），false（不使用）
   ///
@@ -330,10 +355,10 @@ class SmartDialog {
   /// [backDismiss]：true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
   /// 你仍然可以使用dismiss方法来关闭loading
   ///
-  /// [builder]：the custom loading
+  /// [builder]：自定义loading
   static Future<void> showLoading({
     String msg = 'loading...',
-    bool? clickBgDismiss,
+    bool? clickMaskDismiss,
     SmartAnimationType? animationType,
     bool? usePenetrate,
     bool? useAnimation,
@@ -344,7 +369,7 @@ class SmartDialog {
     WidgetBuilder? builder,
   }) {
     return DialogProxy.instance.showLoading(
-      clickBgDismiss: clickBgDismiss ?? config.loading.clickBgDismiss,
+      clickMaskDismiss: clickMaskDismiss ?? config.loading.clickMaskDismiss,
       animationType: animationType ?? config.loading.animationType,
       usePenetrate: usePenetrate ?? config.loading.usePenetrate,
       useAnimation: useAnimation ?? config.loading.useAnimation,
@@ -366,12 +391,11 @@ class SmartDialog {
   ///
   /// [alignment]：control the location of the dialog
   ///
-  /// [clickBgDismiss]：true（toast will be closed after click background），
-  /// false（not close）
+  /// [clickMaskDismiss]：true（toast will be closed after click mask），false（not close）
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///
-  /// [usePenetrate]：true（the click event will penetrate background），
+  /// [usePenetrate]：true（the click event will penetrate mask），
   /// false（not penetration）
   ///
   /// [useAnimation]：true（use the animation），false（not use）
@@ -382,11 +406,9 @@ class SmartDialog {
   ///
   /// [maskWidget]：highly customizable mask
   ///
-  /// [location]：control the location of toast on the screen (Use the [builder] param to customize the toast, this param will be invalid)
-  ///
   /// [debounce]：debounce feature
   ///
-  /// [type]：provider multiple display logic，
+  /// [displayType]：provider multiple display logic，
   /// please refer to [SmartToastType] comment for detailed description
   ///
   /// [consumeEvent]：true (toast will consume touch events), false (toast no longer consumes events, touch events can penetrate toast)
@@ -403,11 +425,11 @@ class SmartDialog {
   ///
   /// [alignment]：控制弹窗的位置
   ///
-  /// [clickBgDismiss]：true（点击半透明的暗色背景后，将关闭toast），false（不关闭）
+  /// [clickMaskDismiss]：true（点击遮罩后，将关闭toast），false（不关闭）
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
-  /// [usePenetrate]：true（点击事件将穿透背景），false（不穿透）
+  /// [usePenetrate]：true（点击事件将穿透遮罩），false（不穿透）
   ///
   /// [useAnimation]：true（使用动画），false（不使用）
   ///
@@ -417,11 +439,9 @@ class SmartDialog {
   ///
   /// [maskWidget]：可高度定制遮罩
   ///
-  /// [location]：控制toast在屏幕上的显示位置（使用[builder]参数自定义toast，该参数将失效）
-  ///
   /// [debounce]：防抖功能
   ///
-  /// [type]：提供多种显示逻辑，详细描述请查看 [SmartToastType] 注释
+  /// [displayType]：提供多种显示逻辑，详细描述请查看 [SmartToastType] 注释
   ///
   /// [consumeEvent]：true（toast会消耗触摸事件），false（toast不再消耗事件，触摸事件能穿透toast）
   ///
@@ -430,7 +450,7 @@ class SmartDialog {
     String msg, {
     Duration? displayTime,
     AlignmentGeometry? alignment,
-    bool? clickBgDismiss,
+    bool? clickMaskDismiss,
     SmartAnimationType? animationType,
     bool? usePenetrate,
     bool? useAnimation,
@@ -439,13 +459,13 @@ class SmartDialog {
     Widget? maskWidget,
     bool? consumeEvent,
     bool? debounce,
-    SmartToastType? type,
+    SmartToastType? displayType,
     WidgetBuilder? builder,
   }) async {
     return DialogProxy.instance.showToast(
       displayTime: displayTime ?? config.toast.displayTime,
       alignment: alignment ?? config.toast.alignment,
-      clickBgDismiss: clickBgDismiss ?? config.toast.clickBgDismiss,
+      clickMaskDismiss: clickMaskDismiss ?? config.toast.clickMaskDismiss,
       animationType: animationType ?? config.toast.animationType,
       usePenetrate: usePenetrate ?? config.toast.usePenetrate,
       useAnimation: useAnimation ?? config.toast.useAnimation,
@@ -453,7 +473,7 @@ class SmartDialog {
       maskColor: maskColor ?? config.toast.maskColor,
       maskWidget: maskWidget ?? config.toast.maskWidget,
       debounce: debounce ?? config.toast.debounce,
-      type: type ?? config.toast.type,
+      displayType: displayType ?? config.toast.displayType,
       consumeEvent: consumeEvent ?? config.toast.consumeEvent,
       widget: builder != null
           ? Builder(builder: (context) => builder(context))

@@ -7,31 +7,20 @@ import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_widget.dart';
 
-import '../config/smart_config.dart';
 import '../config/enum_config.dart';
 
 ///main function : customize dialog
 class MainDialog {
-  MainDialog({
-    required this.config,
-    required this.overlayEntry,
-  }) : _widget = Container();
+  MainDialog({required this.overlayEntry}) : _widget = Container();
 
   ///OverlayEntry instance
   final OverlayEntry overlayEntry;
-
-  ///config info
-  final SmartConfig config;
-
+  final DialogParam param = DialogParam();
   final _uniqueKey = UniqueKey();
-
   BaseController? _controller;
   Completer? _completer;
   VoidCallback? _onDismiss;
   Widget _widget;
-
-  //refuse repeat close
-  bool repeatClose = false;
 
   Future<T?> show<T>({
     required Widget widget,
@@ -42,8 +31,7 @@ class MainDialog {
     required SmartAnimationType animationType,
     required Color maskColor,
     required Widget? maskWidget,
-    required bool clickBgDismiss,
-    required VoidCallback onBgTap,
+    required VoidCallback onMask,
     required VoidCallback? onDismiss,
     required bool useSystem,
     required bool reuse,
@@ -51,6 +39,7 @@ class MainDialog {
     //custom dialog
     _widget = SmartDialogWidget(
       key: reuse ? _uniqueKey : UniqueKey(),
+      param: param,
       controller: _controller = SmartDialogController(),
       alignment: alignment,
       usePenetrate: usePenetrate,
@@ -59,9 +48,8 @@ class MainDialog {
       animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
-      clickBgDismiss: clickBgDismiss,
       child: widget,
-      onBgTap: onBgTap,
+      onMask: onMask,
     );
 
     _handleCommonOperate(onDismiss: onDismiss, useSystem: useSystem);
@@ -83,14 +71,14 @@ class MainDialog {
     required Color maskColor,
     required Widget? maskWidget,
     required HighlightBuilder highlightBuilder,
-    required bool clickBgDismiss,
-    required VoidCallback onBgTap,
+    required VoidCallback onMask,
     required VoidCallback? onDismiss,
     required bool useSystem,
   }) {
     //attach dialog
     _widget = AttachDialogWidget(
       key: _uniqueKey,
+      param: param,
       targetContext: targetContext,
       target: target,
       controller: _controller = AttachDialogController(),
@@ -102,9 +90,8 @@ class MainDialog {
       maskColor: maskColor,
       maskWidget: maskWidget,
       highlightBuilder: highlightBuilder,
-      clickBgDismiss: clickBgDismiss,
       child: widget,
-      onBgTap: onBgTap,
+      onMask: onMask,
     );
 
     _handleCommonOperate(onDismiss: onDismiss, useSystem: useSystem);
@@ -118,7 +105,6 @@ class MainDialog {
     required VoidCallback? onDismiss,
     required bool useSystem,
   }) {
-    repeatClose = false;
     _onDismiss = onDismiss;
 
     if (useSystem && DialogProxy.contextNavigator != null) {
@@ -162,5 +148,11 @@ class MainDialog {
     }
   }
 
-  Widget getWidget() => _widget;
+  Widget getWidget() => Visibility(visible: param.visible, child: _widget);
+}
+
+class DialogParam {
+  bool visible = true;
+
+  bool forbidAnimation = false;
 }

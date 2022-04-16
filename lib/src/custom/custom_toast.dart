@@ -3,16 +3,12 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
-import '../config/smart_config.dart';
 import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
 import '../smart_dialog.dart';
 
 class CustomToast extends BaseDialog {
-  CustomToast({
-    required SmartConfig config,
-    required OverlayEntry overlayEntry,
-  }) : super(config: config, overlayEntry: overlayEntry);
+  CustomToast({required OverlayEntry overlayEntry}) : super(overlayEntry);
 
   Queue<Future<void> Function()> _toastQueue = ListQueue();
   Queue<_ToastInfo> _tempQueue = ListQueue();
@@ -27,7 +23,7 @@ class CustomToast extends BaseDialog {
 
   Future<void> showToast({
     required AlignmentGeometry alignment,
-    required bool clickBgDismiss,
+    required bool clickMaskDismiss,
     required SmartAnimationType animationType,
     required bool usePenetrate,
     required bool useAnimation,
@@ -36,7 +32,7 @@ class CustomToast extends BaseDialog {
     required Widget? maskWidget,
     required Duration displayTime,
     required bool debounce,
-    required SmartToastType type,
+    required SmartToastType displayType,
     required Widget widget,
   }) async {
     // debounce
@@ -47,7 +43,7 @@ class CustomToast extends BaseDialog {
       _lastTime = now;
       if (isShake) return;
     }
-    config.toast.isExist = true;
+    SmartDialog.config.toast.isExist = true;
 
     showToast() {
       mainDialog.show(
@@ -59,23 +55,22 @@ class CustomToast extends BaseDialog {
         animationType: animationType,
         useAnimation: useAnimation,
         usePenetrate: usePenetrate,
-        clickBgDismiss: clickBgDismiss,
         onDismiss: null,
         useSystem: false,
         reuse: false,
-        onBgTap: () => _realDismiss(),
+        onMask: () => clickMaskDismiss ? _realDismiss() : null,
       );
     }
 
     multiTypeToast() async {
       // provider multiple toast display logic
-      if (type == SmartToastType.normal) {
+      if (displayType == SmartToastType.normal) {
         await _normalToast(time: displayTime, onShowToast: showToast);
-      } else if (type == SmartToastType.first) {
+      } else if (displayType == SmartToastType.first) {
         await _firstToast(time: displayTime, onShowToast: showToast);
-      } else if (type == SmartToastType.last) {
+      } else if (displayType == SmartToastType.last) {
         await _lastToast(time: displayTime, onShowToast: showToast);
-      } else if (type == SmartToastType.firstAndLast) {
+      } else if (displayType == SmartToastType.firstAndLast) {
         await _firstAndLastToast(time: displayTime, onShowToast: showToast);
       }
 
@@ -83,7 +78,7 @@ class CustomToast extends BaseDialog {
     }
 
     //handling different types of toast
-    handleMultiTypeToast(curType: type, fun: multiTypeToast);
+    handleMultiTypeToast(curType: displayType, fun: multiTypeToast);
   }
 
   ///--------------------------multi type toast--------------------------
@@ -203,7 +198,7 @@ class CustomToast extends BaseDialog {
     await mainDialog.dismiss();
     await Future.delayed(SmartDialog.config.toast.intervalTime);
     if (_toastQueue.length > 1) return;
-    config.toast.isExist = false;
+    SmartDialog.config.toast.isExist = false;
   }
 
   Future<T?> dismiss<T>({bool closeAll = false}) async {

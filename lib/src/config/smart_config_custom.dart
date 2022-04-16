@@ -14,11 +14,12 @@ class SmartConfigCustom {
     this.usePenetrate = false,
     this.maskColor = const Color.fromRGBO(0, 0, 0, 0.35),
     this.maskWidget,
-    this.clickBgDismiss = true,
+    this.clickMaskDismiss = true,
     this.debounce = false,
     this.debounceTime = const Duration(milliseconds: 300),
     this.backDismiss = true,
-    this.isExist =false,
+    this.bindPage = false,
+    this.isExist = false,
   });
 
   /// control the location of the dialog on the screen
@@ -48,53 +49,53 @@ class SmartConfigCustom {
   /// centerLeft：dialog位于屏幕左边，动画默认为位移动画，自左而右，
   ///
   /// centerRight：dialog位于屏幕左边，动画默认为位移动画，自右而左，
-  AlignmentGeometry alignment = Alignment.center;
+  final AlignmentGeometry alignment;
 
   /// [animationTime]：The animation time can be set
   ///
   /// [animationTime]：可设置动画时间
-  Duration animationTime;
+  final Duration animationTime;
 
   /// Animation type [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///
   /// 动画类型[animationType]： 具体可参照[SmartAnimationType]注释
-  SmartAnimationType animationType;
+  final SmartAnimationType animationType;
 
   /// default（true），true（use the animation），false（not use）
   ///
   /// 是否使用动画（默认：true）
-  bool useAnimation;
+  final bool useAnimation;
 
   /// default（false），true（click event will penetrate background），false（not penetration）
   ///
   /// 屏幕上交互事件可以穿透遮罩背景（默认:false）：true（交互事件能穿透背景，遮罩会自动变成透明），false（不能穿透）
-  bool usePenetrate;
+  final bool usePenetrate;
 
   /// the color of the mask，it is invalid if [usePenetrate] is true or [maskWidget] set the value
   ///
   /// 遮罩颜色：[usePenetrate]设置为true或[maskWidget]参数设置了数据，该参数会失效
-  Color maskColor;
+  final Color maskColor;
 
   /// highly customizable mask, it is invalid if [usePenetrate] is true
   ///
   /// 遮罩Widget，可高度自定义你自己的遮罩背景：[usePenetrate]设置为true，该参数失效
-  Widget? maskWidget;
+  final Widget? maskWidget;
 
   /// default（true），true（loading will be closed after click background），false（not close）
   ///
   /// 点击遮罩，是否关闭dialog（默认：true）：true（点击遮罩关闭dialog），false（不关闭）
-  bool clickBgDismiss;
+  final bool clickMaskDismiss;
 
   /// debounce feature，it works on toast and dialog：default（false）;
   ///
   /// 防抖功能，它作用于toast和dialog上：默认（false）;
-  bool debounce;
+  final bool debounce;
 
   /// [debounceTime]：Within the debounce time, multiple clicks will only respond to the first time,
   /// and the second invalid click will trigger the debounce time to re-time.
   ///
   /// [debounceTime]：防抖时间内，多次点击只会响应第一次，第二次无效点击会触发防抖时间重新计时
-  Duration debounceTime;
+  final Duration debounceTime;
 
   /// true（the back event will close the loading but not close the page），
   /// false（the back event not close the loading and not close page），
@@ -102,7 +103,13 @@ class SmartConfigCustom {
   ///
   /// true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
   /// 你仍然可以使用dismiss方法来关闭loading
-  bool backDismiss;
+  final bool backDismiss;
+
+  /// Bind the dialog to the current page, the bound page is not on the top of the stack,
+  /// the dialog is automatically hidden, the bound page is placed on the top of the stack, and the dialog is automatically displayed
+  ///
+  /// 将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示
+  final bool bindPage;
 
   /// whether custom dialog(show()) exist on the screen
   ///

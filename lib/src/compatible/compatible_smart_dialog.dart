@@ -31,7 +31,7 @@ class CompatibleSmartDialog {
   ///
   /// [isLoadingTemp]：true（use the opacity animation），false（use the scale transition animation）
   ///
-  /// [isPenetrateTemp]：true（the click event will penetrate background），false（not penetration）
+  /// [isPenetrateTemp]：true（the click event will penetrate mask），false（not penetration）
   ///
   /// [isUseAnimationTemp]：true（use the animation），false（not use）
   ///
@@ -68,7 +68,7 @@ class CompatibleSmartDialog {
   ///
   /// [isLoadingTemp]：true（使用透明动画），false（使用尺寸缩放动画）
   ///
-  /// [isPenetrateTemp]：true（点击事件将穿透背景），false（不穿透）
+  /// [isPenetrateTemp]：true（点击事件将穿透遮罩），false（不穿透）
   ///
   /// [isUseAnimationTemp]：true（使用动画），false（不使用）
   ///
@@ -122,7 +122,7 @@ class CompatibleSmartDialog {
     await DialogProxy.instance.show(
       widget: widget,
       alignment: alignmentTemp ?? config.alignment,
-      clickBgDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
+      clickMaskDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
       animationType: isLoadingTemp ?? config.isLoading
           ? SmartAnimationType.fade
           : SmartAnimationType.scale,
@@ -133,10 +133,12 @@ class CompatibleSmartDialog {
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       debounce: debounceTemp ?? config.debounce,
       onDismiss: onDismiss,
+      onMask: null,
       tag: tag,
       backDismiss: backDismiss ?? true,
       keepSingle: keepSingle ?? false,
       useSystem: useSystem ?? false,
+      bindPage: false,
     );
   }
 
@@ -156,7 +158,7 @@ class CompatibleSmartDialog {
   ///
   /// [isLoadingTemp]：true（use the opacity animation），false（use the scale transition animation）
   ///
-  /// [isPenetrateTemp]：true（the click event will penetrate background），false（not penetration）
+  /// [isPenetrateTemp]：true（the click event will penetrate mask），false（not penetration）
   ///
   /// [isUseAnimationTemp]：true（use the animation），false（not use）
   ///
@@ -203,7 +205,7 @@ class CompatibleSmartDialog {
   ///
   /// [isLoadingTemp]：true（使用透明动画），false（使用尺寸缩放动画）
   ///
-  /// [isPenetrateTemp]：true（点击事件将穿透背景），false（不穿透）
+  /// [isPenetrateTemp]：true（点击事件将穿透遮罩），false（不穿透）
   ///
   /// [isUseAnimationTemp]：true（使用动画），false（不使用）
   ///
@@ -272,7 +274,7 @@ class CompatibleSmartDialog {
       target: target,
       widget: widget,
       alignment: alignmentTemp ?? Alignment.bottomCenter,
-      clickBgDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
+      clickMaskDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
       animationType: isLoadingTemp ?? false
           ? SmartAnimationType.fade
           : SmartAnimationType.scale,
@@ -288,10 +290,12 @@ class CompatibleSmartDialog {
               return highlight ?? Positioned(child: Container());
             },
       onDismiss: onDismiss,
+      onMask: null,
       tag: tag,
       backDismiss: backDismiss ?? true,
       keepSingle: keepSingle ?? false,
       useSystem: useSystem ?? false,
+      bindPage: false,
     );
   }
 
@@ -307,7 +311,7 @@ class CompatibleSmartDialog {
   /// [isLoadingTemp]：default（true），true（use the opacity animation），
   /// false（use the scale transition animation）
   ///
-  /// [isPenetrateTemp]：default（false），true（the click event will penetrate background），
+  /// [isPenetrateTemp]：default（false），true（the click event will penetrate mask），
   /// false（not penetration）
   ///
   /// [isUseAnimationTemp]：true（use the animation），false（not use）
@@ -336,7 +340,7 @@ class CompatibleSmartDialog {
   ///
   /// [isLoadingTemp]：默认（true），true（使用透明动画），false（使用尺寸缩放动画）
   ///
-  /// [isPenetrateTemp]：默认（false），true（点击事件将穿透背景），false（不穿透）
+  /// [isPenetrateTemp]：默认（false），true（点击事件将穿透遮罩），false（不穿透）
   ///
   /// [isUseAnimationTemp]：true（使用动画），false（不使用）
   ///
@@ -363,7 +367,7 @@ class CompatibleSmartDialog {
     Widget? widget,
   }) {
     return DialogProxy.instance.showLoading(
-      clickBgDismiss: clickBgDismissTemp ?? false,
+      clickMaskDismiss: clickBgDismissTemp ?? false,
       animationType: isLoadingTemp ?? true
           ? SmartAnimationType.fade
           : SmartAnimationType.scale,
@@ -387,7 +391,7 @@ class CompatibleSmartDialog {
   /// [isLoadingTemp]：default（true），true（use the opacity animation），
   /// false（use the scale transition animation）
   ///
-  /// [isPenetrateTemp]：default（true），true（the click event will penetrate background），
+  /// [isPenetrateTemp]：default（true），true（the click event will penetrate mask），
   /// false（not penetration）
   ///
   /// [isUseAnimationTemp]：true（use the animation），false（not use）
@@ -422,7 +426,7 @@ class CompatibleSmartDialog {
   ///
   /// [isLoadingTemp]：默认（true），true（使用透明动画），false（使用尺寸缩放动画）
   ///
-  /// [isPenetrateTemp]：默认（true），true（点击事件将穿透背景），false（不穿透）
+  /// [isPenetrateTemp]：默认（true），true（点击事件将穿透遮罩），false（不穿透）
   ///
   /// [isUseAnimationTemp]：true（使用动画），false（不使用）
   ///
@@ -460,7 +464,7 @@ class CompatibleSmartDialog {
   }) async {
     return DialogProxy.instance.showToast(
       alignment: Alignment.bottomCenter,
-      clickBgDismiss: clickBgDismissTemp ?? false,
+      clickMaskDismiss: clickBgDismissTemp ?? false,
       animationType: isLoadingTemp ?? true
           ? SmartAnimationType.fade
           : SmartAnimationType.scale,
@@ -472,7 +476,7 @@ class CompatibleSmartDialog {
       consumeEvent: consumeEvent ?? false,
       displayTime: time ?? Duration(milliseconds: 2000),
       debounce: debounceTemp ?? config.debounce,
-      type: type ?? SmartToastType.normal,
+      displayType: type ?? SmartToastType.normal,
       widget: widget ?? DialogProxy.instance.toastBuilder(msg),
     );
   }

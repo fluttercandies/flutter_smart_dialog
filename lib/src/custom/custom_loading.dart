@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
-import '../config/smart_config.dart';
-import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
 
 class CustomLoading extends BaseDialog {
-  CustomLoading({
-    required SmartConfig config,
-    required OverlayEntry overlayEntry,
-  }) : super(config: config, overlayEntry: overlayEntry);
+  CustomLoading({required OverlayEntry overlayEntry}) : super(overlayEntry);
 
   Future<void> showLoading({
     required Widget widget,
-    required bool clickBgDismiss,
+    required bool clickMaskDismiss,
     required SmartAnimationType animationType,
     required bool usePenetrate,
     required bool useAnimation,
@@ -23,11 +19,10 @@ class CustomLoading extends BaseDialog {
     required bool backDismiss,
   }) async {
     DialogProxy.instance.loadingBackDismiss = backDismiss;
-    config.loading.isExist = true;
+    SmartDialog.config.loading.isExist = true;
 
     return mainDialog.show(
       widget: widget,
-      clickBgDismiss: clickBgDismiss,
       animationType: animationType,
       alignment: Alignment.center,
       maskColor: maskColor,
@@ -38,7 +33,7 @@ class CustomLoading extends BaseDialog {
       onDismiss: null,
       useSystem: false,
       reuse: true,
-      onBgTap: () => dismiss(),
+      onMask: () => clickMaskDismiss ? dismiss() : null,
     );
   }
 
@@ -46,7 +41,7 @@ class CustomLoading extends BaseDialog {
     if (!DialogProxy.instance.loadingBackDismiss && back) return null;
 
     await mainDialog.dismiss();
-    config.loading.isExist = false;
+    SmartDialog.config.loading.isExist = false;
 
     return null;
   }

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
+import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
-import '../../flutter_smart_dialog.dart';
 import '../config/smart_config.dart';
 import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
@@ -24,14 +24,11 @@ enum DialogType {
 
 ///main function : custom dialog
 class CustomDialog extends BaseDialog {
-  CustomDialog({
-    required SmartConfig config,
-    required OverlayEntry overlayEntry,
-  }) : super(config: config, overlayEntry: overlayEntry);
+  CustomDialog({required OverlayEntry overlayEntry}) : super(overlayEntry);
 
   static MainDialog? mainDialogSingle;
 
-  DateTime? clickBgLastTime;
+  DateTime? clickMaskLastTime;
 
   Future<T?> show<T>({
     required Widget widget,
@@ -41,14 +38,16 @@ class CustomDialog extends BaseDialog {
     required Duration animationTime,
     required SmartAnimationType animationType,
     required Color maskColor,
-    required bool clickBgDismiss,
+    required bool clickMaskDismiss,
     required bool debounce,
     required Widget? maskWidget,
     required VoidCallback? onDismiss,
+    required VoidCallback? onMask,
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
     required bool useSystem,
+    required bool bindPage,
   }) {
     if (!_handleMustOperate(
       tag: tag,
@@ -57,6 +56,7 @@ class CustomDialog extends BaseDialog {
       debounce: debounce,
       type: DialogType.custom,
       useSystem: useSystem,
+      bindPage: bindPage,
     )) return Future.value(null);
     return mainDialog.show<T>(
       widget: widget,
@@ -67,12 +67,12 @@ class CustomDialog extends BaseDialog {
       animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
-      clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
       useSystem: useSystem,
       reuse: true,
-      onBgTap: () {
-        if (!_clickBgDebounce()) return;
+      onMask: () {
+        onMask?.call();
+        if (clickMaskDismiss && !_clickMaskDebounce()) return;
         dismiss();
       },
     );
@@ -88,15 +88,17 @@ class CustomDialog extends BaseDialog {
     required Duration animationTime,
     required SmartAnimationType animationType,
     required Color maskColor,
-    required bool clickBgDismiss,
+    required bool clickMaskDismiss,
     required bool debounce,
     required Widget? maskWidget,
     required HighlightBuilder highlightBuilder,
     required VoidCallback? onDismiss,
+    required VoidCallback? onMask,
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
     required bool useSystem,
+    required bool bindPage,
   }) {
     if (!_handleMustOperate(
       tag: tag,
@@ -105,6 +107,7 @@ class CustomDialog extends BaseDialog {
       debounce: debounce,
       type: DialogType.attach,
       useSystem: useSystem,
+      bindPage: bindPage,
     )) return null;
     return mainDialog.showAttach<T>(
       targetContext: targetContext,
@@ -118,11 +121,11 @@ class CustomDialog extends BaseDialog {
       maskColor: maskColor,
       highlightBuilder: highlightBuilder,
       maskWidget: maskWidget,
-      clickBgDismiss: clickBgDismiss,
       onDismiss: onDismiss,
       useSystem: useSystem,
-      onBgTap: () {
-        if (!_clickBgDebounce()) return;
+      onMask: () {
+        onMask?.call();
+        if (clickMaskDismiss && !_clickMaskDebounce()) return;
         dismiss();
       },
     );
@@ -135,6 +138,7 @@ class CustomDialog extends BaseDialog {
     required bool debounce,
     required DialogType type,
     required bool useSystem,
+    required bool bindPage,
   }) {
     // debounce
     if (!_checkDebounce(debounce, type)) return false;
@@ -146,10 +150,11 @@ class CustomDialog extends BaseDialog {
       keepSingle: keepSingle,
       type: type,
       useSystem: useSystem,
+      bindPage: bindPage,
     );
 
-    config.custom.isExist = DialogType.custom == type;
-    config.attach.isExist = DialogType.attach == type;
+    SmartDialog.config.custom.isExist = DialogType.custom == type;
+    SmartDialog.config.attach.isExist = DialogType.attach == type;
     return true;
   }
 
@@ -159,6 +164,7 @@ class CustomDialog extends BaseDialog {
     required bool keepSingle,
     required DialogType type,
     required bool useSystem,
+    required bool bindPage,
   }) {
     var proxy = DialogProxy.instance;
 
@@ -171,6 +177,8 @@ class CustomDialog extends BaseDialog {
           type: type,
           tag: SmartTag.keepSingle,
           useSystem: useSystem,
+          bindPage: bindPage,
+          route: RouteRecord.curRoute,
         );
         proxy.dialogQueue.add(dialogInfo);
         Overlay.of(DialogProxy.contextOverlay)!.insert(
@@ -191,6 +199,8 @@ class CustomDialog extends BaseDialog {
       type: type,
       tag: tag,
       useSystem: useSystem,
+      bindPage: bindPage,
+      route: RouteRecord.curRoute,
     );
     proxy.dialogQueue.add(dialogInfo);
     // insert the dialog carrier into the page
@@ -216,11 +226,11 @@ class CustomDialog extends BaseDialog {
     return true;
   }
 
-  bool _clickBgDebounce() {
+  bool _clickMaskDebounce() {
     var now = DateTime.now();
-    var isShake = clickBgLastTime != null &&
-        now.difference(clickBgLastTime!) < Duration(milliseconds: 500);
-    clickBgLastTime = now;
+    var isShake = clickMaskLastTime != null &&
+        now.difference(clickMaskLastTime!) < Duration(milliseconds: 500);
+    clickMaskLastTime = now;
     if (isShake) return false;
 
     return true;

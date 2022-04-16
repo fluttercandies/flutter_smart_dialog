@@ -5,6 +5,7 @@ import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/location.dart';
 
 import '../config/enum_config.dart';
+import '../custom/main_dialog.dart';
 
 typedef HighlightBuilder = Positioned Function(
   Offset targetOffset,
@@ -14,21 +15,24 @@ typedef HighlightBuilder = Positioned Function(
 class AttachDialogWidget extends StatefulWidget {
   const AttachDialogWidget({
     Key? key,
+    required this.param,
     required this.child,
     required this.targetContext,
     required this.target,
     required this.controller,
     required this.animationTime,
     required this.useAnimation,
-    required this.onBgTap,
+    required this.onMask,
     required this.alignment,
     required this.usePenetrate,
     required this.animationType,
     required this.maskColor,
-    required this.clickBgDismiss,
     required this.highlightBuilder,
     required this.maskWidget,
   }) : super(key: key);
+
+  /// 外部控制内部的参数
+  final DialogParam param;
 
   ///target context
   final BuildContext? targetContext;
@@ -48,7 +52,7 @@ class AttachDialogWidget extends StatefulWidget {
   final AttachDialogController controller;
 
   /// 点击背景
-  final VoidCallback onBgTap;
+  final VoidCallback onMask;
 
   /// 内容控件方向
   final AlignmentGeometry alignment;
@@ -68,9 +72,6 @@ class AttachDialogWidget extends StatefulWidget {
 
   /// 溶解遮罩,设置高亮位置
   final HighlightBuilder highlightBuilder;
-
-  /// 点击遮罩，是否关闭dialog---true：点击遮罩关闭dialog，false：不关闭
-  final bool clickBgDismiss;
 
   @override
   _AttachDialogWidgetState createState() => _AttachDialogWidgetState();
@@ -135,8 +136,8 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   @override
   void didUpdateWidget(covariant AttachDialogWidget oldWidget) {
+    if (widget.param.forbidAnimation) return;
     if (oldWidget.child != widget.child) _resetState();
-
     super.didUpdateWidget(oldWidget);
   }
 
@@ -146,7 +147,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     return Stack(children: [
       //暗色背景widget动画
       _buildBgAnimation(
-        onPointerUp: widget.clickBgDismiss ? widget.onBgTap : null,
+        onPointerUp: widget.onMask,
         child: (widget.maskWidget != null && !widget.usePenetrate)
             ? widget.maskWidget
             : widget.usePenetrate

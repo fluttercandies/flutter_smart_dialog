@@ -46,6 +46,12 @@ class SmartDialogPage extends StatelessWidget {
             onPressed: () => _showAttach(context),
             child: Text('showAttach'),
           ),
+
+          //attach
+          ElevatedButton(
+            onPressed: () => _bindPage(context),
+            child: Text('bindPage'),
+          ),
         ]),
       ),
     );
@@ -104,6 +110,37 @@ class SmartDialogPage extends StatelessWidget {
               child: Text('target widget'),
             );
           }),
+        );
+      },
+    );
+  }
+
+  void _bindPage(BuildContext ctx) {
+    //target widget
+    SmartDialog.show(
+      bindPage: true,
+      builder: (_) {
+        return Container(
+          height: 300,
+          width: 500,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white,
+          ),
+          alignment: Alignment.center,
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.push(ctx, MaterialPageRoute(builder: (_) {
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Text("New Page"),
+                  ),
+                  body: Center(child: Text("New Page")),
+                );
+              }));
+            },
+            child: Text('to new page'),
+          ),
         );
       },
     );

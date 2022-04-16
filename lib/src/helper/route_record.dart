@@ -13,21 +13,22 @@ class RouteRecord {
 
   static RouteRecord get instance => _instance ??= RouteRecord._internal();
 
+  late Queue<Route<dynamic>> routeQueue;
+  static Route<dynamic>? curRoute;
+
   RouteRecord._internal() {
     routeQueue = DoubleLinkedQueue();
   }
 
-  late Queue<Route<dynamic>> routeQueue;
-
-  void push(Route<dynamic> route) {
+  void push(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _hideDialog(previousRoute);
     if (DialogProxy.instance.dialogQueue.isEmpty) return;
-
     routeQueue.add(route);
   }
 
-  void pop(Route<dynamic> route) {
+  void pop(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    _showDialog(previousRoute);
     if (routeQueue.isEmpty) return;
-
     routeQueue.remove(route);
   }
 
@@ -50,5 +51,29 @@ class RouteRecord {
     }
 
     return SmartDialog.config.isExist && !handleSystemPage;
+  }
+
+  void _hideDialog(Route<dynamic>? curRoute) {
+    if (curRoute == null) return;
+    for (var item in DialogProxy.instance.dialogQueue) {
+      if (item.route == curRoute && item.bindPage) {
+        item.dialog.mainDialog.param.visible = false;
+        item.dialog.mainDialog.param.forbidAnimation = true;
+        item.dialog.overlayEntry.markNeedsBuild();
+      }
+    }
+  }
+
+  void _showDialog(Route<dynamic>? curRoute) {
+    if (curRoute == null) return;
+    for (var item in DialogProxy.instance.dialogQueue) {
+      if (item.route == curRoute && item.bindPage) {
+        WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+          await Future.delayed(Duration(seconds: 2));
+          item.dialog.mainDialog.param.visible = true;
+          item.dialog.overlayEntry.markNeedsBuild();
+        });
+      }
+    }
   }
 }
