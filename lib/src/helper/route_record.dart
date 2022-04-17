@@ -15,19 +15,20 @@ class RouteRecord {
 
   late Queue<Route<dynamic>> routeQueue;
   static Route<dynamic>? curRoute;
+  static Route<dynamic>? popRoute;
 
   RouteRecord._internal() {
     routeQueue = DoubleLinkedQueue();
   }
 
   void push(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _hideDialog(previousRoute);
+    _offstageDialog(previousRoute);
     if (DialogProxy.instance.dialogQueue.isEmpty) return;
     routeQueue.add(route);
   }
 
   void pop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _showDialog(previousRoute);
+    _onstageDialog(previousRoute);
     if (routeQueue.isEmpty) return;
     routeQueue.remove(route);
   }
@@ -53,26 +54,22 @@ class RouteRecord {
     return SmartDialog.config.isExist && !handleSystemPage;
   }
 
-  void _hideDialog(Route<dynamic>? curRoute) {
+  void _offstageDialog(Route<dynamic>? curRoute) {
     if (curRoute == null) return;
     for (var item in DialogProxy.instance.dialogQueue) {
       if (item.route == curRoute && item.bindPage) {
-        item.dialog.mainDialog.param.visible = false;
-        item.dialog.mainDialog.param.forbidAnimation = true;
+        item.dialog.mainDialog.offstage = true;
         item.dialog.overlayEntry.markNeedsBuild();
       }
     }
   }
 
-  void _showDialog(Route<dynamic>? curRoute) {
+  void _onstageDialog(Route<dynamic>? curRoute) {
     if (curRoute == null) return;
     for (var item in DialogProxy.instance.dialogQueue) {
       if (item.route == curRoute && item.bindPage) {
-        WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
-          await Future.delayed(Duration(seconds: 2));
-          item.dialog.mainDialog.param.visible = true;
-          item.dialog.overlayEntry.markNeedsBuild();
-        });
+        item.dialog.mainDialog.offstage = false;
+        item.dialog.overlayEntry.markNeedsBuild();
       }
     }
   }

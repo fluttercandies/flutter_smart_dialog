@@ -66,6 +66,7 @@ class DialogProxy {
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
+    required bool permanent,
     required bool useSystem,
     required bool bindPage,
   }) {
@@ -90,6 +91,7 @@ class DialogProxy {
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
+      permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
     );
@@ -114,6 +116,7 @@ class DialogProxy {
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
+    required bool permanent,
     required bool useSystem,
     required bool bindPage,
   }) {
@@ -141,6 +144,7 @@ class DialogProxy {
       tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
+      permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
     );
@@ -206,11 +210,19 @@ class DialogProxy {
     bool back = false,
     String? tag,
     T? result,
+    bool force = false,
   }) {
     if (status == SmartStatus.smart) {
       var loading = config.isExistLoading;
-      if (!loading)
-        return CustomDialog.dismiss(DialogType.dialog, back, tag, result);
+      if (!loading) {
+        return CustomDialog.dismiss(
+          type: DialogType.dialog,
+          back: back,
+          tag: tag,
+          result: result,
+          force: force,
+        );
+      }
       if (loading) return _loading.dismiss(back: back);
     } else if (status == SmartStatus.toast) {
       return _toast.dismiss();
@@ -218,18 +230,32 @@ class DialogProxy {
       return _toast.dismiss(closeAll: true);
     } else if (status == SmartStatus.loading) {
       return _loading.dismiss(back: back);
-    } else if (status == SmartStatus.dialog) {
-      return CustomDialog.dismiss(DialogType.dialog, back, tag, result);
+    }
+
+    DialogType? type = _convertEnum(status);
+    if (type == null) return null;
+    return CustomDialog.dismiss(
+      type: type,
+      back: back,
+      tag: tag,
+      result: result,
+      force: force,
+    );
+  }
+
+  DialogType? _convertEnum(SmartStatus status) {
+    if (status == SmartStatus.dialog) {
+      return DialogType.dialog;
     } else if (status == SmartStatus.custom) {
-      return CustomDialog.dismiss(DialogType.custom, back, tag, result);
+      return DialogType.custom;
     } else if (status == SmartStatus.attach) {
-      return CustomDialog.dismiss(DialogType.attach, back, tag, result);
+      return DialogType.attach;
     } else if (status == SmartStatus.allDialog) {
-      return CustomDialog.dismiss(DialogType.allDialog, back, tag, result);
+      return DialogType.allDialog;
     } else if (status == SmartStatus.allCustom) {
-      return CustomDialog.dismiss(DialogType.allCustom, back, tag, result);
+      return DialogType.allCustom;
     } else if (status == SmartStatus.allAttach) {
-      return CustomDialog.dismiss(DialogType.allAttach, back, tag, result);
+      return DialogType.allAttach;
     }
     return null;
   }

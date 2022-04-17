@@ -18,7 +18,7 @@ class SmartConfigAttach {
     this.debounce = false,
     this.debounceTime = const Duration(milliseconds: 300),
     this.backDismiss = true,
-    this.bindPage = false,
+    this.bindPage = true,
     this.isExist = false,
   });
 
@@ -106,9 +106,11 @@ class SmartConfigAttach {
   final bool backDismiss;
 
   /// Bind the dialog to the current page, the bound page is not on the top of the stack,
-  /// the dialog is automatically hidden, the bound page is placed on the top of the stack, and the dialog is automatically displayed
+  /// the dialog is automatically hidden, the bound page is placed on the top of the stack, and the dialog is automatically displayed;
+  /// the bound page is closed, and the dialog bound to the page will also be removed
   ///
-  /// 将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示
+  /// 将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
+  /// 绑定页面被关闭,被绑定在该页面上的dialog也将被移除
   final bool bindPage;
 
   /// whether attach dialog(showAttach()) exist on the screen

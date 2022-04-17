@@ -9,7 +9,6 @@ import '../custom/main_dialog.dart';
 class SmartDialogWidget extends StatefulWidget {
   const SmartDialogWidget({
     Key? key,
-    required this.param,
     required this.child,
     required this.controller,
     required this.onMask,
@@ -21,9 +20,6 @@ class SmartDialogWidget extends StatefulWidget {
     required this.maskColor,
     required this.maskWidget,
   }) : super(key: key);
-
-  /// 外部控制内部的参数
-  final DialogParam param;
 
   /// 内容widget
   final Widget child;
@@ -96,7 +92,6 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   @override
   void didUpdateWidget(covariant SmartDialogWidget oldWidget) {
-    if (widget.param.forbidAnimation) return;
     if (oldWidget.child != widget.child) _resetState();
     super.didUpdateWidget(oldWidget);
   }

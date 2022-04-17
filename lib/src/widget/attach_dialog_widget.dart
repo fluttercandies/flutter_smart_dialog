@@ -5,7 +5,6 @@ import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/location.dart';
 
 import '../config/enum_config.dart';
-import '../custom/main_dialog.dart';
 
 typedef HighlightBuilder = Positioned Function(
   Offset targetOffset,
@@ -15,7 +14,6 @@ typedef HighlightBuilder = Positioned Function(
 class AttachDialogWidget extends StatefulWidget {
   const AttachDialogWidget({
     Key? key,
-    required this.param,
     required this.child,
     required this.targetContext,
     required this.target,
@@ -30,9 +28,6 @@ class AttachDialogWidget extends StatefulWidget {
     required this.highlightBuilder,
     required this.maskWidget,
   }) : super(key: key);
-
-  /// 外部控制内部的参数
-  final DialogParam param;
 
   ///target context
   final BuildContext? targetContext;
@@ -136,7 +131,6 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   @override
   void didUpdateWidget(covariant AttachDialogWidget oldWidget) {
-    if (widget.param.forbidAnimation) return;
     if (oldWidget.child != widget.child) _resetState();
     super.didUpdateWidget(oldWidget);
   }

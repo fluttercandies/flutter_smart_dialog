@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 
-import '../config/enum_config.dart';
+import '../custom/custom_dialog.dart';
 import '../smart_dialog.dart';
 import 'dialog_proxy.dart';
 
@@ -23,6 +23,7 @@ class SmartNavigatorObserver extends NavigatorObserver {
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) async {
     RouteRecord.instance.pop(route, previousRoute);
+    RouteRecord.popRoute = route;
     RouteRecord.curRoute = previousRoute;
 
     if (!SmartDialog.config.isExist ||
@@ -33,7 +34,7 @@ class SmartNavigatorObserver extends NavigatorObserver {
     for (var i = dialogQueue.length; i > 0; i--) {
       if (dialogQueue.isEmpty || dialogQueue.last.useSystem) return;
 
-      // await DialogProxy.instance.dismiss(status: SmartStatus.dialog);
+      await CustomDialog.dismiss(route: true);
     }
   }
 }

@@ -137,6 +137,7 @@ class CompatibleSmartDialog {
       tag: tag,
       backDismiss: backDismiss ?? true,
       keepSingle: keepSingle ?? false,
+      permanent: false,
       useSystem: useSystem ?? false,
       bindPage: false,
     );
@@ -294,6 +295,7 @@ class CompatibleSmartDialog {
       tag: tag,
       backDismiss: backDismiss ?? true,
       keepSingle: keepSingle ?? false,
+      permanent: false,
       useSystem: useSystem ?? false,
       bindPage: false,
     );

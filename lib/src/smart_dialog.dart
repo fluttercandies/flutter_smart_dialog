@@ -50,14 +50,20 @@ class SmartDialog {
   /// [backDismiss]：true（the back event will close the dialog but not close the page），
   /// false（the back event not close the dialog and not close page），you still can use the dismiss method to close the dialog
   ///
-  /// [keepSingle]：Default (false), true (calling [show] multiple times will not generate multiple dialogs,
+  /// [keepSingle]：default (false), true (calling [show] multiple times will not generate multiple dialogs,
   /// only single dialog will be kept), false (calling [show] multiple times will generate multiple dialogs)
   ///
-  /// [useSystem]：Default (false), true (using the system dialog, [usePenetrate] is invalid, [tag] and [keepSingle] are prohibited),
-  /// false (using SmartDialog), this param can completely solve the page jump scene on the dialog
+  /// [permanent]： default (false), true (set the dialog as a permanent dialog), false (not set);
+  /// Various security operations (return events, routing) inside the framework cannot close the permanent dialog,
+  /// you need to close this kind of dialog: dismiss(force: true)
   ///
-  /// [bindPage]：Bind the dialog to the current page, the bound page is not on the top of the stack,
-  /// the dialog is automatically hidden, the bound page is placed on the top of the stack, and the dialog is automatically displayed
+  /// [useSystem]：default (false), true (using the system dialog, [usePenetrate] is invalid;
+  /// [tag], [keepSingle], [permanent] and [bindPage] are prohibited), false (using SmartDialog),
+  /// using this param can make SmartDialog reasonably interact with the routing page and the dialog that comes with flutter
+  ///
+  /// [bindPage]：bind the dialog to the current page, the bound page is not on the top of the stack,
+  /// the dialog is automatically hidden, the bound page is placed on the top of the stack, and the dialog is automatically displayed;
+  /// the bound page is closed, and the dialog bound to the page will also be removed
   ///
   /// -------------------------------------------------------------------------------
   ///
@@ -95,10 +101,14 @@ class SmartDialog {
   /// [keepSingle]：默认（false），true（多次调用[show]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[show]会生成多个dialog）
   ///
-  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效,[tag]和[keepSingle]禁止使用），
-  /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题(可与路由页面,flutter自带dialog合理交互)
+  /// [permanent]：默认（false），true（将该dialog设置为永久化dialog）,false(不设置);
+  /// 框架内部各种兜底操作(返回事件,路由)无法关闭永久化dialog, 需要关闭此类dialog可使用: dismiss(force: true)
   ///
-  /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示
+  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效; [tag], [keepSingle], [permanent]和[bindPage]禁止使用），
+  /// false（使用SmartDialog），使用此改参数可使SmartDialog, 与路由页面以及flutter自带dialog合理交互
+  ///
+  /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
+  /// 绑定页面被关闭,被绑定在该页面上的dialog也将被移除
   static Future<T?>? show<T>({
     required WidgetBuilder builder,
     AlignmentGeometry? alignment,
@@ -115,13 +125,18 @@ class SmartDialog {
     String? tag,
     bool? backDismiss,
     bool? keepSingle,
+    bool? permanent,
     bool? useSystem,
     bool? bindPage,
   }) {
     assert(
-      (useSystem == true && keepSingle == null && tag == null) ||
+      (useSystem == true &&
+              tag == null &&
+              permanent == null &&
+              keepSingle == null &&
+              bindPage == null) ||
           (useSystem == null || useSystem == false),
-      'useSystem is true, keepSingle and tag prohibit setting values',
+      'useSystem is true; tag, keepSingle, permanent and bindPage prohibit setting values',
     );
     assert(
       keepSingle == null || keepSingle == false || tag == null,
@@ -144,6 +159,7 @@ class SmartDialog {
       tag: tag,
       backDismiss: backDismiss ?? config.custom.backDismiss,
       keepSingle: keepSingle ?? false,
+      permanent: permanent ?? false,
       useSystem: useSystem ?? false,
       bindPage: bindPage ?? config.custom.bindPage,
     );
@@ -181,21 +197,27 @@ class SmartDialog {
   ///
   /// [onDismiss]：the callback will be invoked when the dialog is closed
   ///
-  /// [onMask]：This callback will be triggered when the mask is clicked
+  /// [onMask]：this callback will be triggered when the mask is clicked
   ///
   /// [tag]：if you set a tag for the dialog, you can turn it off in a targeted manner
   ///
   /// [backDismiss]：true（the back event will close the dialog but not close the page），
   /// false（the back event not close the dialog and not close page），you still can use the dismiss method to close the dialog
   ///
-  /// [keepSingle]：Default (false), true (calling [showAttach] multiple times will not generate multiple dialogs,
+  /// [keepSingle]：default (false), true (calling [showAttach] multiple times will not generate multiple dialogs,
   /// only single dialog will be kept), false (calling [showAttach] multiple times will generate multiple dialogs)
   ///
-  /// [useSystem]: Default (false), true (using the system dialog, [usePenetrate] is invalid, [tag] and [keepSingle] are prohibited),
-  /// false (using SmartDialog), this param can completely solve the page jump scene on the dialog
+  /// [permanent]：default (false), true (set the dialog as a permanent dialog), false (not set);
+  /// Various security operations (return events, routing) inside the framework cannot close the permanent dialog,
+  /// you need to close this kind of dialog: dismiss(force: true)
   ///
-  /// [bindPage]：Bind the dialog to the current page, the bound page is not on the top of the stack,
-  /// the dialog is automatically hidden, the bound page is placed on the top of the stack, and the dialog is automatically displayed
+  /// [useSystem]：default (false), true (using the system dialog, [usePenetrate] is invalid;
+  /// [tag], [keepSingle], [permanent] and [bindPage] are prohibited), false (using SmartDialog),
+  /// using this param can make SmartDialog reasonably interact with the routing page and the dialog that comes with flutter
+  ///
+  /// [bindPage]：bind the dialog to the current page, the bound page is not on the top of the stack,
+  /// the dialog is automatically hidden, the bound page is placed on the top of the stack, and the dialog is automatically displayed;
+  /// the bound page is closed, and the dialog bound to the page will also be removed
   ///
   /// -------------------------------------------------------------------------------
   ///
@@ -239,10 +261,14 @@ class SmartDialog {
   /// [keepSingle]：默认（false），true（多次调用[showAttach]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[showAttach]会生成多个dialog）
   ///
-  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效,[tag]和[keepSingle]禁止使用），
-  /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题(可与路由页面,flutter自带dialog合理交互)
+  /// [permanent]：默认（false），true（将该dialog设置为永久化dialog）,false(不设置);
+  /// 框架内部各种兜底操作(返回事件,路由)无法关闭永久化dialog, 需要关闭此类dialog可使用: dismiss(force: true)
   ///
-  /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示
+  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效; [tag], [keepSingle], [permanent]和[bindPage]禁止使用），
+  /// false（使用SmartDialog），使用此改参数可使SmartDialog, 与路由页面以及flutter自带dialog合理交互
+  ///
+  /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
+  /// 绑定页面被关闭,被绑定在该页面上的dialog也将被移除
   static Future<T?>? showAttach<T>({
     required BuildContext? targetContext,
     required WidgetBuilder builder,
@@ -262,6 +288,7 @@ class SmartDialog {
     String? tag,
     bool? backDismiss,
     bool? keepSingle,
+    bool? permanent,
     bool? useSystem,
     bool? bindPage,
   }) {
@@ -270,9 +297,13 @@ class SmartDialog {
       'targetContext and target, cannot both be null',
     );
     assert(
-      (useSystem == true && keepSingle == null && tag == null) ||
+      (useSystem == true &&
+              tag == null &&
+              permanent == null &&
+              keepSingle == null &&
+              bindPage == null) ||
           (useSystem == null || useSystem == false),
-      'useSystem is true, keepSingle and tag prohibit setting values',
+      'useSystem is true; tag, keepSingle, permanent and bindPage prohibit setting values',
     );
     assert(
       keepSingle == null || keepSingle == false || tag == null,
@@ -299,6 +330,7 @@ class SmartDialog {
       tag: tag,
       backDismiss: backDismiss ?? config.attach.backDismiss,
       keepSingle: keepSingle ?? false,
+      permanent: permanent ?? false,
       useSystem: useSystem ?? false,
       bindPage: bindPage ?? config.attach.bindPage,
     );
@@ -483,11 +515,13 @@ class SmartDialog {
 
   /// close dialog
   ///
-  /// [status]：For the specific meaning, please refer to the [SmartStatus] note
+  /// [status]：for the specific meaning, please refer to the [SmartStatus] note
   ///
-  /// [tag]：If you want to close the specified dialog, you can set a 'tag' for it
+  /// [tag]：if you want to close the specified dialog, you can set a 'tag' for it
   ///
-  /// [result]：Set a return value and accept it at the place where the dialog is called
+  /// [result]：set a return value and accept it at the place where the dialog is called
+  ///
+  /// [force]：force close the permanent dialog
   ///
   /// -------------------------------------------------------------------------------
   /// 关闭dialog
@@ -498,15 +532,19 @@ class SmartDialog {
   /// [tag]：如果你想关闭指定的dialog，你可以给它设置一个tag
   ///
   /// [result]：设置一个返回值,可在调用弹窗的地方接受
+  ///
+  /// [force]：强制关闭永久化的dialog
   static Future<void> dismiss<T>({
     SmartStatus status = SmartStatus.smart,
     String? tag,
     T? result,
+    bool force = false,
   }) async {
     return DialogProxy.instance.dismiss<T>(
       status: status,
       tag: tag,
       result: result,
+      force: force,
     );
   }
 }

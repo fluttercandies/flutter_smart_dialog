@@ -7,7 +7,6 @@ import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
-import '../config/smart_config.dart';
 import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
 import '../smart_dialog.dart';
@@ -46,6 +45,7 @@ class CustomDialog extends BaseDialog {
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
+    required bool permanent,
     required bool useSystem,
     required bool bindPage,
   }) {
@@ -55,6 +55,7 @@ class CustomDialog extends BaseDialog {
       keepSingle: keepSingle,
       debounce: debounce,
       type: DialogType.custom,
+      permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
     )) return Future.value(null);
@@ -97,6 +98,7 @@ class CustomDialog extends BaseDialog {
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
+    required bool permanent,
     required bool useSystem,
     required bool bindPage,
   }) {
@@ -106,6 +108,7 @@ class CustomDialog extends BaseDialog {
       keepSingle: keepSingle,
       debounce: debounce,
       type: DialogType.attach,
+      permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
     )) return null;
@@ -137,6 +140,7 @@ class CustomDialog extends BaseDialog {
     required bool keepSingle,
     required bool debounce,
     required DialogType type,
+    required bool permanent,
     required bool useSystem,
     required bool bindPage,
   }) {
@@ -149,6 +153,7 @@ class CustomDialog extends BaseDialog {
       backDismiss: backDismiss,
       keepSingle: keepSingle,
       type: type,
+      permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
     );
@@ -163,6 +168,7 @@ class CustomDialog extends BaseDialog {
     required bool backDismiss,
     required bool keepSingle,
     required DialogType type,
+    required bool permanent,
     required bool useSystem,
     required bool bindPage,
   }) {
@@ -176,6 +182,7 @@ class CustomDialog extends BaseDialog {
           backDismiss: backDismiss,
           type: type,
           tag: SmartTag.keepSingle,
+          permanent: permanent,
           useSystem: useSystem,
           bindPage: bindPage,
           route: RouteRecord.curRoute,
@@ -198,6 +205,7 @@ class CustomDialog extends BaseDialog {
       backDismiss: backDismiss,
       type: type,
       tag: tag,
+      permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
       route: RouteRecord.curRoute,
@@ -236,47 +244,75 @@ class CustomDialog extends BaseDialog {
     return true;
   }
 
-  static Future<void>? dismiss<T>([
+  static Future<void>? dismiss<T>({
     DialogType type = DialogType.dialog,
     bool back = false,
     String? tag,
     T? result,
-  ]) {
-    if (type == DialogType.dialog) {
-      return _closeSingle<T>(DialogType.dialog, back, tag, result);
-    } else if (type == DialogType.custom) {
-      return _closeSingle<T>(DialogType.custom, back, tag, result);
-    } else if (type == DialogType.attach) {
-      return _closeSingle<T>(DialogType.attach, back, tag, result);
-    } else if (type == DialogType.allDialog) {
-      return _closeAll<T>(DialogType.dialog, back, tag, result);
-    } else if (type == DialogType.allCustom) {
-      return _closeAll<T>(DialogType.custom, back, tag, result);
-    } else if (type == DialogType.allAttach) {
-      return _closeAll<T>(DialogType.attach, back, tag, result);
+    bool force = false,
+    bool route = false,
+  }) {
+    if (type == DialogType.dialog ||
+        type == DialogType.custom ||
+        type == DialogType.attach) {
+      return _closeSingle<T>(
+        type: type,
+        back: back,
+        tag: tag,
+        result: result,
+        force: force,
+        route: route,
+      );
+    } else {
+      DialogType? allType;
+      if (type == DialogType.allDialog) allType = DialogType.dialog;
+      if (type == DialogType.allCustom) allType = DialogType.custom;
+      if (type == DialogType.allAttach) allType = DialogType.attach;
+      if (allType == null) return null;
+
+      return _closeAll<T>(
+        type: allType,
+        back: back,
+        tag: tag,
+        result: result,
+        force: force,
+        route: route,
+      );
     }
-    return null;
   }
 
-  static Future<void> _closeAll<T>(
-    DialogType type,
-    bool back,
-    String? tag,
-    T? result,
-  ) async {
+  static Future<void> _closeAll<T>({
+    required DialogType type,
+    required bool back,
+    required String? tag,
+    required T? result,
+    required bool force,
+    required bool route,
+  }) async {
     for (int i = DialogProxy.instance.dialogQueue.length; i > 0; i--) {
-      await _closeSingle(type, back, tag, result);
+      await _closeSingle(
+        type: type,
+        back: back,
+        tag: tag,
+        result: result,
+        force: force,
+        route: route,
+      );
     }
   }
 
-  static Future<void> _closeSingle<T>(
-    DialogType type,
-    bool back,
-    String? tag,
-    T? result,
-  ) async {
+  static Future<void> _closeSingle<T>({
+    required DialogType type,
+    required bool back,
+    required String? tag,
+    required T? result,
+    required bool force,
+    required bool route,
+  }) async {
     var info = _getDialog(type, back, tag);
-    if (info == null) return;
+    if (info == null || (info.permanent && !force)) return;
+    //route close
+    if (route && info.bindPage && info.route != RouteRecord.popRoute) return;
 
     //handle close dialog
     var proxy = DialogProxy.instance;
@@ -295,7 +331,10 @@ class CustomDialog extends BaseDialog {
     }
 
     //perform a real dismiss
-    await customDialog.mainDialog.dismiss(useSystem: info.useSystem);
+    await customDialog.mainDialog.dismiss<T>(
+      useSystem: info.useSystem,
+      result: result,
+    );
     customDialog.overlayEntry.remove();
   }
 

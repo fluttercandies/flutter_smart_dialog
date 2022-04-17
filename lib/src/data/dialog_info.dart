@@ -9,6 +9,7 @@ class DialogInfo {
     required this.backDismiss,
     required this.type,
     required this.tag,
+    required this.permanent,
     required this.useSystem,
     required this.bindPage,
     required this.route,
@@ -21,6 +22,8 @@ class DialogInfo {
   final DialogType type;
 
   final String? tag;
+
+  final bool permanent;
 
   final bool useSystem;
 

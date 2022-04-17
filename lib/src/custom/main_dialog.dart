@@ -15,8 +15,9 @@ class MainDialog {
 
   ///OverlayEntry instance
   final OverlayEntry overlayEntry;
-  final DialogParam param = DialogParam();
   final _uniqueKey = UniqueKey();
+
+  bool offstage = false;
   BaseController? _controller;
   Completer? _completer;
   VoidCallback? _onDismiss;
@@ -39,7 +40,6 @@ class MainDialog {
     //custom dialog
     _widget = SmartDialogWidget(
       key: reuse ? _uniqueKey : UniqueKey(),
-      param: param,
       controller: _controller = SmartDialogController(),
       alignment: alignment,
       usePenetrate: usePenetrate,
@@ -78,7 +78,6 @@ class MainDialog {
     //attach dialog
     _widget = AttachDialogWidget(
       key: _uniqueKey,
-      param: param,
       targetContext: targetContext,
       target: target,
       controller: _controller = AttachDialogController(),
@@ -148,11 +147,5 @@ class MainDialog {
     }
   }
 
-  Widget getWidget() => Visibility(visible: param.visible, child: _widget);
-}
-
-class DialogParam {
-  bool visible = true;
-
-  bool forbidAnimation = false;
+  Widget getWidget() => Offstage(offstage: offstage, child: _widget);
 }
