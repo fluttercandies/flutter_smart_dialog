@@ -521,7 +521,7 @@ class SmartDialog {
   ///
   /// [result]：set a return value and accept it at the place where the dialog is called
   ///
-  /// [force]：force close the permanent dialog
+  /// [force]：force close the permanent dialog; with this param, the permanent dialog will be closed first
   ///
   /// -------------------------------------------------------------------------------
   /// 关闭dialog
@@ -533,7 +533,7 @@ class SmartDialog {
   ///
   /// [result]：设置一个返回值,可在调用弹窗的地方接受
   ///
-  /// [force]：强制关闭永久化的dialog
+  /// [force]：强制关闭永久化的dialog; 使用该参数, 将优先关闭永久化dialog
   static Future<void> dismiss<T>({
     SmartStatus status = SmartStatus.smart,
     String? tag,

@@ -1,11 +1,8 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
-
-import '../smart_dialog.dart';
 
 class RouteRecord {
   factory RouteRecord() => instance;
@@ -34,28 +31,31 @@ class RouteRecord {
   }
 
   bool handleSmartDialog() {
-    bool handleSystemPage = false;
+    bool shouldHandle = true;
     try {
-      if (routeQueue.isEmpty || DialogProxy.instance.dialogQueue.isEmpty) {
+      if (DialogProxy.instance.dialogQueue.isEmpty) {
         if (routeQueue.isNotEmpty) routeQueue.clear();
-        handleSystemPage = false;
+        shouldHandle = false;
       } else {
         var route = routeQueue.last;
-        var dialog = DialogProxy.instance.dialogQueue.last;
+        var info = DialogProxy.instance.dialogQueue.last;
 
-        if (dialog.useSystem && route.settings.name != SmartTag.systemDialog) {
-          handleSystemPage = true;
+        if ((info.useSystem && route.settings.name != SmartTag.systemDialog) ||
+            info.dialog.mainDialog.offstage ||
+            info.permanent) {
+          shouldHandle = false;
         }
       }
     } catch (e) {
+      shouldHandle = false;
       print('SmartDialog back event error:${e.toString()}');
     }
 
-    return SmartDialog.config.isExist && !handleSystemPage;
+    return shouldHandle;
   }
 
   void _offstageDialog(Route<dynamic>? curRoute) {
-    if (curRoute == null) return;
+    if (curRoute == null || DialogProxy.instance.dialogQueue.isEmpty) return;
     for (var item in DialogProxy.instance.dialogQueue) {
       if (item.route == curRoute && item.bindPage) {
         item.dialog.mainDialog.offstage = true;
@@ -65,7 +65,7 @@ class RouteRecord {
   }
 
   void _onstageDialog(Route<dynamic>? curRoute) {
-    if (curRoute == null) return;
+    if (curRoute == null || DialogProxy.instance.dialogQueue.isEmpty) return;
     for (var item in DialogProxy.instance.dialogQueue) {
       if (item.route == curRoute && item.bindPage) {
         item.dialog.mainDialog.offstage = false;

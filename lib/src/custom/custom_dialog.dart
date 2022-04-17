@@ -172,11 +172,9 @@ class CustomDialog extends BaseDialog {
     required bool useSystem,
     required bool bindPage,
   }) {
-    var proxy = DialogProxy.instance;
-
     if (keepSingle) {
-      DialogInfo dialogInfo;
-      if (_getDialog(DialogType.dialog, false, SmartTag.keepSingle) == null) {
+      DialogInfo? dialogInfo = _getDialog(tag: SmartTag.keepSingle);
+      if (dialogInfo == null) {
         dialogInfo = DialogInfo(
           dialog: this,
           backDismiss: backDismiss,
@@ -187,11 +185,7 @@ class CustomDialog extends BaseDialog {
           bindPage: bindPage,
           route: RouteRecord.curRoute,
         );
-        proxy.dialogQueue.add(dialogInfo);
-        Overlay.of(DialogProxy.contextOverlay)!.insert(
-          overlayEntry,
-          below: proxy.entryLoading,
-        );
+        _pushDialog(dialogInfo);
         mainDialogSingle = mainDialog;
       }
 
@@ -210,7 +204,16 @@ class CustomDialog extends BaseDialog {
       bindPage: bindPage,
       route: RouteRecord.curRoute,
     );
-    proxy.dialogQueue.add(dialogInfo);
+    _pushDialog(dialogInfo);
+  }
+
+  void _pushDialog(DialogInfo dialogInfo) {
+    var proxy = DialogProxy.instance;
+    if (dialogInfo.permanent) {
+      proxy.dialogQueue.addFirst(dialogInfo);
+    } else {
+      proxy.dialogQueue.addLast(dialogInfo);
+    }
     // insert the dialog carrier into the page
     Overlay.of(DialogProxy.contextOverlay)!.insert(
       overlayEntry,
@@ -309,7 +312,7 @@ class CustomDialog extends BaseDialog {
     required bool force,
     required bool route,
   }) async {
-    var info = _getDialog(type, back, tag);
+    var info = _getDialog(type: type, back: back, tag: tag, force: force);
     if (info == null || (info.permanent && !force)) return;
     //route close
     if (route && info.bindPage && info.route != RouteRecord.popRoute) return;
@@ -338,13 +341,27 @@ class CustomDialog extends BaseDialog {
     customDialog.overlayEntry.remove();
   }
 
-  static DialogInfo? _getDialog(DialogType type, bool back, String? tag) {
+  static DialogInfo? _getDialog({
+    DialogType type = DialogType.dialog,
+    bool back = false,
+    String? tag,
+    bool force = false,
+  }) {
     var proxy = DialogProxy.instance;
     if (proxy.dialogQueue.isEmpty) return null;
 
     DialogInfo? info;
     var dialogQueue = proxy.dialogQueue;
     var list = dialogQueue.toList();
+
+    //handle permanent dialog
+    if (force) {
+      for (var i = dialogQueue.length - 1; i >= 0; i--) {
+        if (dialogQueue.isEmpty) break;
+        var item = list[i];
+        if (item.permanent) return item;
+      }
+    }
 
     for (var i = dialogQueue.length - 1; i >= 0; i--) {
       if (dialogQueue.isEmpty) break;
