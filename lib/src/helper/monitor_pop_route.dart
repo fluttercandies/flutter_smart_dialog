@@ -14,6 +14,9 @@ class MonitorPopRoute with WidgetsBindingObserver {
   static MonitorPopRoute get instance => _instance ??= MonitorPopRoute._();
 
   MonitorPopRoute._() {
+    if (WidgetsBinding.instance == null)
+      WidgetsFlutterBinding.ensureInitialized();
+    //to prevent ensureInitialized changes, still use WidgetsBinding.instance
     WidgetsBinding.instance!.addObserver(this);
   }
 

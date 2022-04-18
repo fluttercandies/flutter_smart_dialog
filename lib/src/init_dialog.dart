@@ -35,8 +35,6 @@ class FlutterSmartDialog extends StatefulWidget {
 
   static final observer = SmartNavigatorObserver();
 
-  static void monitor() => MonitorPopRoute.instance;
-
   ///recommend the way of init
   static TransitionBuilder init({
     TransitionBuilder? builder,
@@ -47,7 +45,7 @@ class FlutterSmartDialog extends StatefulWidget {
     //Compatible with cupertino style
     FlutterSmartStyleBuilder? styleBuilder,
   }) {
-    monitor();
+    MonitorPopRoute.instance;
 
     return (BuildContext context, Widget? child) {
       return builder == null
