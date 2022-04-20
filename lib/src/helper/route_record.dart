@@ -37,12 +37,18 @@ class RouteRecord {
         if (routeQueue.isNotEmpty) routeQueue.clear();
         shouldHandle = false;
       } else {
-        var route = routeQueue.last;
         var info = DialogProxy.instance.dialogQueue.last;
 
-        if ((info.useSystem && route.settings.name != SmartTag.systemDialog) ||
-            info.dialog.mainDialog.offstage ||
-            info.permanent) {
+        //deal with system dialog
+        if (routeQueue.isNotEmpty) {
+          var route = routeQueue.last;
+          if (info.useSystem && route.settings.name != SmartTag.systemDialog) {
+            shouldHandle = false;
+          }
+        }
+
+        // deal with bindPage and permanent dialog
+        if (info.dialog.mainDialog.offstage || info.permanent) {
           shouldHandle = false;
         }
       }
