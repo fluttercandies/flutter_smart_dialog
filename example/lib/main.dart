@@ -147,7 +147,7 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showLoading() async {
-    SmartDialog.showLoading(backDismiss: false);
+    SmartDialog.showLoading();
     await Future.delayed(Duration(seconds: 2));
     SmartDialog.dismiss();
   }

@@ -21,7 +21,7 @@ class SmartDialog {
 
   /// custom dialog
   ///
-  /// [widget]：custom widget
+  /// [builder]：the custom dialog
   ///
   /// [alignment]：control the location of the dialog
   ///
@@ -69,7 +69,7 @@ class SmartDialog {
   ///
   /// 自定义弹窗
   ///
-  /// [widget]：自定义 widget
+  /// [builder]：自定义 dialog
   ///
   /// [alignment]：控制弹窗的位置
   ///
@@ -169,7 +169,7 @@ class SmartDialog {
   ///
   /// [targetContext]：BuildContext with target widget
   ///
-  /// [widget]：custom widget
+  /// [builder]：the custom dialog
   ///
   /// [target]：target offset，when the target is set to value，
   /// the targetContext param will be invalid
@@ -225,7 +225,7 @@ class SmartDialog {
   ///
   /// [targetContext]：伴随位置widget的BuildContext
   ///
-  /// [widget]：自定义 widget
+  /// [builder]：自定义 dialog
   ///
   /// [target]：target offset，当target被设置数据，targetContext参数将失效
   ///
@@ -340,8 +340,6 @@ class SmartDialog {
   ///
   /// [msg]：loading msg (Use the [builder] param, this param will be invalid)
   ///
-  /// [background]：the rectangle background color of msg  (Use the [builder] param, this param will be invalid)
-  ///
   /// [clickMaskDismiss]：true（loading will be closed after click mask），false（not close）
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
@@ -361,14 +359,12 @@ class SmartDialog {
   /// false（the back event not close the loading and not close page），
   /// you still can use the dismiss method to close the loading
   ///
-  /// [widget]：the custom loading
+  /// [builder]：the custom loading
   /// -------------------------------------------------------------------------------
   ///
   /// loading弹窗
   ///
   /// [msg]：loading 的信息（使用[builder]参数，该参数将失效）
-  ///
-  /// [background]：loading信息后面的矩形背景颜色（使用[builder]参数，该参数将失效）
   ///
   /// [clickMaskDismiss]：true（点击遮罩后，将关闭loading），false（不关闭）
   ///
@@ -445,7 +441,7 @@ class SmartDialog {
   ///
   /// [consumeEvent]：true (toast will consume touch events), false (toast no longer consumes events, touch events can penetrate toast)
   ///
-  /// [widget]：highly customizable toast
+  /// [builder]：the custom toast
   ///
   /// -------------------------------------------------------------------------------
   ///
@@ -477,7 +473,7 @@ class SmartDialog {
   ///
   /// [consumeEvent]：true（toast会消耗触摸事件），false（toast不再消耗事件，触摸事件能穿透toast）
   ///
-  /// [builder]：可高度定制化toast
+  /// [builder]：自定义toast
   static Future<void> showToast(
     String msg, {
     Duration? displayTime,

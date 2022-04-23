@@ -142,9 +142,7 @@ class MainDialog {
     }
 
     //end waiting
-    if (!(_completer?.isCompleted ?? true)) {
-      _completer?.complete(result);
-    }
+    if (!(_completer?.isCompleted ?? true)) _completer?.complete(result);
   }
 
   Widget getWidget() => Offstage(offstage: offstage, child: _widget);

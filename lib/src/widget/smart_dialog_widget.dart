@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 
 import '../config/enum_config.dart';
-import '../custom/main_dialog.dart';
 
 class SmartDialogWidget extends StatefulWidget {
   const SmartDialogWidget({

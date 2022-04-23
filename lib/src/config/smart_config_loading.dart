@@ -16,6 +16,7 @@ class SmartConfigLoading {
     this.maskWidget,
     this.backDismiss = true,
     this.clickMaskDismiss = false,
+    this.leastLoadingTime = const Duration(milliseconds: 0),
     this.isExist = false,
   });
 
@@ -63,9 +64,10 @@ class SmartConfigLoading {
   /// 是否使用动画（默认：true）
   final bool useAnimation;
 
-  /// default（false），true（click event will penetrate background），false（not penetration）
+  /// On-screen interaction events can penetrate the masked background:
+  /// true（click event will penetrate background），false（not penetration）
   ///
-  /// 屏幕上交互事件可以穿透遮罩背景（默认:false）：true（交互事件能穿透背景，遮罩会自动变成透明），false（不能穿透）
+  /// 屏幕上交互事件可以穿透遮罩背景：true（交互事件能穿透背景，遮罩会自动变成透明），false（不能穿透）
   final bool usePenetrate;
 
   /// the color of the mask，it is invalid if [usePenetrate] is true or [maskWidget] set the value
@@ -86,10 +88,16 @@ class SmartConfigLoading {
   /// 你仍然可以使用dismiss方法来关闭loading
   final bool backDismiss;
 
-  /// default（true），true（loading will be closed after click background），false（not close）
+  /// true（dialog will be closed after click background），false（not close）
   ///
-  /// 点击遮罩，是否关闭dialog（默认：true）：true（点击遮罩关闭dialog），false（不关闭）
+  /// true（点击遮罩关闭dialog），false（不关闭）
   final bool clickMaskDismiss;
+
+  /// leastLoadingTime: If this param is set to 1 second, dismiss() is called immediately after showLoading(),
+  /// loading will not be closed immediately, but will be closed when the loading time reaches 1 second
+  ///
+  /// 最小加载时间: 如果该参数设置为1秒, showLoading()之后立马调用dismiss(), loading不会立马关闭, 会在加载时间达到1秒的时候关闭
+  final Duration leastLoadingTime;
 
   /// whether loading(showLoading()) exist on the screen
   ///

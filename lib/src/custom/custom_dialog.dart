@@ -293,7 +293,7 @@ class CustomDialog extends BaseDialog {
     required bool route,
   }) async {
     for (int i = DialogProxy.instance.dialogQueue.length; i > 0; i--) {
-      await _closeSingle(
+      await _closeSingle<T>(
         type: type,
         back: back,
         tag: tag,
@@ -354,24 +354,28 @@ class CustomDialog extends BaseDialog {
     var dialogQueue = proxy.dialogQueue;
     var list = dialogQueue.toList();
 
+    //handle dialog with tag
+    if (tag != null) {
+      for (var i = dialogQueue.length - 1; i >= 0; i--) {
+        if (dialogQueue.isEmpty) break;
+        if (list[i].tag == tag) info = list[i];
+      }
+      return info;
+    }
+
     //handle permanent dialog
     if (force) {
       for (var i = dialogQueue.length - 1; i >= 0; i--) {
         if (dialogQueue.isEmpty) break;
-        var item = list[i];
-        if (item.permanent) return item;
+        if (list[i].permanent) return list[i];
       }
     }
 
+    //handle normal dialog
     for (var i = dialogQueue.length - 1; i >= 0; i--) {
       if (dialogQueue.isEmpty) break;
-      var item = list[i];
-      if (tag != null && item.tag == tag) {
-        info = item;
-        break;
-      } else if (tag == null &&
-          (type == DialogType.dialog || item.type == type)) {
-        info = item;
+      if (type == DialogType.dialog || list[i].type == type) {
+        info = list[i];
         break;
       }
     }

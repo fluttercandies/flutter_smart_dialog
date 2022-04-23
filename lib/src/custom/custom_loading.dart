@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
@@ -6,6 +8,10 @@ import '../data/base_dialog.dart';
 
 class CustomLoading extends BaseDialog {
   CustomLoading({required OverlayEntry overlayEntry}) : super(overlayEntry);
+
+  Timer? _timer;
+  bool _canDismiss = false;
+  bool _needDismiss = false;
 
   Future<void> showLoading({
     required Widget widget,
@@ -21,6 +27,15 @@ class CustomLoading extends BaseDialog {
     DialogProxy.instance.loadingBackDismiss = backDismiss;
     SmartDialog.config.loading.isExist = true;
 
+    _canDismiss = false;
+    _needDismiss = false;
+    _timer?.cancel();
+    _timer = Timer(SmartDialog.config.loading.leastLoadingTime, () {
+      _canDismiss = true;
+      if (!_needDismiss) return;
+      _realDismiss();
+    });
+
     return mainDialog.show(
       widget: widget,
       animationType: animationType,
@@ -33,16 +48,21 @@ class CustomLoading extends BaseDialog {
       onDismiss: null,
       useSystem: false,
       reuse: true,
-      onMask: () => clickMaskDismiss ? dismiss() : null,
+      onMask: () => clickMaskDismiss ? _realDismiss() : null,
     );
   }
 
-  Future<T?> dismiss<T>({bool back = false}) async {
+  Future<void> _realDismiss({bool back = false}) async {
     if (!DialogProxy.instance.loadingBackDismiss && back) return null;
 
     await mainDialog.dismiss();
     SmartDialog.config.loading.isExist = false;
+  }
 
-    return null;
+  Future<void> dismiss({bool back = false}) async {
+    if (_canDismiss)
+      await _realDismiss(back: back);
+    else
+      _needDismiss = true;
   }
 }

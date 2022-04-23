@@ -215,7 +215,7 @@ class DialogProxy {
     if (status == SmartStatus.smart) {
       var loading = config.isExistLoading;
       if (!loading) {
-        return CustomDialog.dismiss(
+        return CustomDialog.dismiss<T>(
           type: DialogType.dialog,
           back: back,
           tag: tag,
@@ -234,7 +234,7 @@ class DialogProxy {
 
     DialogType? type = _convertEnum(status);
     if (type == null) return null;
-    return CustomDialog.dismiss(
+    return CustomDialog.dismiss<T>(
       type: type,
       back: back,
       tag: tag,

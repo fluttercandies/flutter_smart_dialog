@@ -61,14 +61,15 @@ class SmartConfigCustom {
   /// 动画类型[animationType]： 具体可参照[SmartAnimationType]注释
   final SmartAnimationType animationType;
 
-  /// default（true），true（use the animation），false（not use）
+  /// true（use the animation），false（not use）
   ///
-  /// 是否使用动画（默认：true）
+  /// true（使用动画），false（不使用）
   final bool useAnimation;
 
-  /// default（false），true（click event will penetrate background），false（not penetration）
+  /// On-screen interaction events can penetrate the masked background:
+  /// true（click event will penetrate background），false（not penetration）
   ///
-  /// 屏幕上交互事件可以穿透遮罩背景（默认:false）：true（交互事件能穿透背景，遮罩会自动变成透明），false（不能穿透）
+  /// 屏幕上交互事件可以穿透遮罩背景：true（交互事件能穿透背景，遮罩会自动变成透明），false（不能穿透）
   final bool usePenetrate;
 
   /// the color of the mask，it is invalid if [usePenetrate] is true or [maskWidget] set the value
@@ -81,9 +82,9 @@ class SmartConfigCustom {
   /// 遮罩Widget，可高度自定义你自己的遮罩背景：[usePenetrate]设置为true，该参数失效
   final Widget? maskWidget;
 
-  /// default（true），true（loading will be closed after click background），false（not close）
+  /// true（dialog will be closed after click background），false（not close）
   ///
-  /// 点击遮罩，是否关闭dialog（默认：true）：true（点击遮罩关闭dialog），false（不关闭）
+  /// true（点击遮罩关闭dialog），false（不关闭）
   final bool clickMaskDismiss;
 
   /// debounce feature，it works on toast and dialog：default（false）;

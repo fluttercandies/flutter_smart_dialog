@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_smart_dialog/src/compatible/compatible_smart_dialog.dart';
 
 ///全局配置统一在此处处理
 class SmartConfigCompatible {
