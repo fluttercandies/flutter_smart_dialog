@@ -109,7 +109,7 @@ class SmartDialog {
   ///
   /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
   /// 绑定页面被关闭,被绑定在该页面上的dialog也将被移除
-  static Future<T?>? show<T>({
+  static Future<T> show<T>({
     required WidgetBuilder builder,
     AlignmentGeometry? alignment,
     bool? clickMaskDismiss,
@@ -269,7 +269,7 @@ class SmartDialog {
   ///
   /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
   /// 绑定页面被关闭,被绑定在该页面上的dialog也将被移除
-  static Future<T?>? showAttach<T>({
+  static Future<T?> showAttach<T>({
     required BuildContext? targetContext,
     required WidgetBuilder builder,
     Offset? target,
@@ -384,7 +384,7 @@ class SmartDialog {
   /// 你仍然可以使用dismiss方法来关闭loading
   ///
   /// [builder]：自定义loading
-  static Future<void> showLoading({
+  static Future<T?> showLoading<T>({
     String msg = 'loading...',
     bool? clickMaskDismiss,
     SmartAnimationType? animationType,
@@ -396,7 +396,7 @@ class SmartDialog {
     bool? backDismiss,
     WidgetBuilder? builder,
   }) {
-    return DialogProxy.instance.showLoading(
+    return DialogProxy.instance.showLoading<T>(
       clickMaskDismiss: clickMaskDismiss ?? config.loading.clickMaskDismiss,
       animationType: animationType ?? config.loading.animationType,
       usePenetrate: usePenetrate ?? config.loading.usePenetrate,

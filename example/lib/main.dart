@@ -62,22 +62,29 @@ class SmartDialogPage extends StatelessWidget {
     print('--------------------------');
   }
 
-  void _show() {
-    SmartDialog.show(builder: (_) {
-      return Container(
-        height: 80,
-        width: 180,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          'easy custom dialog',
-          style: TextStyle(color: Colors.white),
-        ),
-      );
-    });
+  void _show() async {
+    var result = await SmartDialog.show<String?>(
+      clickMaskDismiss: false,
+      onMask: () => SmartDialog.dismiss(result: null),
+      builder: (_) {
+        return Container(
+          height: 80,
+          width: 180,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            'easy custom dialog',
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+      },
+    );
+
+    print("-----------------------");
+    print(result);
   }
 
   void _showAttach(BuildContext ctx) {

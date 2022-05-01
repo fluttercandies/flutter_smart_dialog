@@ -29,7 +29,7 @@ class CustomDialog extends BaseDialog {
 
   DateTime? clickMaskLastTime;
 
-  Future<T?> show<T>({
+  Future<T> show<T>({
     required Widget widget,
     required AlignmentGeometry alignment,
     required bool usePenetrate,
@@ -79,7 +79,7 @@ class CustomDialog extends BaseDialog {
     );
   }
 
-  Future<T?>? showAttach<T>({
+  Future<T?> showAttach<T>({
     required BuildContext? targetContext,
     required Offset? target,
     required Widget widget,
@@ -111,7 +111,7 @@ class CustomDialog extends BaseDialog {
       permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
-    )) return null;
+    )) return Future.value(null);
     return mainDialog.showAttach<T>(
       targetContext: targetContext,
       target: target,

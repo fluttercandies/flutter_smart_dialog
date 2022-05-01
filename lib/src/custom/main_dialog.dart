@@ -23,7 +23,7 @@ class MainDialog {
   VoidCallback? _onDismiss;
   Widget _widget;
 
-  Future<T?> show<T>({
+  Future<T> show<T>({
     required Widget widget,
     required AlignmentGeometry alignment,
     required bool usePenetrate,

@@ -50,7 +50,7 @@ class DialogProxy {
     _toast = CustomToast(overlayEntry: entryToast);
   }
 
-  Future<T?>? show<T>({
+  Future<T> show<T>({
     required Widget widget,
     required AlignmentGeometry alignment,
     required bool usePenetrate,
@@ -97,7 +97,7 @@ class DialogProxy {
     );
   }
 
-  Future<T?>? showAttach<T>({
+  Future<T?> showAttach<T>({
     required BuildContext? targetContext,
     required Widget widget,
     required Offset? target,
@@ -150,7 +150,7 @@ class DialogProxy {
     );
   }
 
-  Future<void> showLoading({
+  Future<T?> showLoading<T>({
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
     required bool usePenetrate,
@@ -161,7 +161,7 @@ class DialogProxy {
     required bool backDismiss,
     required Widget widget,
   }) {
-    return _loading.showLoading(
+    return _loading.showLoading<T>(
       clickMaskDismiss: clickMaskDismiss,
       animationType: animationType,
       maskColor: maskColor,

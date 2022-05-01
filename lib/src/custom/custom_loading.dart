@@ -13,7 +13,7 @@ class CustomLoading extends BaseDialog {
   bool _canDismiss = false;
   bool _needDismiss = false;
 
-  Future<void> showLoading({
+  Future<T?> showLoading<T>({
     required Widget widget,
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
@@ -36,7 +36,7 @@ class CustomLoading extends BaseDialog {
       _realDismiss();
     });
 
-    return mainDialog.show(
+    return mainDialog.show<T>(
       widget: widget,
       animationType: animationType,
       alignment: Alignment.center,
