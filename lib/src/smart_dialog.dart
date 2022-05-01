@@ -109,7 +109,7 @@ class SmartDialog {
   ///
   /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
   /// 绑定页面被关闭,被绑定在该页面上的dialog也将被移除
-  static Future<T> show<T>({
+  static Future<T?> show<T>({
     required WidgetBuilder builder,
     AlignmentGeometry? alignment,
     bool? clickMaskDismiss,

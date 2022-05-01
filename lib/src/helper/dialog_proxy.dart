@@ -50,7 +50,7 @@ class DialogProxy {
     _toast = CustomToast(overlayEntry: entryToast);
   }
 
-  Future<T> show<T>({
+  Future<T?> show<T>({
     required Widget widget,
     required AlignmentGeometry alignment,
     required bool usePenetrate,

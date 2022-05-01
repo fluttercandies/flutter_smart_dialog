@@ -29,7 +29,7 @@ class CustomDialog extends BaseDialog {
 
   DateTime? clickMaskLastTime;
 
-  Future<T> show<T>({
+  Future<T?> show<T>({
     required Widget widget,
     required AlignmentGeometry alignment,
     required bool usePenetrate,
@@ -229,10 +229,10 @@ class CustomDialog extends BaseDialog {
     var debounceTime = type == DialogType.dialog
         ? SmartDialog.config.custom.debounceTime
         : SmartDialog.config.attach.debounceTime;
-    var isShake = proxy.dialogLastTime != null &&
+    var prohibit = proxy.dialogLastTime != null &&
         now.difference(proxy.dialogLastTime!) < debounceTime;
     proxy.dialogLastTime = now;
-    if (isShake) return false;
+    if (prohibit) return false;
 
     return true;
   }
