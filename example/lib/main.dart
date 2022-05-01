@@ -64,6 +64,7 @@ class SmartDialogPage extends StatelessWidget {
 
   void _show() {
     SmartDialog.show(builder: (_) {
+      
       return Container(
         height: 80,
         width: 180,
