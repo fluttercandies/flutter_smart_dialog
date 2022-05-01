@@ -124,7 +124,7 @@ class CompatibleSmartDialog {
       alignment: alignmentTemp ?? config.alignment,
       clickMaskDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
       animationType: isLoadingTemp ?? config.isLoading
-          ? SmartAnimationType.fade
+          ? SmartAnimationType.centerFadeAndOtherScale
           : SmartAnimationType.scale,
       usePenetrate: isPenetrateTemp ?? config.isPenetrate,
       useAnimation: isUseAnimationTemp ?? config.isUseAnimation,
