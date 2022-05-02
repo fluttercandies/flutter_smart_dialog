@@ -20,7 +20,7 @@ class SmartConfigToast {
     this.displayType = SmartToastType.normal,
     this.consumeEvent = false,
     this.displayTime = const Duration(milliseconds: 2000),
-    this.intervalTime = const Duration(milliseconds: 150),
+    this.intervalTime = const Duration(milliseconds: 100),
     this.isExist = false,
   });
 
