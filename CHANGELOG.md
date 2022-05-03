@@ -1,3 +1,15 @@
+# [4.0.x]
+
+- Breaking Change!!! migrate doc: [3.x migrate 4.0]() | [3.x 迁移 4.0]()
+- Major update
+- Subdivided 'config', can control 'show', 'showAttach', 'showLoading', 'showToast' in more detail
+- Add 'bindPage' feature, it can reasonably solve the problem of dialog jumping pages
+- Now 'dismiss' can carry the return value, similar to pop and push usage
+- You can use the 'permanent' param to set a permanent dialog
+- The interval time that can be added between successive displays of toasts
+- Loading can set the least loading time
+- Add click listener for dialog mask
+
 # [3.4.x]
 
 - 'showToast' add 'consumeEvent' param: [#27](https://github.com/fluttercandies/flutter_smart_dialog/issues/27)

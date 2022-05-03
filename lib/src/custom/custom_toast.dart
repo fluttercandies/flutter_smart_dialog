@@ -62,7 +62,7 @@ class CustomToast extends BaseDialog {
       );
     }
 
-    multiTypeToast() async {
+    Future<void> multiTypeToast() async {
       // provider multiple toast display logic
       if (displayType == SmartToastType.normal) {
         await _normalToast(time: displayTime, onShowToast: showToast);
@@ -78,7 +78,7 @@ class CustomToast extends BaseDialog {
     }
 
     //handling different types of toast
-    handleMultiTypeToast(curType: displayType, fun: multiTypeToast);
+    await handleMultiTypeToast(curType: displayType, fun: multiTypeToast);
   }
 
   ///--------------------------multi type toast--------------------------
@@ -152,15 +152,15 @@ class CustomToast extends BaseDialog {
 
   ///--------------------------multi type toast--------------------------
 
-  void handleMultiTypeToast({
+  Future<void> handleMultiTypeToast({
     required SmartToastType curType,
-    required Function() fun,
+    required Future<void> Function() fun,
   }) async {
     _lastType = _lastType ?? curType;
     if (_lastType != curType || _tempQueue.isNotEmpty) {
       _tempQueue.add(_ToastInfo(type: curType, fun: fun));
     } else {
-      fun();
+      await fun();
     }
     _lastType = curType;
   }
@@ -215,5 +215,5 @@ class _ToastInfo {
   _ToastInfo({required this.type, required this.fun});
 
   SmartToastType type;
-  Function() fun;
+  Future<void> Function() fun;
 }

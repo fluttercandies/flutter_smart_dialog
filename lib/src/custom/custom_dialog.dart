@@ -73,7 +73,7 @@ class CustomDialog extends BaseDialog {
       reuse: true,
       onMask: () {
         onMask?.call();
-        if (!clickMaskDismiss || !_clickMaskDebounce()) return;
+        if (!clickMaskDismiss || !_clickMaskDebounce() || permanent) return;
         dismiss();
       },
     );
@@ -128,7 +128,7 @@ class CustomDialog extends BaseDialog {
       useSystem: useSystem,
       onMask: () {
         onMask?.call();
-        if (!clickMaskDismiss || !_clickMaskDebounce()) return;
+        if (!clickMaskDismiss || !_clickMaskDebounce() || permanent) return;
         dismiss();
       },
     );
