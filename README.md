@@ -2,6 +2,8 @@
 
 Language:  English | [中文](https://juejin.cn/post/7026150456673959943)
 
+Migrate doc：[3.x migrate 4.0](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/3.x%20migrate%204.0.md) | [3.x 迁移 4.0](https://juejin.cn/post/7093867453012246565)
+
 # Introduction
 
 An elegant Flutter Dialog solution.

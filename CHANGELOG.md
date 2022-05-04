@@ -1,6 +1,6 @@
 # [4.0.x]
 
-- Breaking Change!!! migrate doc: [3.x migrate 4.0]() | [3.x 迁移 4.0]()
+- Breaking Change!!! migrate doc: [3.x migrate 4.0](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/3.x%20migrate%204.0.md) | [3.x 迁移 4.0](https://juejin.cn/post/7093867453012246565)
 - Major update
 - Subdivided 'config', can control 'show', 'showAttach', 'showLoading', 'showToast' in more detail
 - Add 'bindPage' feature, it can reasonably solve the problem of dialog jumping pages
