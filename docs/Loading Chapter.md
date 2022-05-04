@@ -1,10 +1,35 @@
-# Loading Chapter
+# Loading articles
+
+## Pit Avoidance Guide
+
+- After loading is turned on, it can be turned off using the following methods
+  - SmartDialog.dismiss(): can close loading and dialog
+  - status is set to SmartStatus.loading: just turn off loading
+
+````dart
+// easy close
+SmartDialog.dismiss();
+// exact close
+SmartDialog.dismiss(status: SmartStatus.loading);
+````
+
+- Generally speaking, the loading pop-up window is encapsulated in the network library, and automatically opens and closes with the request status
+  - Based on this scenario, I suggest: when using dismiss, add the status parameter and set it to: SmartStatus.loading
+- pit ratio scene
+  - When the network request is loaded, the loading is also turned on. At this time, it is easy to touch the back button by mistake and close the loading
+  - When the network request ends, the dismiss method will be called automatically
+  - Because loading has been closed, assuming that the page has a SmartDialog pop-up window at this time, dismiss without setting status will close the SmartDialog pop-up window
+  - Of course, this situation is easy to solve, encapsulate the loading of the network library, use: `SmartDialog.dismiss(status: SmartStatus.loading);` to close it
+- The `status` parameter is a parameter designed to accurately close the corresponding type of pop-up window, which can play a huge role in some special scenarios
+  - If you understand the meaning of this parameter, then you must be confident about when to add the `status` parameter
 
 ## Parameter Description
 
-- maskWidgetTemp: powerful mask customization function😆, use your brain. . .
+The parameters are very detailed in the comments, so I won't go into details, let's see the effect
 
-```dart
+- maskWidget: Powerful mask customization function 😆, use your brains. . .
+
+````dart
 var maskWidget = Container(
   width: double.infinity,
   height: double.infinity,
@@ -16,60 +41,47 @@ var maskWidget = Container(
     ),
   ),
 );
-SmartDialog.showLoading(maskWidgetTemp: maskWidget);
-```
+SmartDialog.showLoading(maskWidget: maskWidget);
+````
 
-![loadingOne](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092313.gif)
+![loadingOne](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224902.gif)
 
-- maskColorTemp: support quick custom mask color
+- maskColor: supports quick custom mask color
 
-```dart
-SmartDialog.showLoading(maskColorTemp: randomColor().withOpacity(0.3));
-
-/// random color
-Color randomColor() => Color.fromRGBO(
-    Random().nextInt(256), Random().nextInt(256), Random().nextInt(256), 1);
-```
-
-![loadingTwo](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092325.gif)
-
-- background: support loading background customization
-
-```dart
-SmartDialog.showLoading(background: randomColor());
+````dart
+SmartDialog.showLoading(maskColor: randomColor().withOpacity(0.3));
 
 /// random color
-Color randomColor() => Color.fromRGBO(
-    Random().nextInt(256), Random().nextInt(256), Random().nextInt(256), 1);
-```
+Color randomColor() => Color.fromRGBO(Random().nextInt(256), Random().nextInt(256), Random().nextInt(256), 1);
+````
 
-![loadingThree](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092331.gif)
+![loadingTwo](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224910.gif)
 
-- isLoadingTemp: Animation effect switch
+- animationType: animation effect switching
 
-```dart
-SmartDialog.showLoading(isLoadingTemp: false);
-```
+````dart
+SmartDialog.showLoading(animationType: SmartAnimationType.scale);
+````
 
-![loadingFour](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092336.gif)
+![loadingFour](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224929.gif)
 
-- isPenetrateTemp: Interaction events can penetrate the mask, which is a very useful function, which is very important for some special demand scenes
+- usePenetrate: Interaction events can penetrate the mask, which is a very useful function and is critical for some special demand scenarios
 
-```dart
-SmartDialog.showLoading(isPenetrateTemp: true);
-```
+````dart
+SmartDialog.showLoading(usePenetrate: true);
+````
 
-![loadingFive](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092342.gif)
+![loadingFive](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224945.gif)
 
 ## Custom Loading
 
-Use `showLoading` to easily customize the powerful loading dialog; I have limited brains, just demonstrate it briefly
+Use `showLoading` to easily customize a powerful loading pop-up window; I have limited brains, so I will simply demonstrate
 
 > **Customize a loading layout**
 
-```dart
+````dart
 class CustomLoading extends StatefulWidget {
-  const CustomLoading({Key? key, this.type = 0}): super(key: key);
+  const CustomLoading({Key? key, this.type = 0}) : super(key: key);
 
   final int type;
 
@@ -184,39 +196,42 @@ class _CustomLoadingState extends State<CustomLoading>
     super.dispose();
   }
 }
-```
+````
 
 > **Let's see the effect**
 
-- Effect one
+- effect one
 
-```dart
-SmartDialog.showLoading(isLoadingTemp: false, widget: CustomLoading());
-await Future.delayed(Duration(seconds: 2));
-SmartDialog.dismiss();
-```
-
-![loadingSmile](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092359.gif)
-
-- Effect two
-
-```dart
+````dart
 SmartDialog.showLoading(
-    isLoadingTemp: false,
-    widget: CustomLoading(type: 1),
+  animationType: SmartAnimationType.scale,
+  builder: (_) => CustomLoading(),
 );
 await Future.delayed(Duration(seconds: 2));
 SmartDialog.dismiss();
-```
+````
 
-![loadingIcon](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092408.gif)
+![loadingSmile](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224959.gif)
+
+- Effect two
+
+````dart
+SmartDialog.showLoading(
+  animationType: SmartAnimationType.scale,
+  builder: (_) => CustomLoading(type: 1),
+);
+await Future.delayed(Duration(seconds: 2));
+SmartDialog.dismiss();
+````
+
+![loadingIcon](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103225006.gif)
 
 - Effect three
 
-```dart
-SmartDialog.showLoading(widget: CustomLoading(type: 2));
+````dart
+SmartDialog.showLoading(builder: (_) => CustomLoading(type: 2));
 await Future.delayed(Duration(seconds: 2));
 SmartDialog.dismiss();
-```
+````
 
-![loadingNormal](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092413.gif)
+![loadingNormal](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103225013.gif)

@@ -157,12 +157,13 @@ class CustomToast extends BaseDialog {
     required Future<void> Function() fun,
   }) async {
     _lastType = _lastType ?? curType;
-    if (_lastType != curType || _tempQueue.isNotEmpty) {
+    var useTempQueue = _lastType != curType || _tempQueue.isNotEmpty;
+    _lastType = curType;
+    if (useTempQueue) {
       _tempQueue.add(_ToastInfo(type: curType, fun: fun));
     } else {
       await fun();
     }
-    _lastType = curType;
   }
 
   void afterDismiss() {

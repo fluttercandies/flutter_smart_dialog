@@ -133,10 +133,9 @@ class SmartDialog {
       (useSystem == true &&
               tag == null &&
               permanent == null &&
-              keepSingle == null &&
-              bindPage == null) ||
+              keepSingle == null) ||
           (useSystem == null || useSystem == false),
-      'useSystem is true; tag, keepSingle, permanent and bindPage prohibit setting values',
+      'useSystem is true; tag, keepSingle and permanent prohibit setting values',
     );
     assert(
       keepSingle == null || keepSingle == false || tag == null,
@@ -300,10 +299,9 @@ class SmartDialog {
       (useSystem == true &&
               tag == null &&
               permanent == null &&
-              keepSingle == null &&
-              bindPage == null) ||
+              keepSingle == null) ||
           (useSystem == null || useSystem == false),
-      'useSystem is true; tag, keepSingle, permanent and bindPage prohibit setting values',
+      'useSystem is true; tag, keepSingle and permanent prohibit setting values',
     );
     assert(
       keepSingle == null || keepSingle == false || tag == null,

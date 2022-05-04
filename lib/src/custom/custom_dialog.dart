@@ -320,7 +320,6 @@ class CustomDialog extends BaseDialog {
     //handle close dialog
     var proxy = DialogProxy.instance;
     proxy.dialogQueue.remove(info);
-    var customDialog = info.dialog;
 
     //check if the queue contains a custom dialog or attach dialog
     proxy.config.custom.isExist = false;
@@ -334,6 +333,7 @@ class CustomDialog extends BaseDialog {
     }
 
     //perform a real dismiss
+    var customDialog = info.dialog;
     await customDialog.mainDialog.dismiss<T>(
       useSystem: info.useSystem,
       result: result,

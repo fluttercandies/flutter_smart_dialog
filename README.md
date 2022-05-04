@@ -64,7 +64,7 @@ SmartDialog's showLoading and showToast provide a default style. Of course, cust
 
 - SmartDialog custom Loading or Toast is very simple: However, when using it, it may make you feel a little troublesome
 - for example
-  - Use custom Loading: `SmartDialog.showLoading(widget: CustomLoadingWidget);`
+  - Use custom Loading: `SmartDialog.showLoading(builder: () => CustomLoadingWidget);`
   - The effect we want must be like this:  `SmartDialog.showLoading();`
 - In view of the above considerations, I added the function of setting custom default Loading and Toast styles at the entrance
 
@@ -86,13 +86,9 @@ class MyApp extends StatelessWidget {
       // here
       builder: FlutterSmartDialog.init(
         //default toast widget
-        toastBuilder: (String msg, AlignmentGeometry alignment) {
-          return CustomToastWidget(msg: msg, alignment: alignment);
-        },
+        toastBuilder: (String msg) => CustomToastWidget(msg: msg),
         //default loading widget
-        loadingBuilder: (String msg, Color background) {
-          return CustomLoadingWidget(msg: msg, background: background);
-        },
+        loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
       ),
     );
   }
@@ -122,18 +118,19 @@ SmartDialog.dismiss();
 - **dialog usage**🎨
 
 ```dart
-var custom = Container(
+SmartDialog.show(builder: (context) {
+  return Container(
     height: 80,
     width: 180,
     decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(20),
+      color: Colors.black,
+      borderRadius: BorderRadius.circular(10),
     ),
     alignment: Alignment.center,
-    child: Text('easy custom dialog', style: TextStyle(color: Colors.white)),
-);
-// here
-SmartDialog.show(widget: custom, isLoadingTemp: false);
+    child:
+    Text('easy custom dialog', style: TextStyle(color: Colors.white)),
+  );
+});
 ```
 
 ![dialogEasy](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211102232821.gif)
@@ -243,33 +240,36 @@ class _OtherTrickState extends State<OtherTrick> {
 - Show this component and then trigger it externally
 
 ```dart
-VoidCallback? callback;
+void _otherTrick() async {
+  VoidCallback? callback;
 
-// display
-SmartDialog.show(
-  alignmentTemp: Alignment.center,
-  widget: OtherTrick(
-    onUpdate: (VoidCallback onInvoke) => callback = onInvoke,
-  ),
-);
-
-await Future.delayed(Duration(milliseconds: 500));
-
-// handler
-SmartDialog.show(
-  alignmentTemp: Alignment.centerRight,
-  maskColorTemp: Colors.transparent,
-  widget: Container(
-    height: double.infinity,
-    width: 150,
-    color: Colors.white,
+  // display
+  SmartDialog.show(
     alignment: Alignment.center,
-    child: ElevatedButton(
-      child: Text('add'),
-      onPressed: () => callback?.call(),
-    ),
-  ),
-);
+    builder: (_) =>
+    OtherTrick(onUpdate: (VoidCallback onInvoke) => callback = onInvoke),
+  );
+
+  await Future.delayed(const Duration(milliseconds: 500));
+
+  // handler
+  SmartDialog.show(
+    alignment: Alignment.centerRight,
+    maskColor: Colors.transparent,
+    builder: (_) {
+      return Container(
+        height: double.infinity,
+        width: 150,
+        color: Colors.white,
+        alignment: Alignment.center,
+        child: ElevatedButton(
+          child: const Text('add'),
+          onPressed: () => callback?.call(),
+        ),
+      );
+    },
+  );
+}
 ```
 
 - Let's see the effect

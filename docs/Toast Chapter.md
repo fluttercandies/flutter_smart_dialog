@@ -2,35 +2,52 @@
 
 ## The particularity of toast
 
-Strictly speaking, toast is a very special dialog, I think it should have the following characteristics
+Strictly speaking, toast is a very special pop-up window, I think it should have the following characteristics
 
 > **Toast messages should be displayed one by one, and subsequent messages should not top off the previous toast**
 
-- This is a pit point. If the frame is not processed inside, it is easy to cause the back toast to directly top off the front toast.
+- This is a pit. If the inside of the frame is not processed, it is easy to cause the toast in the back to directly top off the toast in the front
+  - Of course, the type parameter is provided internally, you can choose the display logic you want
 
-![toastOne](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092214.gif)
 
-> **Displayed on the top level of the page, should not be blocked by some other dialog**
+![toastOne](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103225022.gif)
 
-- You can find layouts such as loading and dialog masks, none of which obscures the toast information
+> **Displayed on the top layer of the page, should not be blocked by some pop-up windows and the like**
 
-![toastTwo](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092219.gif)
+- It can be found that the layout of loading and dialog masks, etc., do not block the toast information
 
-> **Handle the occlusion of the keyboard**
+![toastTwo](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103225028.gif)
 
-- The keyboard is a bit tricky, it will directly obscure all layouts
-  - when the keyboard is awakened, toast will dynamically adjust the distance between itself and the bottom of the screen
-- This will have the effect that the keyboard will not block the toast
+> **Handle the keyboard occlusion situation**
+
+- The keyboard is a bit pitted, it will directly block all layouts, and it can only save the country with curves
+  - A special treatment is made here, when the keyboard is invoked, the toast will dynamically adjust the distance between itself and the bottom of the screen
+  - This will play a role, the keyboard will not block the toast effect
 
 ![toastSmart](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092228.gif)
 
 ## Custom Toast
 
-- First, a custom toast
+> **Parameter description**
 
-```dart
+Some parameters of toast are not exposed, only msg is exposed
+
+- For example: toast font size, font color, toast background color, etc., no parameters are provided
+  - First, I feel that providing these parameters will make the overall parameter input very large, and the random flowers will gradually enter the charming eyes.
+  - The second is that even if I provide a lot of parameters, it may not meet those strange aesthetics and needs
+- Based on the above considerations, I directly provided a large number of low-level parameters
+  - You can customize the toast as you like
+    - Note, not only toast can be customized, such as: success prompt, failure prompt, warning prompt, etc.
+    - Toast has done a lot of optimization, the `displayType` parameter allows you to have a variety of display logic, use your imagination
+  - Note: the `builder` parameter is used, the `msg` parameter will be invalid
+
+> **More powerful custom toast**
+
+- First, a whole custom toast
+
+````dart
 class CustomToast extends StatelessWidget {
-  const CustomToast(this.msg, {Key? key}): super(key: key);
+  const CustomToast(this.msg, {Key? key}) : super(key: key);
 
   final String msg;
 
@@ -68,13 +85,13 @@ class CustomToast extends StatelessWidget {
     );
   }
 }
-```
+````
 
 - use
 
-```dart
-SmartDialog.showToast('', widget: CustomToast('custom toast'));
-```
+````dart
+SmartDialog.showToast('', builder: (_) => CustomToast('custom toast'));
+````
 
 - Effect
 
