@@ -290,7 +290,7 @@ This time, the function of highlighting a specific area of the mask has been add
 ````dart
 SmartDialog.showAttach(
   targetContext: context,
-  alignmentTemp: Alignment.bottomCenter,
+  alignment: Alignment.bottomCenter,
   highlightBuilder: (Offset targetOffset, Size targetSize) {
     return Positioned(
       top: targetOffset.dy - 10,
