@@ -6,7 +6,7 @@
 
 ![image-20211031221419600](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224824.png)
 
-- alignmentTemp: If this parameter is set differently, the animation effect will be different
+- alignment: If this parameter is set differently, the animation effect will be different
 
 ````dart
 void _dialogLocation() async {
