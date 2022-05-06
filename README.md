@@ -66,7 +66,7 @@ SmartDialog's showLoading and showToast provide a default style. Of course, cust
 
 - SmartDialog custom Loading or Toast is very simple: However, when using it, it may make you feel a little troublesome
 - for example
-  - Use custom Loading: `SmartDialog.showLoading(builder: () => CustomLoadingWidget);`
+  - Use custom Loading: `SmartDialog.showLoading(builder: (_) => CustomLoadingWidget);`
   - The effect we want must be like this:  `SmartDialog.showLoading();`
 - In view of the above considerations, I added the function of setting custom default Loading and Toast styles at the entrance
 
