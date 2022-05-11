@@ -30,23 +30,33 @@ class RouteRecord {
   }
 
   bool handleSmartDialog() {
-    bool handleSystemPage = false;
+    bool shouldHandle = true;
     try {
-      if (routeQueue.isEmpty || DialogProxy.instance.dialogQueue.isEmpty) {
-        if (routeQueue.isNotEmpty) routeQueue.clear();
-        handleSystemPage = false;
-      } else {
-        var route = routeQueue.last;
-        var dialog = DialogProxy.instance.dialogQueue.last;
+      //handle loading
+      if (SmartDialog.config.isExistLoading) {
+        return true;
+      }
 
-        if (dialog.useSystem && route.settings.name != SmartTag.systemDialog) {
-          handleSystemPage = true;
+      //handle dialog
+      if (DialogProxy.instance.dialogQueue.isEmpty) {
+        if (routeQueue.isNotEmpty) routeQueue.clear();
+        shouldHandle = false;
+      } else {
+        var info = DialogProxy.instance.dialogQueue.last;
+
+        //deal with system dialog
+        if (routeQueue.isNotEmpty) {
+          var route = routeQueue.last;
+          if (info.useSystem && route.settings.name != SmartTag.systemDialog) {
+            shouldHandle = false;
+          }
         }
       }
     } catch (e) {
+      shouldHandle = false;
       print('SmartDialog back event error:${e.toString()}');
     }
 
-    return SmartDialog.config.isExist && !handleSystemPage;
+    return shouldHandle;
   }
 }

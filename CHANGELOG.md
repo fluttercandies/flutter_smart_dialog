@@ -6,6 +6,7 @@
 - Fix [#42](https://github.com/fluttercandies/flutter_smart_dialog/issues/42)
 - Fix [#34](https://github.com/fluttercandies/flutter_smart_dialog/issues/41) [#41](https://github.com/fluttercandies/flutter_smart_dialog/issues/34)
 - Add SmartStatus.allToast
+- Fix back event cannot close loading
 
 # [3.3.x]
 
