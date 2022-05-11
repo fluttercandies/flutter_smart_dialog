@@ -188,7 +188,7 @@ class DialogProxy {
     required bool debounce,
     required SmartToastType displayType,
     required Widget widget,
-  }) async {
+  }) {
     return _toast.showToast(
       alignment: alignment,
       clickMaskDismiss: clickMaskDismiss,

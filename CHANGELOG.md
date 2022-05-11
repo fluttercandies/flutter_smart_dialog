@@ -1,5 +1,10 @@
 # [4.0.x]
 
+- Fix [#53](https://github.com/fluttercandies/flutter_smart_dialog/issues/53)
+- Fix back event cannot close loading
+
+# [4.0.0]
+
 - Breaking Change!!! migrate doc: [3.x migrate 4.0](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/3.x%20migrate%204.0.md) | [3.x 迁移 4.0](https://juejin.cn/post/7093867453012246565)
 - Major update
 - Subdivided 'config', can control 'show', 'showAttach', 'showLoading', 'showToast' in more detail
@@ -9,6 +14,7 @@
 - The interval time that can be added between successive displays of toasts
 - Loading can set the least loading time
 - Add click listener for dialog mask
+
 
 # [3.4.x]
 

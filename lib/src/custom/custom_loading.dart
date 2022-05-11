@@ -23,7 +23,7 @@ class CustomLoading extends BaseDialog {
     required Color maskColor,
     required Widget? maskWidget,
     required bool backDismiss,
-  }) async {
+  }) {
     DialogProxy.instance.loadingBackDismiss = backDismiss;
     SmartDialog.config.loading.isExist = true;
 

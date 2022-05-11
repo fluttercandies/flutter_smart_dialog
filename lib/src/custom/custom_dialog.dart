@@ -5,6 +5,7 @@ import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
+import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
 import '../config/enum_config.dart';
@@ -215,10 +216,12 @@ class CustomDialog extends BaseDialog {
       proxy.dialogQueue.addLast(dialogInfo);
     }
     // insert the dialog carrier into the page
-    Overlay.of(DialogProxy.contextOverlay)!.insert(
-      overlayEntry,
-      below: proxy.entryLoading,
-    );
+    ViewUtils.addRouteSafeUse(() {
+      Overlay.of(DialogProxy.contextOverlay)!.insert(
+        overlayEntry,
+        below: proxy.entryLoading,
+      );
+    });
   }
 
   bool _checkDebounce(bool debounce, DialogType type) {

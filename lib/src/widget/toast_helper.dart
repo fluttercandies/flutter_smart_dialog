@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 
 class ToastHelper extends StatefulWidget {
   ToastHelper({
@@ -49,7 +50,7 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
   }
 
   void _dealKeyboard() {
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    ViewUtils.addPostFrameCallback((_) {
       if (!mounted) return;
       _keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
       setState(() {});

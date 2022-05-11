@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/navigator_observer.dart';
+import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_widget.dart';
 
 import 'helper/dialog_proxy.dart';
@@ -71,7 +72,7 @@ class FlutterSmartDialog extends StatefulWidget {
 class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
   @override
   void initState() {
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    ViewUtils.addPostFrameCallback((timeStamp) {
       try {
         var navigator = widget.child as Navigator;
         var key = navigator.key as GlobalKey;

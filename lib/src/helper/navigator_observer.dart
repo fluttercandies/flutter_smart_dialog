@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/config/enum_config.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
+import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 
 import '../custom/custom_dialog.dart';
 import '../smart_dialog.dart';
@@ -12,6 +14,8 @@ class SmartNavigatorObserver extends NavigatorObserver {
     DialogProxy.contextNavigator ??= navigator?.context;
     RouteRecord.instance.push(route, previousRoute);
     RouteRecord.curRoute = route;
+
+    ViewUtils.routeSafeUse = false;
   }
 
   @override

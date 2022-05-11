@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/location.dart';
+import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 
 import '../config/enum_config.dart';
 
@@ -120,7 +121,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       targetOffset = widget.target!;
       targetSize = Size.zero;
     }
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    ViewUtils.addPostFrameCallback((timeStamp) {
       if (mounted) _handleAnimatedAndLocation();
     });
     _axis = Axis.vertical;
