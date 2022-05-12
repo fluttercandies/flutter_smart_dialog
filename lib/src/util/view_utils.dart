@@ -17,6 +17,6 @@ class ViewUtils {
   }
 
   static void addPostFrameCallback(FrameCallback callback) {
-    WidgetsBinding.instance?.addPostFrameCallback(callback);
+    WidgetsBinding.instance.addPostFrameCallback(callback);
   }
 }

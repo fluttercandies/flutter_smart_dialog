@@ -1,4 +1,8 @@
-# [4.0.x]
+# [4.1.x]
+
+- Adapt to flutter 3
+
+# [4.0.1]
 
 - Fix [#53](https://github.com/fluttercandies/flutter_smart_dialog/issues/53)
 - Fix back event cannot close loading
