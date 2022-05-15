@@ -1,3 +1,7 @@
+# [3.5.x]
+
+- Fix [#47](https://github.com/fluttercandies/flutter_smart_dialog/issues/47)
+
 # [3.4.x]
 
 - 'showToast' add 'consumeEvent' param: [#27](https://github.com/fluttercandies/flutter_smart_dialog/issues/27)

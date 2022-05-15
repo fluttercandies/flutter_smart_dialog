@@ -22,7 +22,6 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsFlutterBinding.ensureInitialized();
     WidgetsBinding.instance?.addObserver(this);
     _dealKeyboard();
   }
