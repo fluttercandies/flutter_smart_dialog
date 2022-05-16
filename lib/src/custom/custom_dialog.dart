@@ -216,7 +216,7 @@ class CustomDialog extends BaseDialog {
       proxy.dialogQueue.addLast(dialogInfo);
     }
     // insert the dialog carrier into the page
-    ViewUtils.addRouteSafeUse(() {
+    ViewUtils.addSafeUse(() {
       Overlay.of(DialogProxy.contextOverlay)!.insert(
         overlayEntry,
         below: proxy.entryLoading,

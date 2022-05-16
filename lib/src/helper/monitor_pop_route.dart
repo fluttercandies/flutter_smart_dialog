@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
+import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 
 import '../config/enum_config.dart';
 
@@ -16,7 +17,7 @@ class MonitorPopRoute with WidgetsBindingObserver {
   MonitorPopRoute._() {
     WidgetsFlutterBinding.ensureInitialized();
     //to prevent ensureInitialized changes, still use WidgetsBinding.instance
-    WidgetsBinding.instance.addObserver(this);
+    widgetsBinding.addObserver(this);
   }
 
   @override

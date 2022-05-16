@@ -105,7 +105,7 @@ class MainDialog {
     required VoidCallback? onDismiss,
     required bool useSystem,
   }) {
-    ViewUtils.addRouteSafeUse(() {
+    ViewUtils.addSafeUse(() {
       _onDismiss = onDismiss;
 
       if (useSystem && DialogProxy.contextNavigator != null) {

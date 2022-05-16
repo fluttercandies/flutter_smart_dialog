@@ -23,7 +23,7 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    widgetsBinding.addObserver(this);
     _dealKeyboard();
   }
 
@@ -45,7 +45,7 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    widgetsBinding.removeObserver(this);
     super.dispose();
   }
 

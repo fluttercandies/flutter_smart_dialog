@@ -4,19 +4,18 @@ import 'package:flutter/scheduler.dart';
 class ViewUtils {
   static bool routeSafeUse = false;
 
-  static void addRouteSafeUse(VoidCallback callback) async {
-    if (routeSafeUse) {
+  static void addSafeUse(VoidCallback callback) {
+    var schedulerPhase = SchedulerBinding.instance.schedulerPhase;
+    if (schedulerPhase == SchedulerPhase.persistentCallbacks) {
+      ViewUtils.addPostFrameCallback((timeStamp) => callback());
+    } else {
       callback();
-      return;
     }
-
-    ViewUtils.addPostFrameCallback((timeStamp) {
-      routeSafeUse = true;
-      callback();
-    });
   }
 
   static void addPostFrameCallback(FrameCallback callback) {
-    WidgetsBinding.instance.addPostFrameCallback(callback);
+    widgetsBinding.addPostFrameCallback(callback);
   }
 }
+
+WidgetsBinding get widgetsBinding => WidgetsBinding.instance;
