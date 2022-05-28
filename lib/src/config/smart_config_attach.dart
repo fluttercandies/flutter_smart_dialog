@@ -19,6 +19,7 @@ class SmartConfigAttach {
     this.debounceTime = const Duration(milliseconds: 300),
     this.backDismiss = true,
     this.bindPage = true,
+    this.awaitOverType = SmartAwaitOverType.dialogDismiss,
     this.isExist = false,
   });
 
@@ -113,6 +114,11 @@ class SmartConfigAttach {
   /// 将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
   /// 绑定页面被关闭,被绑定在该页面上的dialog也将被移除
   final bool bindPage;
+
+  /// The type of dialog await ending
+  ///
+  /// 弹窗await结束的类型
+  final SmartAwaitOverType awaitOverType;
 
   /// whether attach dialog(showAttach()) exist on the screen
   ///

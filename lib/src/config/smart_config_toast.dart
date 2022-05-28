@@ -21,6 +21,7 @@ class SmartConfigToast {
     this.consumeEvent = false,
     this.displayTime = const Duration(milliseconds: 2000),
     this.intervalTime = const Duration(milliseconds: 100),
+    this.awaitOverType = SmartAwaitOverType.dialogDismiss,
     this.isExist = false,
   });
 
@@ -119,6 +120,11 @@ class SmartConfigToast {
   ///
   /// 多个toast连续显示,每个toast之间显示的间隔时间
   final Duration intervalTime;
+
+  /// The type of dialog await ending
+  ///
+  /// 弹窗await结束的类型
+  final SmartAwaitOverType awaitOverType;
 
   /// whether toast(showToast()) exist on the screen
   ///

@@ -1,4 +1,3 @@
-
 enum SmartStatus {
   /// close single dialog：loading（showToast），custom（show）or attach（showAttach）
   ///
@@ -92,4 +91,24 @@ enum SmartAnimationType {
 
   /// 中间位置的为渐隐动画, 其他位置为位移缩放动画
   centerFadeAndOtherScale
+}
+
+/// The type of dialog await ending
+///
+/// 弹窗await结束的类型
+enum SmartAwaitOverType {
+  /// The moment when the dialog is completely closed
+  ///
+  /// dialog完全关闭的时刻
+  dialogDismiss,
+
+  /// The moment when the pop-up window fully appears (when the start animation of the dialog appears)
+  ///
+  /// 弹窗完全出现时刻(弹窗出现的开始动画结束时)
+  dialogAppear,
+
+  /// await ends after 10 milliseconds
+  ///
+  /// await 10毫秒后结束
+  none
 }

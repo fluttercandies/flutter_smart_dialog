@@ -23,6 +23,7 @@ class MainDialog {
   Completer? _completer;
   VoidCallback? _onDismiss;
   Widget _widget;
+  SmartAwaitOverType _awaitOverType = SmartAwaitOverType.dialogDismiss;
 
   Future<T?> show<T>({
     required Widget widget,
@@ -37,6 +38,7 @@ class MainDialog {
     required VoidCallback? onDismiss,
     required bool useSystem,
     required bool reuse,
+    required SmartAwaitOverType awaitOverType,
   }) {
     //custom dialog
     _widget = SmartDialogWidget(
@@ -53,7 +55,12 @@ class MainDialog {
       onMask: onMask,
     );
 
-    _handleCommonOperate(onDismiss: onDismiss, useSystem: useSystem);
+    _handleCommonOperate(
+      animationTime: animationTime,
+      onDismiss: onDismiss,
+      useSystem: useSystem,
+      awaitOverType: awaitOverType,
+    );
 
     //wait dialog dismiss
     var completer = _completer = Completer<T>();
@@ -75,6 +82,7 @@ class MainDialog {
     required VoidCallback onMask,
     required VoidCallback? onDismiss,
     required bool useSystem,
+    required SmartAwaitOverType awaitOverType,
   }) {
     //attach dialog
     _widget = AttachDialogWidget(
@@ -94,7 +102,12 @@ class MainDialog {
       onMask: onMask,
     );
 
-    _handleCommonOperate(onDismiss: onDismiss, useSystem: useSystem);
+    _handleCommonOperate(
+      animationTime: animationTime,
+      onDismiss: onDismiss,
+      useSystem: useSystem,
+      awaitOverType: awaitOverType,
+    );
 
     //wait dialog dismiss
     var completer = _completer = Completer<T>();
@@ -102,9 +115,23 @@ class MainDialog {
   }
 
   void _handleCommonOperate({
+    required Duration animationTime,
     required VoidCallback? onDismiss,
     required bool useSystem,
+    required SmartAwaitOverType awaitOverType,
   }) {
+    _awaitOverType = awaitOverType;
+
+    //SmartAwaitOverType.none
+    Future.delayed(const Duration(milliseconds: 10), () {
+      _handleAwaitOver(awaitOverType: SmartAwaitOverType.none);
+    });
+
+    //SmartAwaitOverType.dialogAppear
+    Future.delayed(animationTime, () {
+      _handleAwaitOver(awaitOverType: SmartAwaitOverType.dialogAppear);
+    });
+
     ViewUtils.addSafeUse(() {
       _onDismiss = onDismiss;
 
@@ -126,6 +153,19 @@ class MainDialog {
     });
   }
 
+  void _handleAwaitOver<T>({
+    required SmartAwaitOverType awaitOverType,
+    T? result,
+  }) {
+    if (awaitOverType == _awaitOverType) {
+      if (!(_completer?.isCompleted ?? true)) _completer?.complete(result);
+    } else if (awaitOverType == _awaitOverType) {
+      if (!(_completer?.isCompleted ?? true)) _completer?.complete(result);
+    } else if (awaitOverType == _awaitOverType) {
+      if (!(_completer?.isCompleted ?? true)) _completer?.complete(result);
+    }
+  }
+
   Future<void> dismiss<T>({
     bool useSystem = false,
     T? result,
@@ -145,7 +185,10 @@ class MainDialog {
     }
 
     //end waiting
-    if (!(_completer?.isCompleted ?? true)) _completer?.complete(result);
+    _handleAwaitOver<T>(
+      awaitOverType: SmartAwaitOverType.dialogDismiss,
+      result: result,
+    );
   }
 
   Widget getWidget() => Offstage(offstage: offstage, child: _widget);

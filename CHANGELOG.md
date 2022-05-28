@@ -1,6 +1,7 @@
 # [4.3.x]
 
 - Adapt to flutter 3
+- Add SmartAwaitOverType
 
 # [4.0.1]
 

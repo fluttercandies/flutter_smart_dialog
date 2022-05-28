@@ -48,6 +48,7 @@ class CustomLoading extends BaseDialog {
       onDismiss: null,
       useSystem: false,
       reuse: true,
+      awaitOverType: SmartDialog.config.loading.awaitOverType,
       onMask: () => clickMaskDismiss ? _realDismiss() : null,
     );
   }

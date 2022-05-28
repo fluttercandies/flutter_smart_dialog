@@ -17,6 +17,7 @@ class SmartConfigLoading {
     this.backDismiss = true,
     this.clickMaskDismiss = false,
     this.leastLoadingTime = const Duration(milliseconds: 0),
+    this.awaitOverType = SmartAwaitOverType.dialogDismiss,
     this.isExist = false,
   });
 
@@ -98,6 +99,11 @@ class SmartConfigLoading {
   ///
   /// 最小加载时间: 如果该参数设置为1秒, showLoading()之后立马调用dismiss(), loading不会立马关闭, 会在加载时间达到1秒的时候关闭
   final Duration leastLoadingTime;
+
+  /// The type of dialog await ending
+  ///
+  /// 弹窗await结束的类型
+  final SmartAwaitOverType awaitOverType;
 
   /// whether loading(showLoading()) exist on the screen
   ///
