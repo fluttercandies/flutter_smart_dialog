@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-void main() => runApp(MaterialApp(
-  home: SmartDialogPage(),
-  navigatorObservers: [FlutterSmartDialog.observer],
-  builder: FlutterSmartDialog.init(),
-));
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override

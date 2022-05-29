@@ -138,7 +138,14 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   @override
   Widget build(BuildContext context) {
-    var child = Opacity(opacity: _postFrameOpacity, child: widget.child);
+    //CustomSingleChildLayout 和 SizeTransition 占位面积冲突
+    //使用SizeTransition位移动画，不适合使用CustomSingleChildLayout
+    //也可使用该方式获取子控件大小
+    var child = Builder(builder: (context) {
+      _childContext = context;
+      return Opacity(opacity: _postFrameOpacity, child: widget.child);
+    });
+
     return Stack(children: [
       //暗色背景widget动画
       _buildBgAnimation(
@@ -166,22 +173,6 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
                       widget.highlightBuilder(targetOffset, targetSize)
                     ]),
                   ),
-      ),
-
-      //CustomSingleChildLayout 和 SizeTransition 占位面积冲突
-      //使用SizeTransition位移动画，不适合使用CustomSingleChildLayout
-      //只能使用折中的方式获取子控件大小
-      Positioned(
-        left: _targetRect?.left,
-        right: _targetRect?.right,
-        top: _targetRect?.top,
-        bottom: _targetRect?.bottom,
-        child: Center(
-          child: Builder(builder: (context) {
-            _childContext = context;
-            return Opacity(opacity: 0, child: widget.child);
-          }),
-        ),
       ),
 
       //内容Widget动画
@@ -285,7 +276,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       );
     }
 
-    //第一帧后恢复透明度
+    //第一帧后恢复透明度,同时重置位置信息
     _postFrameOpacity = 1;
     setState(() {});
   }
