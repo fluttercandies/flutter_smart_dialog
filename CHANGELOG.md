@@ -2,11 +2,16 @@
 
 - Adapt to flutter 3
 - Add SmartAwaitOverType
+- Fix [#56](https://github.com/fluttercandies/flutter_smart_dialog/issues/56)
+- Fix [#60](https://github.com/fluttercandies/flutter_smart_dialog/issues/60)
 
-# [4.0.1]
+# [4.0.3]
 
 - Fix [#53](https://github.com/fluttercandies/flutter_smart_dialog/issues/53)
 - Fix back event cannot close loading
+- Add SmartAwaitOverType
+- Fix [#56](https://github.com/fluttercandies/flutter_smart_dialog/issues/56)
+- Fix [#60](https://github.com/fluttercandies/flutter_smart_dialog/issues/60)
 
 # [4.0.0]
 
