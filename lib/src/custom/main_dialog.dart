@@ -159,10 +159,6 @@ class MainDialog {
   }) {
     if (awaitOverType == _awaitOverType) {
       if (!(_completer?.isCompleted ?? true)) _completer?.complete(result);
-    } else if (awaitOverType == _awaitOverType) {
-      if (!(_completer?.isCompleted ?? true)) _completer?.complete(result);
-    } else if (awaitOverType == _awaitOverType) {
-      if (!(_completer?.isCompleted ?? true)) _completer?.complete(result);
     }
   }
 
