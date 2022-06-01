@@ -102,7 +102,7 @@ enum SmartAwaitOverType {
   /// dialog完全关闭的时刻
   dialogDismiss,
 
-  /// The moment when the pop-up window fully appears (when the start animation of the dialog appears)
+  /// The moment when the dialog fully appears (when the start animation of the dialog appears)
   ///
   /// 弹窗完全出现时刻(弹窗出现的开始动画结束时)
   dialogAppear,
