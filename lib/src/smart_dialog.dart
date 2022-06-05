@@ -7,6 +7,7 @@ import 'config/smart_config.dart';
 import 'config/enum_config.dart';
 import 'helper/dialog_proxy.dart';
 import 'widget/attach_dialog_widget.dart';
+import 'widget/dialog_scope.dart';
 
 class SmartDialog {
   /// Compatible with older versions
@@ -22,6 +23,8 @@ class SmartDialog {
   /// custom dialog
   ///
   /// [builder]：the custom dialog
+  ///
+  /// [controller]：this controller can be used to refresh the layout of the custom dialog
   ///
   /// [alignment]：control the location of the dialog
   ///
@@ -71,6 +74,8 @@ class SmartDialog {
   ///
   /// [builder]：自定义 dialog
   ///
+  /// [controller]：可使用该控制器来刷新自定义的dialog的布局
+  ///
   /// [alignment]：控制弹窗的位置
   ///
   /// [clickMaskDismiss]：true（点击遮罩后，将关闭dialog），false（不关闭）
@@ -111,6 +116,7 @@ class SmartDialog {
   /// 绑定页面被关闭,被绑定在该页面上的dialog也将被移除
   static Future<T?> show<T>({
     required WidgetBuilder builder,
+    SmartDialogController? controller,
     AlignmentGeometry? alignment,
     bool? clickMaskDismiss,
     bool? usePenetrate,
@@ -143,7 +149,10 @@ class SmartDialog {
     );
 
     return DialogProxy.instance.show<T>(
-      widget: Builder(builder: (context) => builder(context)),
+      widget: DialogScope(
+        controller: controller,
+        builder: (context) => builder(context),
+      ),
       alignment: alignment ?? config.custom.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.custom.clickMaskDismiss,
       animationType: animationType ?? config.custom.animationType,
@@ -169,6 +178,8 @@ class SmartDialog {
   /// [targetContext]：BuildContext with target widget
   ///
   /// [builder]：the custom dialog
+  ///
+  /// [controller]：this controller can be used to refresh the layout of the custom dialog
   ///
   /// [target]：target offset，when the target is set to value，
   /// the targetContext param will be invalid
@@ -226,6 +237,8 @@ class SmartDialog {
   ///
   /// [builder]：自定义 dialog
   ///
+  /// [controller]：可使用该控制器来刷新自定义的dialog的布局
+  ///
   /// [target]：target offset，当target被设置数据，targetContext参数将失效
   ///
   /// [alignment]：控制弹窗的位置
@@ -271,6 +284,7 @@ class SmartDialog {
   static Future<T?> showAttach<T>({
     required BuildContext? targetContext,
     required WidgetBuilder builder,
+    SmartDialogController? controller,
     Offset? target,
     AlignmentGeometry? alignment,
     bool? clickMaskDismiss,
@@ -311,7 +325,10 @@ class SmartDialog {
     var highlight = highlightBuilder;
     return DialogProxy.instance.showAttach<T>(
       targetContext: targetContext,
-      widget: Builder(builder: (context) => builder(context)),
+      widget: DialogScope(
+        controller: controller,
+        builder: (context) => builder(context),
+      ),
       target: target,
       alignment: alignment ?? config.attach.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.attach.clickMaskDismiss,
@@ -337,6 +354,8 @@ class SmartDialog {
   /// loading dialog
   ///
   /// [msg]：loading msg (Use the [builder] param, this param will be invalid)
+  ///
+  /// [controller]：this controller can be used to refresh the layout of the custom loading
   ///
   /// [clickMaskDismiss]：true（loading will be closed after click mask），false（not close）
   ///
@@ -364,6 +383,8 @@ class SmartDialog {
   ///
   /// [msg]：loading 的信息（使用[builder]参数，该参数将失效）
   ///
+  /// [controller]：可使用该控制器来刷新自定义的loading的布局
+  ///
   /// [clickMaskDismiss]：true（点击遮罩后，将关闭loading），false（不关闭）
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
@@ -384,6 +405,7 @@ class SmartDialog {
   /// [builder]：自定义loading
   static Future<T?> showLoading<T>({
     String msg = 'loading...',
+    SmartDialogController? controller,
     bool? clickMaskDismiss,
     SmartAnimationType? animationType,
     bool? usePenetrate,
@@ -404,7 +426,10 @@ class SmartDialog {
       maskWidget: maskWidget ?? config.loading.maskWidget,
       backDismiss: backDismiss ?? config.loading.backDismiss,
       widget: builder != null
-          ? Builder(builder: (context) => builder(context))
+          ? DialogScope(
+              controller: controller,
+              builder: (context) => builder(context),
+            )
           : DialogProxy.instance.loadingBuilder(msg),
     );
   }
@@ -412,6 +437,8 @@ class SmartDialog {
   /// toast message
   ///
   /// [msg]：msg presented to users (Use the [builder] param to customize the toast, this param will be invalid)
+  ///
+  ///  [controller]：this controller can be used to refresh the layout of the custom toast
   ///
   /// [displayTime]：toast display time on the screen
   ///
@@ -447,6 +474,8 @@ class SmartDialog {
   ///
   /// [msg]：呈现给用户的信息（使用[builder]参数自定义toast，该参数将失效）
   ///
+  /// [controller]：可使用该控制器来刷新自定义的toast的布局
+  ///
   /// [displayTime]：toast在屏幕上的显示时间
   ///
   /// [alignment]：控制弹窗的位置
@@ -474,6 +503,7 @@ class SmartDialog {
   /// [builder]：自定义toast
   static Future<void> showToast(
     String msg, {
+    SmartDialogController? controller,
     Duration? displayTime,
     AlignmentGeometry? alignment,
     bool? clickMaskDismiss,
@@ -502,7 +532,10 @@ class SmartDialog {
       displayType: displayType ?? config.toast.displayType,
       consumeEvent: consumeEvent ?? config.toast.consumeEvent,
       widget: builder != null
-          ? Builder(builder: (context) => builder(context))
+          ? DialogScope(
+              controller: controller,
+              builder: (context) => builder(context),
+            )
           : DialogProxy.instance.toastBuilder(msg),
     );
   }

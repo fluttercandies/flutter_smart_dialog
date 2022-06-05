@@ -314,13 +314,13 @@ SmartDialog.showAttach(
 
 The above two business scenarios are very common. Sometimes, we need to be above or below the target widget or a specific area without being covered by a mask.
 
-If you do it yourself, you can do it, but it will be cumbersome; now you can easily achieve this using the `highlight` parameter in `showAttach`
+If you do it yourself, you can do it, but it will be cumbersome; now you can easily achieve this using the `highlightBuilder` parameter in `showAttach`
 
 > **Guide Actions**
 
 Guidance operations are still very common in apps, and you need to specify the area to highlight, and then introduce its functions
 
-- Using the `highlight` parameter in `showAttach` can also easily achieve this requirement, see the effect
+- Using the `highlightBuilder` parameter in `showAttach` can also easily achieve this requirement, see the effect
   - The code is also a little bit more, if you are interested, please check: [flutter_use](https://github.com/xdd666t/flutter_use)
 
 ![attachGuide](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224816.gif)

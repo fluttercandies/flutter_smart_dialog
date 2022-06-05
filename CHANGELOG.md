@@ -4,6 +4,7 @@
 - Add SmartAwaitOverType
 - Fix [#56](https://github.com/fluttercandies/flutter_smart_dialog/issues/56)
 - Fix [#60](https://github.com/fluttercandies/flutter_smart_dialog/issues/60)
+- Add SmartDialogController
 
 # [4.0.3]
 
