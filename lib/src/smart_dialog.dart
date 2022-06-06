@@ -110,7 +110,7 @@ class SmartDialog {
   /// 框架内部各种兜底操作(返回事件,路由)无法关闭永久化dialog, 需要关闭此类dialog可使用: dismiss(force: true)
   ///
   /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效; [tag], [keepSingle], [permanent]和[bindPage]禁止使用），
-  /// false（使用SmartDialog），使用此改参数可使SmartDialog, 与路由页面以及flutter自带dialog合理交互
+  /// false（使用SmartDialog），使用该参数可使SmartDialog, 与路由页面以及flutter自带dialog合理交互
   ///
   /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
   /// 绑定页面被关闭,被绑定在该页面上的dialog也将被移除
@@ -277,7 +277,7 @@ class SmartDialog {
   /// 框架内部各种兜底操作(返回事件,路由)无法关闭永久化dialog, 需要关闭此类dialog可使用: dismiss(force: true)
   ///
   /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效; [tag], [keepSingle], [permanent]和[bindPage]禁止使用），
-  /// false（使用SmartDialog），使用此改参数可使SmartDialog, 与路由页面以及flutter自带dialog合理交互
+  /// false（使用SmartDialog），使用该参数可使SmartDialog, 与路由页面以及flutter自带dialog合理交互
   ///
   /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
   /// 绑定页面被关闭,被绑定在该页面上的dialog也将被移除
