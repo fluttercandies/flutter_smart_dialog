@@ -79,18 +79,25 @@ enum SmartToastType {
 ///
 /// 可给弹窗(出现和消失)设置不同的动画类型
 enum SmartAnimationType {
-  /// FadeTransition
+  /// FadeTransition for all positions
   ///
-  /// 渐隐动画
+  /// 全部位置都为渐隐动画
   fade,
 
-  /// SizeTransition
+  /// All positions are ScaleTransition
   ///
-  /// 缩放动画
+  /// 全部位置都为缩放动画
   scale,
 
-  /// 中间位置的为渐隐动画, 其他位置为位移缩放动画
-  centerFadeAndOtherScale
+  /// The center position is the FadeTransition, and the other positions are the SlideTransition
+  ///
+  /// 中间位置的为渐隐动画, 其他位置为位移动画
+  centerFade_otherSlide,
+
+  /// The center position is the ScaleTransition, and the other positions are the SlideTransition
+  ///
+  /// 中间位置的为缩放, 其他位置为位移动画
+  centerScale_otherSlide,
 }
 
 /// The type of dialog await ending

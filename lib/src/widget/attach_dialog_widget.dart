@@ -25,6 +25,7 @@ class AttachDialogWidget extends StatefulWidget {
     required this.alignment,
     required this.usePenetrate,
     required this.animationType,
+    required this.scalePoint,
     required this.maskColor,
     required this.highlightBuilder,
     required this.maskWidget,
@@ -60,6 +61,9 @@ class AttachDialogWidget extends StatefulWidget {
   /// 仅仅针对中间位置的控件
   final SmartAnimationType animationType;
 
+  /// 缩放动画的缩放点
+  final Offset? scalePoint;
+
   /// 遮罩颜色
   final Color maskColor;
 
@@ -81,6 +85,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   //target info
   RectInfo? _targetRect;
   BuildContext? _childContext;
+  Alignment? _scaleAlignment;
   late Axis _axis;
   late double _postFrameOpacity;
 
@@ -202,29 +207,57 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   Widget _buildBodyAnimation(Widget child) {
     var animation = CurvedAnimation(parent: _ctrlBody, curve: Curves.linear);
-    var transition = widget.alignment == Alignment.center
-        //中间弹窗动画使用缩放
-        ? ScaleTransition(scale: animation, child: child)
-        //其它的都使用位移动画
-        : SizeTransition(axis: _axis, sizeFactor: _ctrlBody, child: child);
+    var type = widget.animationType;
+    Widget animationWidget = FadeTransition(opacity: animation, child: child);
 
-    bool useFade = (widget.animationType == SmartAnimationType.fade) ||
-        (widget.animationType == SmartAnimationType.centerFadeAndOtherScale &&
-            widget.alignment == Alignment.center);
-    return useFade
-        ? FadeTransition(opacity: animation, child: child)
-        : transition;
+    //select different animation
+    if (type == SmartAnimationType.fade) {
+      animationWidget = FadeTransition(opacity: animation, child: child);
+    } else if (type == SmartAnimationType.scale) {
+      animationWidget = ScaleTransition(
+        alignment: _scaleAlignment ?? Alignment(0, 0),
+        scale: animation,
+        child: child,
+      );
+    } else if (type == SmartAnimationType.centerFade_otherSlide) {
+      if (widget.alignment == Alignment.center) {
+        animationWidget = FadeTransition(opacity: animation, child: child);
+      } else {
+        animationWidget = SizeTransition(
+          axis: _axis,
+          sizeFactor: _ctrlBody,
+          child: child,
+        );
+      }
+    } else if (type == SmartAnimationType.centerScale_otherSlide) {
+      if (widget.alignment == Alignment.center) {
+        animationWidget = ScaleTransition(
+          alignment: _scaleAlignment ?? Alignment(0, 0),
+          scale: animation,
+          child: child,
+        );
+      } else {
+        animationWidget = SizeTransition(
+          axis: _axis,
+          sizeFactor: _ctrlBody,
+          child: child,
+        );
+      }
+    }
+
+    return animationWidget;
   }
 
-  ///处理下动画方向及其位置
+  /// 处理: 动画方向及其位置, 缩放动画的缩放点
   void _handleAnimatedAndLocation() {
+    final childSize = (_childContext!.findRenderObject() as RenderBox).size;
+
+    //动画方向及其位置
     _axis = Axis.vertical;
     final alignment = widget.alignment;
     var offset = targetOffset;
     var size = targetSize;
     final screen = MediaQuery.of(context).size;
-    final childSize = (_childContext!.findRenderObject() as RenderBox).size;
-
     if (alignment == Alignment.topLeft) {
       _targetRect = RectInfo(
         bottom: screen.height - offset.dy,
@@ -274,6 +307,17 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
         right: max(
             screen.width - (offset.dx + size.width + childSize.width / 2), 0),
       );
+    }
+
+    //缩放动画的缩放点
+    if (widget.scalePoint != null) {
+      var halfWidth = childSize.width / 2;
+      var halfHeight = childSize.height / 2;
+      var scaleDx = widget.scalePoint!.dx;
+      var scaleDy = widget.scalePoint!.dy;
+      var rateX = (scaleDx - halfWidth) / halfWidth;
+      var rateY = (scaleDy - halfHeight) / halfHeight;
+      _scaleAlignment = Alignment(rateX, rateY);
     }
 
     //第一帧后恢复透明度,同时重置位置信息

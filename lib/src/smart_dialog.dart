@@ -190,6 +190,12 @@ class SmartDialog {
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///
+  /// [scalePoint]：he zoom point of the zoom animation, the default point is the center point of the attach widget as the zoom point;
+  /// Offset(0, 0): Use the upper left point of the control as the zoom point,
+  /// Offset(attach widget width, 0): Use the upper right point of the control as the zoom point
+  /// Offset(0, attach widget height): use the lower left point of the control as the zoom point,
+  /// Offset (attach widget width, attach widget height): use the lower right point of the control as the zoom point
+  ///
   /// [usePenetrate]：true（the click event will penetrate mask），false（not penetration）
   ///
   /// [useAnimation]：true（use the animation），false（not use）
@@ -247,6 +253,10 @@ class SmartDialog {
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
+  /// [scalePoint]：缩放动画的缩放点, 默认点将自定义dialog控件的中心点作为缩放点;
+  /// Offset(0, 0): 将控件左上点作为缩放点, Offset(控件宽度, 0): 将控件右上点作为缩放点
+  /// Offset(0, 控件高度): 将控件左下点作为缩放点, Offset(控件宽度, 控件高度): 将控件右下点作为缩放点
+  ///
   /// [usePenetrate]：true（点击事件将穿透遮罩），false（不穿透）
   ///
   /// [useAnimation]：true（使用动画），false（不使用）
@@ -289,6 +299,7 @@ class SmartDialog {
     AlignmentGeometry? alignment,
     bool? clickMaskDismiss,
     SmartAnimationType? animationType,
+    Offset? scalePoint,
     bool? usePenetrate,
     bool? useAnimation,
     Duration? animationTime,
@@ -333,6 +344,7 @@ class SmartDialog {
       alignment: alignment ?? config.attach.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.attach.clickMaskDismiss,
       animationType: animationType ?? config.attach.animationType,
+      scalePoint: scalePoint,
       usePenetrate: usePenetrate ?? config.attach.usePenetrate,
       useAnimation: useAnimation ?? config.attach.useAnimation,
       animationTime: animationTime ?? config.attach.animationTime,

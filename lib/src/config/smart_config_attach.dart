@@ -8,7 +8,7 @@ import 'enum_config.dart';
 class SmartConfigAttach {
   SmartConfigAttach({
     this.alignment = Alignment.bottomCenter,
-    this.animationType = SmartAnimationType.scale,
+    this.animationType = SmartAnimationType.centerScale_otherSlide,
     this.animationTime = const Duration(milliseconds: 260),
     this.useAnimation = true,
     this.usePenetrate = false,

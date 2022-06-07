@@ -5,7 +5,7 @@ class ViewUtils {
   static bool routeSafeUse = false;
 
   static void addSafeUse(VoidCallback callback) {
-    var schedulerPhase = SchedulerBinding.instance.schedulerPhase;
+    var schedulerPhase = schedulerBinding.schedulerPhase;
     if (schedulerPhase == SchedulerPhase.persistentCallbacks) {
       ViewUtils.addPostFrameCallback((timeStamp) => callback());
     } else {
@@ -19,3 +19,5 @@ class ViewUtils {
 }
 
 WidgetsBinding get widgetsBinding => WidgetsBinding.instance;
+
+SchedulerBinding get schedulerBinding => SchedulerBinding.instance;

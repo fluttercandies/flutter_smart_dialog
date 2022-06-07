@@ -129,20 +129,37 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
   }
 
   Widget _buildBodyAnimation() {
+    var child = widget.child;
     var animation = CurvedAnimation(parent: _ctrlBody, curve: Curves.linear);
     var tw = Tween<Offset>(begin: _offset, end: Offset.zero);
-    var transition = widget.alignment == Alignment.center
-        //中间弹窗动画使用缩放
-        ? ScaleTransition(scale: animation, child: widget.child)
-        //其它的都使用位移动画
-        : SlideTransition(position: tw.animate(_ctrlBody), child: widget.child);
+    var type = widget.animationType;
+    Widget animationWidget = FadeTransition(opacity: animation, child: child);
 
-    bool useFade = (widget.animationType == SmartAnimationType.fade) ||
-        (widget.animationType == SmartAnimationType.centerFadeAndOtherScale &&
-            widget.alignment == Alignment.center);
-    return useFade
-        ? FadeTransition(opacity: animation, child: widget.child)
-        : transition;
+    //select different animation
+    if (type == SmartAnimationType.fade) {
+      animationWidget = FadeTransition(opacity: animation, child: child);
+    } else if (type == SmartAnimationType.scale) {
+      animationWidget = ScaleTransition(scale: animation, child: child);
+    } else if (type == SmartAnimationType.centerFade_otherSlide) {
+      if (widget.alignment == Alignment.center) {
+        animationWidget = FadeTransition(opacity: animation, child: child);
+      } else {
+        animationWidget = SlideTransition(
+          position: tw.animate(_ctrlBody),
+          child: child,
+        );
+      }
+    } else if (type == SmartAnimationType.centerScale_otherSlide) {
+      if (widget.alignment == Alignment.center) {
+        animationWidget = ScaleTransition(scale: animation, child: child);
+      } else {
+        animationWidget = SlideTransition(
+          position: tw.animate(_ctrlBody),
+          child: child,
+        );
+      }
+    }
+    return animationWidget;
   }
 
   ///处理下内容widget动画方向
