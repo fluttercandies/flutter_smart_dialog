@@ -70,7 +70,7 @@ class MainDialog {
   Future<T?> showAttach<T>({
     required BuildContext? targetContext,
     required Widget widget,
-    required Offset? target,
+    required TargetBuilder? targetBuilder,
     required AlignmentGeometry alignment,
     required bool usePenetrate,
     required bool useAnimation,
@@ -89,7 +89,7 @@ class MainDialog {
     _widget = AttachDialogWidget(
       key: _uniqueKey,
       targetContext: targetContext,
-      target: target,
+      targetBuilder: targetBuilder,
       controller: _controller = AttachDialogController(),
       alignment: alignment,
       usePenetrate: usePenetrate,

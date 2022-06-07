@@ -83,7 +83,7 @@ class CustomDialog extends BaseDialog {
 
   Future<T?> showAttach<T>({
     required BuildContext? targetContext,
-    required Offset? target,
+    required TargetBuilder? targetBuilder,
     required Widget widget,
     required AlignmentGeometry alignment,
     required bool usePenetrate,
@@ -117,7 +117,7 @@ class CustomDialog extends BaseDialog {
     )) return Future.value(null);
     return mainDialog.showAttach<T>(
       targetContext: targetContext,
-      target: target,
+      targetBuilder: targetBuilder,
       widget: widget,
       alignment: alignment,
       usePenetrate: usePenetrate,

@@ -181,8 +181,9 @@ class SmartDialog {
   ///
   /// [controller]：this controller can be used to refresh the layout of the custom dialog
   ///
-  /// [target]：target offset，when the target is set to value，
-  /// the targetContext param will be invalid
+  /// [targetBuilder]：Manually specify the appropriate coordinate point.
+  /// When targetBuilder is used, the targetContext param will not be able to automatically set the position.
+  /// The param of the targetBuilder callback are calculated according to the targetContext
   ///
   /// [alignment]：control the location of the dialog
   ///
@@ -245,7 +246,8 @@ class SmartDialog {
   ///
   /// [controller]：可使用该控制器来刷新自定义的dialog的布局
   ///
-  /// [target]：target offset，当target被设置数据，targetContext参数将失效
+  /// [targetBuilder]：手动指定合适坐标点，当targetBuilder被使用时，targetContext参数将无法自动设置位置,
+  /// targetBuilder回调的参数是根据targetContext计算得来的
   ///
   /// [alignment]：控制弹窗的位置
   ///
@@ -295,7 +297,7 @@ class SmartDialog {
     required BuildContext? targetContext,
     required WidgetBuilder builder,
     SmartDialogController? controller,
-    Offset? target,
+    TargetBuilder? targetBuilder,
     AlignmentGeometry? alignment,
     bool? clickMaskDismiss,
     SmartAnimationType? animationType,
@@ -317,7 +319,7 @@ class SmartDialog {
     bool? bindPage,
   }) {
     assert(
-      targetContext != null || target != null,
+      targetContext != null || targetBuilder != null,
       'targetContext and target, cannot both be null',
     );
     assert(
@@ -340,7 +342,7 @@ class SmartDialog {
         controller: controller,
         builder: (context) => builder(context),
       ),
-      target: target,
+      targetBuilder: targetBuilder,
       alignment: alignment ?? config.attach.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.attach.clickMaskDismiss,
       animationType: animationType ?? config.attach.animationType,

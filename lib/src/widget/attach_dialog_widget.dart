@@ -12,12 +12,17 @@ typedef HighlightBuilder = Positioned Function(
   Size targetSize,
 );
 
+typedef TargetBuilder = Offset Function(
+  Offset targetOffset,
+  Size targetSize,
+);
+
 class AttachDialogWidget extends StatefulWidget {
   const AttachDialogWidget({
     Key? key,
     required this.child,
     required this.targetContext,
-    required this.target,
+    required this.targetBuilder,
     required this.controller,
     required this.animationTime,
     required this.useAnimation,
@@ -34,7 +39,7 @@ class AttachDialogWidget extends StatefulWidget {
   ///target context
   final BuildContext? targetContext;
 
-  final Offset? target;
+  final TargetBuilder? targetBuilder;
 
   /// 是否使用动画
   final bool useAnimation;
@@ -122,9 +127,11 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       targetOffset = renderBox.localToGlobal(Offset.zero);
       targetSize = renderBox.size;
     }
-    if (widget.target != null) {
-      targetOffset = widget.target!;
-      targetSize = Size.zero;
+    if (widget.targetBuilder != null) {
+      targetOffset = widget.targetContext != null
+          ? widget.targetBuilder!(targetOffset, targetSize)
+          : widget.targetBuilder!(Offset.zero, Size.zero);
+      targetSize = widget.targetContext != null ? targetSize : Size.zero;
     }
     ViewUtils.addPostFrameCallback((timeStamp) {
       if (mounted) _handleAnimatedAndLocation();
@@ -253,6 +260,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     final childSize = (_childContext!.findRenderObject() as RenderBox).size;
 
     //动画方向及其位置
+    bool autoSet = (widget.targetBuilder == null);
     _axis = Axis.vertical;
     final alignment = widget.alignment;
     var offset = targetOffset;
@@ -261,7 +269,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     if (alignment == Alignment.topLeft) {
       _targetRect = RectInfo(
         bottom: screen.height - offset.dy,
-        left: max(offset.dx - childSize.width / 2, 0),
+        left: autoSet ? max(offset.dx - childSize.width / 2, 0) : offset.dx,
       );
     } else if (alignment == Alignment.topCenter) {
       _targetRect = RectInfo(
@@ -271,8 +279,10 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     } else if (alignment == Alignment.topRight) {
       _targetRect = RectInfo(
         bottom: screen.height - offset.dy,
-        right: max(
-            screen.width - (offset.dx + size.width + childSize.width / 2), 0),
+        right: autoSet
+            ? max(screen.width - (offset.dx + size.width + childSize.width / 2),
+                0)
+            : screen.width - (offset.dx + size.width),
       );
     } else if (alignment == Alignment.centerLeft) {
       _axis = Axis.horizontal;
@@ -294,7 +304,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     } else if (alignment == Alignment.bottomLeft) {
       _targetRect = RectInfo(
         top: offset.dy + size.height,
-        left: max(offset.dx - childSize.width / 2, 0),
+        left: autoSet ? max(offset.dx - childSize.width / 2, 0) : offset.dx,
       );
     } else if (alignment == Alignment.bottomCenter) {
       _targetRect = RectInfo(
@@ -304,8 +314,10 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     } else if (alignment == Alignment.bottomRight) {
       _targetRect = RectInfo(
         top: offset.dy + size.height,
-        right: max(
-            screen.width - (offset.dx + size.width + childSize.width / 2), 0),
+        right: autoSet
+            ? max(screen.width - (offset.dx + size.width + childSize.width / 2),
+                0)
+            :screen.width - (offset.dx + size.width),
       );
     }
 

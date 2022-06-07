@@ -1,3 +1,6 @@
+# [4.5.x]
+- Remove 'target' param(showAttach): please use 'targetBuilder' instead of 'target' param
+
 # [4.3.x]
 
 - Adapt to flutter 3
@@ -5,20 +8,24 @@
 - Fix [#56](https://github.com/fluttercandies/flutter_smart_dialog/issues/56)
 - Fix [#60](https://github.com/fluttercandies/flutter_smart_dialog/issues/60)
 - Add SmartDialogController
-- adjust AnimationType
+- Adjust AnimationType
   - fade: FadeTransition for all positions
   - scale: All positions are ScaleTransition
   - centerFade_otherSlide: The center position is the FadeTransition, and the other positions are the SlideTransition
   - centerScale_otherSlide: The center position is the ScaleTransition, and the other positions are the SlideTransition
-- add scalePoint (showAttach)
+- Add scalePoint (showAttach)
+
+
+# [4.0.6]
+- Remove 'target' param(showAttach): please use 'targetBuilder' instead of 'target' param
 
 # [4.0.5]
-- adjust AnimationType
+- Adjust AnimationType
     - fade: FadeTransition for all positions
     - scale: All positions are ScaleTransition
     - centerFade_otherSlide: The center position is the FadeTransition, and the other positions are the SlideTransition
     - centerScale_otherSlide: The center position is the ScaleTransition, and the other positions are the SlideTransition
-- add scalePoint (showAttach)
+- Add scalePoint (showAttach)
 
 # [4.0.3]
 

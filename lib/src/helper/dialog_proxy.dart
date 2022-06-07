@@ -100,7 +100,7 @@ class DialogProxy {
   Future<T?> showAttach<T>({
     required BuildContext? targetContext,
     required Widget widget,
-    required Offset? target,
+    required TargetBuilder? targetBuilder,
     required AlignmentGeometry alignment,
     required bool usePenetrate,
     required bool useAnimation,
@@ -128,7 +128,7 @@ class DialogProxy {
     dialog = CustomDialog(overlayEntry: entry);
     return dialog.showAttach<T>(
       targetContext: targetContext,
-      target: target,
+      targetBuilder: targetBuilder,
       widget: widget,
       alignment: alignment,
       usePenetrate: usePenetrate,

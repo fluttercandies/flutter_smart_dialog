@@ -116,12 +116,14 @@ SmartDialog.showAttach(
 );
 ````
 
-- Of course, there are a few cases where custom coordinates need to be used, and the target parameter is also provided here: if the target parameter is set, the targetContext will automatically become invalid
-  - targetContext is a very common scenario, so it is set as a mandatory parameter here, but you can set it to null
+- Of course, there are still a few cases where custom coordinates need to be used. The targetBuilder parameter is also provided here: if the targetBuilder parameter is set, the targetContext will automatically become invalid.
+  - targetContext is a very common scenario, so here it is set as a mandatory parameter
+  - The callback parameters in targetBuilder are also calculated from targetContext
+  - In some special cases, the targetContext can be set to be empty, and the default value of the callback parameter in targetBuilder is zero
 
 ````dart
 SmartDialog.showAttach(
-  targetContext: null,
+  targetContext: widget,
   target: Offset(100, 100);,
   builder: (_) => Container(width: 100, height: 100, color: Colors.red),
 );
@@ -141,7 +143,7 @@ void _attachPoint() async {
     if (random == 4) alignment = Alignment.bottomCenter;
     SmartDialog.showAttach(
       targetContext: null,
-      target: offset,
+      targetBuilder: (_, __) => offset,
       usePenetrate: true,
       clickMaskDismiss: false,
       alignment: alignment,
@@ -178,6 +180,8 @@ void _attachPoint() async {
   });
 }
 ````
+
+targetBuilder is a very powerful parameter. Combine it with the scalePoint parameter to make a lot of very interesting bubble dialog.
 
 ![attachPoint](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224747.gif)
 
