@@ -17,6 +17,8 @@ typedef TargetBuilder = Offset Function(
   Size targetSize,
 );
 
+typedef ScalePointBuilder = Offset Function(Size selfSize);
+
 class AttachDialogWidget extends StatefulWidget {
   const AttachDialogWidget({
     Key? key,
@@ -30,7 +32,7 @@ class AttachDialogWidget extends StatefulWidget {
     required this.alignment,
     required this.usePenetrate,
     required this.animationType,
-    required this.scalePoint,
+    required this.scalePointBuilder,
     required this.maskColor,
     required this.highlightBuilder,
     required this.maskWidget,
@@ -67,7 +69,7 @@ class AttachDialogWidget extends StatefulWidget {
   final SmartAnimationType animationType;
 
   /// 缩放动画的缩放点
-  final Offset? scalePoint;
+  final ScalePointBuilder? scalePointBuilder;
 
   /// 遮罩颜色
   final Color maskColor;
@@ -269,7 +271,9 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     if (alignment == Alignment.topLeft) {
       _targetRect = RectInfo(
         bottom: screen.height - offset.dy,
-        left: autoSet ? max(offset.dx - childSize.width / 2, 0) : offset.dx,
+        left: autoSet
+            ? max(offset.dx - childSize.width / 2, 0)
+            : max(offset.dx, 0),
       );
     } else if (alignment == Alignment.topCenter) {
       _targetRect = RectInfo(
@@ -282,7 +286,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
         right: autoSet
             ? max(screen.width - (offset.dx + size.width + childSize.width / 2),
                 0)
-            : screen.width - (offset.dx + size.width),
+            : max(screen.width - (offset.dx + size.width), 0),
       );
     } else if (alignment == Alignment.centerLeft) {
       _axis = Axis.horizontal;
@@ -304,7 +308,9 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     } else if (alignment == Alignment.bottomLeft) {
       _targetRect = RectInfo(
         top: offset.dy + size.height,
-        left: autoSet ? max(offset.dx - childSize.width / 2, 0) : offset.dx,
+        left: autoSet
+            ? max(offset.dx - childSize.width / 2, 0)
+            : max(offset.dx, 0),
       );
     } else if (alignment == Alignment.bottomCenter) {
       _targetRect = RectInfo(
@@ -317,16 +323,17 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
         right: autoSet
             ? max(screen.width - (offset.dx + size.width + childSize.width / 2),
                 0)
-            :screen.width - (offset.dx + size.width),
+            : max(screen.width - (offset.dx + size.width), 0),
       );
     }
 
     //缩放动画的缩放点
-    if (widget.scalePoint != null) {
+    if (widget.scalePointBuilder != null) {
       var halfWidth = childSize.width / 2;
       var halfHeight = childSize.height / 2;
-      var scaleDx = widget.scalePoint!.dx;
-      var scaleDy = widget.scalePoint!.dy;
+      var scalePoint = widget.scalePointBuilder!(childSize);
+      var scaleDx = scalePoint.dx;
+      var scaleDy = scalePoint.dy;
       var rateX = (scaleDx - halfWidth) / halfWidth;
       var rateY = (scaleDy - halfHeight) / halfHeight;
       _scaleAlignment = Alignment(rateX, rateY);

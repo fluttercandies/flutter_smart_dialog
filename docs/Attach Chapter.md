@@ -181,7 +181,7 @@ void _attachPoint() async {
 }
 ````
 
-targetBuilder is a very powerful parameter. Combine it with the scalePoint parameter to make a lot of very interesting bubble dialog.
+'targetBuilder is a very powerful param. Combine it with the 'scalePointBuilder' param to make a lot of very interesting bubble dialog.
 
 ![attachPoint](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224747.gif)
 

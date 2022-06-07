@@ -1,5 +1,6 @@
 # [4.5.x]
 - Remove 'target' param(showAttach): please use 'targetBuilder' instead of 'target' param
+- Optimize scalePointBuilder (showAttach)
 
 # [4.3.x]
 
@@ -13,11 +14,12 @@
   - scale: All positions are ScaleTransition
   - centerFade_otherSlide: The center position is the FadeTransition, and the other positions are the SlideTransition
   - centerScale_otherSlide: The center position is the ScaleTransition, and the other positions are the SlideTransition
-- Add scalePoint (showAttach)
+- Add scalePointBuilder (showAttach)
 
 
-# [4.0.6]
+# [4.0.7]
 - Remove 'target' param(showAttach): please use 'targetBuilder' instead of 'target' param
+- Optimize scalePointBuilder (showAttach)
 
 # [4.0.5]
 - Adjust AnimationType
@@ -25,7 +27,7 @@
     - scale: All positions are ScaleTransition
     - centerFade_otherSlide: The center position is the FadeTransition, and the other positions are the SlideTransition
     - centerScale_otherSlide: The center position is the ScaleTransition, and the other positions are the SlideTransition
-- Add scalePoint (showAttach)
+- Add scalePointBuilder (showAttach)
 
 # [4.0.3]
 

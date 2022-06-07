@@ -279,7 +279,7 @@ class CompatibleSmartDialog {
       animationType: isLoadingTemp ?? false
           ? SmartAnimationType.fade
           : SmartAnimationType.scale,
-      scalePoint: null,
+      scalePointBuilder: null,
       usePenetrate: isPenetrateTemp ?? config.isPenetrate,
       useAnimation: isUseAnimationTemp ?? config.isUseAnimation,
       animationTime: animationDurationTemp ?? config.animationDuration,
