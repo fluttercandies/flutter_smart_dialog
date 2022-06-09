@@ -262,68 +262,66 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     final childSize = (_childContext!.findRenderObject() as RenderBox).size;
 
     //动画方向及其位置
-    bool autoSet = (widget.targetBuilder == null);
     _axis = Axis.vertical;
     final alignment = widget.alignment;
     var offset = targetOffset;
     var size = targetSize;
     final screen = MediaQuery.of(context).size;
     if (alignment == Alignment.topLeft) {
-      _targetRect = RectInfo(
+      _targetRect = _adjustReactInfo(
         bottom: screen.height - offset.dy,
-        left: autoSet
-            ? max(offset.dx - childSize.width / 2, 0)
-            : max(offset.dx, 0),
+        left: offset.dx - childSize.width / 2,
+        fixedVertical: true,
       );
     } else if (alignment == Alignment.topCenter) {
-      _targetRect = RectInfo(
+      _targetRect = _adjustReactInfo(
         bottom: screen.height - offset.dy,
-        left: max(offset.dx + size.width / 2 - childSize.width / 2, 0),
+        left: offset.dx + size.width / 2 - childSize.width / 2,
+        fixedVertical: true,
       );
     } else if (alignment == Alignment.topRight) {
-      _targetRect = RectInfo(
+      _targetRect = _adjustReactInfo(
         bottom: screen.height - offset.dy,
-        right: autoSet
-            ? max(screen.width - (offset.dx + size.width + childSize.width / 2),
-                0)
-            : max(screen.width - (offset.dx + size.width), 0),
+        left: offset.dx + size.width - childSize.width / 2,
+        fixedVertical: true,
       );
     } else if (alignment == Alignment.centerLeft) {
       _axis = Axis.horizontal;
-      _targetRect = RectInfo(
+      _targetRect = _adjustReactInfo(
         right: screen.width - offset.dx,
-        top: max(offset.dy + size.height / 2 - childSize.height / 2, 0),
+        top: offset.dy + size.height / 2 - childSize.height / 2,
+        fixedHorizontal: true,
       );
     } else if (alignment == Alignment.center) {
-      _targetRect = RectInfo(
-        left: max(offset.dx + size.width / 2 - childSize.width / 2, 0),
-        top: max(offset.dy + size.height / 2 - childSize.height / 2, 0),
+      _targetRect = _adjustReactInfo(
+        left: offset.dx + size.width / 2 - childSize.width / 2,
+        top: offset.dy + size.height / 2 - childSize.height / 2,
+        fixedHorizontal: true,
       );
     } else if (alignment == Alignment.centerRight) {
       _axis = Axis.horizontal;
-      _targetRect = RectInfo(
+      _targetRect = _adjustReactInfo(
         left: offset.dx + size.width,
-        top: max(offset.dy + size.height / 2 - childSize.height / 2, 0),
+        top: offset.dy + size.height / 2 - childSize.height / 2,
+        fixedHorizontal: true,
       );
     } else if (alignment == Alignment.bottomLeft) {
-      _targetRect = RectInfo(
+      _targetRect = _adjustReactInfo(
         top: offset.dy + size.height,
-        left: autoSet
-            ? max(offset.dx - childSize.width / 2, 0)
-            : max(offset.dx, 0),
+        left: offset.dx - childSize.width / 2,
+        fixedVertical: true,
       );
     } else if (alignment == Alignment.bottomCenter) {
-      _targetRect = RectInfo(
+      _targetRect = _adjustReactInfo(
         top: offset.dy + size.height,
-        left: max(offset.dx + size.width / 2 - childSize.width / 2, 0),
+        left: offset.dx + size.width / 2 - childSize.width / 2,
+        fixedVertical: true,
       );
     } else if (alignment == Alignment.bottomRight) {
-      _targetRect = RectInfo(
+      _targetRect = _adjustReactInfo(
         top: offset.dy + size.height,
-        right: autoSet
-            ? max(screen.width - (offset.dx + size.width + childSize.width / 2),
-                0)
-            : max(screen.width - (offset.dx + size.width), 0),
+        left: offset.dx + size.width - childSize.width / 2,
+        fixedVertical: true,
       );
     }
 
@@ -342,6 +340,49 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     //第一帧后恢复透明度,同时重置位置信息
     _postFrameOpacity = 1;
     setState(() {});
+  }
+
+  RectInfo _adjustReactInfo({
+    double? left,
+    double? right,
+    double? top,
+    double? bottom,
+    bool fixedHorizontal = false,
+    bool fixedVertical = false,
+  }) {
+    var size = targetSize;
+    final screen = MediaQuery.of(context).size;
+    var rectInfo = RectInfo(left: left, right: right, top: top, bottom: bottom);
+
+    //处理左右边界问题
+    if (!fixedHorizontal && left != null) {
+      if (left < 0) {
+        rectInfo.left = 0;
+        rectInfo.right = null;
+      } else {
+        var rightEdge = screen.width - left - size.width;
+        if (rightEdge < 0) {
+          rectInfo.left = null;
+          rectInfo.right = 0;
+        }
+      }
+    }
+
+    //处理上下边界问题
+    if (!fixedVertical && top != null) {
+      if (top < 0) {
+        rectInfo.top = 0;
+        rectInfo.bottom = null;
+      } else {
+        var bottomEdge = screen.height - top - size.height;
+        if (bottomEdge < 0) {
+          rectInfo.top = null;
+          rectInfo.bottom = 0;
+        }
+      }
+    }
+
+    return rectInfo;
   }
 
   ///等待动画结束,关闭动画资源

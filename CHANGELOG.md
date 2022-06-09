@@ -1,6 +1,7 @@
 # [4.5.x]
 - Remove 'target' param(showAttach): please use 'targetBuilder' instead of 'target' param
 - Optimize scalePointBuilder (showAttach)
+- Optimize showAttach
 
 # [4.3.x]
 
@@ -17,9 +18,10 @@
 - Add scalePointBuilder (showAttach)
 
 
-# [4.0.7]
+# [4.0.8]
 - Remove 'target' param(showAttach): please use 'targetBuilder' instead of 'target' param
 - Optimize scalePointBuilder (showAttach)
+- Optimize showAttach
 
 # [4.0.5]
 - Adjust AnimationType
