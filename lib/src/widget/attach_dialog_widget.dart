@@ -350,7 +350,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     bool fixedHorizontal = false,
     bool fixedVertical = false,
   }) {
-    var size = targetSize;
+    final childSize = (_childContext!.findRenderObject() as RenderBox).size;
     final screen = MediaQuery.of(context).size;
     var rectInfo = RectInfo(left: left, right: right, top: top, bottom: bottom);
 
@@ -360,7 +360,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
         rectInfo.left = 0;
         rectInfo.right = null;
       } else {
-        var rightEdge = screen.width - left - size.width;
+        var rightEdge = screen.width - left - childSize.width;
         if (rightEdge < 0) {
           rectInfo.left = null;
           rectInfo.right = 0;
@@ -374,7 +374,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
         rectInfo.top = 0;
         rectInfo.bottom = null;
       } else {
-        var bottomEdge = screen.height - top - size.height;
+        var bottomEdge = screen.height - top - childSize.height;
         if (bottomEdge < 0) {
           rectInfo.top = null;
           rectInfo.bottom = 0;
