@@ -18,7 +18,7 @@
 - Add scalePointBuilder (showAttach)
 
 
-# [4.0.8]
+# [4.0.9]
 - Remove 'target' param(showAttach): please use 'targetBuilder' instead of 'target' param
 - Optimize scalePointBuilder (showAttach)
 - Optimize showAttach
