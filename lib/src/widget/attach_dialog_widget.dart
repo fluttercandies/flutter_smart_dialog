@@ -155,7 +155,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     //CustomSingleChildLayout 和 SizeTransition 占位面积冲突
     //使用SizeTransition位移动画，不适合使用CustomSingleChildLayout
     //也可使用该方式获取子控件大小
-    var child = Builder(builder: (context) {
+    var child = AdaptBuilder(builder: (context) {
       _childContext = context;
       return Opacity(opacity: _postFrameOpacity, child: widget.child);
     });
@@ -403,6 +403,22 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     _ctrlBg = null;
     _ctrlBody.dispose();
     super.dispose();
+  }
+}
+
+class AdaptBuilder extends StatelessWidget {
+  const AdaptBuilder({
+    Key? key,
+    required this.builder,
+  }) : super(key: key);
+
+  final WidgetBuilder builder;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(mainAxisSize: MainAxisSize.min, children: [
+      Column(mainAxisSize: MainAxisSize.min, children: [builder(context)]),
+    ]);
   }
 }
 
