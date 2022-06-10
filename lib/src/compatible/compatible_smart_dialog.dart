@@ -273,6 +273,7 @@ class CompatibleSmartDialog {
     await DialogProxy.instance.showAttach(
       targetContext: targetContext,
       targetBuilder: target != null ? (_, __) => target : null,
+      replaceBuilder: null,
       widget: widget,
       alignment: alignmentTemp ?? Alignment.bottomCenter,
       clickMaskDismiss: clickBgDismissTemp ?? config.clickBgDismiss,

@@ -17,6 +17,13 @@ typedef TargetBuilder = Offset Function(
   Size targetSize,
 );
 
+typedef ReplaceBuilder = Widget Function(
+  Offset targetOffset,
+  Size targetSize,
+  Offset selfOffset,
+  Size selfSize,
+);
+
 typedef ScalePointBuilder = Offset Function(Size selfSize);
 
 class AttachDialogWidget extends StatefulWidget {
@@ -25,6 +32,7 @@ class AttachDialogWidget extends StatefulWidget {
     required this.child,
     required this.targetContext,
     required this.targetBuilder,
+    required this.replaceBuilder,
     required this.controller,
     required this.animationTime,
     required this.useAnimation,
@@ -41,7 +49,10 @@ class AttachDialogWidget extends StatefulWidget {
   ///target context
   final BuildContext? targetContext;
 
+  /// 自定义坐标点
   final TargetBuilder? targetBuilder;
+
+  final ReplaceBuilder? replaceBuilder;
 
   /// 是否使用动画
   final bool useAnimation;
@@ -100,8 +111,12 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   late Offset targetOffset;
   late Size targetSize;
 
+  late Widget _child;
+
   @override
   void initState() {
+    _child = widget.child;
+
     _resetState();
 
     super.initState();
@@ -131,7 +146,10 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     }
     if (widget.targetBuilder != null) {
       targetOffset = widget.targetContext != null
-          ? widget.targetBuilder!(targetOffset, targetSize)
+          ? widget.targetBuilder!(
+              targetOffset,
+              Size(targetSize.width, targetSize.height),
+            )
           : widget.targetBuilder!(Offset.zero, Size.zero);
       targetSize = widget.targetContext != null ? targetSize : Size.zero;
     }
@@ -146,7 +164,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   @override
   void didUpdateWidget(covariant AttachDialogWidget oldWidget) {
-    if (oldWidget.child != widget.child) _resetState();
+    if (oldWidget.child != _child) _resetState();
     super.didUpdateWidget(oldWidget);
   }
 
@@ -157,7 +175,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     //也可使用该方式获取子控件大小
     var child = AdaptBuilder(builder: (context) {
       _childContext = context;
-      return Opacity(opacity: _postFrameOpacity, child: widget.child);
+      return Opacity(opacity: _postFrameOpacity, child: _child);
     });
 
     return Stack(children: [
@@ -259,77 +277,93 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   /// 处理: 动画方向及其位置, 缩放动画的缩放点
   void _handleAnimatedAndLocation() {
-    final childSize = (_childContext!.findRenderObject() as RenderBox).size;
+    final selfSize = (_childContext!.findRenderObject() as RenderBox).size;
+    final screen = MediaQuery.of(context).size;
 
     //动画方向及其位置
     _axis = Axis.vertical;
     final alignment = widget.alignment;
-    var offset = targetOffset;
-    var size = targetSize;
-    final screen = MediaQuery.of(context).size;
+
     if (alignment == Alignment.topLeft) {
       _targetRect = _adjustReactInfo(
-        bottom: screen.height - offset.dy,
-        left: offset.dx - childSize.width / 2,
+        bottom: screen.height - targetOffset.dy,
+        left: targetOffset.dx - selfSize.width / 2,
         fixedVertical: true,
       );
     } else if (alignment == Alignment.topCenter) {
       _targetRect = _adjustReactInfo(
-        bottom: screen.height - offset.dy,
-        left: offset.dx + size.width / 2 - childSize.width / 2,
+        bottom: screen.height - targetOffset.dy,
+        left: targetOffset.dx + targetSize.width / 2 - selfSize.width / 2,
         fixedVertical: true,
       );
     } else if (alignment == Alignment.topRight) {
       _targetRect = _adjustReactInfo(
-        bottom: screen.height - offset.dy,
-        left: offset.dx + size.width - childSize.width / 2,
+        bottom: screen.height - targetOffset.dy,
+        left: targetOffset.dx + targetSize.width - selfSize.width / 2,
         fixedVertical: true,
       );
     } else if (alignment == Alignment.centerLeft) {
       _axis = Axis.horizontal;
       _targetRect = _adjustReactInfo(
-        right: screen.width - offset.dx,
-        top: offset.dy + size.height / 2 - childSize.height / 2,
+        right: screen.width - targetOffset.dx,
+        top: targetOffset.dy + targetSize.height / 2 - selfSize.height / 2,
         fixedHorizontal: true,
       );
     } else if (alignment == Alignment.center) {
       _targetRect = _adjustReactInfo(
-        left: offset.dx + size.width / 2 - childSize.width / 2,
-        top: offset.dy + size.height / 2 - childSize.height / 2,
+        left: targetOffset.dx + targetSize.width / 2 - selfSize.width / 2,
+        top: targetOffset.dy + targetSize.height / 2 - selfSize.height / 2,
         fixedHorizontal: true,
       );
     } else if (alignment == Alignment.centerRight) {
       _axis = Axis.horizontal;
       _targetRect = _adjustReactInfo(
-        left: offset.dx + size.width,
-        top: offset.dy + size.height / 2 - childSize.height / 2,
+        left: targetOffset.dx + targetSize.width,
+        top: targetOffset.dy + targetSize.height / 2 - selfSize.height / 2,
         fixedHorizontal: true,
       );
     } else if (alignment == Alignment.bottomLeft) {
       _targetRect = _adjustReactInfo(
-        top: offset.dy + size.height,
-        left: offset.dx - childSize.width / 2,
+        top: targetOffset.dy + targetSize.height,
+        left: targetOffset.dx - selfSize.width / 2,
         fixedVertical: true,
       );
     } else if (alignment == Alignment.bottomCenter) {
       _targetRect = _adjustReactInfo(
-        top: offset.dy + size.height,
-        left: offset.dx + size.width / 2 - childSize.width / 2,
+        top: targetOffset.dy + targetSize.height,
+        left: targetOffset.dx + targetSize.width / 2 - selfSize.width / 2,
         fixedVertical: true,
       );
     } else if (alignment == Alignment.bottomRight) {
       _targetRect = _adjustReactInfo(
-        top: offset.dy + size.height,
-        left: offset.dx + size.width - childSize.width / 2,
+        top: targetOffset.dy + targetSize.height,
+        left: targetOffset.dx + targetSize.width - selfSize.width / 2,
         fixedVertical: true,
+      );
+    }
+
+    //替换控件builder
+    if (widget.replaceBuilder != null) {
+      _child = widget.replaceBuilder!(
+        targetOffset,
+        targetSize,
+        Offset(
+          _targetRect?.left != null
+              ? _targetRect!.left!
+              : screen.width - ((_targetRect?.right ?? 0) + selfSize.width),
+          _targetRect?.top != null
+              ? _targetRect!.top!
+              : screen.height - ((_targetRect?.bottom ?? 0) + selfSize.height),
+        ),
+        selfSize,
       );
     }
 
     //缩放动画的缩放点
     if (widget.scalePointBuilder != null) {
-      var halfWidth = childSize.width / 2;
-      var halfHeight = childSize.height / 2;
-      var scalePoint = widget.scalePointBuilder!(childSize);
+      var halfWidth = selfSize.width / 2;
+      var halfHeight = selfSize.height / 2;
+      var scalePoint = widget.scalePointBuilder!(selfSize);
       var scaleDx = scalePoint.dx;
       var scaleDy = scalePoint.dy;
       var rateX = (scaleDx - halfWidth) / halfWidth;
