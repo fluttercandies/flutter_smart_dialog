@@ -18,6 +18,6 @@ class ViewUtils {
   }
 }
 
-WidgetsBinding get widgetsBinding => WidgetsBinding.instance!;
+WidgetsBinding get widgetsBinding => WidgetsBinding.instance;
 
-SchedulerBinding get schedulerBinding => SchedulerBinding.instance!;
+SchedulerBinding get schedulerBinding => SchedulerBinding.instance;

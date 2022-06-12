@@ -2,6 +2,7 @@
 - Remove 'target' param(showAttach): please use 'targetBuilder' instead of 'target' param
 - Optimize scalePointBuilder (showAttach)
 - Optimize showAttach
+- Add replaceBuilder (showAttach)
 
 # [4.3.x]
 
@@ -22,6 +23,7 @@
 - Remove 'target' param(showAttach): please use 'targetBuilder' instead of 'target' param
 - Optimize scalePointBuilder (showAttach)
 - Optimize showAttach
+- Add replaceBuilder (showAttach)
 
 # [4.0.5]
 - Adjust AnimationType

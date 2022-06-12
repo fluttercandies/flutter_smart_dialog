@@ -19,9 +19,11 @@ class DialogScope extends StatefulWidget {
 }
 
 class _DialogScopeState extends State<DialogScope> {
+  VoidCallback? _callback;
+
   @override
   void initState() {
-    widget.controller?._setListener(() {
+    widget.controller?._setListener(_callback = () {
       ViewUtils.addSafeUse(() => setState(() {}));
     });
 
@@ -35,7 +37,9 @@ class _DialogScopeState extends State<DialogScope> {
 
   @override
   void dispose() {
-    widget.controller?._dismiss();
+    if (_callback == widget.controller?._callback) {
+      widget.controller?._dismiss();
+    }
 
     super.dispose();
   }

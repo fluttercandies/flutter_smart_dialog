@@ -1,9 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/data/location.dart';
 import 'package:flutter_smart_dialog/src/util/view_utils.dart';
+import 'package:flutter_smart_dialog/src/widget/dialog_scope.dart';
 
 import '../config/enum_config.dart';
 
@@ -344,19 +343,32 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
     //替换控件builder
     if (widget.replaceBuilder != null) {
-      _child = widget.replaceBuilder!(
-        targetOffset,
-        targetSize,
-        Offset(
-          _targetRect?.left != null
-              ? _targetRect!.left!
-              : screen.width - ((_targetRect?.right ?? 0) + selfSize.width),
-          _targetRect?.top != null
-              ? _targetRect!.top!
-              : screen.height - ((_targetRect?.bottom ?? 0) + selfSize.height),
-        ),
-        selfSize,
-      );
+      Widget replaceChildBuilder() {
+        return widget.replaceBuilder!(
+          targetOffset,
+          targetSize,
+          Offset(
+            _targetRect?.left != null
+                ? _targetRect!.left!
+                : screen.width - ((_targetRect?.right ?? 0) + selfSize.width),
+            _targetRect?.top != null
+                ? _targetRect!.top!
+                : screen.height -
+                    ((_targetRect?.bottom ?? 0) + selfSize.height),
+          ),
+          selfSize,
+        );
+      }
+
+      //必须要写在DialogScope的builder之外,保证在scalePointBuilder之前触发replaceBuilder
+      _child = replaceChildBuilder();
+      //保证controller能刷新replaceBuilder
+      if (widget.child is DialogScope) {
+        _child = DialogScope(
+          controller: (widget.child as DialogScope).controller,
+          builder: (context) => replaceChildBuilder(),
+        );
+      }
     }
 
     //缩放动画的缩放点
