@@ -22,6 +22,8 @@ class CustomLoading extends BaseDialog {
     required Duration animationTime,
     required Color maskColor,
     required Widget? maskWidget,
+    required VoidCallback? onDismiss,
+    required VoidCallback? onMask,
     required bool backDismiss,
   }) {
     DialogProxy.instance.loadingBackDismiss = backDismiss;
@@ -45,11 +47,15 @@ class CustomLoading extends BaseDialog {
       usePenetrate: usePenetrate,
       useAnimation: useAnimation,
       animationTime: animationTime,
-      onDismiss: null,
+      onDismiss: onDismiss,
       useSystem: false,
       reuse: true,
       awaitOverType: SmartDialog.config.loading.awaitOverType,
-      onMask: () => clickMaskDismiss ? _realDismiss() : null,
+      onMask: () {
+        onMask?.call();
+        if (!clickMaskDismiss) return;
+        _realDismiss();
+      },
     );
   }
 

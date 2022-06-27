@@ -380,6 +380,8 @@ class CompatibleSmartDialog {
       animationTime: animationDurationTemp ?? config.animationDuration,
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
+      onDismiss: null,
+      onMask: null,
       backDismiss: backDismiss ?? true,
       widget: widget ?? DialogProxy.instance.loadingBuilder(msg),
     );

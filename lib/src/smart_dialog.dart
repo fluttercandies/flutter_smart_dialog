@@ -439,6 +439,8 @@ class SmartDialog {
     Duration? animationTime,
     Color? maskColor,
     Widget? maskWidget,
+    VoidCallback? onDismiss,
+    VoidCallback? onMask,
     bool? backDismiss,
     WidgetBuilder? builder,
   }) {
@@ -450,6 +452,8 @@ class SmartDialog {
       animationTime: animationTime ?? config.loading.animationTime,
       maskColor: maskColor ?? config.loading.maskColor,
       maskWidget: maskWidget ?? config.loading.maskWidget,
+      onDismiss: onDismiss,
+      onMask: onMask,
       backDismiss: backDismiss ?? config.loading.backDismiss,
       widget: builder != null
           ? DialogScope(

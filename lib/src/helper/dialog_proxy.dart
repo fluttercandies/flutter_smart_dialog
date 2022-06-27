@@ -162,6 +162,8 @@ class DialogProxy {
     required Duration animationTime,
     required Color maskColor,
     required Widget? maskWidget,
+    required VoidCallback? onDismiss,
+    required VoidCallback? onMask,
     required bool backDismiss,
     required Widget widget,
   }) {
@@ -173,6 +175,8 @@ class DialogProxy {
       usePenetrate: usePenetrate,
       useAnimation: useAnimation,
       animationTime: animationTime,
+      onDismiss: onDismiss,
+      onMask: onMask,
       backDismiss: backDismiss,
       widget: widget,
     );
