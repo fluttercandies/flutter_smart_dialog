@@ -48,6 +48,10 @@ class SmartDialog {
   ///
   /// [onMask]：This callback will be triggered when the mask is clicked
   ///
+  /// [displayTime]：Controls the display time of the dialog on the screen;
+  /// the default is null, if it is null, it means that the param will not control the dialog to close;
+  /// note: Using the [displayTime] param will disable the use of the [tag] param
+  ///
   /// [tag]：If you set a tag for the dialog, you can turn it off in a targeted manner
   ///
   /// [backDismiss]：true（the back event will close the dialog but not close the page），
@@ -98,6 +102,9 @@ class SmartDialog {
   ///
   /// [onMask]：点击遮罩时，该回调将会被触发
   ///
+  /// [displayTime]：控制弹窗在屏幕上显示时间; 默认为null, 为null则代表该参数不会控制弹窗关闭;
+  /// 注: 使用[displayTime]参数, 将禁止使用[tag]参数
+  ///
   /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
   ///
   /// [backDismiss]：true（返回事件将关闭loading，但是不会关闭页面），
@@ -128,6 +135,7 @@ class SmartDialog {
     bool? debounce,
     VoidCallback? onDismiss,
     VoidCallback? onMask,
+    Duration? displayTime,
     String? tag,
     bool? backDismiss,
     bool? keepSingle,
@@ -147,6 +155,10 @@ class SmartDialog {
       keepSingle == null || keepSingle == false || tag == null,
       'keepSingle is true, tag prohibit setting values',
     );
+    assert(
+      displayTime == null || tag == null,
+      'displayTime is used, tag prohibit setting values',
+    );
 
     return DialogProxy.instance.show<T>(
       widget: DialogScope(
@@ -164,6 +176,7 @@ class SmartDialog {
       debounce: debounce ?? config.custom.debounce,
       onDismiss: onDismiss,
       onMask: onMask,
+      displayTime: displayTime,
       tag: tag,
       backDismiss: backDismiss ?? config.custom.backDismiss,
       keepSingle: keepSingle ?? false,
@@ -221,6 +234,10 @@ class SmartDialog {
   /// [onDismiss]：the callback will be invoked when the dialog is closed
   ///
   /// [onMask]：this callback will be triggered when the mask is clicked
+  ///
+  /// [displayTime]：Controls the display time of the dialog on the screen;
+  /// the default is null, if it is null, it means that the param will not control the dialog to close;
+  /// note: Using the [displayTime] param will disable the use of the [tag] param
   ///
   /// [tag]：if you set a tag for the dialog, you can turn it off in a targeted manner
   ///
@@ -287,6 +304,9 @@ class SmartDialog {
   ///
   /// [onMask]：点击遮罩时，该回调将会被触发
   ///
+  /// [displayTime]：控制弹窗在屏幕上显示时间; 默认为null, 为null则代表该参数不会控制弹窗关闭;
+  /// 注: 使用[displayTime]参数, 将禁止使用[tag]参数
+  ///
   /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
   ///
   /// [backDismiss]：true（返回事件将关闭loading，但是不会关闭页面），
@@ -322,6 +342,7 @@ class SmartDialog {
     HighlightBuilder? highlightBuilder,
     VoidCallback? onDismiss,
     VoidCallback? onMask,
+    Duration? displayTime,
     String? tag,
     bool? backDismiss,
     bool? keepSingle,
@@ -344,6 +365,10 @@ class SmartDialog {
     assert(
       keepSingle == null || keepSingle == false || tag == null,
       'keepSingle is true, tag prohibit setting values',
+    );
+    assert(
+      displayTime == null || tag == null,
+      'displayTime is used, tag prohibit setting values',
     );
 
     var highlight = highlightBuilder;
@@ -368,6 +393,7 @@ class SmartDialog {
       highlightBuilder: highlight ?? (_, __) => Positioned(child: Container()),
       onDismiss: onDismiss,
       onMask: onMask,
+      displayTime: displayTime,
       tag: tag,
       backDismiss: backDismiss ?? config.attach.backDismiss,
       keepSingle: keepSingle ?? false,
@@ -398,6 +424,13 @@ class SmartDialog {
   ///
   /// [maskWidget]：highly customizable mask
   ///
+  /// [onDismiss]：This callback will be triggered when the dialog is closed
+  ///
+  /// [onMask]：This callback will be triggered when the mask is clicked
+  ///
+  /// [displayTime]：Controls the display time of the dialog on the screen;
+  /// the default is null, if it is null, it means that the param will not control the dialog to close
+  ///
   /// [backDismiss]：true（the back event will close the loading but not close the page），
   /// false（the back event not close the loading and not close page），
   /// you still can use the dismiss method to close the loading
@@ -425,6 +458,12 @@ class SmartDialog {
   ///
   /// [maskWidget]：可高度定制遮罩
   ///
+  /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
+  ///
+  /// [onMask]：点击遮罩时，该回调将会被触发
+  ///
+  /// [displayTime]：控制弹窗在屏幕上显示时间; 默认为null, 为null则代表该参数不会控制弹窗关闭
+  ///
   /// [backDismiss]：true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
   /// 你仍然可以使用dismiss方法来关闭loading
   ///
@@ -441,6 +480,7 @@ class SmartDialog {
     Widget? maskWidget,
     VoidCallback? onDismiss,
     VoidCallback? onMask,
+    Duration? displayTime,
     bool? backDismiss,
     WidgetBuilder? builder,
   }) {
@@ -454,6 +494,7 @@ class SmartDialog {
       maskWidget: maskWidget ?? config.loading.maskWidget,
       onDismiss: onDismiss,
       onMask: onMask,
+      displayTime: displayTime,
       backDismiss: backDismiss ?? config.loading.backDismiss,
       widget: builder != null
           ? DialogScope(

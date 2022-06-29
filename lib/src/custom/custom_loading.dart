@@ -10,8 +10,9 @@ class CustomLoading extends BaseDialog {
   CustomLoading({required OverlayEntry overlayEntry}) : super(overlayEntry);
 
   Timer? _timer;
+  Timer? _displayTimer;
   bool _canDismiss = false;
-  bool _needDismiss = false;
+  Future Function()? _canDismissCallback;
 
   Future<T?> showLoading<T>({
     required Widget widget,
@@ -24,18 +25,18 @@ class CustomLoading extends BaseDialog {
     required Widget? maskWidget,
     required VoidCallback? onDismiss,
     required VoidCallback? onMask,
+    required Duration? displayTime,
     required bool backDismiss,
   }) {
     DialogProxy.instance.loadingBackDismiss = backDismiss;
     SmartDialog.config.loading.isExist = true;
 
     _canDismiss = false;
-    _needDismiss = false;
+    _canDismissCallback = null;
     _timer?.cancel();
     _timer = Timer(SmartDialog.config.loading.leastLoadingTime, () {
       _canDismiss = true;
-      if (!_needDismiss) return;
-      _realDismiss();
+      _canDismissCallback?.call();
     });
 
     return mainDialog.show<T>(
@@ -47,7 +48,7 @@ class CustomLoading extends BaseDialog {
       usePenetrate: usePenetrate,
       useAnimation: useAnimation,
       animationTime: animationTime,
-      onDismiss: onDismiss,
+      onDismiss: _handleDismiss(onDismiss, displayTime),
       useSystem: false,
       reuse: true,
       awaitOverType: SmartDialog.config.loading.awaitOverType,
@@ -59,6 +60,18 @@ class CustomLoading extends BaseDialog {
     );
   }
 
+  VoidCallback _handleDismiss(VoidCallback? onDismiss, Duration? displayTime) {
+    _displayTimer?.cancel();
+    if (displayTime != null) {
+      _displayTimer = Timer(displayTime, () => dismiss());
+    }
+
+    return () {
+      _displayTimer?.cancel();
+      onDismiss?.call();
+    };
+  }
+
   Future<void> _realDismiss({bool back = false}) async {
     if (!DialogProxy.instance.loadingBackDismiss && back) return null;
 
@@ -67,9 +80,7 @@ class CustomLoading extends BaseDialog {
   }
 
   Future<void> dismiss({bool back = false}) async {
-    if (_canDismiss)
-      await _realDismiss(back: back);
-    else
-      _needDismiss = true;
+    _canDismissCallback = () => _realDismiss(back: back);
+    if (_canDismiss) await _canDismissCallback?.call();
   }
 }

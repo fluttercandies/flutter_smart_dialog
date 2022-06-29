@@ -3,6 +3,8 @@
 - Optimize scalePointBuilder (showAttach)
 - Optimize showAttach
 - Add replaceBuilder (showAttach)
+- Add onDismiss/onMask (showLoading)
+- Add displayTime (show/showAttach/showLoading)
 
 # [4.3.x]
 

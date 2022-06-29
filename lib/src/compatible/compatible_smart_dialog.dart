@@ -134,6 +134,7 @@ class CompatibleSmartDialog {
       debounce: debounceTemp ?? config.debounce,
       onDismiss: onDismiss,
       onMask: null,
+      displayTime: null,
       tag: tag,
       backDismiss: backDismiss ?? true,
       keepSingle: keepSingle ?? false,
@@ -294,6 +295,7 @@ class CompatibleSmartDialog {
             },
       onDismiss: onDismiss,
       onMask: null,
+      displayTime: null,
       tag: tag,
       backDismiss: backDismiss ?? true,
       keepSingle: keepSingle ?? false,
@@ -382,6 +384,7 @@ class CompatibleSmartDialog {
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       onDismiss: null,
       onMask: null,
+      displayTime: null,
       backDismiss: backDismiss ?? true,
       widget: widget ?? DialogProxy.instance.loadingBuilder(msg),
     );

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
@@ -30,6 +31,8 @@ class CustomDialog extends BaseDialog {
 
   DateTime? clickMaskLastTime;
 
+  var _timeRandom = Random().nextInt(666666) + Random().nextDouble();
+
   Future<T?> show<T>({
     required Widget widget,
     required AlignmentGeometry alignment,
@@ -43,6 +46,7 @@ class CustomDialog extends BaseDialog {
     required Widget? maskWidget,
     required VoidCallback? onDismiss,
     required VoidCallback? onMask,
+    required Duration? displayTime,
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
@@ -51,7 +55,7 @@ class CustomDialog extends BaseDialog {
     required bool bindPage,
   }) {
     if (!_handleMustOperate(
-      tag: tag,
+      tag: displayTime != null ? _getTimeKey(displayTime) : tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
       debounce: debounce,
@@ -69,7 +73,7 @@ class CustomDialog extends BaseDialog {
       animationType: animationType,
       maskColor: maskColor,
       maskWidget: maskWidget,
-      onDismiss: onDismiss,
+      onDismiss: _handleDismiss(onDismiss, displayTime),
       useSystem: useSystem,
       reuse: true,
       awaitOverType: SmartDialog.config.custom.awaitOverType,
@@ -99,6 +103,7 @@ class CustomDialog extends BaseDialog {
     required HighlightBuilder highlightBuilder,
     required VoidCallback? onDismiss,
     required VoidCallback? onMask,
+    required Duration? displayTime,
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
@@ -107,7 +112,7 @@ class CustomDialog extends BaseDialog {
     required bool bindPage,
   }) {
     if (!_handleMustOperate(
-      tag: tag,
+      tag: displayTime != null ? _getTimeKey(displayTime) : tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
       debounce: debounce,
@@ -130,7 +135,7 @@ class CustomDialog extends BaseDialog {
       maskColor: maskColor,
       highlightBuilder: highlightBuilder,
       maskWidget: maskWidget,
-      onDismiss: onDismiss,
+      onDismiss: _handleDismiss(onDismiss, displayTime),
       useSystem: useSystem,
       awaitOverType: SmartDialog.config.attach.awaitOverType,
       onMask: () {
@@ -140,6 +145,20 @@ class CustomDialog extends BaseDialog {
       },
     );
   }
+
+  VoidCallback _handleDismiss(VoidCallback? onDismiss, Duration? displayTime) {
+    Timer? timer;
+    if (displayTime != null) {
+      timer = Timer(displayTime, () => dismiss(tag: _getTimeKey(displayTime)));
+    }
+
+    return () {
+      timer?.cancel();
+      onDismiss?.call();
+    };
+  }
+
+  String _getTimeKey(Duration time) => '${time.hashCode + _timeRandom}';
 
   bool _handleMustOperate({
     required String? tag,
