@@ -10,6 +10,8 @@ import 'widget/attach_dialog_widget.dart';
 import 'widget/dialog_scope.dart';
 
 class SmartDialog {
+  SmartDialog._();
+
   /// Compatible with older versions
   ///
   /// 兼容老版本
