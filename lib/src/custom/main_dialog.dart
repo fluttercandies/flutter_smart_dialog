@@ -9,13 +9,14 @@ import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_widget.dart';
 
 import '../config/enum_config.dart';
+import '../widget/smart_overlay_entry.dart';
 
 ///main function : customize dialog
 class MainDialog {
   MainDialog({required this.overlayEntry}) : _widget = Container();
 
   ///OverlayEntry instance
-  final OverlayEntry overlayEntry;
+  final SmartOverlayEntry overlayEntry;
   final _uniqueKey = UniqueKey();
 
   bool offstage = false;
@@ -136,12 +137,12 @@ class MainDialog {
       _handleAwaitOver(awaitOverType: SmartAwaitOverType.dialogAppear);
     });
 
-    ViewUtils.addSafeUse(() {
-      _onDismiss = onDismiss;
+    _onDismiss = onDismiss;
 
-      if (useSystem && DialogProxy.contextNavigator != null) {
-        var tempWidget = _widget;
-        _widget = Container();
+    if (useSystem && DialogProxy.contextNavigator != null) {
+      var tempWidget = _widget;
+      _widget = Container();
+      ViewUtils.addSafeUse(() {
         showDialog(
           context: DialogProxy.contextNavigator!,
           barrierColor: Colors.transparent,
@@ -150,11 +151,11 @@ class MainDialog {
           routeSettings: RouteSettings(name: SmartTag.systemDialog),
           builder: (BuildContext context) => tempWidget,
         );
-      }
+      });
+    }
 
-      //refresh dialog
-      overlayEntry.markNeedsBuild();
-    });
+    //refresh dialog
+    overlayEntry.markNeedsBuild();
   }
 
   void _handleAwaitOver<T>({

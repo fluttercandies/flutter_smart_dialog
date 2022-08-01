@@ -19,6 +19,7 @@
   - centerFade_otherSlide: The center position is the FadeTransition, and the other positions are the SlideTransition
   - centerScale_otherSlide: The center position is the ScaleTransition, and the other positions are the SlideTransition
 - Add scalePointBuilder (showAttach)
+- Fix [#69](https://github.com/fluttercandies/flutter_smart_dialog/issues/69)
 
 
 # [4.0.9]

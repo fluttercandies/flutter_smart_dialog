@@ -11,11 +11,12 @@ import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 import '../config/smart_config.dart';
 import '../config/enum_config.dart';
 import '../init_dialog.dart';
+import '../widget/smart_overlay_entry.dart';
 
 class DialogProxy {
   late SmartConfig config;
-  late OverlayEntry entryToast;
-  late OverlayEntry entryLoading;
+  late SmartOverlayEntry entryToast;
+  late SmartOverlayEntry entryLoading;
   late Queue<DialogInfo> dialogQueue;
   late CustomToast _toast;
   late CustomLoading _loading;
@@ -44,9 +45,9 @@ class DialogProxy {
   }
 
   void initialize() {
-    entryLoading = OverlayEntry(builder: (_) => _loading.getWidget());
+    entryLoading = SmartOverlayEntry(builder: (_) => _loading.getWidget());
     _loading = CustomLoading(overlayEntry: entryLoading);
-    entryToast = OverlayEntry(builder: (_) => _toast.getWidget());
+    entryToast = SmartOverlayEntry(builder: (_) => _toast.getWidget());
     _toast = CustomToast(overlayEntry: entryToast);
   }
 
@@ -72,7 +73,7 @@ class DialogProxy {
     required bool bindPage,
   }) {
     CustomDialog? dialog;
-    var entry = OverlayEntry(
+    var entry = SmartOverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
     );
     dialog = CustomDialog(overlayEntry: entry);
@@ -126,7 +127,7 @@ class DialogProxy {
     required bool bindPage,
   }) {
     CustomDialog? dialog;
-    var entry = OverlayEntry(
+    var entry = SmartOverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
     );
     dialog = CustomDialog(overlayEntry: entry);

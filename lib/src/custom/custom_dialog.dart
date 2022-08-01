@@ -12,6 +12,7 @@ import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
 import '../smart_dialog.dart';
+import '../widget/smart_overlay_entry.dart';
 import 'main_dialog.dart';
 
 enum DialogType {
@@ -25,7 +26,7 @@ enum DialogType {
 
 ///main function : custom dialog
 class CustomDialog extends BaseDialog {
-  CustomDialog({required OverlayEntry overlayEntry}) : super(overlayEntry);
+  CustomDialog({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
 
   static MainDialog? mainDialogSingle;
 

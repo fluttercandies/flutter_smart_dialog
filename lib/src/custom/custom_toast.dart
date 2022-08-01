@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import '../config/enum_config.dart';
 import '../data/base_dialog.dart';
 import '../smart_dialog.dart';
+import '../widget/smart_overlay_entry.dart';
 
 class CustomToast extends BaseDialog {
-  CustomToast({required OverlayEntry overlayEntry}) : super(overlayEntry);
+  CustomToast({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
 
   Queue<Future<void> Function()> _toastQueue = ListQueue();
   Queue<_ToastInfo> _tempQueue = ListQueue();

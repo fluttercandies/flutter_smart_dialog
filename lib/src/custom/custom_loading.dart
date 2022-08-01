@@ -5,9 +5,10 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
 import '../data/base_dialog.dart';
+import '../widget/smart_overlay_entry.dart';
 
 class CustomLoading extends BaseDialog {
-  CustomLoading({required OverlayEntry overlayEntry}) : super(overlayEntry);
+  CustomLoading({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
 
   Timer? _timer;
   Timer? _displayTimer;
