@@ -97,8 +97,11 @@ class SmartConfigToast {
 
   /// [debounceTime]：Within the debounce time, multiple clicks will only respond to the first time,
   /// and the second invalid click will trigger the debounce time to re-time.
+  /// note: The definition of anti-shake is that the response will not be triggered again at the specified time,
+  /// which will cause a delay in the click response, so the actual implementation needs to be adjusted a little.
   ///
   /// [debounceTime]：防抖时间内，多次点击只会响应第一次，第二次无效点击会触发防抖时间重新计时
+  /// note: 防抖定义是在规定时间无二次触发才会响应,这样会导致点击响应有延时,所以实际实现做一点调整
   final Duration debounceTime;
 
   /// provider multiple display logic，please refer to [SmartToastType] comment for detailed description

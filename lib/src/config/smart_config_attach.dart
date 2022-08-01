@@ -95,8 +95,11 @@ class SmartConfigAttach {
 
   /// [debounceTime]：Within the debounce time, multiple clicks will only respond to the first time,
   /// and the second invalid click will trigger the debounce time to re-time.
+  /// note: The definition of anti-shake is that the response will not be triggered again at the specified time,
+  /// which will cause a delay in the click response, so the actual implementation needs to be adjusted a little.
   ///
   /// [debounceTime]：防抖时间内，多次点击只会响应第一次，第二次无效点击会触发防抖时间重新计时
+  /// note: 防抖定义是在规定时间无二次触发才会响应,这样会导致点击响应有延时,所以实际实现做一点调整
   final Duration debounceTime;
 
   /// true（the back event will close the loading but not close the page），
@@ -104,7 +107,7 @@ class SmartConfigAttach {
   /// you still can use the dismiss method to close the loading
   ///
   /// true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
-  /// 你仍然可以使用dismiss方法来关闭loading
+  /// 你仍然可以使用dismiss方法来关闭dialog
   final bool backDismiss;
 
   /// Bind the dialog to the current page, the bound page is not on the top of the stack,
