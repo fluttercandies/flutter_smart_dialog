@@ -177,34 +177,37 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       return Opacity(opacity: _postFrameOpacity, child: _child);
     });
 
+    //handle mask
+    late Widget maskWidget;
+    if (widget.usePenetrate) {
+      maskWidget = Container();
+    } else if (widget.maskWidget != null) {
+      maskWidget = widget.maskWidget!;
+    } else {
+      maskWidget = ColorFiltered(
+        colorFilter: ColorFilter.mode(
+          // mask color
+          widget.maskColor,
+          BlendMode.srcOut,
+        ),
+        child: Stack(children: [
+          Container(
+            decoration: BoxDecoration(
+              // any color
+              color: Colors.white,
+              backgroundBlendMode: BlendMode.dstOut,
+            ),
+          ),
+
+          //dissolve mask, highlight location
+          widget.highlightBuilder(targetOffset, targetSize)
+        ]),
+      );
+    }
+
     return Stack(children: [
       //暗色背景widget动画
-      _buildBgAnimation(
-        onPointerUp: widget.onMask,
-        child: (widget.maskWidget != null && !widget.usePenetrate)
-            ? widget.maskWidget
-            : widget.usePenetrate
-                ? Container()
-                : ColorFiltered(
-                    colorFilter: ColorFilter.mode(
-                      // mask color
-                      widget.maskColor,
-                      BlendMode.srcOut,
-                    ),
-                    child: Stack(children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          // any color
-                          color: Colors.white,
-                          backgroundBlendMode: BlendMode.dstOut,
-                        ),
-                      ),
-
-                      //dissolve mask, highlight location
-                      widget.highlightBuilder(targetOffset, targetSize)
-                    ]),
-                  ),
-      ),
+      _buildBgAnimation(onPointerUp: widget.onMask, child: maskWidget),
 
       //内容Widget动画
       Positioned(
