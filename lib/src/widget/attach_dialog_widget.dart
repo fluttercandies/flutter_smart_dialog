@@ -43,6 +43,7 @@ class AttachDialogWidget extends StatefulWidget {
     required this.maskColor,
     required this.highlightBuilder,
     required this.maskWidget,
+    required this.maskTriggerType,
   }) : super(key: key);
 
   ///target context
@@ -90,6 +91,9 @@ class AttachDialogWidget extends StatefulWidget {
   /// 溶解遮罩,设置高亮位置
   final HighlightBuilder highlightBuilder;
 
+  /// 遮罩点击时, 被触发的时机
+  final SmartMaskTriggerType maskTriggerType;
+
   @override
   _AttachDialogWidgetState createState() => _AttachDialogWidgetState();
 }
@@ -111,6 +115,8 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   late Size targetSize;
 
   late Widget _child;
+
+  bool _maskTrigger = false;
 
   @override
   void initState() {
@@ -207,7 +213,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
     return Stack(children: [
       //暗色背景widget动画
-      _buildBgAnimation(onPointerUp: widget.onMask, child: maskWidget),
+      _buildBgAnimation(onMask: widget.onMask, child: maskWidget),
 
       //内容Widget动画
       Positioned(
@@ -221,14 +227,37 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   }
 
   Widget _buildBgAnimation({
-    required void Function()? onPointerUp,
+    required void Function()? onMask,
     required Widget? child,
   }) {
+    Function()? onPointerDown;
+    Function()? onPointerMove;
+    Function()? onPointerUp;
+    if (widget.maskTriggerType == SmartMaskTriggerType.down) {
+      onPointerDown = onMask;
+    } else if (widget.maskTriggerType == SmartMaskTriggerType.move) {
+      onPointerMove = onMask;
+    } else {
+      onPointerUp = onMask;
+    }
+
     return FadeTransition(
       opacity: CurvedAnimation(parent: _ctrlBg!, curve: Curves.linear),
       child: Listener(
         behavior: HitTestBehavior.translucent,
-        onPointerUp: (event) => onPointerUp?.call(),
+        onPointerDown: (event) {
+          onPointerDown?.call();
+          if (onPointerDown != null) _maskTrigger = true;
+        },
+        onPointerMove: (event) {
+          if (!_maskTrigger) onPointerMove?.call();
+          if (onPointerMove != null) _maskTrigger = true;
+        },
+        onPointerUp: (event) {
+          onPointerUp?.call();
+          if (onPointerUp == null && !_maskTrigger) onMask?.call();
+          _maskTrigger = false;
+        },
         child: child,
       ),
     );

@@ -40,6 +40,7 @@ class MainDialog {
     required bool useSystem,
     required bool reuse,
     required SmartAwaitOverType awaitOverType,
+    required SmartMaskTriggerType maskTriggerType,
   }) {
     //custom dialog
     _widget = SmartDialogWidget(
@@ -54,6 +55,7 @@ class MainDialog {
       maskWidget: maskWidget,
       child: widget,
       onMask: onMask,
+      maskTriggerType: maskTriggerType,
     );
 
     _handleCommonOperate(
@@ -86,6 +88,7 @@ class MainDialog {
     required VoidCallback? onDismiss,
     required bool useSystem,
     required SmartAwaitOverType awaitOverType,
+    required SmartMaskTriggerType maskTriggerType,
   }) {
     //attach dialog
     _widget = AttachDialogWidget(
@@ -105,6 +108,7 @@ class MainDialog {
       highlightBuilder: highlightBuilder,
       child: widget,
       onMask: onMask,
+      maskTriggerType: maskTriggerType,
     );
 
     _handleCommonOperate(

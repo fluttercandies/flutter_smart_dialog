@@ -119,3 +119,24 @@ enum SmartAwaitOverType {
   /// await 10毫秒后结束
   none
 }
+
+/// The type of timing that is triggered when the mask is clicked
+///
+/// 点击遮罩时, 被触发时机的类型
+enum SmartMaskTriggerType {
+  /// Triggered when the mask is clicked (down gesture)
+  ///
+  /// 点击到遮罩时(down手势)触发
+  down,
+
+  /// Click to the mask, trigger when the move gesture (move gesture),
+  /// if the move event is not triggered, it will be downgraded to the up event trigger
+  ///
+  /// 点击到遮罩, 移动手势时(move手势)触发, 如果move事件未触发, 将会降级到up事件触发
+  move,
+
+  /// Triggered when the mask is tapped and then raised (up gesture)
+  ///
+  /// 点击到遮罩, 然后抬起手势时(up手势)触发
+  up
+}

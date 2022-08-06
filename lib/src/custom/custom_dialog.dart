@@ -78,6 +78,7 @@ class CustomDialog extends BaseDialog {
       useSystem: useSystem,
       reuse: true,
       awaitOverType: SmartDialog.config.custom.awaitOverType,
+      maskTriggerType: SmartDialog.config.custom.maskTriggerType,
       onMask: () {
         onMask?.call();
         if (!clickMaskDismiss || !_clickMaskDebounce() || permanent) return;
@@ -139,6 +140,7 @@ class CustomDialog extends BaseDialog {
       onDismiss: _handleDismiss(onDismiss, displayTime),
       useSystem: useSystem,
       awaitOverType: SmartDialog.config.attach.awaitOverType,
+      maskTriggerType: SmartDialog.config.attach.maskTriggerType,
       onMask: () {
         onMask?.call();
         if (!clickMaskDismiss || !_clickMaskDebounce() || permanent) return;

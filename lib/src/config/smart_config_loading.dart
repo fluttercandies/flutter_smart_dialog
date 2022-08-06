@@ -18,6 +18,7 @@ class SmartConfigLoading {
     this.clickMaskDismiss = false,
     this.leastLoadingTime = const Duration(milliseconds: 0),
     this.awaitOverType = SmartAwaitOverType.dialogDismiss,
+    this.maskTriggerType = SmartMaskTriggerType.up,
     this.isExist = false,
   });
 
@@ -104,6 +105,11 @@ class SmartConfigLoading {
   ///
   /// 弹窗await结束的类型
   final SmartAwaitOverType awaitOverType;
+
+  /// When the mask is clicked, the trigger timing type (please refer to the [SmartMaskTriggerType] note for details)
+  ///
+  /// 点击遮罩时, 被触发时机的类型 (具体请查看[SmartMaskTriggerType]注释)
+  final SmartMaskTriggerType maskTriggerType;
 
   /// whether loading(showLoading()) exist on the screen
   ///

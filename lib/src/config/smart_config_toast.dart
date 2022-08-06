@@ -22,6 +22,7 @@ class SmartConfigToast {
     this.displayTime = const Duration(milliseconds: 2000),
     this.intervalTime = const Duration(milliseconds: 100),
     this.awaitOverType = SmartAwaitOverType.dialogDismiss,
+    this.maskTriggerType = SmartMaskTriggerType.up,
     this.isExist = false,
   });
 
@@ -128,6 +129,11 @@ class SmartConfigToast {
   ///
   /// 弹窗await结束的类型
   final SmartAwaitOverType awaitOverType;
+
+  /// When the mask is clicked, the trigger timing type (please refer to the [SmartMaskTriggerType] note for details)
+  ///
+  /// 点击遮罩时, 被触发时机的类型 (具体请查看[SmartMaskTriggerType]注释)
+  final SmartMaskTriggerType maskTriggerType;
 
   /// whether toast(showToast()) exist on the screen
   ///

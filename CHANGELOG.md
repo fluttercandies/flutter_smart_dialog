@@ -5,6 +5,7 @@
 - Add replaceBuilder (showAttach)
 - Add onDismiss/onMask (showLoading)
 - Add displayTime (show/showAttach/showLoading)
+- Add SmartMaskTriggerType ([#71](https://github.com/fluttercandies/flutter_smart_dialog/issues/71))
 
 # [4.3.x]
 
