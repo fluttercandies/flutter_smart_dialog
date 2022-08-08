@@ -494,8 +494,17 @@ class AdaptBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Row(mainAxisSize: MainAxisSize.min, children: [
-      Column(mainAxisSize: MainAxisSize.min, children: [builder(context)]),
+      Column(mainAxisSize: MainAxisSize.min, children: [
+        Container(
+          constraints: BoxConstraints(
+            maxWidth: size.width,
+            maxHeight: size.height,
+          ),
+          child: builder(context),
+        ),
+      ]),
     ]);
   }
 }
