@@ -498,10 +498,7 @@ class AdaptBuilder extends StatelessWidget {
     return Row(mainAxisSize: MainAxisSize.min, children: [
       Column(mainAxisSize: MainAxisSize.min, children: [
         Container(
-          constraints: BoxConstraints(
-            maxWidth: size.width,
-            maxHeight: size.height,
-          ),
+          constraints: BoxConstraints(maxWidth: size.width),
           child: builder(context),
         ),
       ]),
