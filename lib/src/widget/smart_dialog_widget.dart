@@ -2,8 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
+import 'package:flutter_smart_dialog/src/widget/animation/fade_animation.dart';
+import 'package:flutter_smart_dialog/src/widget/animation/scale_animation.dart';
+import 'package:flutter_smart_dialog/src/widget/animation/slide_animation.dart';
 
 import '../config/enum_config.dart';
+import 'animation/mask_animation.dart';
+import 'helper/mask_event.dart';
 
 class SmartDialogWidget extends StatefulWidget {
   const SmartDialogWidget({
@@ -61,10 +66,8 @@ class SmartDialogWidget extends StatefulWidget {
 
 class _SmartDialogWidgetState extends State<SmartDialogWidget>
     with TickerProviderStateMixin {
-  AnimationController? _ctrlBg;
-  late AnimationController _ctrlBody;
-  Offset? _offset;
-  bool _maskTrigger = false;
+  AnimationController? _maskController;
+  late AnimationController _bodyController;
 
   @override
   void initState() {
@@ -74,20 +77,18 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
   }
 
   void _resetState() {
-    _dealContentAnimate();
-
     var duration = widget.animationTime;
-    if (_ctrlBg == null) {
-      _ctrlBg = AnimationController(vsync: this, duration: duration);
-      _ctrlBody = AnimationController(vsync: this, duration: duration);
-      _ctrlBg!.forward();
-      _ctrlBody.forward();
+    if (_maskController == null) {
+      _maskController = AnimationController(vsync: this, duration: duration);
+      _bodyController = AnimationController(vsync: this, duration: duration);
+      _maskController!.forward();
+      _bodyController.forward();
     } else {
-      _ctrlBg!.duration = duration;
-      _ctrlBody.duration = duration;
+      _maskController!.duration = duration;
+      _bodyController.duration = duration;
 
-      _ctrlBody.value = 0;
-      _ctrlBody.forward();
+      _bodyController.value = 0;
+      _bodyController.forward();
     }
 
     //bind controller
@@ -104,11 +105,15 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
   Widget build(BuildContext context) {
     return Stack(children: [
       //暗色背景widget动画
-      _buildBgAnimation(
+      MaskEvent(
+        maskTriggerType: widget.maskTriggerType,
         onMask: widget.onMask,
-        child: (widget.maskWidget != null && !widget.usePenetrate)
-            ? widget.maskWidget
-            : Container(color: widget.usePenetrate ? null : widget.maskColor),
+        child: MaskAnimation(
+          controller: _maskController!,
+          maskColor: widget.maskColor,
+          maskWidget: widget.maskWidget,
+          usePenetrate: widget.usePenetrate,
+        ),
       ),
 
       //内容Widget动画
@@ -119,110 +124,45 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
     ]);
   }
 
-  Widget _buildBgAnimation({
-    required void Function()? onMask,
-    required Widget? child,
-  }) {
-    Function()? onPointerDown;
-    Function()? onPointerMove;
-    Function()? onPointerUp;
-    if (widget.maskTriggerType == SmartMaskTriggerType.down) {
-      onPointerDown = onMask;
-    } else if (widget.maskTriggerType == SmartMaskTriggerType.move) {
-      onPointerMove = onMask;
-    } else {
-      onPointerUp = onMask;
-    }
-
-    return FadeTransition(
-      opacity: CurvedAnimation(parent: _ctrlBg!, curve: Curves.linear),
-      child: Listener(
-        behavior: HitTestBehavior.translucent,
-        onPointerDown: (event) {
-          onPointerDown?.call();
-          if (onPointerDown != null) _maskTrigger = true;
-        },
-        onPointerMove: (event) {
-          if (!_maskTrigger) onPointerMove?.call();
-          if (onPointerMove != null) _maskTrigger = true;
-        },
-        onPointerUp: (event) {
-          onPointerUp?.call();
-          if (onPointerUp == null && !_maskTrigger) onMask?.call();
-          _maskTrigger = false;
-        },
-        child: child,
-      ),
-    );
-  }
-
   Widget _buildBodyAnimation() {
     var child = widget.child;
-    var animation = CurvedAnimation(parent: _ctrlBody, curve: Curves.linear);
-    var tw = Tween<Offset>(begin: _offset, end: Offset.zero);
     var type = widget.animationType;
-    Widget animationWidget = FadeTransition(opacity: animation, child: child);
+    Widget fade = FadeAnimation(controller: _bodyController, child: child);
+    Widget scale = ScaleAnimation(controller: _bodyController, child: child);
+    Widget slide = SlideAnimation(
+      controller: _bodyController,
+      child: child,
+      alignment: widget.alignment,
+    );
+    Widget animation = fade;
 
     //select different animation
     if (type == SmartAnimationType.fade) {
-      animationWidget = FadeTransition(opacity: animation, child: child);
+      animation = fade;
     } else if (type == SmartAnimationType.scale) {
-      animationWidget = ScaleTransition(scale: animation, child: child);
+      animation = scale;
     } else if (type == SmartAnimationType.centerFade_otherSlide) {
       if (widget.alignment == Alignment.center) {
-        animationWidget = FadeTransition(opacity: animation, child: child);
+        animation = fade;
       } else {
-        animationWidget = SlideTransition(
-          position: tw.animate(_ctrlBody),
-          child: child,
-        );
+        animation = slide;
       }
     } else if (type == SmartAnimationType.centerScale_otherSlide) {
       if (widget.alignment == Alignment.center) {
-        animationWidget = ScaleTransition(scale: animation, child: child);
+        animation = scale;
       } else {
-        animationWidget = SlideTransition(
-          position: tw.animate(_ctrlBody),
-          child: child,
-        );
+        animation = slide;
       }
     }
-    return animationWidget;
-  }
-
-  ///处理下内容widget动画方向
-  void _dealContentAnimate() {
-    AlignmentGeometry? alignment = widget.alignment;
-    _offset = Offset(0, 0);
-
-    if (alignment == Alignment.bottomCenter ||
-        alignment == Alignment.bottomLeft ||
-        alignment == Alignment.bottomRight) {
-      //靠下
-      _offset = Offset(0, 1);
-    } else if (alignment == Alignment.topCenter ||
-        alignment == Alignment.topLeft ||
-        alignment == Alignment.topRight) {
-      //靠上
-      _offset = Offset(0, -1);
-    } else if (alignment == Alignment.centerLeft) {
-      //靠左
-      _offset = Offset(-1, 0);
-    } else if (alignment == Alignment.centerRight) {
-      //靠右
-      _offset = Offset(1, 0);
-    } else {
-      //居中使用缩放动画,空结构体,不需要操作
-    }
+    return animation;
   }
 
   ///等待动画结束,关闭动画资源
   Future<void> dismiss() async {
-    if (_ctrlBg == null) return;
-    //结束动画
-    _ctrlBg!.reverse();
-    _ctrlBody.reverse();
+    if (_maskController == null) return;
 
+    _maskController!.reverse();
+    _bodyController.reverse();
     if (widget.useAnimation) {
       await Future.delayed(widget.animationTime);
     }
@@ -230,9 +170,9 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   @override
   void dispose() {
-    _ctrlBg?.dispose();
-    _ctrlBg = null;
-    _ctrlBody.dispose();
+    _maskController?.dispose();
+    _maskController = null;
+    _bodyController.dispose();
 
     super.dispose();
   }

@@ -72,7 +72,7 @@ class FlutterSmartDialog extends StatefulWidget {
 class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
   @override
   void initState() {
-    ViewUtils.addPostFrameCallback((timeStamp) {
+    ViewUtils.addSafeUse(() {
       try {
         var navigator = widget.child as Navigator;
         var key = navigator.key as GlobalKey;

@@ -8,8 +8,8 @@ import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 
-import '../config/smart_config.dart';
 import '../config/enum_config.dart';
+import '../config/smart_config.dart';
 import '../init_dialog.dart';
 import '../widget/smart_overlay_entry.dart';
 

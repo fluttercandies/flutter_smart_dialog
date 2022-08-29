@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'compatible/compatible_smart_dialog.dart';
-import 'config/smart_config.dart';
 import 'config/enum_config.dart';
+import 'config/smart_config.dart';
 import 'helper/dialog_proxy.dart';
 import 'widget/attach_dialog_widget.dart';
 import 'widget/dialog_scope.dart';

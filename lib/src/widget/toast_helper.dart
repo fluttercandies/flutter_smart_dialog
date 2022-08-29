@@ -50,7 +50,7 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
   }
 
   void _dealKeyboard() {
-    ViewUtils.addPostFrameCallback((_) {
+    ViewUtils.addSafeUse((){
       if (!mounted) return;
       _keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
       setState(() {});

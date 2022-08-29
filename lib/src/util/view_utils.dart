@@ -7,14 +7,10 @@ class ViewUtils {
   static void addSafeUse(VoidCallback callback) {
     var schedulerPhase = schedulerBinding.schedulerPhase;
     if (schedulerPhase == SchedulerPhase.persistentCallbacks) {
-      ViewUtils.addPostFrameCallback((timeStamp) => callback());
+      widgetsBinding.addPostFrameCallback((timeStamp) => callback());
     } else {
       callback();
     }
-  }
-
-  static void addPostFrameCallback(FrameCallback callback) {
-    widgetsBinding.addPostFrameCallback(callback);
   }
 }
 
