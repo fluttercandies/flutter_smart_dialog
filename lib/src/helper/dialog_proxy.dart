@@ -118,7 +118,7 @@ class DialogProxy {
     required Color maskColor,
     required bool clickMaskDismiss,
     required Widget? maskWidget,
-    required HighlightBuilder highlightBuilder,
+    required HighlightBuilder? highlightBuilder,
     required bool debounce,
     required VoidCallback? onDismiss,
     required VoidCallback? onMask,

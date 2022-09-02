@@ -385,7 +385,6 @@ class SmartDialog {
       'displayTime is used, tag prohibit setting values',
     );
 
-    var highlight = highlightBuilder;
     return DialogProxy.instance.showAttach<T>(
       targetContext: targetContext,
       widget: DialogScope(
@@ -405,7 +404,7 @@ class SmartDialog {
       maskColor: maskColor ?? config.attach.maskColor,
       maskWidget: maskWidget ?? config.attach.maskWidget,
       debounce: debounce ?? config.attach.debounce,
-      highlightBuilder: highlight ?? (_, __) => Positioned(child: Container()),
+      highlightBuilder: highlightBuilder,
       onDismiss: onDismiss,
       onMask: onMask,
       displayTime: displayTime,

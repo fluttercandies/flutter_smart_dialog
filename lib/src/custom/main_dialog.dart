@@ -87,7 +87,7 @@ class MainDialog {
     required ScalePointBuilder? scalePointBuilder,
     required Color maskColor,
     required Widget? maskWidget,
-    required HighlightBuilder highlightBuilder,
+    required HighlightBuilder? highlightBuilder,
     required VoidCallback onMask,
     required VoidCallback? onDismiss,
     required bool useSystem,

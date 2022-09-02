@@ -99,7 +99,7 @@ class AttachDialogWidget extends StatefulWidget {
   final Widget? maskWidget;
 
   /// 溶解遮罩,设置高亮位置
-  final HighlightBuilder highlightBuilder;
+  final HighlightBuilder? highlightBuilder;
 
   /// 遮罩点击时, 被触发的时机
   final SmartMaskTriggerType maskTriggerType;

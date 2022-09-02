@@ -106,7 +106,7 @@ class CustomDialog extends BaseDialog {
     required bool clickMaskDismiss,
     required bool debounce,
     required Widget? maskWidget,
-    required HighlightBuilder highlightBuilder,
+    required HighlightBuilder? highlightBuilder,
     required VoidCallback? onDismiss,
     required VoidCallback? onMask,
     required Duration? displayTime,

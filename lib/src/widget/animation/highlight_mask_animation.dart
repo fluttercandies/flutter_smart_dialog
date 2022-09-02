@@ -25,7 +25,7 @@ class HighlightMaskAnimation extends StatelessWidget {
   final Offset targetOffset;
   final Size targetSize;
 
-  final HighlightBuilder highlightBuilder;
+  final HighlightBuilder? highlightBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +35,8 @@ class HighlightMaskAnimation extends StatelessWidget {
       mask = Container();
     } else if (maskWidget != null) {
       mask = maskWidget!;
+    } else if (highlightBuilder == null) {
+      mask = Container(color: maskColor);
     } else {
       mask = ColorFiltered(
         colorFilter: ColorFilter.mode(
@@ -52,7 +54,7 @@ class HighlightMaskAnimation extends StatelessWidget {
           ),
 
           //dissolve mask, highlight location
-          highlightBuilder(targetOffset, targetSize)
+          highlightBuilder!.call(targetOffset, targetSize)
         ]),
       );
     }
