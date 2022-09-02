@@ -8,7 +8,7 @@ import 'config/smart_config.dart';
 import 'data/animation_param.dart';
 import 'helper/dialog_proxy.dart';
 import 'widget/attach_dialog_widget.dart';
-import 'widget/dialog_scope.dart';
+import 'widget/helper/dialog_scope.dart';
 
 class SmartDialog {
   SmartDialog._();

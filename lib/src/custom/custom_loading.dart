@@ -6,7 +6,7 @@ import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
 import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
-import '../widget/smart_overlay_entry.dart';
+import '../widget/helper/smart_overlay_entry.dart';
 
 class CustomLoading extends BaseDialog {
   CustomLoading({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);

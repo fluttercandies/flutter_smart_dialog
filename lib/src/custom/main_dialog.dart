@@ -10,7 +10,7 @@ import 'package:flutter_smart_dialog/src/widget/smart_dialog_widget.dart';
 
 import '../config/enum_config.dart';
 import '../data/animation_param.dart';
-import '../widget/smart_overlay_entry.dart';
+import '../widget/helper/smart_overlay_entry.dart';
 
 ///main function : customize dialog
 class MainDialog {

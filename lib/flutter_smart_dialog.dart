@@ -9,5 +9,5 @@ export 'src/config/smart_config_toast.dart';
 /// dialog
 export 'src/init_dialog.dart';
 export 'src/smart_dialog.dart';
-export 'src/widget/dialog_scope.dart' show SmartDialogController;
+export 'src/widget/helper/dialog_scope.dart' show SmartDialogController;
 export 'src/data/animation_param.dart' show AnimationParam;
