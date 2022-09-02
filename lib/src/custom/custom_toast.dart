@@ -4,6 +4,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 
 import '../config/enum_config.dart';
+import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
 import '../smart_dialog.dart';
 import '../widget/smart_overlay_entry.dart';
@@ -26,6 +27,7 @@ class CustomToast extends BaseDialog {
     required AlignmentGeometry alignment,
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
+    required AnimationBuilder? animationBuilder,
     required bool usePenetrate,
     required bool useAnimation,
     required Duration animationTime,
@@ -54,6 +56,7 @@ class CustomToast extends BaseDialog {
         maskWidget: maskWidget,
         animationTime: animationTime,
         animationType: animationType,
+        animationBuilder: animationBuilder,
         useAnimation: useAnimation,
         usePenetrate: usePenetrate,
         onDismiss: null,

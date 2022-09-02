@@ -10,6 +10,7 @@ import 'package:flutter_smart_dialog/src/widget/toast_helper.dart';
 
 import '../config/enum_config.dart';
 import '../config/smart_config.dart';
+import '../data/animation_param.dart';
 import '../init_dialog.dart';
 import '../widget/smart_overlay_entry.dart';
 
@@ -58,6 +59,7 @@ class DialogProxy {
     required bool useAnimation,
     required Duration animationTime,
     required SmartAnimationType animationType,
+    required AnimationBuilder? animationBuilder,
     required Color maskColor,
     required bool clickMaskDismiss,
     required Widget? maskWidget,
@@ -84,6 +86,7 @@ class DialogProxy {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
+      animationBuilder: animationBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
       clickMaskDismiss: clickMaskDismiss,
@@ -110,6 +113,7 @@ class DialogProxy {
     required bool useAnimation,
     required Duration animationTime,
     required SmartAnimationType animationType,
+    required AnimationBuilder? animationBuilder,
     required ScalePointBuilder? scalePointBuilder,
     required Color maskColor,
     required bool clickMaskDismiss,
@@ -141,6 +145,7 @@ class DialogProxy {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
+      animationBuilder: animationBuilder,
       scalePointBuilder: scalePointBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
@@ -162,6 +167,7 @@ class DialogProxy {
   Future<T?> showLoading<T>({
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
+    required AnimationBuilder? animationBuilder,
     required bool usePenetrate,
     required bool useAnimation,
     required Duration animationTime,
@@ -176,6 +182,7 @@ class DialogProxy {
     return _loading.showLoading<T>(
       clickMaskDismiss: clickMaskDismiss,
       animationType: animationType,
+      animationBuilder: animationBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
       usePenetrate: usePenetrate,
@@ -193,6 +200,7 @@ class DialogProxy {
     required AlignmentGeometry alignment,
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
+    required AnimationBuilder? animationBuilder,
     required bool usePenetrate,
     required bool useAnimation,
     required Duration animationTime,
@@ -208,6 +216,7 @@ class DialogProxy {
       alignment: alignment,
       clickMaskDismiss: clickMaskDismiss,
       animationType: animationType,
+      animationBuilder: animationBuilder,
       usePenetrate: usePenetrate,
       useAnimation: useAnimation,
       animationTime: animationTime,

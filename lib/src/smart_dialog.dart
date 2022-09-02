@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'compatible/compatible_smart_dialog.dart';
 import 'config/enum_config.dart';
 import 'config/smart_config.dart';
+import 'data/animation_param.dart';
 import 'helper/dialog_proxy.dart';
 import 'widget/attach_dialog_widget.dart';
 import 'widget/dialog_scope.dart';
@@ -33,6 +34,8 @@ class SmartDialog {
   /// [clickMaskDismiss]：true（the dialog will be closed after click mask），false（not close）
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
+  ///
+  /// [animationBuilder]：Support highly custom animation, please refer to [AnimationBuilder] description for details
   ///
   /// [usePenetrate]：true（the click event will penetrate mask），false（not penetration）
   ///
@@ -88,6 +91,8 @@ class SmartDialog {
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
+  /// [animationBuilder]：支持高度自定义动画, 具体可参照[AnimationBuilder]说明
+  ///
   /// [usePenetrate]：true（点击事件将穿透遮罩），false（不穿透）
   ///
   /// [useAnimation]：true（使用动画），false（不使用）
@@ -131,6 +136,7 @@ class SmartDialog {
     bool? usePenetrate,
     bool? useAnimation,
     SmartAnimationType? animationType,
+    AnimationBuilder? animationBuilder,
     Duration? animationTime,
     Color? maskColor,
     Widget? maskWidget,
@@ -170,6 +176,7 @@ class SmartDialog {
       alignment: alignment ?? config.custom.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.custom.clickMaskDismiss,
       animationType: animationType ?? config.custom.animationType,
+      animationBuilder: animationBuilder,
       usePenetrate: usePenetrate ?? config.custom.usePenetrate,
       useAnimation: useAnimation ?? config.custom.useAnimation,
       animationTime: animationTime ?? config.custom.animationTime,
@@ -211,6 +218,8 @@ class SmartDialog {
   /// [clickMaskDismiss]：true（the dialog will be closed after click mask），false（not close）
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
+  ///
+  /// [animationBuilder]：Support highly custom animation, please refer to [AnimationBuilder] description for details
   ///
   /// [scalePointBuilder]：he zoom point of the zoom animation, the default point is the center point of the attach widget as the zoom point;
   /// Offset(0, 0): Use the upper left point of the control as the zoom point,
@@ -284,6 +293,8 @@ class SmartDialog {
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
+  /// [animationBuilder]：支持高度自定义动画, 具体可参照[AnimationBuilder]说明
+  ///
   /// [scalePointBuilder]：缩放动画的缩放点, 默认点将自定义dialog控件的中心点作为缩放点;
   /// Offset(0, 0): 将控件左上点作为缩放点, Offset(控件宽度, 0): 将控件右上点作为缩放点
   /// Offset(0, 控件高度): 将控件左下点作为缩放点, Offset(控件宽度, 控件高度): 将控件右下点作为缩放点
@@ -334,6 +345,7 @@ class SmartDialog {
     AlignmentGeometry? alignment,
     bool? clickMaskDismiss,
     SmartAnimationType? animationType,
+    AnimationBuilder? animationBuilder,
     ScalePointBuilder? scalePointBuilder,
     bool? usePenetrate,
     bool? useAnimation,
@@ -385,6 +397,7 @@ class SmartDialog {
       alignment: alignment ?? config.attach.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.attach.clickMaskDismiss,
       animationType: animationType ?? config.attach.animationType,
+      animationBuilder: animationBuilder,
       scalePointBuilder: scalePointBuilder,
       usePenetrate: usePenetrate ?? config.attach.usePenetrate,
       useAnimation: useAnimation ?? config.attach.useAnimation,
@@ -414,6 +427,8 @@ class SmartDialog {
   /// [clickMaskDismiss]：true（loading will be closed after click mask），false（not close）
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
+  ///
+  /// [animationBuilder]：Support highly custom animation, please refer to [AnimationBuilder] description for details
   ///
   /// [usePenetrate]：true（the click event will penetrate mask），
   /// false（not penetration）
@@ -450,6 +465,8 @@ class SmartDialog {
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
+  /// [animationBuilder]：支持高度自定义动画, 具体可参照[AnimationBuilder]说明
+  ///
   /// [usePenetrate]：true（点击事件将穿透遮罩），false（不穿透）
   ///
   /// [useAnimation]：true（使用动画），false（不使用）
@@ -475,6 +492,7 @@ class SmartDialog {
     SmartDialogController? controller,
     bool? clickMaskDismiss,
     SmartAnimationType? animationType,
+    AnimationBuilder? animationBuilder,
     bool? usePenetrate,
     bool? useAnimation,
     Duration? animationTime,
@@ -489,6 +507,7 @@ class SmartDialog {
     return DialogProxy.instance.showLoading<T>(
       clickMaskDismiss: clickMaskDismiss ?? config.loading.clickMaskDismiss,
       animationType: animationType ?? config.loading.animationType,
+      animationBuilder: animationBuilder,
       usePenetrate: usePenetrate ?? config.loading.usePenetrate,
       useAnimation: useAnimation ?? config.loading.useAnimation,
       animationTime: animationTime ?? config.loading.animationTime,
@@ -520,6 +539,8 @@ class SmartDialog {
   /// [clickMaskDismiss]：true（toast will be closed after click mask），false（not close）
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
+  ///
+  /// [animationBuilder]：Support highly custom animation, please refer to [AnimationBuilder] description for details
   ///
   /// [usePenetrate]：true（the click event will penetrate mask），
   /// false（not penetration）
@@ -557,6 +578,8 @@ class SmartDialog {
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
+  /// [animationBuilder]：支持高度自定义动画, 具体可参照[AnimationBuilder]说明
+  ///
   /// [usePenetrate]：true（点击事件将穿透遮罩），false（不穿透）
   ///
   /// [useAnimation]：true（使用动画），false（不使用）
@@ -581,6 +604,7 @@ class SmartDialog {
     AlignmentGeometry? alignment,
     bool? clickMaskDismiss,
     SmartAnimationType? animationType,
+    AnimationBuilder? animationBuilder,
     bool? usePenetrate,
     bool? useAnimation,
     Duration? animationTime,
@@ -596,6 +620,7 @@ class SmartDialog {
       alignment: alignment ?? config.toast.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.toast.clickMaskDismiss,
       animationType: animationType ?? config.toast.animationType,
+      animationBuilder: animationBuilder,
       usePenetrate: usePenetrate ?? config.toast.usePenetrate,
       useAnimation: useAnimation ?? config.toast.useAnimation,
       animationTime: animationTime ?? config.toast.animationTime,

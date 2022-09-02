@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
+import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/animation/highlight_mask_animation.dart';
 import 'package:flutter_smart_dialog/src/widget/animation/scale_animation.dart';
 import 'package:flutter_smart_dialog/src/widget/dialog_scope.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_smart_dialog/src/widget/helper/attach_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/helper/mask_event.dart';
 
 import '../config/enum_config.dart';
+import '../data/animation_param.dart';
 import 'animation/fade_animation.dart';
 import 'animation/size_animation.dart';
 
@@ -43,6 +45,7 @@ class AttachDialogWidget extends StatefulWidget {
     required this.alignment,
     required this.usePenetrate,
     required this.animationType,
+    required this.animationBuilder,
     required this.scalePointBuilder,
     required this.maskColor,
     required this.highlightBuilder,
@@ -83,6 +86,9 @@ class AttachDialogWidget extends StatefulWidget {
   /// 仅仅针对中间位置的控件
   final SmartAnimationType animationType;
 
+  /// 自定义动画
+  final AnimationBuilder? animationBuilder;
+
   /// 缩放动画的缩放点
   final ScalePointBuilder? scalePointBuilder;
 
@@ -107,6 +113,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   // animation
   AnimationController? _maskController;
   late AnimationController _bodyController;
+  AnimationParam? _animationParam;
 
   // target info
   RectInfo? _targetRect;
@@ -137,6 +144,10 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       _bodyController.forward();
     }
 
+    ViewUtils.addSafeUse(() {
+      _animationParam?.onForward?.call();
+    });
+
     //bind controller
     widget.controller._bind(this);
   }
@@ -157,7 +168,9 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       beforeBuilder: beforeBuilder,
       alignment: widget.alignment,
       originChild: _child,
-      builder: (Widget child) => _buildBodyAnimation(child),
+      builder: (Widget child) {
+        return widget.useAnimation ? _buildBodyAnimation(child) : child;
+      },
       belowBuilder: (targetOffset, targetSize) {
         return [
           //暗色背景widget动画
@@ -231,6 +244,17 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   }
 
   Widget _buildBodyAnimation(Widget child) {
+    if (widget.animationBuilder != null) {
+      return widget.animationBuilder!.call(
+        _bodyController,
+        child,
+        _animationParam = AnimationParam(
+          alignment: widget.alignment,
+          animationTime: widget.animationTime,
+        ),
+      );
+    }
+
     var type = widget.animationType;
     Widget fade = FadeAnimation(controller: _bodyController, child: child);
     Widget scale = ScaleAnimation(
@@ -273,9 +297,11 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     //over animation
     _maskController!.reverse();
     _bodyController.reverse();
+    _animationParam?.onDismiss?.call();
 
+    var awaitTime = _bodyController.duration ?? widget.animationTime;
     if (widget.useAnimation) {
-      await Future.delayed(widget.animationTime);
+      await Future.delayed(awaitTime);
     }
   }
 
@@ -297,13 +323,6 @@ class AttachDialogController extends BaseController {
 
   @override
   Future<void> dismiss() async {
-    try {
-      await _state?.dismiss();
-    } catch (e) {
-      print("-------------------------------------------------------------");
-      print("SmartDialog error: ${e.toString()}");
-      print("-------------------------------------------------------------");
-    }
-    _state = null;
+    await _state?.dismiss();
   }
 }

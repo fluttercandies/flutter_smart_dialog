@@ -9,6 +9,7 @@ import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_widget.dart';
 
 import '../config/enum_config.dart';
+import '../data/animation_param.dart';
 import '../widget/smart_overlay_entry.dart';
 
 ///main function : customize dialog
@@ -41,11 +42,12 @@ class MainDialog {
     required bool reuse,
     required SmartAwaitOverType awaitOverType,
     required SmartMaskTriggerType maskTriggerType,
+    required AnimationBuilder? animationBuilder,
   }) {
     //custom dialog
     _widget = SmartDialogWidget(
       key: reuse ? _uniqueKey : UniqueKey(),
-      controller: _controller = SmartDialogController(),
+      controller: _controller = SmartDialogWidgetController(),
       alignment: alignment,
       usePenetrate: usePenetrate,
       useAnimation: useAnimation,
@@ -56,6 +58,7 @@ class MainDialog {
       child: widget,
       onMask: onMask,
       maskTriggerType: maskTriggerType,
+      animationBuilder: animationBuilder,
     );
 
     _handleCommonOperate(
@@ -80,6 +83,7 @@ class MainDialog {
     required bool useAnimation,
     required Duration animationTime,
     required SmartAnimationType animationType,
+    required AnimationBuilder? animationBuilder,
     required ScalePointBuilder? scalePointBuilder,
     required Color maskColor,
     required Widget? maskWidget,
@@ -102,6 +106,7 @@ class MainDialog {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
+      animationBuilder: animationBuilder,
       scalePointBuilder: scalePointBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,

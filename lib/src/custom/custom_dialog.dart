@@ -10,6 +10,7 @@ import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
 import '../config/enum_config.dart';
+import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
 import '../smart_dialog.dart';
 import '../widget/smart_overlay_entry.dart';
@@ -41,6 +42,7 @@ class CustomDialog extends BaseDialog {
     required bool useAnimation,
     required Duration animationTime,
     required SmartAnimationType animationType,
+    required AnimationBuilder? animationBuilder,
     required Color maskColor,
     required bool clickMaskDismiss,
     required bool debounce,
@@ -72,6 +74,7 @@ class CustomDialog extends BaseDialog {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
+      animationBuilder: animationBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
       onDismiss: _handleDismiss(onDismiss, displayTime),
@@ -97,6 +100,7 @@ class CustomDialog extends BaseDialog {
     required bool useAnimation,
     required Duration animationTime,
     required SmartAnimationType animationType,
+    required AnimationBuilder? animationBuilder,
     required ScalePointBuilder? scalePointBuilder,
     required Color maskColor,
     required bool clickMaskDismiss,
@@ -133,6 +137,7 @@ class CustomDialog extends BaseDialog {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
+      animationBuilder: animationBuilder,
       scalePointBuilder: scalePointBuilder,
       maskColor: maskColor,
       highlightBuilder: highlightBuilder,

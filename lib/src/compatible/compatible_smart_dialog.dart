@@ -126,6 +126,7 @@ class CompatibleSmartDialog {
       animationType: isLoadingTemp ?? config.isLoading
           ? SmartAnimationType.centerFade_otherSlide
           : SmartAnimationType.centerScale_otherSlide,
+      animationBuilder: null,
       usePenetrate: isPenetrateTemp ?? config.isPenetrate,
       useAnimation: isUseAnimationTemp ?? config.isUseAnimation,
       animationTime: animationDurationTemp ?? config.animationDuration,
@@ -281,6 +282,7 @@ class CompatibleSmartDialog {
       animationType: isLoadingTemp ?? false
           ? SmartAnimationType.fade
           : SmartAnimationType.scale,
+      animationBuilder: null,
       scalePointBuilder: null,
       usePenetrate: isPenetrateTemp ?? config.isPenetrate,
       useAnimation: isUseAnimationTemp ?? config.isUseAnimation,
@@ -377,6 +379,7 @@ class CompatibleSmartDialog {
       animationType: isLoadingTemp ?? true
           ? SmartAnimationType.fade
           : SmartAnimationType.scale,
+      animationBuilder: null,
       usePenetrate: isPenetrateTemp ?? false,
       useAnimation: isUseAnimationTemp ?? config.isUseAnimation,
       animationTime: animationDurationTemp ?? config.animationDuration,
@@ -477,6 +480,7 @@ class CompatibleSmartDialog {
       animationType: isLoadingTemp ?? true
           ? SmartAnimationType.fade
           : SmartAnimationType.scale,
+      animationBuilder: null,
       usePenetrate: isPenetrateTemp ?? true,
       useAnimation: isUseAnimationTemp ?? true,
       animationTime: animationDurationTemp ?? Duration(milliseconds: 200),

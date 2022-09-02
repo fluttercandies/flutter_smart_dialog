@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
+import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
 import '../widget/smart_overlay_entry.dart';
 
@@ -19,6 +20,7 @@ class CustomLoading extends BaseDialog {
     required Widget widget,
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
+    required AnimationBuilder? animationBuilder,
     required bool usePenetrate,
     required bool useAnimation,
     required Duration animationTime,
@@ -43,6 +45,7 @@ class CustomLoading extends BaseDialog {
     return mainDialog.show<T>(
       widget: widget,
       animationType: animationType,
+      animationBuilder: animationBuilder,
       alignment: Alignment.center,
       maskColor: maskColor,
       maskWidget: maskWidget,

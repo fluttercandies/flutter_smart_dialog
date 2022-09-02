@@ -7,6 +7,7 @@
 - Add displayTime (show/showAttach/showLoading)
 - Add SmartMaskTriggerType ([#71](https://github.com/fluttercandies/flutter_smart_dialog/issues/71))
 - Fix [#72](https://github.com/fluttercandies/flutter_smart_dialog/issues/72)
+- Complete [#75](https://github.com/fluttercandies/flutter_smart_dialog/issues/75): add animationBuilder(Support highly custom animation)
 
 # [4.3.x]
 
