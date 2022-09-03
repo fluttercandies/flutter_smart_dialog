@@ -6,16 +6,16 @@ import '../attach_dialog_widget.dart';
 typedef AttachBuilder = Widget Function(Widget child);
 
 typedef BeforeBuilder = void Function(
-    Offset targetOffset,
-    Size targetSize,
-    Offset selfOffset,
-    Size selfSize,
-    );
+  Offset targetOffset,
+  Size targetSize,
+  Offset selfOffset,
+  Size selfSize,
+);
 
 typedef CoverBuilder = List<Widget> Function(
-    Offset targetOffset,
-    Size targetSize,
-    );
+  Offset targetOffset,
+  Size targetSize,
+);
 
 class AttachWidget extends StatefulWidget {
   const AttachWidget({
@@ -115,9 +115,9 @@ class _AttachWidgetState extends State<AttachWidget> {
     if (widget.targetBuilder != null) {
       targetOffset = widget.targetContext != null
           ? widget.targetBuilder!(
-        targetOffset,
-        Size(targetSize.width, targetSize.height),
-      )
+              targetOffset,
+              Size(targetSize.width, targetSize.height),
+            )
           : widget.targetBuilder!(Offset.zero, Size.zero);
       targetSize = widget.targetContext != null ? targetSize : Size.zero;
     }
@@ -130,9 +130,7 @@ class _AttachWidgetState extends State<AttachWidget> {
   /// 处理: 方向及其位置
   void _handleLocation() {
     final selfSize = (_childContext!.findRenderObject() as RenderBox).size;
-    final screen = MediaQuery
-        .of(context)
-        .size;
+    final screen = MediaQuery.of(context).size;
 
     //动画方向及其位置
     final alignment = widget.alignment;
@@ -221,9 +219,7 @@ class _AttachWidgetState extends State<AttachWidget> {
     bool fixedVertical = false,
   }) {
     final childSize = (_childContext!.findRenderObject() as RenderBox).size;
-    final screen = MediaQuery
-        .of(context)
-        .size;
+    final screen = MediaQuery.of(context).size;
     var rectInfo = RectInfo(left: left, right: right, top: top, bottom: bottom);
 
     //处理左右边界问题
@@ -268,9 +264,7 @@ class AdaptBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery
-        .of(context)
-        .size;
+    final size = MediaQuery.of(context).size;
     return Row(mainAxisSize: MainAxisSize.min, children: [
       Column(mainAxisSize: MainAxisSize.min, children: [
         Container(
