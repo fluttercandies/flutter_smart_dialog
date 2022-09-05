@@ -192,7 +192,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     );
   }
 
-  void beforeBuilder(
+  Widget beforeBuilder(
     Offset targetOffset,
     Size targetSize,
     Offset selfOffset,
@@ -220,7 +220,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       }
 
       //必须要写在DialogScope的builder之外,保证在scalePointBuilder之前触发replaceBuilder
-      _child = replaceChildBuilder();
+      replaceChildBuilder();
       //保证controller能刷新replaceBuilder
       if (widget.child is DialogScope) {
         _child = DialogScope(
@@ -241,6 +241,8 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       var rateY = (scaleDy - halfHeight) / halfHeight;
       _scaleAlignment = Alignment(rateX, rateY);
     }
+
+    return _child;
   }
 
   Widget _buildBodyAnimation(Widget child) {

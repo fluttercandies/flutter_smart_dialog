@@ -5,7 +5,7 @@ import '../attach_dialog_widget.dart';
 
 typedef AttachBuilder = Widget Function(Widget child);
 
-typedef BeforeBuilder = void Function(
+typedef BeforeBuilder = Widget Function(
   Offset targetOffset,
   Size targetSize,
   Offset selfOffset,
@@ -60,6 +60,7 @@ class _AttachWidgetState extends State<AttachWidget> {
   //target info
   RectInfo? _targetRect;
   BuildContext? _childContext;
+  late Widget _originChild;
 
   @override
   void initState() {
@@ -80,7 +81,7 @@ class _AttachWidgetState extends State<AttachWidget> {
   Widget build(BuildContext context) {
     var child = AdaptBuilder(builder: (context) {
       _childContext = context;
-      return Opacity(opacity: _postFrameOpacity, child: widget.originChild);
+      return Opacity(opacity: _postFrameOpacity, child: _originChild);
     });
 
     List<Widget> below =
@@ -106,7 +107,9 @@ class _AttachWidgetState extends State<AttachWidget> {
   }
 
   void _resetState() {
+    _originChild = widget.originChild;
     _postFrameOpacity = 0;
+
     if (widget.targetContext != null) {
       final renderBox = widget.targetContext!.findRenderObject() as RenderBox;
       targetOffset = renderBox.localToGlobal(Offset.zero);
@@ -191,19 +194,21 @@ class _AttachWidgetState extends State<AttachWidget> {
       );
     }
 
-    widget.beforeBuilder?.call(
-      targetOffset,
-      targetSize,
-      Offset(
-        _targetRect?.left != null
-            ? _targetRect!.left!
-            : screen.width - ((_targetRect?.right ?? 0) + selfSize.width),
-        _targetRect?.top != null
-            ? _targetRect!.top!
-            : screen.height - ((_targetRect?.bottom ?? 0) + selfSize.height),
-      ),
-      selfSize,
-    );
+    if (widget.beforeBuilder != null) {
+      _originChild = widget.beforeBuilder!.call(
+        targetOffset,
+        targetSize,
+        Offset(
+          _targetRect?.left != null
+              ? _targetRect!.left!
+              : screen.width - ((_targetRect?.right ?? 0) + selfSize.width),
+          _targetRect?.top != null
+              ? _targetRect!.top!
+              : screen.height - ((_targetRect?.bottom ?? 0) + selfSize.height),
+        ),
+        selfSize,
+      );
+    }
 
     //第一帧后恢复透明度,同时重置位置信息
     _postFrameOpacity = 1;
