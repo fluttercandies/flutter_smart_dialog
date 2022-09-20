@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 
@@ -28,6 +29,10 @@ class SmartNavigatorObserver extends NavigatorObserver {
 
     if (!SmartDialog.config.isExist ||
         route.settings.name == SmartTag.systemDialog) return;
+
+    if (SmartDialog.config.isExistLoading) {
+      SmartDialog.dismiss(status: SmartStatus.loading);
+    }
 
     //smart close dialog
     var dialogQueue = DialogProxy.instance.dialogQueue;
