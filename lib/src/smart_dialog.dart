@@ -70,7 +70,7 @@ class SmartDialog {
   /// you need to close this kind of dialog: dismiss(force: true)
   ///
   /// [useSystem]：default (false), true (using the system dialog, [usePenetrate] is invalid;
-  /// [tag], [backDismiss], [keepSingle], [permanent] and [bindPage] are prohibited), false (using SmartDialog),
+  /// [tag], [keepSingle], [permanent] and [bindPage] are prohibited), false (using SmartDialog),
   /// using this param can make SmartDialog reasonably interact with the routing page and the dialog that comes with flutter
   ///
   /// [bindPage]：bind the dialog to the current page, the bound page is not on the top of the stack,
@@ -123,7 +123,7 @@ class SmartDialog {
   /// [permanent]：默认（false），true（将该dialog设置为永久化dialog）,false(不设置);
   /// 框架内部各种兜底操作(返回事件,路由)无法关闭永久化dialog, 需要关闭此类dialog可使用: dismiss(force: true)
   ///
-  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效; [tag], [backDismiss], [keepSingle], [permanent]和[bindPage]禁止使用），
+  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效; [tag], [keepSingle], [permanent]和[bindPage]禁止使用），
   /// false（使用SmartDialog），使用该参数可使SmartDialog, 与路由页面以及flutter自带dialog合理交互
   ///
   /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
@@ -154,12 +154,11 @@ class SmartDialog {
     assert(
       (useSystem == true &&
               tag == null &&
-              backDismiss == null &&
               permanent == null &&
               bindPage == null &&
               keepSingle == null) ||
           (useSystem == null || useSystem == false),
-      'useSystem is true; tag, backDismiss, keepSingle, bindPage and permanent prohibit setting values',
+      'useSystem is true; tag, keepSingle, bindPage and permanent prohibit setting values',
     );
     assert(
       keepSingle == null || keepSingle == false || tag == null,
@@ -265,7 +264,7 @@ class SmartDialog {
   /// you need to close this kind of dialog: dismiss(force: true)
   ///
   /// [useSystem]：default (false), true (using the system dialog, [usePenetrate] is invalid;
-  /// [tag], [backDismiss], [keepSingle], [permanent] and [bindPage] are prohibited), false (using SmartDialog),
+  /// [tag], [keepSingle], [permanent] and [bindPage] are prohibited), false (using SmartDialog),
   /// using this param can make SmartDialog reasonably interact with the routing page and the dialog that comes with flutter
   ///
   /// [bindPage]：bind the dialog to the current page, the bound page is not on the top of the stack,
@@ -333,7 +332,7 @@ class SmartDialog {
   /// [permanent]：默认（false），true（将该dialog设置为永久化dialog）,false(不设置);
   /// 框架内部各种兜底操作(返回事件,路由)无法关闭永久化dialog, 需要关闭此类dialog可使用: dismiss(force: true)
   ///
-  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效; [tag], [backDismiss], [keepSingle], [permanent]和[bindPage]禁止使用），
+  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效; [tag], [keepSingle], [permanent]和[bindPage]禁止使用），
   /// false（使用SmartDialog），使用该参数可使SmartDialog, 与路由页面以及flutter自带dialog合理交互
   ///
   /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
@@ -373,12 +372,11 @@ class SmartDialog {
     assert(
       (useSystem == true &&
               tag == null &&
-              backDismiss == null &&
               permanent == null &&
               bindPage == null &&
               keepSingle == null) ||
           (useSystem == null || useSystem == false),
-      'useSystem is true; tag, backDismiss, keepSingle, bindPage and permanent prohibit setting values',
+      'useSystem is true; tag, keepSingle, bindPage and permanent prohibit setting values',
     );
     assert(
       keepSingle == null || keepSingle == false || tag == null,
