@@ -4,7 +4,6 @@ import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 
 import '../custom/custom_dialog.dart';
-import '../smart_dialog.dart';
 import 'dialog_proxy.dart';
 
 class SmartNavigatorObserver extends NavigatorObserver {
