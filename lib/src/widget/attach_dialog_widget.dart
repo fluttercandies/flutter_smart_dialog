@@ -116,7 +116,6 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   AnimationParam? _animationParam;
 
   // target info
-  RectInfo? _targetRect;
   Alignment? _scaleAlignment;
 
   late Widget _child;
@@ -198,23 +197,13 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     Offset selfOffset,
     Size selfSize,
   ) {
-    final screen = MediaQuery.of(context).size;
-
     //替换控件builder
     if (widget.replaceBuilder != null) {
       Widget replaceChildBuilder() {
         return widget.replaceBuilder!(
           targetOffset,
           targetSize,
-          Offset(
-            _targetRect?.left != null
-                ? _targetRect!.left!
-                : screen.width - ((_targetRect?.right ?? 0) + selfSize.width),
-            _targetRect?.top != null
-                ? _targetRect!.top!
-                : screen.height -
-                    ((_targetRect?.bottom ?? 0) + selfSize.height),
-          ),
+          selfOffset,
           selfSize,
         );
       }

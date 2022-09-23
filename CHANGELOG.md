@@ -11,6 +11,7 @@
 - Fix [#77](https://github.com/fluttercandies/flutter_smart_dialog/issues/77)
 - Fix [#78](https://github.com/fluttercandies/flutter_smart_dialog/issues/78)
 - Fix [#80](https://github.com/fluttercandies/flutter_smart_dialog/issues/80)
+- Optimize replaceBuilder
 
 
 # [4.3.x]
