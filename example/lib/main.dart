@@ -62,22 +62,42 @@ class SmartDialogPage extends StatelessWidget {
     print('--------------------------');
   }
 
-  void _show() {
-    SmartDialog.show(builder: (_) {
-      return Container(
-        height: 80,
-        width: 180,
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        alignment: Alignment.center,
-        child: Text(
-          'easy custom dialog',
-          style: TextStyle(color: Colors.white),
-        ),
+  void _show() async {
+    //关闭多个相同tag dialog
+    tagDialog(String tag) {
+      SmartDialog.show(
+        tag: tag,
+        builder: (_) {
+          return Container(
+            height: 80,
+            width: 180,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              'easy custom dialog',
+              style: TextStyle(color: Colors.white),
+            ),
+          );
+        },
       );
-    });
+    }
+    var tag = "1";
+    for (var i = 0; i < 3; i++) {
+      tagDialog(tag);
+      await Future.delayed(Duration(milliseconds: 300));
+    }
+    SmartDialog.dismiss(tag: tag, status: SmartStatus.allDialog);
+
+    //穿透遮罩
+    SmartDialog.show(
+      usePenetrate: true,
+      builder: (_) {
+        return Container(height: 80, width: 180, color: Colors.black);
+      },
+    );
   }
 
   void _showAttach(BuildContext ctx) {

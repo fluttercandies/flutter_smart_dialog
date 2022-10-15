@@ -13,6 +13,7 @@ class DialogInfo {
     required this.useSystem,
     required this.bindPage,
     required this.route,
+    required this.bindWidget,
   });
 
   final BaseDialog dialog;
@@ -21,7 +22,7 @@ class DialogInfo {
 
   final DialogType type;
 
-  final String? tag;
+  String? tag;
 
   final bool permanent;
 
@@ -30,4 +31,6 @@ class DialogInfo {
   final bool bindPage;
 
   final Route<dynamic>? route;
+
+  final BuildContext? bindWidget;
 }

@@ -142,6 +142,7 @@ class CompatibleSmartDialog {
       permanent: false,
       useSystem: useSystem ?? false,
       bindPage: false,
+      bindWidget: null,
     );
   }
 
@@ -304,6 +305,7 @@ class CompatibleSmartDialog {
       permanent: false,
       useSystem: useSystem ?? false,
       bindPage: false,
+      bindWidget: null,
     );
   }
 

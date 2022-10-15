@@ -20,7 +20,7 @@ class MainDialog {
   final SmartOverlayEntry overlayEntry;
   final _uniqueKey = UniqueKey();
 
-  bool offstage = false;
+  bool visible = true;
   BaseController? _controller;
   Completer? _completer;
   VoidCallback? _onDismiss;
@@ -201,5 +201,5 @@ class MainDialog {
     );
   }
 
-  Widget getWidget() => Offstage(offstage: offstage, child: _widget);
+  Widget getWidget() => Offstage(offstage: !visible, child: _widget);
 }

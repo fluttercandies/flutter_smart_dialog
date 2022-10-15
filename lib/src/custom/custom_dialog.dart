@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
+import 'package:flutter_smart_dialog/src/helper/monitor_widget_helper.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
@@ -56,6 +57,7 @@ class CustomDialog extends BaseDialog {
     required bool permanent,
     required bool useSystem,
     required bool bindPage,
+    required BuildContext? bindWidget,
   }) {
     if (!_handleMustOperate(
       tag: displayTime != null ? _getTimeKey(displayTime) : tag,
@@ -66,6 +68,7 @@ class CustomDialog extends BaseDialog {
       permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
+      bindWidget: bindWidget,
     )) return Future.value(null);
     return mainDialog.show<T>(
       widget: widget,
@@ -116,6 +119,7 @@ class CustomDialog extends BaseDialog {
     required bool permanent,
     required bool useSystem,
     required bool bindPage,
+    required BuildContext? bindWidget,
   }) {
     if (!_handleMustOperate(
       tag: displayTime != null ? _getTimeKey(displayTime) : tag,
@@ -126,6 +130,7 @@ class CustomDialog extends BaseDialog {
       permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
+      bindWidget: bindWidget,
     )) return Future.value(null);
     return mainDialog.showAttach<T>(
       targetContext: targetContext,
@@ -177,6 +182,7 @@ class CustomDialog extends BaseDialog {
     required bool permanent,
     required bool useSystem,
     required bool bindPage,
+    required BuildContext? bindWidget,
   }) {
     // debounce
     if (!_checkDebounce(debounce, type)) return false;
@@ -190,6 +196,7 @@ class CustomDialog extends BaseDialog {
       permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
+      bindWidget: bindWidget,
     );
 
     SmartDialog.config.custom.isExist = DialogType.custom == type;
@@ -205,7 +212,12 @@ class CustomDialog extends BaseDialog {
     required bool permanent,
     required bool useSystem,
     required bool bindPage,
+    required BuildContext? bindWidget,
   }) {
+    if (bindWidget != null) {
+      tag = tag ?? "${bindPage.hashCode}";
+    }
+
     if (keepSingle) {
       DialogInfo? dialogInfo = _getDialog(tag: SmartTag.keepSingle);
       if (dialogInfo == null) {
@@ -218,6 +230,7 @@ class CustomDialog extends BaseDialog {
           useSystem: useSystem,
           bindPage: bindPage,
           route: RouteRecord.curRoute,
+          bindWidget: bindWidget,
         );
         _pushDialog(dialogInfo);
         mainDialogSingle = mainDialog;
@@ -237,6 +250,7 @@ class CustomDialog extends BaseDialog {
       useSystem: useSystem,
       bindPage: bindPage,
       route: RouteRecord.curRoute,
+      bindWidget: bindWidget,
     );
     _pushDialog(dialogInfo);
   }
@@ -248,6 +262,10 @@ class CustomDialog extends BaseDialog {
     } else {
       proxy.dialogQueue.addLast(dialogInfo);
     }
+    if (dialogInfo.bindWidget != null) {
+      MonitorWidgetHelper.instance.monitorDialogQueue.add(dialogInfo);
+    }
+
     // insert the dialog carrier into the page
     ViewUtils.addSafeUse(() {
       Overlay.of(DialogProxy.contextOverlay)!.insert(
@@ -356,6 +374,9 @@ class CustomDialog extends BaseDialog {
     //handle close dialog
     var proxy = DialogProxy.instance;
     proxy.dialogQueue.remove(info);
+    if (info.bindWidget != null) {
+      MonitorWidgetHelper.instance.monitorDialogQueue.remove(info);
+    }
 
     //check if the queue contains a custom dialog or attach dialog
     proxy.config.custom.isExist = false;
@@ -410,8 +431,12 @@ class CustomDialog extends BaseDialog {
     //handle normal dialog
     for (var i = dialogQueue.length - 1; i >= 0; i--) {
       if (dialogQueue.isEmpty) break;
-      if (type == DialogType.dialog || list[i].type == type) {
-        info = list[i];
+      var item = list[i];
+      if (!item.dialog.mainDialog.visible) {
+        continue;
+      }
+      if (type == DialogType.dialog || item.type == type) {
+        info = item;
         break;
       }
     }

@@ -54,7 +54,7 @@ class RouteRecord {
           }
         } else {
           // deal with bindPage and permanent dialog
-          if (info.dialog.mainDialog.offstage || info.permanent) {
+          if (!info.dialog.mainDialog.visible || info.permanent) {
             shouldHandle = false;
           }
         }
@@ -71,8 +71,7 @@ class RouteRecord {
     if (curRoute == null || DialogProxy.instance.dialogQueue.isEmpty) return;
     for (var item in DialogProxy.instance.dialogQueue) {
       if (item.route == curRoute && item.bindPage) {
-        item.dialog.mainDialog.offstage = true;
-        item.dialog.overlayEntry.markNeedsBuild();
+        item.dialog.hide();
       }
     }
   }
@@ -81,8 +80,7 @@ class RouteRecord {
     if (curRoute == null || DialogProxy.instance.dialogQueue.isEmpty) return;
     for (var item in DialogProxy.instance.dialogQueue) {
       if (item.route == curRoute && item.bindPage) {
-        item.dialog.mainDialog.offstage = false;
-        item.dialog.overlayEntry.markNeedsBuild();
+        item.dialog.appear();
       }
     }
   }

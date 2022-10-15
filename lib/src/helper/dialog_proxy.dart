@@ -73,6 +73,7 @@ class DialogProxy {
     required bool permanent,
     required bool useSystem,
     required bool bindPage,
+    required BuildContext? bindWidget,
   }) {
     CustomDialog? dialog;
     var entry = SmartOverlayEntry(
@@ -100,6 +101,7 @@ class DialogProxy {
       permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
+      bindWidget: bindWidget,
     );
   }
 
@@ -129,6 +131,7 @@ class DialogProxy {
     required bool permanent,
     required bool useSystem,
     required bool bindPage,
+    required BuildContext? bindWidget,
   }) {
     CustomDialog? dialog;
     var entry = SmartOverlayEntry(
@@ -161,6 +164,7 @@ class DialogProxy {
       permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
+      bindWidget: bindWidget,
     );
   }
 

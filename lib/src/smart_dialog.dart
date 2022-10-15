@@ -128,6 +128,9 @@ class SmartDialog {
   ///
   /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
   /// 绑定页面被关闭,被绑定在该页面上的dialog也将被移除
+  ///
+  /// [bindWidget]：将dialog与某个Widget绑定, 当该widget不可见时, dialog自动隐藏, 该widget可见时, dialog自动显示;
+  /// 适用于PageView, TabView之类, 绑定其子页面, 切换页面时, dialog也能合理交互
   static Future<T?> show<T>({
     required WidgetBuilder builder,
     SmartDialogController? controller,
@@ -150,6 +153,7 @@ class SmartDialog {
     bool? permanent,
     bool? useSystem,
     bool? bindPage,
+    BuildContext? bindWidget,
   }) {
     assert(
       (useSystem == true &&
@@ -193,6 +197,7 @@ class SmartDialog {
       permanent: permanent ?? false,
       useSystem: useSystem ?? false,
       bindPage: bindPage ?? config.custom.bindPage,
+      bindWidget: bindWidget,
     );
   }
 
@@ -337,6 +342,9 @@ class SmartDialog {
   ///
   /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
   /// 绑定页面被关闭,被绑定在该页面上的dialog也将被移除
+  ///
+  /// [bindWidget]：将dialog与某个Widget绑定, 当该widget不可见时, dialog自动隐藏, 该widget可见时, dialog自动显示;
+  /// 适用于PageView, TabView之类, 绑定其子页面, 切换页面时, dialog也能合理交互
   static Future<T?> showAttach<T>({
     required BuildContext? targetContext,
     required WidgetBuilder builder,
@@ -364,6 +372,7 @@ class SmartDialog {
     bool? permanent,
     bool? useSystem,
     bool? bindPage,
+    BuildContext? bindWidget,
   }) {
     assert(
       targetContext != null || targetBuilder != null,
@@ -416,6 +425,7 @@ class SmartDialog {
       permanent: permanent ?? false,
       useSystem: useSystem ?? false,
       bindPage: bindPage ?? config.attach.bindPage,
+      bindWidget: bindWidget,
     );
   }
 
