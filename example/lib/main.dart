@@ -63,41 +63,21 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _show() async {
-    //关闭多个相同tag dialog
-    tagDialog(String tag) {
-      SmartDialog.show(
-        tag: tag,
-        builder: (_) {
-          return Container(
-            height: 80,
-            width: 180,
-            decoration: BoxDecoration(
-              color: Colors.black,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              'easy custom dialog',
-              style: TextStyle(color: Colors.white),
-            ),
-          );
-        },
+    SmartDialog.show(builder: (_) {
+      return Container(
+        height: 80,
+        width: 180,
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          'easy custom dialog',
+          style: TextStyle(color: Colors.white),
+        ),
       );
-    }
-    var tag = "1";
-    for (var i = 0; i < 3; i++) {
-      tagDialog(tag);
-      await Future.delayed(Duration(milliseconds: 300));
-    }
-    SmartDialog.dismiss(tag: tag, status: SmartStatus.allDialog);
-
-    //穿透遮罩
-    SmartDialog.show(
-      usePenetrate: true,
-      builder: (_) {
-        return Container(height: 80, width: 180, color: Colors.black);
-      },
-    );
+    });
   }
 
   void _showAttach(BuildContext ctx) {
@@ -139,7 +119,8 @@ class SmartDialogPage extends StatelessWidget {
   void _bindPage(BuildContext ctx) {
     //target widget
     SmartDialog.show(
-      bindPage: true,
+      // bindPage: true,
+      // bindWidget: ctx,
       builder: (_) {
         return Container(
           height: 300,
@@ -151,14 +132,22 @@ class SmartDialogPage extends StatelessWidget {
           alignment: Alignment.center,
           child: ElevatedButton(
             onPressed: () {
-              Navigator.push(ctx, MaterialPageRoute(builder: (_) {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: Text("New Page"),
-                  ),
-                  body: Center(child: Text("New Page")),
-                );
-              }));
+              SmartDialog.show(
+                alignment: Alignment.bottomCenter,
+                  useSystem: true,
+                  builder: (_) {
+                    return Container(
+                        height: 30, width: 30, color: Colors.black);
+                  });
+
+              // Navigator.push(ctx, MaterialPageRoute(builder: (_) {
+              //   return Scaffold(
+              //     appBar: AppBar(
+              //       title: Text("New Page"),
+              //     ),
+              //     body: Center(child: Text("New Page")),
+              //   );
+              // }));
             },
             child: Text('to new page'),
           ),

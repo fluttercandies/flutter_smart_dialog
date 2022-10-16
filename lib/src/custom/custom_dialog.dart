@@ -43,6 +43,7 @@ class CustomDialog extends BaseDialog {
     required bool useAnimation,
     required Duration animationTime,
     required SmartAnimationType animationType,
+    required List<SmartNonAnimationType> nonAnimationTypes,
     required AnimationBuilder? animationBuilder,
     required Color maskColor,
     required bool clickMaskDismiss,
@@ -77,6 +78,7 @@ class CustomDialog extends BaseDialog {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
+      nonAnimationTypes: nonAnimationTypes,
       animationBuilder: animationBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
@@ -88,7 +90,7 @@ class CustomDialog extends BaseDialog {
       onMask: () {
         onMask?.call();
         if (!clickMaskDismiss || !_clickMaskDebounce() || permanent) return;
-        dismiss();
+        dismiss(closeType: CloseType.mask);
       },
     );
   }
@@ -103,6 +105,7 @@ class CustomDialog extends BaseDialog {
     required bool useAnimation,
     required Duration animationTime,
     required SmartAnimationType animationType,
+    required List<SmartNonAnimationType> nonAnimationTypes,
     required AnimationBuilder? animationBuilder,
     required ScalePointBuilder? scalePointBuilder,
     required Color maskColor,
@@ -142,6 +145,7 @@ class CustomDialog extends BaseDialog {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
+      nonAnimationTypes: nonAnimationTypes,
       animationBuilder: animationBuilder,
       scalePointBuilder: scalePointBuilder,
       maskColor: maskColor,
@@ -154,7 +158,7 @@ class CustomDialog extends BaseDialog {
       onMask: () {
         onMask?.call();
         if (!clickMaskDismiss || !_clickMaskDebounce() || permanent) return;
-        dismiss();
+        dismiss(closeType: CloseType.mask);
       },
     );
   }
@@ -303,22 +307,20 @@ class CustomDialog extends BaseDialog {
 
   static Future<void>? dismiss<T>({
     DialogType type = DialogType.dialog,
-    bool back = false,
     String? tag,
     T? result,
     bool force = false,
-    bool route = false,
+    CloseType closeType = CloseType.normal,
   }) {
     if (type == DialogType.dialog ||
         type == DialogType.custom ||
         type == DialogType.attach) {
       return _closeSingle<T>(
         type: type,
-        back: back,
         tag: tag,
         result: result,
         force: force,
-        route: route,
+        closeType: closeType,
       );
     } else {
       DialogType? allType;
@@ -329,47 +331,46 @@ class CustomDialog extends BaseDialog {
 
       return _closeAll<T>(
         type: allType,
-        back: back,
         tag: tag,
         result: result,
         force: force,
-        route: route,
+        closeType: closeType,
       );
     }
   }
 
   static Future<void> _closeAll<T>({
     required DialogType type,
-    required bool back,
     required String? tag,
     required T? result,
     required bool force,
-    required bool route,
+    required CloseType closeType,
   }) async {
     for (int i = DialogProxy.instance.dialogQueue.length; i > 0; i--) {
       await _closeSingle<T>(
         type: type,
-        back: back,
         tag: tag,
         result: result,
         force: force,
-        route: route,
+        closeType: closeType,
       );
     }
   }
 
   static Future<void> _closeSingle<T>({
     required DialogType type,
-    required bool back,
     required String? tag,
     required T? result,
     required bool force,
-    required bool route,
+    required CloseType closeType,
   }) async {
-    var info = _getDialog(type: type, back: back, tag: tag, force: force);
+    var info = _getDialog(
+      type: type,
+      closeType: closeType,
+      tag: tag,
+      force: force,
+    );
     if (info == null || (info.permanent && !force)) return;
-    //route close
-    if (route && info.bindPage && info.route != RouteRecord.popRoute) return;
 
     //handle close dialog
     var proxy = DialogProxy.instance;
@@ -394,15 +395,16 @@ class CustomDialog extends BaseDialog {
     await customDialog.mainDialog.dismiss<T>(
       useSystem: info.useSystem,
       result: result,
+      closeType: closeType,
     );
     customDialog.overlayEntry.remove();
   }
 
   static DialogInfo? _getDialog({
     DialogType type = DialogType.dialog,
-    bool back = false,
     String? tag,
     bool force = false,
+    CloseType closeType = CloseType.normal,
   }) {
     var proxy = DialogProxy.instance;
     if (proxy.dialogQueue.isEmpty) return null;
@@ -432,7 +434,7 @@ class CustomDialog extends BaseDialog {
     for (var i = dialogQueue.length - 1; i >= 0; i--) {
       if (dialogQueue.isEmpty) break;
       var item = list[i];
-      if (!item.dialog.mainDialog.visible) {
+      if (!item.dialog.mainDialog.visible && !item.useSystem) {
         continue;
       }
       if (type == DialogType.dialog || item.type == type) {
@@ -442,7 +444,9 @@ class CustomDialog extends BaseDialog {
     }
 
     //handle prohibiting back event
-    if (info != null && (!info.backDismiss && back)) return null;
+    if (info != null && (!info.backDismiss && closeType == CloseType.back)) {
+      return null;
+    }
 
     return info;
   }

@@ -24,7 +24,10 @@ class MonitorPopRoute with WidgetsBindingObserver {
   Future<bool> didPopRoute() async {
     // handle contain system dialog and common condition
     if (RouteRecord.instance.handleSmartDialog()) {
-      DialogProxy.instance.dismiss(status: SmartStatus.smart, back: true);
+      DialogProxy.instance.dismiss(
+        status: SmartStatus.smart,
+        closeType: CloseType.back,
+      );
       return true;
     }
 

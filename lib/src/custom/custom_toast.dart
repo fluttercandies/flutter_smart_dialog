@@ -56,6 +56,7 @@ class CustomToast extends BaseDialog {
         maskWidget: maskWidget,
         animationTime: animationTime,
         animationType: animationType,
+        nonAnimationTypes: const [],
         animationBuilder: animationBuilder,
         useAnimation: useAnimation,
         usePenetrate: usePenetrate,

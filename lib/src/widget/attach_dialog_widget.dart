@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
 import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/animation/highlight_mask_animation.dart';
@@ -7,8 +8,8 @@ import 'package:flutter_smart_dialog/src/widget/helper/attach_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/helper/dialog_scope.dart';
 import 'package:flutter_smart_dialog/src/widget/helper/mask_event.dart';
 
-import '../config/enum_config.dart';
 import '../data/animation_param.dart';
+import '../helper/dialog_proxy.dart';
 import 'animation/fade_animation.dart';
 import 'animation/size_animation.dart';
 
@@ -45,6 +46,7 @@ class AttachDialogWidget extends StatefulWidget {
     required this.alignment,
     required this.usePenetrate,
     required this.animationType,
+    required this.nonAnimationTypes,
     required this.animationBuilder,
     required this.scalePointBuilder,
     required this.maskColor,
@@ -85,6 +87,9 @@ class AttachDialogWidget extends StatefulWidget {
   /// 是否使用Loading情况；true:内容体使用渐隐动画  false：内容体使用缩放动画
   /// 仅仅针对中间位置的控件
   final SmartAnimationType animationType;
+
+  /// 无动画类型
+  final List<SmartNonAnimationType> nonAnimationTypes;
 
   /// 自定义动画
   final AnimationBuilder? animationBuilder;
@@ -129,16 +134,24 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   }
 
   void _resetState() {
-    var duration = widget.animationTime;
+    var startTime = widget.animationTime;
+    widget.nonAnimationTypes.forEach((nonAnimationType) {
+      if (widget.controller.judgeOpenDialogType(nonAnimationType)) {
+        startTime = Duration.zero;
+      }
+    });
+
     if (_maskController == null) {
-      _maskController = AnimationController(vsync: this, duration: duration);
-      _bodyController = AnimationController(vsync: this, duration: duration);
-      _maskController?.forward();
+      _maskController = AnimationController(vsync: this, duration: startTime);
+      _bodyController = AnimationController(vsync: this, duration: startTime);
+
+      _maskController!.duration = startTime;
+      _bodyController.duration = startTime;
+      _maskController!.forward();
       _bodyController.forward();
     } else {
-      _maskController!.duration = duration;
-      _bodyController.duration = duration;
-
+      _maskController!.duration = startTime;
+      _bodyController.duration = startTime;
       _bodyController.value = 0;
       _bodyController.forward();
     }
@@ -283,16 +296,25 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
   }
 
   ///等待动画结束,关闭动画资源
-  Future<void> dismiss() async {
+  Future<void> dismiss({CloseType closeType = CloseType.normal}) async {
     if (_maskController == null) return;
+
+    // dismiss type
+    var endTime = _bodyController.duration ?? widget.animationTime;
+    widget.nonAnimationTypes.forEach((dismissType) {
+      if (widget.controller.judgeDismissDialogType(closeType, dismissType)) {
+        _maskController!.duration = Duration.zero;
+        _bodyController.duration = Duration.zero;
+        endTime = Duration.zero;
+      }
+    });
+
     //over animation
     _maskController!.reverse();
     _bodyController.reverse();
     _animationParam?.onDismiss?.call();
-
-    var awaitTime = _bodyController.duration ?? widget.animationTime;
     if (widget.useAnimation) {
-      await Future.delayed(awaitTime);
+      await Future.delayed(endTime);
     }
   }
 
@@ -313,7 +335,7 @@ class AttachDialogController extends BaseController {
   }
 
   @override
-  Future<void> dismiss() async {
-    await _state?.dismiss();
+  Future<void> dismiss({CloseType closeType = CloseType.normal}) async {
+    await _state?.dismiss(closeType: closeType);
   }
 }

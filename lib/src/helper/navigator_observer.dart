@@ -3,7 +3,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 
-import '../custom/custom_dialog.dart';
 import 'dialog_proxy.dart';
 
 class SmartNavigatorObserver extends NavigatorObserver {
@@ -23,22 +22,32 @@ class SmartNavigatorObserver extends NavigatorObserver {
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) async {
     RouteRecord.instance.pop(route, previousRoute);
-    RouteRecord.popRoute = route;
     RouteRecord.curRoute = previousRoute;
 
     if (!SmartDialog.config.isExist ||
-        route.settings.name == SmartTag.systemDialog) return;
+        route.settings.name == SmartTag.systemDialog) {
+      return;
+    }
 
     if (SmartDialog.config.isExistLoading) {
-      SmartDialog.dismiss(status: SmartStatus.loading);
+      DialogProxy.instance.dismiss(
+        status: SmartStatus.loading,
+        closeType: CloseType.route,
+      );
     }
 
     //smart close dialog
     var dialogQueue = DialogProxy.instance.dialogQueue;
     for (var i = dialogQueue.length; i > 0; i--) {
-      if (dialogQueue.isEmpty || dialogQueue.last.useSystem) return;
+      var last = dialogQueue.last;
+      if (dialogQueue.isEmpty || last.route != route) {
+        return;
+      }
 
-      await CustomDialog.dismiss(route: true);
+      await DialogProxy.instance.dismiss(
+        status: SmartStatus.dialog,
+        closeType: CloseType.route,
+      );
     }
   }
 }

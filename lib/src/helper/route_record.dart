@@ -13,20 +13,19 @@ class RouteRecord {
 
   late Queue<Route<dynamic>> routeQueue;
   static Route<dynamic>? curRoute;
-  static Route<dynamic>? popRoute;
 
   RouteRecord._internal() {
     routeQueue = DoubleLinkedQueue();
   }
 
   void push(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _offstageDialog(previousRoute);
+    _hideDialog(previousRoute);
     if (DialogProxy.instance.dialogQueue.isEmpty) return;
     routeQueue.add(route);
   }
 
   void pop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    _onstageDialog(previousRoute);
+    _appearDialog(previousRoute);
     if (routeQueue.isEmpty) return;
     routeQueue.remove(route);
   }
@@ -67,16 +66,16 @@ class RouteRecord {
     return shouldHandle;
   }
 
-  void _offstageDialog(Route<dynamic>? curRoute) {
+  void _hideDialog(Route<dynamic>? curRoute) {
     if (curRoute == null || DialogProxy.instance.dialogQueue.isEmpty) return;
     for (var item in DialogProxy.instance.dialogQueue) {
-      if (item.route == curRoute && item.bindPage) {
+      if (item.route == curRoute && item.bindPage && !item.useSystem) {
         item.dialog.hide();
       }
     }
   }
 
-  void _onstageDialog(Route<dynamic>? curRoute) {
+  void _appearDialog(Route<dynamic>? curRoute) {
     if (curRoute == null || DialogProxy.instance.dialogQueue.isEmpty) return;
     for (var item in DialogProxy.instance.dialogQueue) {
       if (item.route == curRoute && item.bindPage) {

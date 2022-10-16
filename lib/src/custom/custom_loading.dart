@@ -9,7 +9,8 @@ import '../data/base_dialog.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
 class CustomLoading extends BaseDialog {
-  CustomLoading({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
+  CustomLoading({required SmartOverlayEntry overlayEntry})
+      : super(overlayEntry);
 
   Timer? _timer;
   Timer? _displayTimer;
@@ -20,6 +21,7 @@ class CustomLoading extends BaseDialog {
     required Widget widget,
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
+    required List<SmartNonAnimationType> nonAnimationTypes,
     required AnimationBuilder? animationBuilder,
     required bool usePenetrate,
     required bool useAnimation,
@@ -45,6 +47,7 @@ class CustomLoading extends BaseDialog {
     return mainDialog.show<T>(
       widget: widget,
       animationType: animationType,
+      nonAnimationTypes: nonAnimationTypes,
       animationBuilder: animationBuilder,
       alignment: Alignment.center,
       maskColor: maskColor,
@@ -77,15 +80,18 @@ class CustomLoading extends BaseDialog {
     };
   }
 
-  Future<void> _realDismiss({bool back = false}) async {
-    if (!DialogProxy.instance.loadingBackDismiss && back) return null;
+  Future<void> _realDismiss({CloseType closeType = CloseType.normal}) async {
+    if (!DialogProxy.instance.loadingBackDismiss &&
+        closeType == CloseType.back) {
+      return null;
+    }
 
-    await mainDialog.dismiss();
+    await mainDialog.dismiss(closeType: closeType);
     SmartDialog.config.loading.isExist = false;
   }
 
-  Future<void> dismiss({bool back = false}) async {
-    _canDismissCallback = () => _realDismiss(back: back);
+  Future<void> dismiss({CloseType closeType = CloseType.normal}) async {
+    _canDismissCallback = () => _realDismiss(closeType: closeType);
     if (_canDismiss) await _canDismissCallback?.call();
   }
 }

@@ -14,6 +14,20 @@ import '../data/animation_param.dart';
 import '../init_dialog.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
+enum CloseType {
+  // back event
+  back,
+
+  // route pop
+  route,
+
+  // mask event
+  mask,
+
+  // normal dismiss
+  normal,
+}
+
 class DialogProxy {
   late SmartConfig config;
   late SmartOverlayEntry entryToast;
@@ -59,6 +73,7 @@ class DialogProxy {
     required bool useAnimation,
     required Duration animationTime,
     required SmartAnimationType animationType,
+    required List<SmartNonAnimationType> nonAnimationTypes,
     required AnimationBuilder? animationBuilder,
     required Color maskColor,
     required bool clickMaskDismiss,
@@ -87,6 +102,7 @@ class DialogProxy {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
+      nonAnimationTypes: nonAnimationTypes,
       animationBuilder: animationBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
@@ -115,6 +131,7 @@ class DialogProxy {
     required bool useAnimation,
     required Duration animationTime,
     required SmartAnimationType animationType,
+    required List<SmartNonAnimationType> nonAnimationTypes,
     required AnimationBuilder? animationBuilder,
     required ScalePointBuilder? scalePointBuilder,
     required Color maskColor,
@@ -148,6 +165,7 @@ class DialogProxy {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
+      nonAnimationTypes: nonAnimationTypes,
       animationBuilder: animationBuilder,
       scalePointBuilder: scalePointBuilder,
       maskColor: maskColor,
@@ -171,6 +189,7 @@ class DialogProxy {
   Future<T?> showLoading<T>({
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
+    required List<SmartNonAnimationType> nonAnimationTypes,
     required AnimationBuilder? animationBuilder,
     required bool usePenetrate,
     required bool useAnimation,
@@ -186,6 +205,7 @@ class DialogProxy {
     return _loading.showLoading<T>(
       clickMaskDismiss: clickMaskDismiss,
       animationType: animationType,
+      nonAnimationTypes: nonAnimationTypes,
       animationBuilder: animationBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
@@ -235,39 +255,39 @@ class DialogProxy {
 
   Future<void>? dismiss<T>({
     required SmartStatus status,
-    bool back = false,
     String? tag,
     T? result,
     bool force = false,
+    CloseType closeType = CloseType.normal,
   }) {
     if (status == SmartStatus.smart) {
       var loading = config.isExistLoading;
       if (!loading) {
         return CustomDialog.dismiss<T>(
           type: DialogType.dialog,
-          back: back,
           tag: tag,
           result: result,
           force: force,
+          closeType: closeType,
         );
       }
-      if (loading) return _loading.dismiss(back: back);
+      if (loading) return _loading.dismiss(closeType: closeType);
     } else if (status == SmartStatus.toast) {
       return _toast.dismiss();
     } else if (status == SmartStatus.allToast) {
       return _toast.dismiss(closeAll: true);
     } else if (status == SmartStatus.loading) {
-      return _loading.dismiss(back: back);
+      return _loading.dismiss(closeType: closeType);
     }
 
     DialogType? type = _convertEnum(status);
     if (type == null) return null;
     return CustomDialog.dismiss<T>(
       type: type,
-      back: back,
       tag: tag,
       result: result,
       force: force,
+      closeType: closeType,
     );
   }
 

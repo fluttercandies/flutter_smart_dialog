@@ -33,7 +33,10 @@ class SmartDialog {
   ///
   /// [clickMaskDismiss]：true（the dialog will be closed after click mask），false（not close）
   ///
-  /// [animationType]：For details, please refer to the [SmartAnimationType] comment
+  /// [animationType]：Set the animation type, For details, please refer to the [SmartAnimationType] comment
+  ///
+  /// [nonAnimationTypes]：For different scenes, the pop-up animation can be dynamically closed.
+  /// For details, please refer to [SmartNonAnimationType]
   ///
   /// [animationBuilder]：Support highly custom animation, please refer to [AnimationBuilder] description for details
   ///
@@ -70,13 +73,17 @@ class SmartDialog {
   /// you need to close this kind of dialog: dismiss(force: true)
   ///
   /// [useSystem]：default (false), true (using the system dialog, [usePenetrate] is invalid;
-  /// [tag], [keepSingle], [permanent] and [bindPage] are prohibited), false (using SmartDialog),
+  /// [tag], [keepSingle] and [permanent] are prohibited), false (using SmartDialog),
   /// using this param can make SmartDialog reasonably interact with the routing page and the dialog that comes with flutter
   ///
   /// [bindPage]：bind the dialog to the current page, the bound page is not on the top of the stack,
   /// the dialog is automatically hidden, the bound page is placed on the top of the stack, and the dialog is automatically displayed;
   /// the bound page is closed, and the dialog bound to the page will also be removed
   ///
+  /// [bindWidget]：bind the dialog to a Widget, when the widget is not visible, the dialog is automatically hidden,
+  /// and when the widget is visible, the dialog is automatically displayed; Applicable to PageView, TabView, etc., bind its sub-pages,
+  /// and when switching pages, the dialog can also interact reasonably
+  /// Note: [bindPage] handles routing logic higher than [bindWidget]; if not expected, [bindPage] can be set to false
   /// -------------------------------------------------------------------------------
   ///
   /// 自定义弹窗
@@ -89,7 +96,9 @@ class SmartDialog {
   ///
   /// [clickMaskDismiss]：true（点击遮罩后，将关闭dialog），false（不关闭）
   ///
-  /// [animationType]：具体可参照[SmartAnimationType]注释
+  /// [animationType]：设置动画类型, 具体可参照[SmartAnimationType]注释
+  ///
+  /// [nonAnimationTypes]：对于不同的场景, 可动态关闭弹窗动画, 具体请参照[SmartNonAnimationType]
   ///
   /// [animationBuilder]：支持高度自定义动画, 具体可参照[AnimationBuilder]说明
   ///
@@ -123,7 +132,7 @@ class SmartDialog {
   /// [permanent]：默认（false），true（将该dialog设置为永久化dialog）,false(不设置);
   /// 框架内部各种兜底操作(返回事件,路由)无法关闭永久化dialog, 需要关闭此类dialog可使用: dismiss(force: true)
   ///
-  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效; [tag], [keepSingle], [permanent]和[bindPage]禁止使用），
+  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效; [tag], [keepSingle]和[permanent]禁止使用），
   /// false（使用SmartDialog），使用该参数可使SmartDialog, 与路由页面以及flutter自带dialog合理交互
   ///
   /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
@@ -131,6 +140,7 @@ class SmartDialog {
   ///
   /// [bindWidget]：将dialog与某个Widget绑定, 当该widget不可见时, dialog自动隐藏, 该widget可见时, dialog自动显示;
   /// 适用于PageView, TabView之类, 绑定其子页面, 切换页面时, dialog也能合理交互
+  /// 注意: [bindPage]处理路由逻辑高于[bindWidget]; 如不符合预期, 可将[bindPage]设置为false
   static Future<T?> show<T>({
     required WidgetBuilder builder,
     SmartDialogController? controller,
@@ -139,6 +149,7 @@ class SmartDialog {
     bool? usePenetrate,
     bool? useAnimation,
     SmartAnimationType? animationType,
+    List<SmartNonAnimationType>? nonAnimationTypes,
     AnimationBuilder? animationBuilder,
     Duration? animationTime,
     Color? maskColor,
@@ -159,10 +170,9 @@ class SmartDialog {
       (useSystem == true &&
               tag == null &&
               permanent == null &&
-              bindPage == null &&
               keepSingle == null) ||
           (useSystem == null || useSystem == false),
-      'useSystem is true; tag, keepSingle, bindPage and permanent prohibit setting values',
+      'useSystem is true; tag, keepSingle and permanent prohibit setting values',
     );
     assert(
       keepSingle == null || keepSingle == false || tag == null,
@@ -181,6 +191,7 @@ class SmartDialog {
       alignment: alignment ?? config.custom.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.custom.clickMaskDismiss,
       animationType: animationType ?? config.custom.animationType,
+      nonAnimationTypes: nonAnimationTypes ?? config.custom.nonAnimationTypes,
       animationBuilder: animationBuilder,
       usePenetrate: usePenetrate ?? config.custom.usePenetrate,
       useAnimation: useAnimation ?? config.custom.useAnimation,
@@ -223,7 +234,10 @@ class SmartDialog {
   ///
   /// [clickMaskDismiss]：true（the dialog will be closed after click mask），false（not close）
   ///
-  /// [animationType]：For details, please refer to the [SmartAnimationType] comment
+  /// [animationType]：Set the animation type, For details, please refer to the [SmartAnimationType] comment
+  ///
+  /// [nonAnimationTypes]：For different scenes, the pop-up animation can be dynamically closed.
+  /// For details, please refer to [SmartNonAnimationType]
   ///
   /// [animationBuilder]：Support highly custom animation, please refer to [AnimationBuilder] description for details
   ///
@@ -269,13 +283,17 @@ class SmartDialog {
   /// you need to close this kind of dialog: dismiss(force: true)
   ///
   /// [useSystem]：default (false), true (using the system dialog, [usePenetrate] is invalid;
-  /// [tag], [keepSingle], [permanent] and [bindPage] are prohibited), false (using SmartDialog),
+  /// [tag], [keepSingle] and [permanent] are prohibited), false (using SmartDialog),
   /// using this param can make SmartDialog reasonably interact with the routing page and the dialog that comes with flutter
   ///
   /// [bindPage]：bind the dialog to the current page, the bound page is not on the top of the stack,
   /// the dialog is automatically hidden, the bound page is placed on the top of the stack, and the dialog is automatically displayed;
   /// the bound page is closed, and the dialog bound to the page will also be removed
   ///
+  /// [bindWidget]：bind the dialog to a Widget, when the widget is not visible, the dialog is automatically hidden,
+  /// and when the widget is visible, the dialog is automatically displayed; Applicable to PageView, TabView, etc., bind its sub-pages,
+  /// and when switching pages, the dialog can also interact reasonably
+  /// Note: [bindPage] handles routing logic higher than [bindWidget]; if not expected, [bindPage] can be set to false
   /// -------------------------------------------------------------------------------
   ///
   /// 定位弹窗
@@ -298,6 +316,8 @@ class SmartDialog {
   /// [clickMaskDismiss]：true（点击遮罩后，将关闭dialog），false（不关闭）
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
+  ///
+  /// [nonAnimationTypes]：对于不同的场景, 可动态关闭弹窗动画, 具体请参照[SmartNonAnimationType]
   ///
   /// [animationBuilder]：支持高度自定义动画, 具体可参照[AnimationBuilder]说明
   ///
@@ -337,7 +357,7 @@ class SmartDialog {
   /// [permanent]：默认（false），true（将该dialog设置为永久化dialog）,false(不设置);
   /// 框架内部各种兜底操作(返回事件,路由)无法关闭永久化dialog, 需要关闭此类dialog可使用: dismiss(force: true)
   ///
-  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效; [tag], [keepSingle], [permanent]和[bindPage]禁止使用），
+  /// [useSystem]：默认（false），true（使用系统dialog，[usePenetrate]功能失效; [tag], [keepSingle]和[permanent]禁止使用），
   /// false（使用SmartDialog），使用该参数可使SmartDialog, 与路由页面以及flutter自带dialog合理交互
   ///
   /// [bindPage]：将该dialog与当前页面绑定，绑定页面不在路由栈顶，dialog自动隐藏，绑定页面置于路由栈顶，dialog自动显示;
@@ -345,6 +365,7 @@ class SmartDialog {
   ///
   /// [bindWidget]：将dialog与某个Widget绑定, 当该widget不可见时, dialog自动隐藏, 该widget可见时, dialog自动显示;
   /// 适用于PageView, TabView之类, 绑定其子页面, 切换页面时, dialog也能合理交互
+  /// 注意: [bindPage]处理路由逻辑高于[bindWidget]; 如不符合预期, 可将[bindPage]设置为false
   static Future<T?> showAttach<T>({
     required BuildContext? targetContext,
     required WidgetBuilder builder,
@@ -354,6 +375,7 @@ class SmartDialog {
     AlignmentGeometry? alignment,
     bool? clickMaskDismiss,
     SmartAnimationType? animationType,
+    List<SmartNonAnimationType>? nonAnimationTypes,
     AnimationBuilder? animationBuilder,
     ScalePointBuilder? scalePointBuilder,
     bool? usePenetrate,
@@ -382,10 +404,9 @@ class SmartDialog {
       (useSystem == true &&
               tag == null &&
               permanent == null &&
-              bindPage == null &&
               keepSingle == null) ||
           (useSystem == null || useSystem == false),
-      'useSystem is true; tag, keepSingle, bindPage and permanent prohibit setting values',
+      'useSystem is true; tag, keepSingle and permanent prohibit setting values',
     );
     assert(
       keepSingle == null || keepSingle == false || tag == null,
@@ -407,6 +428,7 @@ class SmartDialog {
       alignment: alignment ?? config.attach.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.attach.clickMaskDismiss,
       animationType: animationType ?? config.attach.animationType,
+      nonAnimationTypes: nonAnimationTypes ?? config.attach.nonAnimationTypes,
       animationBuilder: animationBuilder,
       scalePointBuilder: scalePointBuilder,
       usePenetrate: usePenetrate ?? config.attach.usePenetrate,
@@ -438,6 +460,9 @@ class SmartDialog {
   /// [clickMaskDismiss]：true（loading will be closed after click mask），false（not close）
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
+  ///
+  /// [nonAnimationTypes]：For different scenes, the pop-up animation can be dynamically closed.
+  /// For details, please refer to [SmartNonAnimationType]
   ///
   /// [animationBuilder]：Support highly custom animation, please refer to [AnimationBuilder] description for details
   ///
@@ -476,6 +501,8 @@ class SmartDialog {
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
+  /// [nonAnimationTypes]：对于不同的场景, 可动态关闭弹窗动画, 具体请参照[SmartNonAnimationType]
+  ///
   /// [animationBuilder]：支持高度自定义动画, 具体可参照[AnimationBuilder]说明
   ///
   /// [usePenetrate]：true（点击事件将穿透遮罩），false（不穿透）
@@ -503,6 +530,7 @@ class SmartDialog {
     SmartDialogController? controller,
     bool? clickMaskDismiss,
     SmartAnimationType? animationType,
+    List<SmartNonAnimationType>? nonAnimationTypes,
     AnimationBuilder? animationBuilder,
     bool? usePenetrate,
     bool? useAnimation,
@@ -518,6 +546,7 @@ class SmartDialog {
     return DialogProxy.instance.showLoading<T>(
       clickMaskDismiss: clickMaskDismiss ?? config.loading.clickMaskDismiss,
       animationType: animationType ?? config.loading.animationType,
+      nonAnimationTypes: nonAnimationTypes ?? config.loading.nonAnimationTypes,
       animationBuilder: animationBuilder,
       usePenetrate: usePenetrate ?? config.loading.usePenetrate,
       useAnimation: useAnimation ?? config.loading.useAnimation,

@@ -19,6 +19,9 @@ class SmartConfigLoading {
     this.leastLoadingTime = const Duration(milliseconds: 0),
     this.awaitOverType = SmartAwaitOverType.dialogDismiss,
     this.maskTriggerType = SmartMaskTriggerType.up,
+    this.nonAnimationTypes = const [
+      SmartNonAnimationType.routeClose_nonAnimation,
+    ],
     this.isExist = false,
   });
 
@@ -110,6 +113,12 @@ class SmartConfigLoading {
   ///
   /// 点击遮罩时, 被触发时机的类型 (具体请查看[SmartMaskTriggerType]注释)
   final SmartMaskTriggerType maskTriggerType;
+
+  /// For different scenes, the pop-up animation can be dynamically closed.
+  /// For details, please refer to [SmartNonAnimationType]
+  ///
+  /// 对于不同的场景, 可动态关闭弹窗动画, 具体请参照[SmartNonAnimationType]
+  final List<SmartNonAnimationType> nonAnimationTypes;
 
   /// whether loading(showLoading()) exist on the screen
   ///

@@ -140,3 +140,34 @@ enum SmartMaskTriggerType {
   /// 点击到遮罩, 然后抬起手势时(up手势)触发
   up
 }
+
+/// For different scenes, the pop-up animation can be dynamically closed.
+///
+/// 对于不同的场景, 可动态关闭弹窗动画
+enum SmartNonAnimationType {
+  /// Open dialog, no dialog start animation
+  ///
+  /// 打开dialog, 无弹窗开始动画
+  openDialog_nonAnimation,
+
+  /// All scenes close dialog, no dialog end animation
+  ///
+  /// 所有场景关闭弹窗, 无弹窗结束动画
+  closeDialog_nonAnimation,
+
+  /// Route the pop event to close the dialog, no dialog end animation
+  ///
+  /// 路由pop事件关闭弹窗, 无弹窗结束动画
+  routeClose_nonAnimation,
+
+  /// Click the mask event to close the dialog, no dialog end animation
+  ///
+  /// 点击遮罩事件关闭弹窗, 无弹窗结束动画
+  maskClose_nonAnimation,
+
+  /// Back event close the dialog, no dialog end animation
+  ///
+  /// 返回事件关闭弹窗, 无弹窗结束动画
+  backClose_nonAnimation,
+}
+

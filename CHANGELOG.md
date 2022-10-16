@@ -1,4 +1,11 @@
+# [4.6.x]
+- Add bindWidget feature
+- Add nonAnimationTypes feature
+- Optimize route monitor
+
+
 # [4.5.x]
+
 - Remove 'target' param(showAttach): please use 'targetBuilder' instead of 'target' param
 - Optimize scalePointBuilder (showAttach)
 - Optimize showAttach
@@ -28,6 +35,14 @@
   - centerScale_otherSlide: The center position is the ScaleTransition, and the other positions are the SlideTransition
 - Add scalePointBuilder (showAttach)
 - Fix [#69](https://github.com/fluttercandies/flutter_smart_dialog/issues/69)
+
+
+# [4.2.x]
+
+- Compatible with Flutter 2.0
+- Add bindWidget feature
+- Add nonAnimationTypes feature
+- Optimize route monitor
 
 
 # [4.0.9]

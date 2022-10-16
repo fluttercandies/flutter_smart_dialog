@@ -35,13 +35,29 @@ class MonitorWidgetHelper {
             throw Error();
           }
 
-          var renderObject = context.findRenderObject();
+          var renderObject = context.findRenderObject() as RenderBox?;
           var viewport = RenderAbstractViewport.of(renderObject);
-          var revealedOffset = viewport?.getOffsetToReveal(renderObject!, 0.0);
-          if (revealedOffset?.rect.hasNaN ?? false) {
-            item.dialog.hide();
+          if (renderObject == null) {
+            throw Error();
+          }
+          var revealedOffset = viewport?.getOffsetToReveal(renderObject, 0.0);
+          if (revealedOffset != null) {
+            // NonPage
+            if (revealedOffset.rect.hasNaN) {
+              item.dialog.hide();
+            } else {
+              item.dialog.appear();
+            }
           } else {
-            item.dialog.appear();
+            // Page
+            if (!item.bindPage) {
+              var selfOffset = renderObject.localToGlobal(Offset.zero);
+              if (selfOffset.dx < 0 || selfOffset.dy < 0) {
+                item.dialog.hide();
+              } else {
+                item.dialog.appear();
+              }
+            }
           }
         } catch (e) {
           removeList.add(item);

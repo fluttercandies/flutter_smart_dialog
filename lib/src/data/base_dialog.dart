@@ -16,12 +16,19 @@ class BaseDialog {
   /// get Widget : must implement
   Widget getWidget() => mainDialog.getWidget();
 
-  void appear(){
+  void appear() {
+    if (mainDialog.visible) {
+      return;
+    }
+
     mainDialog.visible = true;
     overlayEntry.markNeedsBuild();
   }
 
   void hide() {
+    if (!mainDialog.visible) {
+      return;
+    }
     mainDialog.visible = false;
     overlayEntry.markNeedsBuild();
   }

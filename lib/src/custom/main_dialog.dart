@@ -34,6 +34,7 @@ class MainDialog {
     required bool useAnimation,
     required Duration animationTime,
     required SmartAnimationType animationType,
+    required List<SmartNonAnimationType> nonAnimationTypes,
     required Color maskColor,
     required Widget? maskWidget,
     required VoidCallback onMask,
@@ -53,12 +54,13 @@ class MainDialog {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
+      nonAnimationTypes: nonAnimationTypes,
+      animationBuilder: animationBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
       child: widget,
       onMask: onMask,
       maskTriggerType: maskTriggerType,
-      animationBuilder: animationBuilder,
     );
 
     _handleCommonOperate(
@@ -83,6 +85,7 @@ class MainDialog {
     required bool useAnimation,
     required Duration animationTime,
     required SmartAnimationType animationType,
+    required List<SmartNonAnimationType> nonAnimationTypes,
     required AnimationBuilder? animationBuilder,
     required ScalePointBuilder? scalePointBuilder,
     required Color maskColor,
@@ -106,6 +109,7 @@ class MainDialog {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
+      nonAnimationTypes: nonAnimationTypes,
       animationBuilder: animationBuilder,
       scalePointBuilder: scalePointBuilder,
       maskColor: maskColor,
@@ -179,12 +183,13 @@ class MainDialog {
   Future<void> dismiss<T>({
     bool useSystem = false,
     T? result,
+    CloseType closeType = CloseType.normal,
   }) async {
     //dialog prepare dismiss
     _onDismiss?.call();
 
     //close animation
-    await _controller?.dismiss();
+    await _controller?.dismiss(closeType: closeType);
 
     //remove dialog
     _widget = Container();

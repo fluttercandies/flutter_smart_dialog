@@ -9,6 +9,8 @@ import 'package:flutter_smart_dialog/src/widget/animation/slide_animation.dart';
 
 import '../config/enum_config.dart';
 import '../data/animation_param.dart';
+import '../helper/dialog_proxy.dart';
+import '../smart_dialog.dart';
 import 'animation/mask_animation.dart';
 import 'helper/mask_event.dart';
 
@@ -23,6 +25,7 @@ class SmartDialogWidget extends StatefulWidget {
     required this.animationTime,
     required this.useAnimation,
     required this.animationType,
+    required this.nonAnimationTypes,
     required this.animationBuilder,
     required this.maskColor,
     required this.maskWidget,
@@ -54,6 +57,9 @@ class SmartDialogWidget extends StatefulWidget {
   /// 仅仅针对中间位置的控件
   final SmartAnimationType animationType;
 
+  /// 无动画类型
+  final List<SmartNonAnimationType> nonAnimationTypes;
+
   /// 自定义动画
   final AnimationBuilder? animationBuilder;
 
@@ -84,16 +90,24 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
   }
 
   void _resetState() {
-    var duration = widget.animationTime;
+    var startTime = widget.animationTime;
+    widget.nonAnimationTypes.forEach((nonAnimationType) {
+      if (widget.controller.judgeOpenDialogType(nonAnimationType)) {
+        startTime = Duration.zero;
+      }
+    });
+
     if (_maskController == null) {
-      _maskController = AnimationController(vsync: this, duration: duration);
-      _bodyController = AnimationController(vsync: this, duration: duration);
+      _maskController = AnimationController(vsync: this, duration: startTime);
+      _bodyController = AnimationController(vsync: this, duration: startTime);
+
+      _maskController!.duration = startTime;
+      _bodyController.duration = startTime;
       _maskController!.forward();
       _bodyController.forward();
     } else {
-      _maskController!.duration = duration;
-      _bodyController.duration = duration;
-
+      _maskController!.duration = startTime;
+      _bodyController.duration = startTime;
       _bodyController.value = 0;
       _bodyController.forward();
     }
@@ -180,16 +194,25 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
   }
 
   ///等待动画结束,关闭动画资源
-  Future<void> dismiss() async {
+  Future<void> dismiss({CloseType closeType = CloseType.normal}) async {
     if (_maskController == null) return;
 
+    // dismiss type
+    var endTime = _bodyController.duration ?? widget.animationTime;
+    widget.nonAnimationTypes.forEach((dismissType) {
+      if (widget.controller.judgeDismissDialogType(closeType, dismissType)) {
+        _maskController!.duration = Duration.zero;
+        _bodyController.duration = Duration.zero;
+        endTime = Duration.zero;
+      }
+    });
+
+    //over animation
     _maskController!.reverse();
     _bodyController.reverse();
     _animationParam?.onDismiss?.call();
-
-    var awaitTime = _bodyController.duration ?? widget.animationTime;
     if (widget.useAnimation) {
-      await Future.delayed(awaitTime);
+      await Future.delayed(endTime);
     }
   }
 
@@ -211,7 +234,7 @@ class SmartDialogWidgetController extends BaseController {
   }
 
   @override
-  Future<void> dismiss() async {
-    await _state?.dismiss();
+  Future<void> dismiss({CloseType closeType = CloseType.normal}) async {
+    await _state?.dismiss(closeType: closeType);
   }
 }
