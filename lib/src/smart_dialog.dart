@@ -124,7 +124,7 @@ class SmartDialog {
   /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
   ///
   /// [backDismiss]：true（返回事件将关闭dialog，但是不会关闭页面），
-  /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭loading
+  /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭dialog
   ///
   /// [keepSingle]：默认（false），true（多次调用[show]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[show]会生成多个dialog）
@@ -349,7 +349,7 @@ class SmartDialog {
   /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
   ///
   /// [backDismiss]：true（返回事件将关闭dialog，但是不会关闭页面），
-  /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭loading
+  /// false（返回事件不会关闭loading，也不会关闭页面），你仍然可以使用dismiss方法来关闭dialog
   ///
   /// [keepSingle]：默认（false），true（多次调用[showAttach]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[showAttach]会生成多个dialog）
