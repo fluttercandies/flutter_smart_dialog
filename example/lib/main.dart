@@ -132,22 +132,14 @@ class SmartDialogPage extends StatelessWidget {
           alignment: Alignment.center,
           child: ElevatedButton(
             onPressed: () {
-              SmartDialog.show(
-                alignment: Alignment.bottomCenter,
-                  useSystem: true,
-                  builder: (_) {
-                    return Container(
-                        height: 30, width: 30, color: Colors.black);
-                  });
-
-              // Navigator.push(ctx, MaterialPageRoute(builder: (_) {
-              //   return Scaffold(
-              //     appBar: AppBar(
-              //       title: Text("New Page"),
-              //     ),
-              //     body: Center(child: Text("New Page")),
-              //   );
-              // }));
+              Navigator.push(ctx, MaterialPageRoute(builder: (_) {
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Text("New Page"),
+                  ),
+                  body: Center(child: Text("New Page")),
+                );
+              }));
             },
             child: Text('to new page'),
           ),
