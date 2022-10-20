@@ -5,6 +5,8 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
+import '../data/dialog_info.dart';
+
 class RouteRecord {
   factory RouteRecord() => instance;
   static RouteRecord? _instance;
@@ -69,7 +71,7 @@ class RouteRecord {
   void _hideDialog(Route<dynamic>? curRoute) {
     if (curRoute == null || DialogProxy.instance.dialogQueue.isEmpty) return;
     for (var item in DialogProxy.instance.dialogQueue) {
-      if (item.route == curRoute && item.bindPage && !item.useSystem) {
+      if (_needHandle(item, curRoute)) {
         item.dialog.hide();
       }
     }
@@ -78,9 +80,17 @@ class RouteRecord {
   void _appearDialog(Route<dynamic>? curRoute) {
     if (curRoute == null || DialogProxy.instance.dialogQueue.isEmpty) return;
     for (var item in DialogProxy.instance.dialogQueue) {
-      if (item.route == curRoute && item.bindPage) {
+      if (_needHandle(item, curRoute)) {
         item.dialog.appear();
       }
     }
+  }
+
+  bool _needHandle(DialogInfo item, Route<dynamic>? curRoute) {
+    if (item.useSystem || item.permanent) {
+      return false;
+    }
+
+    return item.route == curRoute && item.bindPage;
   }
 }

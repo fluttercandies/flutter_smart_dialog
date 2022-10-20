@@ -9,8 +9,8 @@ class SmartNavigatorObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
     DialogProxy.contextNavigator ??= navigator?.context;
-    RouteRecord.instance.push(route, previousRoute);
     RouteRecord.curRoute = route;
+    RouteRecord.instance.push(route, previousRoute);
   }
 
   @override
@@ -21,8 +21,8 @@ class SmartNavigatorObserver extends NavigatorObserver {
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) async {
-    RouteRecord.instance.pop(route, previousRoute);
     RouteRecord.curRoute = previousRoute;
+    RouteRecord.instance.pop(route, previousRoute);
 
     if (!SmartDialog.config.isExist ||
         route.settings.name == SmartTag.systemDialog) {
