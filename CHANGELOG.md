@@ -1,6 +1,7 @@
 # [4.6.x]
-- Add bindWidget feature
-- Add nonAnimationTypes feature
+- Add 'bindWidget' feature
+- Add 'nonAnimationTypes' feature
+- Add 'ignoreArea' feature
 - Optimize route monitor
 
 

@@ -59,6 +59,7 @@ class CustomDialog extends BaseDialog {
     required bool useSystem,
     required bool bindPage,
     required BuildContext? bindWidget,
+    required Rect? ignoreArea,
   }) {
     if (!_handleMustOperate(
       tag: displayTime != null ? _getTimeKey(displayTime) : tag,
@@ -87,6 +88,7 @@ class CustomDialog extends BaseDialog {
       reuse: true,
       awaitOverType: SmartDialog.config.custom.awaitOverType,
       maskTriggerType: SmartDialog.config.custom.maskTriggerType,
+      ignoreArea: ignoreArea,
       onMask: () {
         onMask?.call();
         if (!clickMaskDismiss || !_clickMaskDebounce() || permanent) return;
@@ -110,11 +112,12 @@ class CustomDialog extends BaseDialog {
     required ScalePointBuilder? scalePointBuilder,
     required Color maskColor,
     required bool clickMaskDismiss,
-    required bool debounce,
     required Widget? maskWidget,
+    required Rect? maskIgnoreArea,
+    required VoidCallback? onMask,
+    required bool debounce,
     required HighlightBuilder? highlightBuilder,
     required VoidCallback? onDismiss,
-    required VoidCallback? onMask,
     required Duration? displayTime,
     required String? tag,
     required bool backDismiss,
@@ -148,9 +151,10 @@ class CustomDialog extends BaseDialog {
       nonAnimationTypes: nonAnimationTypes,
       animationBuilder: animationBuilder,
       scalePointBuilder: scalePointBuilder,
-      maskColor: maskColor,
       highlightBuilder: highlightBuilder,
+      maskColor: maskColor,
       maskWidget: maskWidget,
+      maskIgnoreArea: maskIgnoreArea,
       onDismiss: _handleDismiss(onDismiss, displayTime),
       useSystem: useSystem,
       awaitOverType: SmartDialog.config.attach.awaitOverType,

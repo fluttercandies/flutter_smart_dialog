@@ -65,6 +65,7 @@ class CustomToast extends BaseDialog {
         reuse: false,
         awaitOverType: SmartDialog.config.toast.awaitOverType,
         maskTriggerType: SmartDialog.config.toast.maskTriggerType,
+        ignoreArea: null,
         onMask: () => clickMaskDismiss ? _realDismiss() : null,
       );
     }

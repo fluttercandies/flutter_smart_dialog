@@ -60,6 +60,7 @@ class CustomLoading extends BaseDialog {
       reuse: true,
       awaitOverType: SmartDialog.config.loading.awaitOverType,
       maskTriggerType: SmartDialog.config.loading.maskTriggerType,
+      ignoreArea: null,
       onMask: () {
         onMask?.call();
         if (!clickMaskDismiss) return;

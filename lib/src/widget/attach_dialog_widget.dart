@@ -53,6 +53,7 @@ class AttachDialogWidget extends StatefulWidget {
     required this.highlightBuilder,
     required this.maskWidget,
     required this.maskTriggerType,
+    required this.maskIgnoreArea,
   }) : super(key: key);
 
   ///target context
@@ -108,6 +109,9 @@ class AttachDialogWidget extends StatefulWidget {
 
   /// 遮罩点击时, 被触发的时机
   final SmartMaskTriggerType maskTriggerType;
+
+  /// dialog占位,忽略区域
+  final Rect? maskIgnoreArea;
 
   @override
   _AttachDialogWidgetState createState() => _AttachDialogWidgetState();
@@ -186,17 +190,25 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       belowBuilder: (targetOffset, targetSize) {
         return [
           //暗色背景widget动画
-          MaskEvent(
-            maskTriggerType: widget.maskTriggerType,
-            onMask: widget.onMask,
-            child: HighlightMaskAnimation(
-              controller: _maskController!,
-              maskColor: widget.maskColor,
-              maskWidget: widget.maskWidget,
-              usePenetrate: widget.usePenetrate,
-              targetOffset: targetOffset,
-              targetSize: targetSize,
-              highlightBuilder: widget.highlightBuilder,
+          Padding(
+            padding: EdgeInsets.only(
+              left: widget.maskIgnoreArea?.left ?? 0.0,
+              top: widget.maskIgnoreArea?.top ?? 0.0,
+              right: widget.maskIgnoreArea?.right ?? 0.0,
+              bottom: widget.maskIgnoreArea?.bottom ?? 0.0,
+            ),
+            child: MaskEvent(
+              maskTriggerType: widget.maskTriggerType,
+              onMask: widget.onMask,
+              child: HighlightMaskAnimation(
+                controller: _maskController!,
+                maskColor: widget.maskColor,
+                maskWidget: widget.maskWidget,
+                usePenetrate: widget.usePenetrate,
+                targetOffset: targetOffset,
+                targetSize: targetSize,
+                highlightBuilder: widget.highlightBuilder,
+              ),
             ),
           ),
         ];

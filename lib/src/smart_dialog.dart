@@ -50,11 +50,11 @@ class SmartDialog {
   ///
   /// [maskWidget]：highly customizable mask
   ///
+  /// [onMask]：This callback will be triggered when the mask is clicked
+  ///
   /// [debounce]：debounce feature
   ///
   /// [onDismiss]：the callback will be invoked when the dialog is closed
-  ///
-  /// [onMask]：This callback will be triggered when the mask is clicked
   ///
   /// [displayTime]：Controls the display time of the dialog on the screen;
   /// the default is null, if it is null, it means that the param will not control the dialog to close;
@@ -84,6 +84,10 @@ class SmartDialog {
   /// and when the widget is visible, the dialog is automatically displayed; Applicable to PageView, TabView, etc., bind its sub-pages,
   /// and when switching pages, the dialog can also interact reasonably
   /// Note: [bindPage] handles routing logic higher than [bindWidget]; if not expected, [bindPage] can be set to false
+  ///
+  /// [ignoreArea]： dialog placeholder ignores area, supports up, down, left and right areas, set area, dialog will not occupy space in this area;
+  /// Example: ignoreArea: Rect.fromLTRB (0,0,0,30), there will be 30 gaps at the bottom, and neither dialog nor mask will occupy this area;
+  /// Applies to: do not want the dialog to overwrite the navigation bar area such as BottomNavigationBar, NavigationRail
   /// -------------------------------------------------------------------------------
   ///
   /// 自定义弹窗
@@ -112,11 +116,11 @@ class SmartDialog {
   ///
   /// [maskWidget]：可高度定制遮罩
   ///
+  /// [onMask]：点击遮罩时，该回调将会被触发
+  ///
   /// [debounce]：防抖功能
   ///
   /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
-  ///
-  /// [onMask]：点击遮罩时，该回调将会被触发
   ///
   /// [displayTime]：控制弹窗在屏幕上显示时间; 默认为null, 为null则代表该参数不会控制弹窗关闭;
   /// 注: 使用[displayTime]参数, 将禁止使用[tag]参数
@@ -141,6 +145,10 @@ class SmartDialog {
   /// [bindWidget]：将dialog与某个Widget绑定, 当该widget不可见时, dialog自动隐藏, 该widget可见时, dialog自动显示;
   /// 适用于PageView, TabView之类, 绑定其子页面, 切换页面时, dialog也能合理交互
   /// 注意: [bindPage]处理路由逻辑高于[bindWidget]; 如不符合预期, 可将[bindPage]设置为false
+  ///
+  /// [ignoreArea]：dialog占位忽略区域, 支持上下左右区域, 设置的区域, dialog将不会在此区域占位;
+  /// 例: ignoreArea: Rect.fromLTRB(0, 0, 0, 30), 底部会有30空隙, dialog和mask都不会占位该区域;
+  /// 适用于: 不想dialog覆盖BottomNavigationBar, NavigationRail之类的导航栏区域
   static Future<T?> show<T>({
     required WidgetBuilder builder,
     SmartDialogController? controller,
@@ -165,6 +173,7 @@ class SmartDialog {
     bool? useSystem,
     bool? bindPage,
     BuildContext? bindWidget,
+    Rect? ignoreArea,
   }) {
     assert(
       (useSystem == true &&
@@ -209,6 +218,7 @@ class SmartDialog {
       useSystem: useSystem ?? false,
       bindPage: bindPage ?? config.custom.bindPage,
       bindWidget: bindWidget,
+      ignoreArea: ignoreArea,
     );
   }
 
@@ -257,14 +267,18 @@ class SmartDialog {
   ///
   /// [maskWidget]：highly customizable mask
   ///
+  /// [maskIgnoreArea]：mask occupancy ignore area, support up, down, left and right areas, set area, mask will not occupy space in this area;
+  /// Example: maskIgnoreArea: Rect.fromLTRB (0,0,0,30), there will be 30 gaps at the bottom, the mask will not occupy this area;
+  /// Applies to: do not want mask to cover navigation bar areas such as BottomNavigationBar, NavigationRail
+  ///
+  /// [onMask]：this callback will be triggered when the mask is clicked
+  ///
   /// [debounce]：debounce feature
   ///
   /// [highlightBuilder]：highlight function, dissolve the mask of a specific area,
   /// you can quickly get the target widget information (coordinates and size)
   ///
   /// [onDismiss]：the callback will be invoked when the dialog is closed
-  ///
-  /// [onMask]：this callback will be triggered when the mask is clicked
   ///
   /// [displayTime]：Controls the display time of the dialog on the screen;
   /// the default is null, if it is null, it means that the param will not control the dialog to close;
@@ -335,13 +349,17 @@ class SmartDialog {
   ///
   /// [maskWidget]：可高度定制遮罩
   ///
+  /// [maskIgnoreArea]：mask占位忽略区域, 支持上下左右区域, 设置的区域, mask将不会在此区域占位;
+  /// 例: maskIgnoreArea: Rect.fromLTRB(0, 0, 0, 30), 底部会有30空隙, mask不会占位该区域;
+  /// 适用于: 不想mask覆盖BottomNavigationBar, NavigationRail之类的导航栏区域
+  ///
+  /// [onMask]：点击遮罩时，该回调将会被触发
+  ///
   /// [debounce]：防抖功能
   ///
   /// [highlightBuilder]：高亮功能，溶解特定区域的遮罩，可以快速获取目标widget信息（坐标和大小）
   ///
   /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
-  ///
-  /// [onMask]：点击遮罩时，该回调将会被触发
   ///
   /// [displayTime]：控制弹窗在屏幕上显示时间; 默认为null, 为null则代表该参数不会控制弹窗关闭;
   /// 注: 使用[displayTime]参数, 将禁止使用[tag]参数
@@ -383,10 +401,11 @@ class SmartDialog {
     Duration? animationTime,
     Color? maskColor,
     Widget? maskWidget,
+    Rect? maskIgnoreArea,
+    VoidCallback? onMask,
     bool? debounce,
     HighlightBuilder? highlightBuilder,
     VoidCallback? onDismiss,
-    VoidCallback? onMask,
     Duration? displayTime,
     String? tag,
     bool? backDismiss,
@@ -436,10 +455,11 @@ class SmartDialog {
       animationTime: animationTime ?? config.attach.animationTime,
       maskColor: maskColor ?? config.attach.maskColor,
       maskWidget: maskWidget ?? config.attach.maskWidget,
+      maskIgnoreArea: maskIgnoreArea,
+      onMask: onMask,
       debounce: debounce ?? config.attach.debounce,
       highlightBuilder: highlightBuilder,
       onDismiss: onDismiss,
-      onMask: onMask,
       displayTime: displayTime,
       tag: tag,
       backDismiss: backDismiss ?? config.attach.backDismiss,

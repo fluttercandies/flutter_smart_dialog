@@ -10,7 +10,6 @@ import 'package:flutter_smart_dialog/src/widget/animation/slide_animation.dart';
 import '../config/enum_config.dart';
 import '../data/animation_param.dart';
 import '../helper/dialog_proxy.dart';
-import '../smart_dialog.dart';
 import 'animation/mask_animation.dart';
 import 'helper/mask_event.dart';
 
@@ -30,6 +29,7 @@ class SmartDialogWidget extends StatefulWidget {
     required this.maskColor,
     required this.maskWidget,
     required this.maskTriggerType,
+    required this.ignoreArea,
   }) : super(key: key);
 
   /// 内容widget
@@ -71,6 +71,9 @@ class SmartDialogWidget extends StatefulWidget {
 
   /// 遮罩点击时, 被触发的时机
   final SmartMaskTriggerType maskTriggerType;
+
+  /// dialog占位,忽略区域
+  final Rect? ignoreArea;
 
   @override
   _SmartDialogWidgetState createState() => _SmartDialogWidgetState();
@@ -128,25 +131,33 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      //暗色背景widget动画
-      MaskEvent(
-        maskTriggerType: widget.maskTriggerType,
-        onMask: widget.onMask,
-        child: MaskAnimation(
-          controller: _maskController!,
-          maskColor: widget.maskColor,
-          maskWidget: widget.maskWidget,
-          usePenetrate: widget.usePenetrate,
+    return Padding(
+      padding: EdgeInsets.only(
+        left: widget.ignoreArea?.left ?? 0.0,
+        top: widget.ignoreArea?.top ?? 0.0,
+        right: widget.ignoreArea?.right ?? 0.0,
+        bottom: widget.ignoreArea?.bottom ?? 0.0,
+      ),
+      child: Stack(children: [
+        //暗色背景widget动画
+        MaskEvent(
+          maskTriggerType: widget.maskTriggerType,
+          onMask: widget.onMask,
+          child: MaskAnimation(
+            controller: _maskController!,
+            maskColor: widget.maskColor,
+            maskWidget: widget.maskWidget,
+            usePenetrate: widget.usePenetrate,
+          ),
         ),
-      ),
 
-      //内容Widget动画
-      Container(
-        alignment: widget.alignment,
-        child: widget.useAnimation ? _buildBodyAnimation() : widget.child,
-      ),
-    ]);
+        //内容Widget动画
+        Container(
+          alignment: widget.alignment,
+          child: widget.useAnimation ? _buildBodyAnimation() : widget.child,
+        ),
+      ]),
+    );
   }
 
   Widget _buildBodyAnimation() {

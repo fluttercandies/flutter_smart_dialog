@@ -44,6 +44,7 @@ class MainDialog {
     required SmartAwaitOverType awaitOverType,
     required SmartMaskTriggerType maskTriggerType,
     required AnimationBuilder? animationBuilder,
+    required Rect? ignoreArea,
   }) {
     //custom dialog
     _widget = SmartDialogWidget(
@@ -61,6 +62,7 @@ class MainDialog {
       child: widget,
       onMask: onMask,
       maskTriggerType: maskTriggerType,
+      ignoreArea: ignoreArea,
     );
 
     _handleCommonOperate(
@@ -90,12 +92,13 @@ class MainDialog {
     required ScalePointBuilder? scalePointBuilder,
     required Color maskColor,
     required Widget? maskWidget,
-    required HighlightBuilder? highlightBuilder,
+    required Rect? maskIgnoreArea,
+    required SmartMaskTriggerType maskTriggerType,
     required VoidCallback onMask,
+    required HighlightBuilder? highlightBuilder,
     required VoidCallback? onDismiss,
     required bool useSystem,
     required SmartAwaitOverType awaitOverType,
-    required SmartMaskTriggerType maskTriggerType,
   }) {
     //attach dialog
     _widget = AttachDialogWidget(
@@ -114,10 +117,11 @@ class MainDialog {
       scalePointBuilder: scalePointBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
+      maskTriggerType: maskTriggerType,
+      onMask: onMask,
+      maskIgnoreArea: maskIgnoreArea,
       highlightBuilder: highlightBuilder,
       child: widget,
-      onMask: onMask,
-      maskTriggerType: maskTriggerType,
     );
 
     _handleCommonOperate(

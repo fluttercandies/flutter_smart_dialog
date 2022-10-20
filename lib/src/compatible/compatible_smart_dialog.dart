@@ -144,6 +144,7 @@ class CompatibleSmartDialog {
       useSystem: useSystem ?? false,
       bindPage: false,
       bindWidget: null,
+      ignoreArea: null,
     );
   }
 
@@ -308,6 +309,7 @@ class CompatibleSmartDialog {
       useSystem: useSystem ?? false,
       bindPage: false,
       bindWidget: null,
+      maskIgnoreArea: null,
     );
   }
 

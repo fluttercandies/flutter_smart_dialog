@@ -89,6 +89,7 @@ class DialogProxy {
     required bool useSystem,
     required bool bindPage,
     required BuildContext? bindWidget,
+    required Rect? ignoreArea,
   }) {
     CustomDialog? dialog;
     var entry = SmartOverlayEntry(
@@ -118,6 +119,7 @@ class DialogProxy {
       useSystem: useSystem,
       bindPage: bindPage,
       bindWidget: bindWidget,
+      ignoreArea: ignoreArea,
     );
   }
 
@@ -134,13 +136,14 @@ class DialogProxy {
     required List<SmartNonAnimationType> nonAnimationTypes,
     required AnimationBuilder? animationBuilder,
     required ScalePointBuilder? scalePointBuilder,
-    required Color maskColor,
     required bool clickMaskDismiss,
+    required Color maskColor,
     required Widget? maskWidget,
+    required Rect? maskIgnoreArea,
+    required VoidCallback? onMask,
     required HighlightBuilder? highlightBuilder,
     required bool debounce,
     required VoidCallback? onDismiss,
-    required VoidCallback? onMask,
     required Duration? displayTime,
     required String? tag,
     required bool backDismiss,
@@ -170,11 +173,12 @@ class DialogProxy {
       scalePointBuilder: scalePointBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
+      maskIgnoreArea: maskIgnoreArea,
+      onMask: onMask,
       highlightBuilder: highlightBuilder,
       clickMaskDismiss: clickMaskDismiss,
       debounce: debounce,
       onDismiss: onDismiss,
-      onMask: onMask,
       displayTime: displayTime,
       tag: tag,
       backDismiss: backDismiss,
