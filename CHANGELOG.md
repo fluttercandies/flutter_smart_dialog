@@ -4,6 +4,7 @@
 - Add 'ignoreArea' feature
 - Fix [#81](https://github.com/fluttercandies/flutter_smart_dialog/issues/81)
 - Optimize route monitor
+- Optimize 'KeepSingle'
 
 
 # [4.5.x]
