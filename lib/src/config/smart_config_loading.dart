@@ -12,7 +12,7 @@ class SmartConfigLoading {
     this.animationTime = const Duration(milliseconds: 260),
     this.useAnimation = true,
     this.usePenetrate = false,
-    this.maskColor = const Color.fromRGBO(0, 0, 0, 0.35),
+    this.maskColor = const Color.fromRGBO(0, 0, 0, 0.46),
     this.maskWidget,
     this.backDismiss = true,
     this.clickMaskDismiss = false,

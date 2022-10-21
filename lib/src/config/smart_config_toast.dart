@@ -12,7 +12,7 @@ class SmartConfigToast {
     this.animationTime = const Duration(milliseconds: 200),
     this.useAnimation = true,
     this.usePenetrate = true,
-    this.maskColor = const Color.fromRGBO(0, 0, 0, 0.35),
+    this.maskColor = const Color.fromRGBO(0, 0, 0, 0.46),
     this.maskWidget,
     this.clickMaskDismiss = false,
     this.debounce = false,
