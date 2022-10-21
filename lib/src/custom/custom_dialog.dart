@@ -15,7 +15,6 @@ import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
 import '../smart_dialog.dart';
 import '../widget/helper/smart_overlay_entry.dart';
-import 'main_dialog.dart';
 
 enum DialogType {
   dialog,
@@ -29,8 +28,6 @@ enum DialogType {
 ///main function : custom dialog
 class CustomDialog extends BaseDialog {
   CustomDialog({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
-
-  static MainDialog? mainDialogSingle;
 
   DateTime? clickMaskLastTime;
 
@@ -227,13 +224,13 @@ class CustomDialog extends BaseDialog {
     }
 
     if (keepSingle) {
-      DialogInfo? dialogInfo = _getDialog(tag: SmartTag.keepSingle);
+      DialogInfo? dialogInfo = _getDialog(tag: tag ?? SmartTag.keepSingle);
       if (dialogInfo == null) {
         dialogInfo = DialogInfo(
           dialog: this,
           backDismiss: backDismiss,
           type: type,
-          tag: SmartTag.keepSingle,
+          tag: tag ?? SmartTag.keepSingle,
           permanent: permanent,
           useSystem: useSystem,
           bindPage: bindPage,
@@ -241,10 +238,9 @@ class CustomDialog extends BaseDialog {
           bindWidget: bindWidget,
         );
         _pushDialog(dialogInfo);
-        mainDialogSingle = mainDialog;
       }
 
-      mainDialog = mainDialogSingle!;
+      mainDialog = dialogInfo.dialog.mainDialog;
       return;
     }
 

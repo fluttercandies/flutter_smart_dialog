@@ -184,10 +184,6 @@ class SmartDialog {
       'useSystem is true; tag, keepSingle and permanent prohibit setting values',
     );
     assert(
-      keepSingle == null || keepSingle == false || tag == null,
-      'keepSingle is true, tag prohibit setting values',
-    );
-    assert(
       displayTime == null || tag == null,
       'displayTime is used, tag prohibit setting values',
     );
@@ -426,10 +422,6 @@ class SmartDialog {
               keepSingle == null) ||
           (useSystem == null || useSystem == false),
       'useSystem is true; tag, keepSingle and permanent prohibit setting values',
-    );
-    assert(
-      keepSingle == null || keepSingle == false || tag == null,
-      'keepSingle is true, tag prohibit setting values',
     );
     assert(
       displayTime == null || tag == null,
