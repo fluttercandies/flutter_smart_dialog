@@ -3,13 +3,13 @@ import 'dart:developer' as developer;
 import 'package:flutter/foundation.dart';
 
 class SmartLog {
-  static d(String msg) {
+  static d(Object? object) {
     if (kDebugMode) {
-      developer.log(msg, name: 'SmartDialog');
+      developer.log("$object", name: 'SmartDialog');
     }
   }
 
-  static i(String msg) {
-    developer.log(msg, name: 'SmartDialog');
+  static i(Object? object) {
+    developer.log("$object", name: 'SmartDialog');
   }
 }
