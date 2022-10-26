@@ -59,9 +59,11 @@ class HighlightMaskAnimation extends StatelessWidget {
       );
     }
 
-    return FadeTransition(
-      opacity: CurvedAnimation(parent: controller, curve: Curves.linear),
-      child: mask,
-    );
+    return highlightBuilder != null
+        ? mask
+        : FadeTransition(
+            opacity: CurvedAnimation(parent: controller, curve: Curves.linear),
+            child: mask,
+          );
   }
 }
