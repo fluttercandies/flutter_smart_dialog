@@ -29,7 +29,6 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
   @override
   void initState() {
     widgetsBinding.addObserver(this);
-    _dealKeyboard();
 
     _postFrameOpacity = 0;
     ViewUtils.addSafeUse(() {
@@ -40,6 +39,7 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
       selfSize = renderBox.size;
       _postFrameOpacity = 1;
       setState(() {});
+      _dealKeyboard();
     });
     super.initState();
   }
