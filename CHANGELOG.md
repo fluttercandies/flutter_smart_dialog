@@ -6,6 +6,7 @@
 - Optimize route monitor
 - Optimize 'KeepSingle'
 - Adjust default 'maskColor' config
+- Fix [#82](https://github.com/fluttercandies/flutter_smart_dialog/issues/82), [#84](https://github.com/fluttercandies/flutter_smart_dialog/issues/84)
 
 
 # [4.5.x]
