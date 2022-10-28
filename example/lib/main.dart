@@ -86,6 +86,9 @@ class SmartDialogPage extends StatelessWidget {
         targetContext: context,
         alignment: Alignment.bottomCenter,
         animationType: SmartAnimationType.scale,
+        highlightBuilder: (_,__){
+          return Positioned(child: Container());
+        },
         scalePointBuilder: (selfSize) => Offset(selfSize.width, 0),
         builder: (_) {
           return Container(height: 50, width: 30, color: Colors.red);
@@ -118,34 +121,30 @@ class SmartDialogPage extends StatelessWidget {
 
   void _bindPage(BuildContext ctx) {
     //target widget
-    SmartDialog.show(
-      // bindPage: true,
-      // bindWidget: ctx,
-      builder: (_) {
-        return Container(
-          height: 300,
-          width: 500,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: Colors.white,
-          ),
-          alignment: Alignment.center,
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(ctx, MaterialPageRoute(builder: (_) {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: Text("New Page"),
-                  ),
-                  body: Center(child: Text("New Page")),
-                );
-              }));
-            },
-            child: Text('to new page'),
-          ),
-        );
-      },
-    );
+    SmartDialog.show(builder: (_) {
+      return Container(
+        height: 300,
+        width: 500,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+        ),
+        alignment: Alignment.center,
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.push(ctx, MaterialPageRoute(builder: (_) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text("New Page"),
+                ),
+                body: Center(child: Text("New Page")),
+              );
+            }));
+          },
+          child: Text('to new page'),
+        ),
+      );
+    });
   }
 
   void _showLoading() async {

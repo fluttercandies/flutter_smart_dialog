@@ -169,5 +169,15 @@ enum SmartNonAnimationType {
   ///
   /// 返回事件关闭弹窗, 无弹窗结束动画
   backClose_nonAnimation,
+
+  /// When the attach dialog uses the highlight function, there is no start and end mask animation,
+  /// use this property to solve the stroboscopic problem described below
+  /// Note: ColorFiltered and FadeTransition animation components conflict, which will cause stroboscopic bugs,
+  /// flutter2.10.5 and flutter3.3.5 can reproduce stably, flutter3.0.5 version does not have this problem
+  ///
+  /// attach dialog使用highlight功能时, 无开始和结束遮罩动画, 使用该属性可解决下述描述的频闪问题
+  /// 注: ColorFiltered和FadeTransition动画组件冲突, 会造成频闪bug,
+  /// flutter2.10.5和flutter3.3.5能稳定复现，flutter3.0.5版本则不存在这个问题
+  highlightMask_nonAnimation,
 }
 

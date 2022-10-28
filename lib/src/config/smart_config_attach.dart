@@ -23,6 +23,7 @@ class SmartConfigAttach {
     this.maskTriggerType = SmartMaskTriggerType.up,
     this.nonAnimationTypes = const [
       SmartNonAnimationType.routeClose_nonAnimation,
+      SmartNonAnimationType.highlightMask_nonAnimation,
     ],
     this.isExist = false,
   });

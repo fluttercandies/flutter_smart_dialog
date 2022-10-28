@@ -208,6 +208,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
                 targetOffset: targetOffset,
                 targetSize: targetSize,
                 highlightBuilder: widget.highlightBuilder,
+                nonAnimationTypes: widget.nonAnimationTypes,
               ),
             ),
           ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import '../attach_dialog_widget.dart';
 
@@ -12,6 +13,7 @@ class HighlightMaskAnimation extends StatelessWidget {
     required this.targetOffset,
     required this.targetSize,
     required this.highlightBuilder,
+    required this.nonAnimationTypes,
   }) : super(key: key);
 
   final AnimationController controller;
@@ -26,6 +28,8 @@ class HighlightMaskAnimation extends StatelessWidget {
   final Size targetSize;
 
   final HighlightBuilder? highlightBuilder;
+
+  final List<SmartNonAnimationType> nonAnimationTypes;
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +63,18 @@ class HighlightMaskAnimation extends StatelessWidget {
       );
     }
 
-    return highlightBuilder != null
-        ? mask
-        : FadeTransition(
-            opacity: CurvedAnimation(parent: controller, curve: Curves.linear),
-            child: mask,
-          );
+    Widget maskAnimation = FadeTransition(
+      opacity: CurvedAnimation(parent: controller, curve: Curves.linear),
+      child: mask,
+    );
+    if (highlightBuilder != null) {
+      nonAnimationTypes.forEach((element) {
+        if (element == SmartNonAnimationType.highlightMask_nonAnimation) {
+          maskAnimation = mask;
+        }
+      });
+    }
+
+    return maskAnimation;
   }
 }

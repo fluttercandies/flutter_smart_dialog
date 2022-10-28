@@ -313,7 +313,7 @@ class SmartDialog {
   /// [builder]：自定义 dialog
   ///
   /// [replaceBuilder]：[replaceBuilder]中返回widget会替换掉[builder]中返回的widget;
-  /// [replaceBuilder]将回调目标widget的坐标,大小和dialog自身的坐标,大小, 你可以根据这些参数,重新自定义一个合适的替换widget,
+  /// [replaceBuilder]将回调目标widget的坐标,大小和dialog自身的坐标,大小,你可以根据这些参数,重新自定义一个合适的替换widget,
   /// 强烈建议[replaceBuilder]返回的自定义的widget宽高和[builder]中的保持一致, showAttach中定位信息都是根据[builder]中widget计算得来的
   ///
   /// [controller]：可使用该控制器来刷新自定义的dialog的布局
