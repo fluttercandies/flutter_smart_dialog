@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import 'compatible/compatible_smart_dialog.dart';
-import 'config/enum_config.dart';
 import 'config/smart_config.dart';
 import 'data/animation_param.dart';
 import 'helper/dialog_proxy.dart';
@@ -29,7 +29,7 @@ class SmartDialog {
   ///
   /// [controller]：this controller can be used to refresh the layout of the custom dialog
   ///
-  /// [alignment]：control the location of the dialog
+  /// [alignment]：control the location of the dialog, For details, please refer to the description of alignment parameters in [SmartConfigCustom]
   ///
   /// [clickMaskDismiss]：true（the dialog will be closed after click mask），false（not close）
   ///
@@ -96,7 +96,7 @@ class SmartDialog {
   ///
   /// [controller]：可使用该控制器来刷新自定义的dialog的布局
   ///
-  /// [alignment]：控制弹窗的位置
+  /// [alignment]：控制弹窗的位置, 详细请参照[SmartConfigCustom]中alignment参数说明
   ///
   /// [clickMaskDismiss]：true（点击遮罩后，将关闭dialog），false（不关闭）
   ///
@@ -176,10 +176,7 @@ class SmartDialog {
     Rect? ignoreArea,
   }) {
     assert(
-      (useSystem == true &&
-              tag == null &&
-              permanent == null &&
-              keepSingle == null) ||
+      (useSystem == true && tag == null && permanent == null && keepSingle == null) ||
           (useSystem == null || useSystem == false),
       'useSystem is true; tag, keepSingle and permanent prohibit setting values',
     );
@@ -236,7 +233,7 @@ class SmartDialog {
   /// When targetBuilder is used, the targetContext param will not be able to automatically set the position.
   /// The param of the targetBuilder callback are calculated according to the targetContext
   ///
-  /// [alignment]：control the location of the dialog
+  /// [alignment]：control the location of the dialog, For details, please refer to the description of alignment parameters in [SmartConfigAttach]
   ///
   /// [clickMaskDismiss]：true（the dialog will be closed after click mask），false（not close）
   ///
@@ -321,7 +318,7 @@ class SmartDialog {
   /// [targetBuilder]：手动指定合适坐标点，当targetBuilder被使用时，targetContext参数将无法自动设置位置,
   /// targetBuilder回调的参数是根据targetContext计算得来的
   ///
-  /// [alignment]：控制弹窗的位置
+  /// [alignment]：控制弹窗的位置, 详细请参照[SmartConfigAttach]中alignment参数说明
   ///
   /// [clickMaskDismiss]：true（点击遮罩后，将关闭dialog），false（不关闭）
   ///
@@ -416,10 +413,7 @@ class SmartDialog {
       'targetContext and target, cannot both be null',
     );
     assert(
-      (useSystem == true &&
-              tag == null &&
-              permanent == null &&
-              keepSingle == null) ||
+      (useSystem == true && tag == null && permanent == null && keepSingle == null) ||
           (useSystem == null || useSystem == false),
       'useSystem is true; tag, keepSingle and permanent prohibit setting values',
     );
@@ -469,6 +463,8 @@ class SmartDialog {
   ///
   /// [controller]：this controller can be used to refresh the layout of the custom loading
   ///
+  /// [alignment]：control the location of the dialog, For details, please refer to the description of alignment parameters in [SmartConfigLoading]
+  ///
   /// [clickMaskDismiss]：true（loading will be closed after click mask），false（not close）
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
@@ -509,6 +505,8 @@ class SmartDialog {
   ///
   /// [controller]：可使用该控制器来刷新自定义的loading的布局
   ///
+  /// [alignment]：控制弹窗的位置, 详细请参照[SmartConfigLoading]中alignment参数说明
+  ///
   /// [clickMaskDismiss]：true（点击遮罩后，将关闭loading），false（不关闭）
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
@@ -540,6 +538,7 @@ class SmartDialog {
   static Future<T?> showLoading<T>({
     String msg = 'loading...',
     SmartDialogController? controller,
+    AlignmentGeometry? alignment,
     bool? clickMaskDismiss,
     SmartAnimationType? animationType,
     List<SmartNonAnimationType>? nonAnimationTypes,
@@ -556,6 +555,13 @@ class SmartDialog {
     WidgetBuilder? builder,
   }) {
     return DialogProxy.instance.showLoading<T>(
+      widget: builder != null
+          ? DialogScope(
+              controller: controller,
+              builder: (context) => builder(context),
+            )
+          : DialogProxy.instance.loadingBuilder(msg),
+      alignment: alignment ?? config.loading.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.loading.clickMaskDismiss,
       animationType: animationType ?? config.loading.animationType,
       nonAnimationTypes: nonAnimationTypes ?? config.loading.nonAnimationTypes,
@@ -569,12 +575,6 @@ class SmartDialog {
       onMask: onMask,
       displayTime: displayTime,
       backDismiss: backDismiss ?? config.loading.backDismiss,
-      widget: builder != null
-          ? DialogScope(
-              controller: controller,
-              builder: (context) => builder(context),
-            )
-          : DialogProxy.instance.loadingBuilder(msg),
     );
   }
 
@@ -582,11 +582,11 @@ class SmartDialog {
   ///
   /// [msg]：msg presented to users (Use the [builder] param to customize the toast, this param will be invalid)
   ///
-  ///  [controller]：this controller can be used to refresh the layout of the custom toast
+  /// [controller]：this controller can be used to refresh the layout of the custom toast
   ///
   /// [displayTime]：toast display time on the screen
   ///
-  /// [alignment]：control the location of the dialog
+  /// [alignment]：control the location of the dialog, For details, please refer to the description of alignment parameters in [SmartConfigToast]
   ///
   /// [clickMaskDismiss]：true（toast will be closed after click mask），false（not close）
   ///
@@ -624,7 +624,7 @@ class SmartDialog {
   ///
   /// [displayTime]：toast在屏幕上的显示时间
   ///
-  /// [alignment]：控制弹窗的位置
+  /// [alignment]：控制弹窗的位置, 详细请参照[SmartConfigToast]中alignment参数说明
   ///
   /// [clickMaskDismiss]：true（点击遮罩后，将关闭toast），false（不关闭）
   ///
@@ -668,6 +668,12 @@ class SmartDialog {
     WidgetBuilder? builder,
   }) async {
     return DialogProxy.instance.showToast(
+      widget: builder != null
+          ? DialogScope(
+              controller: controller,
+              builder: (context) => builder(context),
+            )
+          : DialogProxy.instance.toastBuilder(msg),
       displayTime: displayTime ?? config.toast.displayTime,
       alignment: alignment ?? config.toast.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.toast.clickMaskDismiss,
@@ -681,12 +687,6 @@ class SmartDialog {
       debounce: debounce ?? config.toast.debounce,
       displayType: displayType ?? config.toast.displayType,
       consumeEvent: consumeEvent ?? config.toast.consumeEvent,
-      widget: builder != null
-          ? DialogScope(
-              controller: controller,
-              builder: (context) => builder(context),
-            )
-          : DialogProxy.instance.toastBuilder(msg),
     );
   }
 

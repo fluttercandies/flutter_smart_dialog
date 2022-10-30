@@ -9,8 +9,7 @@ import '../data/base_dialog.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
 class CustomLoading extends BaseDialog {
-  CustomLoading({required SmartOverlayEntry overlayEntry})
-      : super(overlayEntry);
+  CustomLoading({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
 
   Timer? _timer;
   Timer? _displayTimer;
@@ -19,6 +18,7 @@ class CustomLoading extends BaseDialog {
 
   Future<T?> showLoading<T>({
     required Widget widget,
+    required AlignmentGeometry alignment,
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
     required List<SmartNonAnimationType> nonAnimationTypes,
@@ -49,7 +49,7 @@ class CustomLoading extends BaseDialog {
       animationType: animationType,
       nonAnimationTypes: nonAnimationTypes,
       animationBuilder: animationBuilder,
-      alignment: Alignment.center,
+      alignment: alignment,
       maskColor: maskColor,
       maskWidget: maskWidget,
       usePenetrate: usePenetrate,
@@ -82,8 +82,7 @@ class CustomLoading extends BaseDialog {
   }
 
   Future<void> _realDismiss({CloseType closeType = CloseType.normal}) async {
-    if (!DialogProxy.instance.loadingBackDismiss &&
-        closeType == CloseType.back) {
+    if (!DialogProxy.instance.loadingBackDismiss && closeType == CloseType.back) {
       return null;
     }
 

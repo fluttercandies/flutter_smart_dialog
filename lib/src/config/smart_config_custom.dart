@@ -31,11 +31,9 @@ class SmartConfigCustom {
   ///
   /// center: the dialog locate the center on the screen，The animation type can be set using [animationType]
   ///
-  /// bottomCenter、bottomLeft、bottomRight：the dialog locate the bottom on the screen，
-  /// animation effect is bottom-to-up
+  /// bottomCenter、bottomLeft、bottomRight：the dialog locate the bottom on the screen，animation effect is bottom-to-up
   ///
-  /// topCenter、topLeft、Alignment.topRight：the dialog locate the top on the screen，
-  /// animation effect is up-to-bottom
+  /// topCenter、topLeft、Alignment.topRight：the dialog locate the top on the screen，animation effect is up-to-bottom
   ///
   /// centerLeft：the dialog locate the left on the screen，animation effect is left-to-right
   ///
@@ -49,11 +47,11 @@ class SmartConfigCustom {
   ///
   /// bottomCenter、bottomLeft、bottomRight：dialog位于屏幕底部，动画默认为位移动画，自下而上
   ///
-  /// topCenter、topLeft、Alignment.topRight：dialog位于屏幕顶部，
+  /// topCenter、topLeft、Alignment.topRight：dialog位于屏幕顶部，动画默认为位移动画，自上而下
   ///
-  /// centerLeft：dialog位于屏幕左边，动画默认为位移动画，自左而右，
+  /// centerLeft：dialog位于屏幕左边，动画默认为位移动画，自左而右
   ///
-  /// centerRight：dialog位于屏幕左边，动画默认为位移动画，自右而左，
+  /// centerRight：dialog位于屏幕左边，动画默认为位移动画，自右而左
   final AlignmentGeometry alignment;
 
   /// [animationTime]：The animation time can be set

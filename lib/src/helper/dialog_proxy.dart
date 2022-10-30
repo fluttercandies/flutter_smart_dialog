@@ -191,6 +191,7 @@ class DialogProxy {
   }
 
   Future<T?> showLoading<T>({
+    required AlignmentGeometry alignment,
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
     required List<SmartNonAnimationType> nonAnimationTypes,
@@ -207,6 +208,7 @@ class DialogProxy {
     required Widget widget,
   }) {
     return _loading.showLoading<T>(
+      alignment: alignment,
       clickMaskDismiss: clickMaskDismiss,
       animationType: animationType,
       nonAnimationTypes: nonAnimationTypes,

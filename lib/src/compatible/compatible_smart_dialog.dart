@@ -11,8 +11,7 @@ class CompatibleSmartDialog {
   factory CompatibleSmartDialog() => instance;
   static CompatibleSmartDialog? _instance;
 
-  static CompatibleSmartDialog get instance =>
-      _instance ??= CompatibleSmartDialog._();
+  static CompatibleSmartDialog get instance => _instance ??= CompatibleSmartDialog._();
 
   CompatibleSmartDialog._();
 
@@ -282,9 +281,7 @@ class CompatibleSmartDialog {
       widget: widget,
       alignment: alignmentTemp ?? Alignment.bottomCenter,
       clickMaskDismiss: clickBgDismissTemp ?? config.clickBgDismiss,
-      animationType: isLoadingTemp ?? false
-          ? SmartAnimationType.fade
-          : SmartAnimationType.scale,
+      animationType: isLoadingTemp ?? false ? SmartAnimationType.fade : SmartAnimationType.scale,
       nonAnimationTypes: const [],
       animationBuilder: null,
       scalePointBuilder: null,
@@ -381,10 +378,9 @@ class CompatibleSmartDialog {
     Widget? widget,
   }) {
     return DialogProxy.instance.showLoading(
+      alignment: Alignment.center,
       clickMaskDismiss: clickBgDismissTemp ?? false,
-      animationType: isLoadingTemp ?? true
-          ? SmartAnimationType.fade
-          : SmartAnimationType.scale,
+      animationType: isLoadingTemp ?? true ? SmartAnimationType.fade : SmartAnimationType.scale,
       nonAnimationTypes: const [],
       animationBuilder: null,
       usePenetrate: isPenetrateTemp ?? false,
@@ -484,9 +480,7 @@ class CompatibleSmartDialog {
     return DialogProxy.instance.showToast(
       alignment: Alignment.bottomCenter,
       clickMaskDismiss: clickBgDismissTemp ?? false,
-      animationType: isLoadingTemp ?? true
-          ? SmartAnimationType.fade
-          : SmartAnimationType.scale,
+      animationType: isLoadingTemp ?? true ? SmartAnimationType.fade : SmartAnimationType.scale,
       animationBuilder: null,
       usePenetrate: isPenetrateTemp ?? true,
       useAnimation: isUseAnimationTemp ?? true,
