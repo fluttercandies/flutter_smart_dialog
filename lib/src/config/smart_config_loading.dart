@@ -9,7 +9,7 @@ class SmartConfigLoading {
   SmartConfigLoading({
     this.alignment = Alignment.center,
     this.animationType = SmartAnimationType.fade,
-    this.animationTime = const Duration(milliseconds: 260),
+    this.animationTime = const Duration(milliseconds: 200),
     this.useAnimation = true,
     this.usePenetrate = false,
     this.maskColor = const Color.fromRGBO(0, 0, 0, 0.46),

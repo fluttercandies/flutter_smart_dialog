@@ -555,12 +555,12 @@ class SmartDialog {
     WidgetBuilder? builder,
   }) {
     return DialogProxy.instance.showLoading<T>(
-      widget: builder != null
-          ? DialogScope(
-              controller: controller,
-              builder: (context) => builder(context),
-            )
-          : DialogProxy.instance.loadingBuilder(msg),
+      widget: DialogScope(
+        controller: controller,
+        builder: (context) {
+          return builder != null ? builder(context) : DialogProxy.instance.loadingBuilder(msg);
+        },
+      ),
       alignment: alignment ?? config.loading.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.loading.clickMaskDismiss,
       animationType: animationType ?? config.loading.animationType,
@@ -668,12 +668,12 @@ class SmartDialog {
     WidgetBuilder? builder,
   }) async {
     return DialogProxy.instance.showToast(
-      widget: builder != null
-          ? DialogScope(
-              controller: controller,
-              builder: (context) => builder(context),
-            )
-          : DialogProxy.instance.toastBuilder(msg),
+      widget: DialogScope(
+        controller: controller,
+        builder: (context) {
+          return builder != null ? builder(context) : DialogProxy.instance.toastBuilder(msg);
+        },
+      ),
       displayTime: displayTime ?? config.toast.displayTime,
       alignment: alignment ?? config.toast.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.toast.clickMaskDismiss,

@@ -57,16 +57,22 @@ enum SmartToastType {
   /// 每一条toast都会显示，当前toast消失之后，后一条toast才会显示
   normal,
 
+  /// Call toast continuously, the next toast will top off the previous toast
+  ///
+  /// 连续调用toast，后一条toast会顶掉前一条toast
+  last,
+
+  /// When the toast is called continuously, if the previous toast does not disappear,
+  /// only the toast content is refreshed, and the toast will not be closed and reopened
+  ///
+  /// 连续调用toast时, 如果上一条toast未消失, 仅刷新toast内容, 并不会关闭toast重新打开
+  onlyRefresh,
+
   /// Call toast continuously, during the period when the first toast exists on the screen,
   /// other toasts called will be invalid
   ///
   /// 连续调用toast，在第一条toast存在界面的期间内，调用的其它toast都将无效
   first,
-
-  /// Call toast continuously, the next toast will top off the previous toast
-  ///
-  /// 连续调用toast，后一条toast会顶掉前一条toast
-  last,
 
   /// Call toast continuously, the first toast is displayed normally，
   /// and all toasts generated during the first toast display period，only the last toast is valid

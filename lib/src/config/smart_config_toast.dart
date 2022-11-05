@@ -7,7 +7,7 @@ import 'enum_config.dart';
 ///showToast() 全局配置
 class SmartConfigToast {
   SmartConfigToast({
-    this.alignment = Alignment.center,
+    this.alignment = Alignment.bottomCenter,
     this.animationType = SmartAnimationType.fade,
     this.animationTime = const Duration(milliseconds: 200),
     this.useAnimation = true,

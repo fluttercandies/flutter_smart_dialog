@@ -19,7 +19,6 @@ class ToastHelper extends StatefulWidget {
 class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
   //solve problem of keyboard shelter toast
   double _keyboardHeight = 0;
-  late double _postFrameOpacity;
   BuildContext? _childContext;
 
   //offset size
@@ -30,15 +29,12 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
   void initState() {
     widgetsBinding.addObserver(this);
 
-    _postFrameOpacity = 0;
     ViewUtils.addSafeUse(() {
       if (!mounted) return;
 
       final renderBox = _childContext!.findRenderObject() as RenderBox;
       selfOffset = renderBox.localToGlobal(Offset.zero);
       selfSize = renderBox.size;
-      _postFrameOpacity = 1;
-      setState(() {});
       _dealKeyboard();
     });
     super.initState();
@@ -48,7 +44,7 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     var child = Builder(builder: (context) {
       _childContext = context;
-      return Opacity(opacity: _postFrameOpacity, child: widget.child);
+      return widget.child;
     });
 
     return Container(

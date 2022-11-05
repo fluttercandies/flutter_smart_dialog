@@ -2,12 +2,15 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_smart_dialog/src/widget/helper/dialog_scope.dart';
+import 'package:flutter_smart_dialog/src/widget/helper/toast_helper.dart';
 
-import '../config/enum_config.dart';
 import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
-import '../smart_dialog.dart';
 import '../widget/helper/smart_overlay_entry.dart';
+
+typedef ToastCallback = Function();
 
 class CustomToast extends BaseDialog {
   CustomToast({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
@@ -19,6 +22,8 @@ class CustomToast extends BaseDialog {
 
   Timer? _curTime;
   Completer? _curCompleter;
+
+  static Widget? test;
 
   ///type
   SmartToastType? _lastType;
@@ -41,14 +46,14 @@ class CustomToast extends BaseDialog {
     // debounce
     if (debounce) {
       var now = DateTime.now();
-      var isShake = _lastTime != null &&
-          now.difference(_lastTime!) < SmartDialog.config.toast.debounceTime;
+      var debounce =
+          _lastTime != null && now.difference(_lastTime!) < SmartDialog.config.toast.debounceTime;
       _lastTime = now;
-      if (isShake) return;
+      if (debounce) return;
     }
     SmartDialog.config.toast.isExist = true;
 
-    showToast() {
+    ToastCallback showToast = () {
       mainDialog.show(
         widget: widget,
         alignment: alignment,
@@ -68,18 +73,20 @@ class CustomToast extends BaseDialog {
         ignoreArea: null,
         onMask: () => clickMaskDismiss ? _realDismiss() : null,
       );
-    }
+    };
 
     Future<void> multiTypeToast() async {
       // provider multiple toast display logic
       if (displayType == SmartToastType.normal) {
         await _normalToast(time: displayTime, onShowToast: showToast);
-      } else if (displayType == SmartToastType.first) {
-        await _firstToast(time: displayTime, onShowToast: showToast);
       } else if (displayType == SmartToastType.last) {
         await _lastToast(time: displayTime, onShowToast: showToast);
+      } else if (displayType == SmartToastType.first) {
+        await _firstToast(time: displayTime, onShowToast: showToast);
       } else if (displayType == SmartToastType.firstAndLast) {
         await _firstAndLastToast(time: displayTime, onShowToast: showToast);
+      } else if (displayType == SmartToastType.onlyRefresh) {
+        await _onlyRefresh(time: displayTime, widget: widget, onShowToast: showToast);
       }
 
       afterDismiss();
@@ -93,7 +100,7 @@ class CustomToast extends BaseDialog {
 
   Future<void> _normalToast({
     required Duration time,
-    required Function() onShowToast,
+    required ToastCallback onShowToast,
   }) async {
     _toastQueue.add(() async {
       //handling special circumstances
@@ -112,7 +119,7 @@ class CustomToast extends BaseDialog {
 
   Future<void> _firstToast({
     required Duration time,
-    required Function() onShowToast,
+    required ToastCallback onShowToast,
   }) async {
     if (_toastQueue.isNotEmpty) return;
 
@@ -126,7 +133,7 @@ class CustomToast extends BaseDialog {
 
   Future<void> _lastToast({
     required Duration time,
-    required Function() onShowToast,
+    required ToastCallback onShowToast,
   }) async {
     onShowToast();
     _toastQueue.add(() async {});
@@ -138,7 +145,7 @@ class CustomToast extends BaseDialog {
 
   Future<void> _firstAndLastToast({
     required Duration time,
-    required Function() onShowToast,
+    required ToastCallback onShowToast,
   }) async {
     _toastQueue.add(() async {
       //handling special circumstances
@@ -156,6 +163,39 @@ class CustomToast extends BaseDialog {
 
     if (_toastQueue.length == 1) await _toastQueue.first();
     if (_toastQueue.length > 2) _toastQueue.remove(_toastQueue.elementAt(1));
+  }
+
+  Timer? _onlyTime;
+  DialogScope? _onlyDialogScope;
+  SmartDialogController? _toastController;
+
+  Future<void> _onlyRefresh({
+    required Duration time,
+    required Widget widget,
+    required ToastCallback onShowToast,
+  }) async {
+    if (_toastQueue.isNotEmpty) _toastQueue.clear();
+
+    if (_onlyDialogScope == null) {
+      var dialogScope = (widget as ToastHelper).child as DialogScope;
+      _onlyDialogScope = dialogScope;
+      if (dialogScope.controller != null) {
+        _toastController = dialogScope.controller;
+      } else {
+        dialogScope.dialogScopeState.setController(_toastController = SmartDialogController());
+      }
+      onShowToast();
+    } else {
+      _onlyDialogScope!.dialogScopeState.replaceBuilder(widget);
+      _toastController?.refresh();
+    }
+
+    _onlyTime?.cancel();
+    _onlyTime = Timer(time, () {
+      _realDismiss();
+      _onlyTime = null;
+      _onlyDialogScope = null;
+    });
   }
 
   ///--------------------------multi type toast--------------------------

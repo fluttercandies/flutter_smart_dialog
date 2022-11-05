@@ -58,8 +58,10 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showToast() async {
-    await SmartDialog.showToast('test toast');
-    print('--------------------------');
+    for (var i = 0; i < 7; i++) {
+      SmartDialog.showToast('test toast ---- $i', displayType: SmartToastType.onlyRefresh);
+      await Future.delayed(Duration(milliseconds: 500));
+    }
   }
 
   void _show() async {
@@ -86,7 +88,7 @@ class SmartDialogPage extends StatelessWidget {
         targetContext: context,
         alignment: Alignment.bottomCenter,
         animationType: SmartAnimationType.scale,
-        highlightBuilder: (_,__){
+        highlightBuilder: (_, __) {
           return Positioned(child: Container());
         },
         scalePointBuilder: (selfSize) => Offset(selfSize.width, 0),

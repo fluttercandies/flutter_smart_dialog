@@ -9,7 +9,7 @@ class SmartConfigAttach {
   SmartConfigAttach({
     this.alignment = Alignment.bottomCenter,
     this.animationType = SmartAnimationType.centerScale_otherSlide,
-    this.animationTime = const Duration(milliseconds: 260),
+    this.animationTime = const Duration(milliseconds: 200),
     this.useAnimation = true,
     this.usePenetrate = false,
     this.maskColor = const Color.fromRGBO(0, 0, 0, 0.46),

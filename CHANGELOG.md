@@ -2,12 +2,12 @@
 - Add 'bindWidget' feature
 - Add 'nonAnimationTypes' feature
 - Add 'ignoreArea' feature
-- Fix [#81](https://github.com/fluttercandies/flutter_smart_dialog/issues/81)
-- Optimize route monitor
-- Optimize 'KeepSingle'
+- Fix [#81](https://github.com/fluttercandies/flutter_smart_dialog/issues/81), Fix [#82](https://github.com/fluttercandies/flutter_smart_dialog/issues/82), [#84](https://github.com/fluttercandies/flutter_smart_dialog/issues/84)
+- Optimize route monitor, 'KeepSingle'
 - Adjust default 'maskColor' config
-- Fix [#82](https://github.com/fluttercandies/flutter_smart_dialog/issues/82), [#84](https://github.com/fluttercandies/flutter_smart_dialog/issues/84)
-
+- Breaking Change 
+  - Toast global default config adjustment(alignment: Alignment.center ---> Alignment.bottomCenter)
+- toast 'displayType' add 'onlyRefresh'
 
 # [4.5.x]
 
