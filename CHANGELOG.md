@@ -2,8 +2,8 @@
 
 - Breaking Change
   - Toast global default config adjustment(alignment: Alignment.center ---> Alignment.bottomCenter)
-- toast 'displayType' add 'onlyRefresh'
-- compatible with flutter_boost
+- Toast 'displayType' add 'onlyRefresh'
+- Compatible with flutter_boost
 
 
 # [4.6.x]
