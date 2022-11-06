@@ -35,7 +35,7 @@ class MonitorWidgetHelper {
           if (context == null) {
             throw Error();
           }
-          _calculatePlanB(context, item);
+          _calculate(context, item);
         } catch (e) {
           removeList.add(item);
           SmartLog.d(
@@ -54,34 +54,7 @@ class MonitorWidgetHelper {
     });
   }
 
-  void _calculatePlanA(BuildContext context, DialogInfo item) {
-    var renderObject = context.findRenderObject() as RenderBox?;
-    var viewport = RenderAbstractViewport.of(renderObject);
-    if (renderObject == null) {
-      throw Error();
-    }
-    var revealedOffset = viewport?.getOffsetToReveal(renderObject, 0.0);
-    if (revealedOffset != null) {
-      // NonPage
-      if (revealedOffset.rect.hasNaN) {
-        item.dialog.hide();
-      } else {
-        item.dialog.appear();
-      }
-    } else {
-      // Page
-      if (!item.bindPage) {
-        var selfOffset = renderObject.localToGlobal(Offset.zero);
-        if (selfOffset.dx < 0 || selfOffset.dy < 0) {
-          item.dialog.hide();
-        } else {
-          item.dialog.appear();
-        }
-      }
-    }
-  }
-
-  void _calculatePlanB(BuildContext context, DialogInfo item) {
+  void _calculate(BuildContext context, DialogInfo item) {
     var renderObject = context.findRenderObject() as RenderBox?;
     if (renderObject == null) {
       throw Error();

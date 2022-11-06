@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/helper/back_monitor/boost_route_monitor.dart';
 import 'package:flutter_smart_dialog/src/helper/navigator_observer.dart';
 import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/toast_widget.dart';
 
 import 'helper/dialog_proxy.dart';
-import 'helper/monitor_pop_route.dart';
+import 'helper/back_monitor/monitor_pop_route.dart';
 import 'widget/loading_widget.dart';
 
 typedef FlutterSmartToastBuilder = Widget Function(String msg);
@@ -35,6 +36,9 @@ class FlutterSmartDialog extends StatefulWidget {
   _FlutterSmartDialogState createState() => _FlutterSmartDialogState();
 
   static final observer = SmartNavigatorObserver();
+
+  static Route<dynamic>? boostMonitor(Route<dynamic>? route) =>
+      BoostRouteMonitor.instance.push(route);
 
   ///recommend the way of init
   static TransitionBuilder init({
