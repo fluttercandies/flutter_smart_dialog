@@ -34,8 +34,8 @@ class BoostRouteMonitor {
 
       if (route is ModalRoute) {
         willPopCallback() async {
-          if (SmartDialog.config.isExist) {
-            SmartDialog.dismiss();
+          if (_handleSmartDialog()) {
+            DialogProxy.instance.dismiss(status: SmartStatus.smart, closeType: CloseType.back);
             return false;
           }
           return true;
@@ -48,5 +48,33 @@ class BoostRouteMonitor {
       SmartLog.d(e);
       _monitorRouteMount(route, ++count);
     }
+  }
+
+  bool _handleSmartDialog() {
+    bool shouldHandle = false;
+    try {
+      //handle loading
+      if (SmartDialog.config.isExistLoading) {
+        return true;
+      }
+
+      //handle dialog
+      var dialogQueue = DialogProxy.instance.dialogQueue;
+
+      if (dialogQueue.isEmpty) {
+        return false;
+      }
+
+      for (var item in DialogProxy.instance.dialogQueue) {
+        if (!item.permanent) {
+          shouldHandle = true;
+        }
+      }
+    } catch (e) {
+      shouldHandle = false;
+      print('SmartDialog back event error:${e.toString()}');
+    }
+
+    return shouldHandle;
   }
 }
