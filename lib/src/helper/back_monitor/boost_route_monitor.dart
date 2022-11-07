@@ -11,18 +11,24 @@ class BoostRouteMonitor {
 
   BoostRouteMonitor._();
 
+  int threshold = 1000;
+
   Route<dynamic>? push(Route<dynamic>? route) {
     ViewUtils.addSafeUse(() {
-      _monitorRouteMount(route);
+      _monitorRouteMount(route, 0);
     });
     return route;
   }
 
-  void _monitorRouteMount(Route<dynamic>? route) async {
+  void _monitorRouteMount(Route<dynamic>? route, int count) async {
     try {
+      if (count > threshold) {
+        return;
+      }
+
       await Future.delayed(Duration(milliseconds: 1));
       if (route?.isActive == false) {
-        _monitorRouteMount(route);
+        _monitorRouteMount(route, ++count);
         return;
       }
 
@@ -40,7 +46,7 @@ class BoostRouteMonitor {
       }
     } catch (e) {
       SmartLog.d(e);
-      _monitorRouteMount(route);
+      _monitorRouteMount(route, ++count);
     }
   }
 }
