@@ -101,7 +101,7 @@ void _attachLocation() {
 }
 ````
 
-![attachLocation](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224738.gif)
+![attachLocation](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224738.gif)
 
 The animation effect and the show method are almost the same. For this consistent experience, a lot of targeted optimizations have been made internally.
 
@@ -183,7 +183,7 @@ void _attachPoint() async {
 
 'targetBuilder is a very powerful param. Combine it with the 'scalePointBuilder' param to make a lot of very interesting bubble dialog.
 
-![attachPoint](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224747.gif)
+![attachPoint](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224747.gif)
 
 > **Imitate DropdownButton**
 
@@ -279,7 +279,7 @@ void _attachImitate() {
 }
 ````
 
-![attachImitate](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224755.gif)
+![attachImitate](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224755.gif)
 
 ## highlight
 
@@ -314,7 +314,7 @@ SmartDialog.showAttach(
 
 - Here are two common examples. The code is a little too much, so I won't post it. If you are interested, please check: [flutter_use](https://github.com/xdd666t/flutter_use)
 
-![attachBusiness](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224803.gif)
+![attachBusiness](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224803.gif)
 
 The above two business scenarios are very common. Sometimes, we need to be above or below the target widget or a specific area without being covered by a mask.
 
@@ -327,4 +327,4 @@ Guidance operations are still very common in apps, and you need to specify the a
 - Using the `highlightBuilder` parameter in `showAttach` can also easily achieve this requirement, see the effect
   - The code is also a little bit more, if you are interested, please check: [flutter_use](https://github.com/xdd666t/flutter_use)
 
-![attachGuide](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224816.gif)
+![attachGuide](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224816.gif)

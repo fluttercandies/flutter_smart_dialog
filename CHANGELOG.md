@@ -4,6 +4,7 @@
   - Toast global default config adjustment(alignment: Alignment.center ---> Alignment.bottomCenter)
 - Toast 'displayType' add 'onlyRefresh'
 - Compatible with flutter_boost
+- Add 'SmartAttachAlignmentType'
 
 
 # [4.6.x]

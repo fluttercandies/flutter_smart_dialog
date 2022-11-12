@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import '../../util/view_utils.dart';
 import '../attach_dialog_widget.dart';
@@ -84,10 +85,8 @@ class _AttachWidgetState extends State<AttachWidget> {
       return Opacity(opacity: _postFrameOpacity, child: _originChild);
     });
 
-    List<Widget> below =
-        widget.belowBuilder?.call(targetOffset, targetSize) ?? [];
-    List<Widget> above =
-        widget.aboveBuilder?.call(targetOffset, targetSize) ?? [];
+    List<Widget> below = widget.belowBuilder?.call(targetOffset, targetSize) ?? [];
+    List<Widget> above = widget.aboveBuilder?.call(targetOffset, targetSize) ?? [];
     return Stack(children: [
       //blow
       for (var belowWidget in below) belowWidget,
@@ -141,7 +140,7 @@ class _AttachWidgetState extends State<AttachWidget> {
     if (alignment == Alignment.topLeft) {
       _targetRect = _adjustReactInfo(
         bottom: screen.height - targetOffset.dy,
-        left: targetOffset.dx - selfSize.width / 2,
+        left: targetOffset.dx + _calculateDx(alignment, selfSize),
         fixedVertical: true,
       );
     } else if (alignment == Alignment.topCenter) {
@@ -153,7 +152,7 @@ class _AttachWidgetState extends State<AttachWidget> {
     } else if (alignment == Alignment.topRight) {
       _targetRect = _adjustReactInfo(
         bottom: screen.height - targetOffset.dy,
-        left: targetOffset.dx + targetSize.width - selfSize.width / 2,
+        left: targetOffset.dx + targetSize.width + _calculateDx(alignment, selfSize),
         fixedVertical: true,
       );
     } else if (alignment == Alignment.centerLeft) {
@@ -177,7 +176,7 @@ class _AttachWidgetState extends State<AttachWidget> {
     } else if (alignment == Alignment.bottomLeft) {
       _targetRect = _adjustReactInfo(
         top: targetOffset.dy + targetSize.height,
-        left: targetOffset.dx - selfSize.width / 2,
+        left: targetOffset.dx + _calculateDx(alignment, selfSize),
         fixedVertical: true,
       );
     } else if (alignment == Alignment.bottomCenter) {
@@ -189,7 +188,7 @@ class _AttachWidgetState extends State<AttachWidget> {
     } else if (alignment == Alignment.bottomRight) {
       _targetRect = _adjustReactInfo(
         top: targetOffset.dy + targetSize.height,
-        left: targetOffset.dx + targetSize.width - selfSize.width / 2,
+        left: targetOffset.dx + targetSize.width + _calculateDx(alignment, selfSize),
         fixedVertical: true,
       );
     }
@@ -213,6 +212,32 @@ class _AttachWidgetState extends State<AttachWidget> {
     //第一帧后恢复透明度,同时重置位置信息
     _postFrameOpacity = 1;
     setState(() {});
+  }
+
+  /// 计算attach alignment类型的偏移量
+  double _calculateDx(AlignmentGeometry alignment, Size selfSize) {
+    double offset = 0;
+    var type = SmartDialog.config.attach.attachAlignmentType;
+
+    if (alignment == Alignment.topLeft || alignment == Alignment.bottomLeft) {
+      if (type == SmartAttachAlignmentType.inside) {
+        offset = 0;
+      } else if (type == SmartAttachAlignmentType.outside) {
+        offset = -selfSize.width;
+      } else {
+        offset = -(selfSize.width / 2);
+      }
+    } else if (alignment == Alignment.topRight || alignment == Alignment.bottomRight) {
+      if (type == SmartAttachAlignmentType.inside) {
+        offset = -selfSize.width;
+      } else if (type == SmartAttachAlignmentType.outside) {
+        offset = 0;
+      } else {
+        offset = -(selfSize.width / 2);
+      }
+    }
+
+    return offset;
   }
 
   RectInfo _adjustReactInfo({

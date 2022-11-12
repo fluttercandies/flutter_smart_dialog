@@ -1,3 +1,5 @@
+
+
 enum SmartStatus {
   /// close single dialog：loading（showToast），custom（show）or attach（showAttach）
   ///
@@ -187,3 +189,31 @@ enum SmartNonAnimationType {
   highlightMask_nonAnimation,
 }
 
+/// The alignment effect when the attach dialog selects different alignment properties
+///
+/// attach dialog选择不同alignment属性时的对齐效果
+enum SmartAttachAlignmentType {
+  /// attach dialog align the inner edge of the goals control, note: Alignment.centerXxx is not affected, the center point is still aligned;
+  /// Alignment.bottom Left/topLeft (the left edge of the dialog align goals control left edge),
+  /// Alignment.bottom Right/topRight ((the right edge of the dialog align goals control right edge))
+  ///
+  /// attach dialog对齐目标控件内边缘, 注意: Alignment.centerXxx不受影响, 依旧是中心点对齐;
+  /// Alignment.bottomLeft/topLeft(dialog左边边缘对齐目标控件左侧边缘), Alignment.bottomRight/topRight((dialog右边边缘对齐目标控件右侧边缘))
+  inside,
+
+  /// attach the center point of the dialog align goals control edge
+  /// Alignment.bottom Left/topLeft (dialog center point align goals control left edge),
+  /// Alignment.bottom Right/topRight (dialog center point align goals control right edge)
+  ///
+  /// attach dialog的中心点对齐目标控件边缘
+  /// Alignment.bottomLeft/topLeft(dialog中心点对齐目标控件左侧边缘), Alignment.bottomRight/topRight(dialog中心点对齐目标控件右侧边缘)
+  center,
+
+  /// attach dialog align the outer edge of the goals control, note: Alignment.centerXxx is not affected, the center point is still aligned;
+  /// Alignment.bottom Left/topLeft (the right edge of the dialog align goals control left edge),
+  /// Alignment.bottom Right/topRight ((the left edge of the dialog align goals control right edge))
+  ///
+  /// attach dialog对齐目标控件外边缘, 注意: Alignment.centerXxx不受影响, 依旧是中心点对齐;
+  /// Alignment.bottomLeft/topLeft(dialog右边边缘对齐目标控件左侧边缘), Alignment.bottomRight/topRight((dialog左边边缘对齐目标控件右侧边缘))
+  outside,
+}

@@ -36,7 +36,7 @@ var maskWidget = Container(
   child: Opacity(
     opacity: 0.6,
     child: Image.network(
-      'https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211101103911.jpeg',
+      'https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211101103911.jpeg',
       fit: BoxFit.fill,
     ),
   ),
@@ -44,7 +44,7 @@ var maskWidget = Container(
 SmartDialog.showLoading(maskWidget: maskWidget);
 ````
 
-![loadingOne](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224902.gif)
+![loadingOne](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224902.gif)
 
 - maskColor: supports quick custom mask color
 
@@ -55,7 +55,7 @@ SmartDialog.showLoading(maskColor: randomColor().withOpacity(0.3));
 Color randomColor() => Color.fromRGBO(Random().nextInt(256), Random().nextInt(256), Random().nextInt(256), 1);
 ````
 
-![loadingTwo](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224910.gif)
+![loadingTwo](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224910.gif)
 
 - animationType: animation effect switching
 
@@ -63,7 +63,7 @@ Color randomColor() => Color.fromRGBO(Random().nextInt(256), Random().nextInt(25
 SmartDialog.showLoading(animationType: SmartAnimationType.scale);
 ````
 
-![loadingFour](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224929.gif)
+![loadingFour](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224929.gif)
 
 - usePenetrate: Interaction events can penetrate the mask, which is a very useful function and is critical for some special demand scenarios
 
@@ -71,7 +71,7 @@ SmartDialog.showLoading(animationType: SmartAnimationType.scale);
 SmartDialog.showLoading(usePenetrate: true);
 ````
 
-![loadingFive](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224945.gif)
+![loadingFive](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224945.gif)
 
 ## Custom Loading
 
@@ -129,13 +129,13 @@ class _CustomLoadingState extends State<CustomLoading>
         alignment: Alignment.center,
         turns: _controller,
         child: Image.network(
-          'https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211101174606.png',
+          'https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211101174606.png',
           height: 110,
           width: 110,
         ),
       ),
       Image.network(
-        'https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211101181404.png',
+        'https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211101181404.png',
         height: 60,
         width: 60,
       ),
@@ -145,7 +145,7 @@ class _CustomLoadingState extends State<CustomLoading>
   Widget _buildLoadingTwo() {
     return Stack(alignment: Alignment.center, children: [
       Image.network(
-        'https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211101162946.png',
+        'https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211101162946.png',
         height: 50,
         width: 50,
       ),
@@ -153,7 +153,7 @@ class _CustomLoadingState extends State<CustomLoading>
         alignment: Alignment.center,
         turns: _controller,
         child: Image.network(
-          'https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211101173708.png',
+          'https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211101173708.png',
           height: 80,
           width: 80,
         ),
@@ -176,7 +176,7 @@ class _CustomLoadingState extends State<CustomLoading>
             alignment: Alignment.center,
             turns: _controller,
             child: Image.network(
-              'https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211101163010.png',
+              'https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211101163010.png',
               height: 50,
               width: 50,
             ),
@@ -211,7 +211,7 @@ await Future.delayed(Duration(seconds: 2));
 SmartDialog.dismiss();
 ````
 
-![loadingSmile](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224959.gif)
+![loadingSmile](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224959.gif)
 
 - Effect two
 
@@ -224,7 +224,7 @@ await Future.delayed(Duration(seconds: 2));
 SmartDialog.dismiss();
 ````
 
-![loadingIcon](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103225006.gif)
+![loadingIcon](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103225006.gif)
 
 - Effect three
 
@@ -234,4 +234,4 @@ await Future.delayed(Duration(seconds: 2));
 SmartDialog.dismiss();
 ````
 
-![loadingNormal](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103225013.gif)
+![loadingNormal](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103225013.gif)

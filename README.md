@@ -16,15 +16,15 @@ An elegant Flutter Dialog solution.
 
 # Some Effect
 
-![attachLocationAndPoint](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103160140.gif)
+![attachLocationAndPoint](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103160140.gif)
 
-![attachHighlight](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103160210.gif)
+![attachHighlight](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103160210.gif)
 
-![dialogStack](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211216222718.gif)
+![dialogStack](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211216222718.gif)
 
-![loadingCustom](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/202201140931573.gif)
+![loadingCustom](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/202201140931573.gif)
 
-![toastCustom](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092253.gif)
+![toastCustom](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092253.gif)
 
 # Advantage
 
@@ -109,7 +109,7 @@ class MyApp extends StatelessWidget {
 SmartDialog.showToast('test toast');
 ```
 
-![toastDefault](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211102232805.gif)
+![toastDefault](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211102232805.gif)
 
 - **loading usage**⏳
 
@@ -119,7 +119,7 @@ await Future.delayed(Duration(seconds: 2));
 SmartDialog.dismiss(); 
 ```
 
-![loadingDefault](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211102232815.gif)
+![loadingDefault](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211102232815.gif)
 
 - **dialog usage**🎨
 
@@ -139,15 +139,15 @@ SmartDialog.show(builder: (context) {
 });
 ```
 
-![dialogEasy](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211102232821.gif)
+![dialogEasy](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211102232821.gif)
 
 # You may have questions
 
 For details, please check： [Some Consideration Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Some%20Consideration.md)
 
-![initBack](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092132.gif)
+![initBack](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092132.gif)
 
-![hardClose](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092201.gif)
+![hardClose](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092201.gif)
 
 # Attach Chapter
 
@@ -155,41 +155,41 @@ For details, please check： [Attach Chapter Details](https://github.com/flutter
 
 This is a very important function. I wanted to add it a long time ago, but it was busy and has been shelved; New Year's Day (2022.1.1) started, and it took some time to complete this function and related demos.
 
-![attachLocation](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103161314.gif)
+![attachLocation](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103161314.gif)
 
-![attachImitate](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103161431.gif)
+![attachImitate](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103161431.gif)
 
-![attachGuide](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103161443.gif)
+![attachGuide](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103161443.gif)
 
 # Dialog Chapter
 
 For details, please check： [Dialog Chapter Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Dialog%20Chapter.md)
 
-![dialogLocation](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092433.gif)
+![dialogLocation](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092433.gif)
 
-![dialogPenetrate](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092442.gif)
+![dialogPenetrate](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092442.gif)
 
-![dialogStack](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211106214858.gif)
+![dialogStack](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211106214858.gif)
 
 # Loading Chapter
 
 For details, please check： [Loading Chapter Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Loading%20Chapter.md)
 
-![loadingOne](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092313.gif)
+![loadingOne](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092313.gif)
 
-![loadingSmile](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092359.gif)
+![loadingSmile](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092359.gif)
 
-![loadingNormal](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092413.gif)
+![loadingNormal](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092413.gif)
 
 # Toast Chapter
 
 For details, please check： [Toast Chapter Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Toast%20Chapter.md)
 
-![toastOne](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092214.gif)
+![toastOne](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092214.gif)
 
-![toastSmart](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092228.gif)
+![toastSmart](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092228.gif)
 
-![toastCustom](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092253.gif)
+![toastCustom](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092253.gif)
 
 # Little tricks of anger
 
@@ -280,4 +280,4 @@ void _otherTrick() async {
 
 - Let's see the effect
 
-![trick](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092459.gif)
+![trick](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092459.gif)

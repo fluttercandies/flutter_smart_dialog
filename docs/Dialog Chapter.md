@@ -4,7 +4,7 @@
 
 > The dialog pops up from different positions, and the animation is different
 
-![image-20211031221419600](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224824.png)
+![image-20211031221419600](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224824.png)
 
 - alignment: If this parameter is set differently, the animation effect will be different
 
@@ -35,7 +35,7 @@ void _dialogLocation() async {
 }
 ````
 
-![dialogLocation](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224832.gif)
+![dialogLocation](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224832.gif)
 
 - usePenetrate: Interaction events penetrate the mask
 
@@ -54,7 +54,7 @@ SmartDialog.show(
 );
 ````
 
-![dialogPenetrate](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224839.gif)
+![dialogPenetrate](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224839.gif)
 
 ## dialog stack
 
@@ -127,4 +127,4 @@ void _dialogStack() async {
 }
 ````
 
-![dialogStack](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224848.gif)
+![dialogStack](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224848.gif)

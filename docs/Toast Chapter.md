@@ -10,13 +10,13 @@ Strictly speaking, toast is a very special pop-up window, I think it should have
   - Of course, the type parameter is provided internally, you can choose the display logic you want
 
 
-![toastOne](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103225022.gif)
+![toastOne](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103225022.gif)
 
 > **Displayed on the top layer of the page, should not be blocked by some pop-up windows and the like**
 
 - It can be found that the layout of loading and dialog masks, etc., do not block the toast information
 
-![toastTwo](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103225028.gif)
+![toastTwo](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103225028.gif)
 
 > **Handle the keyboard occlusion situation**
 
@@ -24,7 +24,7 @@ Strictly speaking, toast is a very special pop-up window, I think it should have
   - A special treatment is made here, when the keyboard is invoked, the toast will dynamically adjust the distance between itself and the bottom of the screen
   - This will play a role, the keyboard will not block the toast effect
 
-![toastSmart](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092228.gif)
+![toastSmart](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092228.gif)
 
 ## Custom Toast
 
@@ -95,4 +95,4 @@ SmartDialog.showToast('', builder: (_) => CustomToast('custom toast'));
 
 - Effect
 
-![toastCustom](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211103092253.gif)
+![toastCustom](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092253.gif)

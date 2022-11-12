@@ -14,7 +14,7 @@ In order to monitor these situations, a route monitoring parameter was added as 
 
 The monitoring of the return button is very important and can basically cover most situations
 
-![initBack](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103224708.gif)
+![initBack](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103224708.gif)
 
 > **pop route**
 
@@ -24,12 +24,12 @@ Although the monitoring of the return button can cover most scenarios, some manu
   - If the penetration parameter is turned on (you can interact with the page after the pop-up window), then manually close the page
   - This is an embarrassing situation
 
-![initPopOne](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103225804.gif)
+![initPopOne](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103225804.gif)
 
 - Add `FlutterSmartDialog.observer`, it can be handled reasonably
   - Of course, the transition animation here also provides parameter control whether to enable 😉
 
-![initPopTwo](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103225825.gif)
+![initPopTwo](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103225825.gif)
 
 > **About FlutterSmartDialog.init()**
 
@@ -93,7 +93,7 @@ SmartDialog.show(
             // content
             Text('I studied the following cheats day and night, and finally managed to catch a rich woman'),
             Image.network(
-              'https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20211102213746.jpeg',
+              'https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211102213746.jpeg',
               height: 200,
               width: 400,
             ),
@@ -113,7 +113,7 @@ SmartDialog.show(
 );
 ````
 
-![hardClose](https://cdn.jsdelivr.net/gh/xdd666t/MyData@master/pic/flutter/blog/20220103225957.gif)
+![hardClose](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103225957.gif)
 
 It can be seen from the above renderings that
 

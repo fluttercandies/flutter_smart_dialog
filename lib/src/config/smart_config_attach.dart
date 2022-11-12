@@ -25,6 +25,7 @@ class SmartConfigAttach {
       SmartNonAnimationType.routeClose_nonAnimation,
       SmartNonAnimationType.highlightMask_nonAnimation,
     ],
+    this.attachAlignmentType = SmartAttachAlignmentType.center,
     this.isExist = false,
   });
 
@@ -53,7 +54,7 @@ class SmartConfigAttach {
   /// centerLeft：dialog位于屏幕左边，动画默认为位移动画，自左而右
   ///
   /// centerRight：dialog位于屏幕左边，动画默认为位移动画，自右而左
-  final AlignmentGeometry alignment;
+  final Alignment alignment;
 
   /// [animationTime]：The animation time can be set
   ///
@@ -136,6 +137,12 @@ class SmartConfigAttach {
   ///
   /// 对于不同的场景, 可动态关闭弹窗动画, 具体请参照[SmartNonAnimationType]
   final List<SmartNonAnimationType> nonAnimationTypes;
+
+  /// The alignment effect when the attach dialog selects different alignment properties.
+  /// For details, please refer to [SmartAttachAlignmentType]
+  ///
+  /// attach dialog选择不同alignment属性时的对齐效果, 具体说明请参照[SmartAttachAlignmentType]
+  final SmartAttachAlignmentType attachAlignmentType;
 
   /// whether attach dialog(showAttach()) exist on the screen
   ///
