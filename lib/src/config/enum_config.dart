@@ -1,5 +1,3 @@
-
-
 enum SmartStatus {
   /// close single dialog：loading（showToast），custom（show）or attach（showAttach）
   ///
@@ -216,4 +214,24 @@ enum SmartAttachAlignmentType {
   /// attach dialog对齐目标控件外边缘, 注意: Alignment.centerXxx不受影响, 依旧是中心点对齐;
   /// Alignment.bottomLeft/topLeft(dialog右边边缘对齐目标控件左侧边缘), Alignment.bottomRight/topRight((dialog左边边缘对齐目标控件右侧边缘))
   outside,
+}
+
+/// The initialization type can be dynamically set, which is suitable for some special scenarios;
+/// for example: for a desktop application, initializing the global only needs to initialize the Attach Dialog,
+/// and initializing a block area does not need to initialize the Attach Dialog
+///
+/// 可动态设置初始化类型, 适用于一些特殊场景;
+/// 例如: 某桌面端应用, 初始化全局只需要初始化Attach Dialog, 初始化某块区域不需要初始化Attach Dialog
+enum SmartInitType {
+  /// init CustomDialog (show)
+  custom,
+
+  /// init AttachDialog (showAttach)
+  attach,
+
+  /// init Loading (showLoading)
+  loading,
+
+  /// init Toast (showToast)
+  toast,
 }

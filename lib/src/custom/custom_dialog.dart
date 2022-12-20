@@ -272,10 +272,25 @@ class CustomDialog extends BaseDialog {
 
     // insert the dialog carrier into the page
     ViewUtils.addSafeUse(() {
-      Overlay.of(DialogProxy.contextOverlay)!.insert(
-        overlayEntry,
-        below: proxy.entryLoading,
-      );
+      if (dialogInfo.type == DialogType.custom) {
+        try {
+          Overlay.of(DialogProxy.contextCustom)!.insert(
+            overlayEntry,
+            below: proxy.entryLoading,
+          );
+        } catch (e) {
+          Overlay.of(DialogProxy.contextCustom)!.insert(overlayEntry);
+        }
+      } else {
+        try {
+          Overlay.of(DialogProxy.contextAttach)!.insert(
+            overlayEntry,
+            below: proxy.entryLoading,
+          );
+        } catch (e) {
+          Overlay.of(DialogProxy.contextAttach)!.insert(overlayEntry);
+        }
+      }
     });
   }
 
@@ -287,8 +302,8 @@ class CustomDialog extends BaseDialog {
     var debounceTime = type == DialogType.dialog
         ? SmartDialog.config.custom.debounceTime
         : SmartDialog.config.attach.debounceTime;
-    var prohibit = proxy.dialogLastTime != null &&
-        now.difference(proxy.dialogLastTime!) < debounceTime;
+    var prohibit =
+        proxy.dialogLastTime != null && now.difference(proxy.dialogLastTime!) < debounceTime;
     proxy.dialogLastTime = now;
     if (prohibit) return false;
 
@@ -312,9 +327,7 @@ class CustomDialog extends BaseDialog {
     bool force = false,
     CloseType closeType = CloseType.normal,
   }) {
-    if (type == DialogType.dialog ||
-        type == DialogType.custom ||
-        type == DialogType.attach) {
+    if (type == DialogType.dialog || type == DialogType.custom || type == DialogType.attach) {
       return _closeSingle<T>(
         type: type,
         tag: tag,

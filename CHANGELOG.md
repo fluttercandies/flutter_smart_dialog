@@ -5,6 +5,7 @@
 - Toast 'displayType' add 'onlyRefresh'
 - Compatible with flutter_boost
 - Add 'SmartAttachAlignmentType'
+- Add 'SmartInitType'
 
 
 # [4.6.x]

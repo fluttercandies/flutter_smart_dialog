@@ -44,7 +44,8 @@ class DialogProxy {
 
   static DialogProxy get instance => _instance ??= DialogProxy._internal();
 
-  static late BuildContext contextOverlay;
+  static late BuildContext contextCustom;
+  static late BuildContext contextAttach;
   static BuildContext? contextNavigator;
 
   ///set default loading widget
