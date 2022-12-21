@@ -3,6 +3,10 @@ import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 
 part 'smart_dialog_controller.dart';
 
+class DialogScopeInfo {
+  _DialogScopeState? state;
+}
+
 class DialogScope extends StatefulWidget {
   DialogScope({
     Key? key,
@@ -14,10 +18,10 @@ class DialogScope extends StatefulWidget {
 
   final WidgetBuilder builder;
 
-  final dialogScopeState = _DialogScopeState();
+  final DialogScopeInfo info = DialogScopeInfo();
 
   @override
-  State<DialogScope> createState() => dialogScopeState;
+  State<DialogScope> createState() => info.state = _DialogScopeState();
 }
 
 class _DialogScopeState extends State<DialogScope> {

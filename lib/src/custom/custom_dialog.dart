@@ -29,10 +29,6 @@ enum DialogType {
 class CustomDialog extends BaseDialog {
   CustomDialog({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
 
-  DateTime? clickMaskLastTime;
-
-  var _timeRandom = Random().nextInt(666666) + Random().nextDouble();
-
   Future<T?> show<T>({
     required Widget widget,
     required AlignmentGeometry alignment,
@@ -58,8 +54,10 @@ class CustomDialog extends BaseDialog {
     required BuildContext? bindWidget,
     required Rect? ignoreArea,
   }) {
-    if (!_handleMustOperate(
-      tag: displayTime != null ? _getTimeKey(displayTime) : tag,
+    if (!_checkDebounce(debounce, DialogType.custom)) return Future.value(null);
+
+    final dialogInfo = _handleMustOperate(
+      tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
       debounce: debounce,
@@ -68,7 +66,8 @@ class CustomDialog extends BaseDialog {
       useSystem: useSystem,
       bindPage: bindPage,
       bindWidget: bindWidget,
-    )) return Future.value(null);
+      displayTime: displayTime,
+    );
     return mainDialog.show<T>(
       widget: widget,
       alignment: alignment,
@@ -80,7 +79,7 @@ class CustomDialog extends BaseDialog {
       animationBuilder: animationBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
-      onDismiss: _handleDismiss(onDismiss, displayTime),
+      onDismiss: _handleDismiss(onDismiss, displayTime, dialogInfo),
       useSystem: useSystem,
       reuse: true,
       awaitOverType: SmartDialog.config.custom.awaitOverType,
@@ -124,8 +123,10 @@ class CustomDialog extends BaseDialog {
     required bool bindPage,
     required BuildContext? bindWidget,
   }) {
-    if (!_handleMustOperate(
-      tag: displayTime != null ? _getTimeKey(displayTime) : tag,
+    if (!_checkDebounce(debounce, DialogType.attach)) return Future.value(null);
+
+    final dialogInfo = _handleMustOperate(
+      tag: tag,
       backDismiss: backDismiss,
       keepSingle: keepSingle,
       debounce: debounce,
@@ -134,7 +135,8 @@ class CustomDialog extends BaseDialog {
       useSystem: useSystem,
       bindPage: bindPage,
       bindWidget: bindWidget,
-    )) return Future.value(null);
+      displayTime: displayTime,
+    );
     return mainDialog.showAttach<T>(
       targetContext: targetContext,
       widget: widget,
@@ -152,7 +154,7 @@ class CustomDialog extends BaseDialog {
       maskColor: maskColor,
       maskWidget: maskWidget,
       maskIgnoreArea: maskIgnoreArea,
-      onDismiss: _handleDismiss(onDismiss, displayTime),
+      onDismiss: _handleDismiss(onDismiss, displayTime, dialogInfo),
       useSystem: useSystem,
       awaitOverType: SmartDialog.config.attach.awaitOverType,
       maskTriggerType: SmartDialog.config.attach.maskTriggerType,
@@ -164,10 +166,20 @@ class CustomDialog extends BaseDialog {
     );
   }
 
-  VoidCallback _handleDismiss(VoidCallback? onDismiss, Duration? displayTime) {
+  VoidCallback _handleDismiss(
+    VoidCallback? onDismiss,
+    Duration? displayTime,
+    DialogInfo dialogInfo,
+  ) {
+    if (dialogInfo.tag == SmartTag.keepSingle) {
+      dialogInfo.displayTimer?.cancel();
+    }
+
     Timer? timer;
-    if (displayTime != null) {
-      timer = Timer(displayTime, () => dismiss(tag: _getTimeKey(displayTime)));
+    final tag = dialogInfo.tag;
+    if (displayTime != null && tag != null) {
+      timer = Timer(displayTime, () => dismiss(tag: tag));
+      dialogInfo.displayTimer = timer;
     }
 
     return () {
@@ -176,9 +188,7 @@ class CustomDialog extends BaseDialog {
     };
   }
 
-  String _getTimeKey(Duration time) => '${time.hashCode + _timeRandom}';
-
-  bool _handleMustOperate({
+  DialogInfo _handleMustOperate({
     required String? tag,
     required bool backDismiss,
     required bool keepSingle,
@@ -188,45 +198,16 @@ class CustomDialog extends BaseDialog {
     required bool useSystem,
     required bool bindPage,
     required BuildContext? bindWidget,
+    required Duration? displayTime,
   }) {
-    // debounce
-    if (!_checkDebounce(debounce, type)) return false;
-
-    //handle dialog stack
-    _handleDialogStack(
-      tag: tag,
-      backDismiss: backDismiss,
-      keepSingle: keepSingle,
-      type: type,
-      permanent: permanent,
-      useSystem: useSystem,
-      bindPage: bindPage,
-      bindWidget: bindWidget,
-    );
-
     SmartDialog.config.custom.isExist = DialogType.custom == type;
     SmartDialog.config.attach.isExist = DialogType.attach == type;
-    return true;
-  }
 
-  void _handleDialogStack({
-    required String? tag,
-    required bool backDismiss,
-    required bool keepSingle,
-    required DialogType type,
-    required bool permanent,
-    required bool useSystem,
-    required bool bindPage,
-    required BuildContext? bindWidget,
-  }) {
-    if (bindWidget != null) {
-      tag = tag ?? "${bindPage.hashCode}";
-    }
-
+    DialogInfo dialogInfo;
     if (keepSingle) {
-      DialogInfo? dialogInfo = _getDialog(tag: tag ?? SmartTag.keepSingle);
-      if (dialogInfo == null) {
-        dialogInfo = DialogInfo(
+      var singleDialogInfo = _getDialog(tag: tag ?? SmartTag.keepSingle);
+      if (singleDialogInfo == null) {
+        singleDialogInfo = DialogInfo(
           dialog: this,
           backDismiss: backDismiss,
           type: type,
@@ -237,26 +218,33 @@ class CustomDialog extends BaseDialog {
           route: RouteRecord.curRoute,
           bindWidget: bindWidget,
         );
-        _pushDialog(dialogInfo);
+        _pushDialog(singleDialogInfo);
+      }
+      mainDialog = singleDialogInfo.dialog.mainDialog;
+      dialogInfo = singleDialogInfo;
+    } else {
+      if (displayTime != null) {
+        tag = tag ?? '${displayTime.hashCode + Random().nextInt(666666) + Random().nextDouble()}';
+      } else if (bindWidget != null) {
+        tag = tag ?? "${bindPage.hashCode}";
       }
 
-      mainDialog = dialogInfo.dialog.mainDialog;
-      return;
+      // handle dialog stack
+      dialogInfo = DialogInfo(
+        dialog: this,
+        backDismiss: backDismiss,
+        type: type,
+        tag: tag,
+        permanent: permanent,
+        useSystem: useSystem,
+        bindPage: bindPage,
+        route: RouteRecord.curRoute,
+        bindWidget: bindWidget,
+      );
+      _pushDialog(dialogInfo);
     }
 
-    // handle dialog stack
-    var dialogInfo = DialogInfo(
-      dialog: this,
-      backDismiss: backDismiss,
-      type: type,
-      tag: tag,
-      permanent: permanent,
-      useSystem: useSystem,
-      bindPage: bindPage,
-      route: RouteRecord.curRoute,
-      bindWidget: bindWidget,
-    );
-    _pushDialog(dialogInfo);
+    return dialogInfo;
   }
 
   void _pushDialog(DialogInfo dialogInfo) {
@@ -309,6 +297,8 @@ class CustomDialog extends BaseDialog {
 
     return true;
   }
+
+  DateTime? clickMaskLastTime;
 
   bool _clickMaskDebounce() {
     var now = DateTime.now();

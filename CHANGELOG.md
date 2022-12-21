@@ -6,6 +6,7 @@
 - Compatible with flutter_boost
 - Add 'SmartAttachAlignmentType'
 - Add 'SmartInitType'
+- Optimize 'keepSingle', 'displayTime', 'tag'
 
 
 # [4.6.x]

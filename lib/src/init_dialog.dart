@@ -97,20 +97,6 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
       } catch (e) {}
     });
 
-    var proxy = DialogProxy.instance;
-    // solve Flutter Inspector -> select widget mode function failure problem
-    proxy.initialize();
-    defaultToast(String msg) {
-      return ToastWidget(msg: msg);
-    }
-
-    defaultLoading(String msg) {
-      return LoadingWidget(msg: msg);
-    }
-
-    proxy.toastBuilder = widget.toastBuilder ?? defaultToast;
-    proxy.loadingBuilder = widget.loadingBuilder ?? defaultLoading;
-
     // init param
     styleBuilder = widget.styleBuilder ??
         (Widget child) {
@@ -118,6 +104,16 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
         };
     initType = widget.initType ??
         {SmartInitType.custom, SmartInitType.attach, SmartInitType.loading, SmartInitType.toast};
+
+    // default toast / loading
+    if (initType.contains(SmartInitType.toast)){
+      DialogProxy.instance.toastBuilder =
+          widget.toastBuilder ?? (String msg) => ToastWidget(msg: msg);
+    }
+    if (initType.contains(SmartInitType.loading)){
+      DialogProxy.instance.loadingBuilder =
+          widget.loadingBuilder ?? (String msg) => LoadingWidget(msg: msg);
+    }
 
     super.initState();
   }
@@ -131,23 +127,15 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
       ),
 
       //provided separately for custom dialog
-      if (initType.contains(SmartInitType.custom) && !initType.contains(SmartInitType.attach))
+      if (initType.contains(SmartInitType.custom))
         OverlayEntry(builder: (BuildContext context) {
           DialogProxy.contextCustom = context;
           return Container();
         }),
 
       //provided separately for attach dialog
-      if (initType.contains(SmartInitType.attach) && !initType.contains(SmartInitType.custom))
+      if (initType.contains(SmartInitType.attach))
         OverlayEntry(builder: (BuildContext context) {
-          DialogProxy.contextAttach = context;
-          return Container();
-        }),
-
-      //provided separately for custom dialog and attach dialog
-      if (initType.contains(SmartInitType.custom) && initType.contains(SmartInitType.attach))
-        OverlayEntry(builder: (BuildContext context) {
-          DialogProxy.contextCustom = context;
           DialogProxy.contextAttach = context;
           return Container();
         }),

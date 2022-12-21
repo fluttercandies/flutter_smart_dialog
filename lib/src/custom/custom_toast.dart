@@ -177,16 +177,18 @@ class CustomToast extends BaseDialog {
     if (_toastQueue.isNotEmpty) _toastQueue.clear();
 
     if (_onlyDialogScope == null) {
-      var dialogScope = (widget as ToastHelper).child as DialogScope;
-      _onlyDialogScope = dialogScope;
-      if (dialogScope.controller != null) {
-        _toastController = dialogScope.controller;
-      } else {
-        dialogScope.dialogScopeState.setController(_toastController = SmartDialogController());
-      }
+      _onlyDialogScope = (widget as ToastHelper).child as DialogScope;
       onShowToast();
     } else {
-      _onlyDialogScope!.dialogScopeState.replaceBuilder(widget);
+      var scope = _onlyDialogScope!;
+      if (_toastController == null) {
+        if (scope.controller != null) {
+          _toastController = scope.controller;
+        } else {
+          scope.info.state?.setController(_toastController = SmartDialogController());
+        }
+      }
+      scope.info.state?.replaceBuilder(widget);
       _toastController?.refresh();
     }
 
@@ -195,6 +197,7 @@ class CustomToast extends BaseDialog {
       _realDismiss();
       _onlyTime = null;
       _onlyDialogScope = null;
+      _toastController = null;
     });
   }
 

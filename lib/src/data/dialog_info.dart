@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
 
@@ -33,4 +35,6 @@ class DialogInfo {
   final Route<dynamic>? route;
 
   final BuildContext? bindWidget;
+
+  Timer? displayTimer;
 }

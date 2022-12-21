@@ -180,10 +180,6 @@ class SmartDialog {
           (useSystem == null || useSystem == false),
       'useSystem is true; tag, keepSingle and permanent prohibit setting values',
     );
-    assert(
-      displayTime == null || tag == null,
-      'displayTime is used, tag prohibit setting values',
-    );
 
     return DialogProxy.instance.show<T>(
       widget: DialogScope(
@@ -416,10 +412,6 @@ class SmartDialog {
       (useSystem == true && tag == null && permanent == null && keepSingle == null) ||
           (useSystem == null || useSystem == false),
       'useSystem is true; tag, keepSingle and permanent prohibit setting values',
-    );
-    assert(
-      displayTime == null || tag == null,
-      'displayTime is used, tag prohibit setting values',
     );
 
     return DialogProxy.instance.showAttach<T>(

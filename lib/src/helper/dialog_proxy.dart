@@ -56,15 +56,16 @@ class DialogProxy {
 
   DialogProxy._internal() {
     config = SmartConfig();
-
     dialogQueue = ListQueue();
-  }
 
-  void initialize() {
     entryLoading = SmartOverlayEntry(builder: (_) => _loading.getWidget());
     _loading = CustomLoading(overlayEntry: entryLoading);
     entryToast = SmartOverlayEntry(builder: (_) => _toast.getWidget());
     _toast = CustomToast(overlayEntry: entryToast);
+  }
+
+  void initialize() {
+
   }
 
   Future<T?> show<T>({
