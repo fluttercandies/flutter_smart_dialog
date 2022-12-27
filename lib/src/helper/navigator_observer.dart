@@ -3,6 +3,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 
+import '../data/dialog_info.dart';
 import 'dialog_proxy.dart';
 
 class SmartNavigatorObserver extends NavigatorObserver {
@@ -37,16 +38,17 @@ class SmartNavigatorObserver extends NavigatorObserver {
     }
 
     //smart close dialog
-    var dialogQueue = DialogProxy.instance.dialogQueue;
-    for (var i = dialogQueue.length; i > 0; i--) {
-      var last = dialogQueue.last;
-      if (dialogQueue.isEmpty || last.route != route) {
-        return;
+    var removeList = <DialogInfo>[];
+    for (var item in DialogProxy.instance.dialogQueue) {
+      if (item.route == route && item.bindPage) {
+        removeList.add(item);
       }
-
-      await DialogProxy.instance.dismiss(
+    }
+    for (var i = removeList.length; i > 0; i--) {
+      DialogProxy.instance.dismiss(
         status: SmartStatus.dialog,
         closeType: CloseType.route,
+        tag: removeList[i - 1].tag,
       );
     }
   }

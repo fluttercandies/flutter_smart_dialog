@@ -1,3 +1,9 @@
+# [4.8.x]
+- Breaking Change
+  - If the 'bindPage' of the dialog is false, the dialog will not be closed when the page is closed
+- Optimize 'tag'
+
+
 # [4.7.x]
 
 - Breaking Change
