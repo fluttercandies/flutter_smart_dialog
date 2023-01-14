@@ -2,6 +2,7 @@
 - Breaking Change
   - If the 'bindPage' of the dialog is false, the dialog will not be closed when the page is closed
 - Optimize 'tag'
+- Fix [#101](https://github.com/fluttercandies/flutter_smart_dialog/issues/101)
 
 
 # [4.7.x]

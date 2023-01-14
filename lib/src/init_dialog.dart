@@ -99,18 +99,24 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
 
     // init param
     styleBuilder = widget.styleBuilder ??
-        (Widget child) {
-          return Material(color: Colors.transparent, child: child);
-        };
+        (Widget child) => Material(color: Colors.transparent, child: child);
     initType = widget.initType ??
-        {SmartInitType.custom, SmartInitType.attach, SmartInitType.loading, SmartInitType.toast};
+        {
+          SmartInitType.custom,
+          SmartInitType.attach,
+          SmartInitType.loading,
+          SmartInitType.toast,
+        };
+
+    // solve Flutter Inspector -> select widget mode function failure problem
+    DialogProxy.instance.initialize(initType);
 
     // default toast / loading
-    if (initType.contains(SmartInitType.toast)){
+    if (initType.contains(SmartInitType.toast)) {
       DialogProxy.instance.toastBuilder =
           widget.toastBuilder ?? (String msg) => ToastWidget(msg: msg);
     }
-    if (initType.contains(SmartInitType.loading)){
+    if (initType.contains(SmartInitType.loading)) {
       DialogProxy.instance.loadingBuilder =
           widget.loadingBuilder ?? (String msg) => LoadingWidget(msg: msg);
     }
@@ -141,10 +147,12 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
         }),
 
       //provided separately for loading
-      if (initType.contains(SmartInitType.loading)) DialogProxy.instance.entryLoading,
+      if (initType.contains(SmartInitType.loading))
+        DialogProxy.instance.entryLoading,
 
       //provided separately for toast
-      if (initType.contains(SmartInitType.toast)) DialogProxy.instance.entryToast,
+      if (initType.contains(SmartInitType.toast))
+        DialogProxy.instance.entryToast,
     ]));
   }
 }
