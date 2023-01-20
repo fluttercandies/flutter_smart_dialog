@@ -42,7 +42,7 @@ class DialogProxy {
   factory DialogProxy() => instance;
   static DialogProxy? _instance;
 
-  static DialogProxy get instance => _instance ??= DialogProxy._();
+  static DialogProxy get instance => _instance ??= DialogProxy._internal();
 
   static late BuildContext contextCustom;
   static late BuildContext contextAttach;
@@ -54,12 +54,12 @@ class DialogProxy {
   ///set default toast widget
   late FlutterSmartToastBuilder toastBuilder;
 
-  DialogProxy._();
-
-  void initialize(Set<SmartInitType> initType) {
+  DialogProxy._internal() {
     config = SmartConfig();
     dialogQueue = ListQueue();
+  }
 
+  void initialize(Set<SmartInitType> initType) {
     if (initType.contains(SmartInitType.loading)) {
       entryLoading = SmartOverlayEntry(builder: (_) => _loading.getWidget());
       _loading = CustomLoading(overlayEntry: entryLoading);
