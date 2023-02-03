@@ -258,21 +258,21 @@ class CustomDialog extends BaseDialog {
     ViewUtils.addSafeUse(() {
       if (dialogInfo.type == DialogType.custom) {
         try {
-          Overlay.of(DialogProxy.contextCustom)!.insert(
+          overlay(DialogProxy.contextCustom).insert(
             overlayEntry,
             below: proxy.entryLoading,
           );
         } catch (e) {
-          Overlay.of(DialogProxy.contextCustom)!.insert(overlayEntry);
+          overlay(DialogProxy.contextCustom).insert(overlayEntry);
         }
       } else {
         try {
-          Overlay.of(DialogProxy.contextAttach)!.insert(
+          overlay(DialogProxy.contextAttach).insert(
             overlayEntry,
             below: proxy.entryLoading,
           );
         } catch (e) {
-          Overlay.of(DialogProxy.contextAttach)!.insert(overlayEntry);
+          overlay(DialogProxy.contextAttach).insert(overlayEntry);
         }
       }
     });

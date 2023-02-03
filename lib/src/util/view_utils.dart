@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 
 class ViewUtils {
@@ -17,3 +18,6 @@ class ViewUtils {
 WidgetsBinding get widgetsBinding => WidgetsBinding.instance;
 
 SchedulerBinding get schedulerBinding => SchedulerBinding.instance;
+
+OverlayState overlay(BuildContext context) => Overlay.of(context);
+
