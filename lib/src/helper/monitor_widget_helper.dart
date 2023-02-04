@@ -1,9 +1,9 @@
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
+import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 import 'package:flutter_smart_dialog/src/util/log.dart';
 import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 
@@ -72,9 +72,9 @@ class MonitorWidgetHelper {
       }
     }
 
-    var viewport = RenderAbstractViewport.of(renderObject);
-    var revealedOffset = viewport?.getOffsetToReveal(renderObject, 0.0);
-    if (revealedOffset != null) {
+    handleDialog();
+
+    if (RouteRecord.curRoute == item.route) {
       // NonPage Scene
       handleDialog();
     } else {
@@ -83,5 +83,16 @@ class MonitorWidgetHelper {
         handleDialog();
       }
     }
+    // var viewport = RenderAbstractViewport.of(renderObject);
+    // var revealedOffset = viewport?.getOffsetToReveal(renderObject, 0.0);
+    // if (revealedOffset != null) {
+    //   // NonPage Scene
+    //   handleDialog();
+    // } else {
+    //   // Page Scene
+    //   if (!item.bindPage) {
+    //     handleDialog();
+    //   }
+    // }
   }
 }
