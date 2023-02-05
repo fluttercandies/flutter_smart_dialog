@@ -60,27 +60,13 @@ class MonitorWidgetHelper {
       throw Error();
     }
 
-    handleDialog() {
-      var selfOffset = renderObject.localToGlobal(Offset.zero);
-      if (selfOffset.dx < 0 ||
-          selfOffset.dy < 0 ||
-          selfOffset.dx.isNaN ||
-          selfOffset.dy.isNaN) {
-        item.dialog.hide();
-      } else {
-        item.dialog.appear();
-      }
-    }
-
-    handleDialog();
-
     if (RouteRecord.curRoute == item.route) {
       // NonPage Scene
-      handleDialog();
+      _handleDialog(renderObject, item);
     } else {
       // Page Scene
       if (!item.bindPage) {
-        handleDialog();
+        _handleDialog(renderObject, item);
       }
     }
     // var viewport = RenderAbstractViewport.of(renderObject);
@@ -94,5 +80,17 @@ class MonitorWidgetHelper {
     //     handleDialog();
     //   }
     // }
+  }
+
+  _handleDialog(RenderBox renderObject, DialogInfo item) {
+    var selfOffset = renderObject.localToGlobal(Offset.zero);
+    if (selfOffset.dx < 0 ||
+        selfOffset.dy < 0 ||
+        selfOffset.dx.isNaN ||
+        selfOffset.dy.isNaN) {
+      item.dialog.hide();
+    } else {
+      item.dialog.appear();
+    }
   }
 }
