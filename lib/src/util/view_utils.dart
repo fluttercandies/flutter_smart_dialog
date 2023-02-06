@@ -18,5 +18,5 @@ WidgetsBinding get widgetsBinding => WidgetsBinding.instance;
 
 SchedulerBinding get schedulerBinding => SchedulerBinding.instance;
 
-OverlayState overlay(BuildContext context) => Overlay.of(context);
+OverlayState overlay(BuildContext context) => Overlay.of(context)!;
 
