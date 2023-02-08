@@ -22,7 +22,7 @@ class MainDialog {
 
   bool visible = true;
   BaseController? _controller;
-  Completer? _completer;
+  Completer<dynamic>? _completer;
   VoidCallback? _onDismiss;
   Widget _widget;
   SmartAwaitOverType _awaitOverType = SmartAwaitOverType.dialogDismiss;
@@ -73,7 +73,7 @@ class MainDialog {
     );
 
     //wait dialog dismiss
-    var completer = _completer = Completer<T>();
+    var completer = _completer = Completer<T?>();
     return completer.future;
   }
 
@@ -132,7 +132,7 @@ class MainDialog {
     );
 
     //wait dialog dismiss
-    var completer = _completer = Completer<T>();
+    var completer = _completer = Completer<T?>();
     return completer.future;
   }
 
