@@ -4,6 +4,8 @@
 - Optimize 'tag'
 - Fix [#101](https://github.com/fluttercandies/flutter_smart_dialog/issues/101)
 - Optimize 'bindWidget'
+- Fix [#105](https://github.com/fluttercandies/flutter_smart_dialog/issues/105)
+
 
 # [4.7.x]
 
