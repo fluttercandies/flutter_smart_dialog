@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/navigator_observer.dart';
@@ -21,6 +22,7 @@ class FlutterSmartDialog extends StatefulWidget {
     this.loadingBuilder,
     this.styleBuilder,
     this.initType,
+    this.useDebugModel,
   }) : super(key: key);
 
   final Widget? child;
@@ -36,6 +38,9 @@ class FlutterSmartDialog extends StatefulWidget {
 
   ///inti type
   final Set<SmartInitType>? initType;
+
+  ///if you set 'useDebugModel' to true, the SmartDialog function will be closed
+  final bool? useDebugModel;
 
   @override
   _FlutterSmartDialogState createState() => _FlutterSmartDialogState();
@@ -57,6 +62,8 @@ class FlutterSmartDialog extends StatefulWidget {
     FlutterSmartStyleBuilder? styleBuilder,
     //init type
     Set<SmartInitType>? initType,
+    //if you set 'useDebugModel' to true, the SmartDialog function will be closed
+    bool? useDebugModel,
   }) {
     MonitorPopRoute.instance;
 
@@ -67,6 +74,7 @@ class FlutterSmartDialog extends StatefulWidget {
               loadingBuilder: loadingBuilder,
               styleBuilder: styleBuilder,
               initType: initType,
+              useDebugModel: useDebugModel,
               child: child,
             )
           : builder(
@@ -76,6 +84,7 @@ class FlutterSmartDialog extends StatefulWidget {
                 loadingBuilder: loadingBuilder,
                 styleBuilder: styleBuilder,
                 initType: initType,
+                useDebugModel: useDebugModel,
                 child: child,
               ),
             );
@@ -86,6 +95,7 @@ class FlutterSmartDialog extends StatefulWidget {
 class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
   late FlutterSmartStyleBuilder styleBuilder;
   late Set<SmartInitType> initType;
+  late bool debugModel;
 
   @override
   void initState() {
@@ -121,38 +131,45 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
           widget.loadingBuilder ?? (String msg) => LoadingWidget(msg: msg);
     }
 
+    // debug model
+    debugModel = (widget.useDebugModel ?? false) && kDebugMode;
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return styleBuilder(Overlay(initialEntries: [
-      //main layout
-      OverlayEntry(
-        builder: (BuildContext context) => widget.child ?? Container(),
-      ),
+    return debugModel
+        ? widget.child ?? Container()
+        : styleBuilder(
+            Overlay(initialEntries: [
+              //main layout
+              OverlayEntry(
+                builder: (BuildContext context) => widget.child ?? Container(),
+              ),
 
-      //provided separately for custom dialog
-      if (initType.contains(SmartInitType.custom))
-        OverlayEntry(builder: (BuildContext context) {
-          DialogProxy.contextCustom = context;
-          return Container();
-        }),
+              //provided separately for custom dialog
+              if (initType.contains(SmartInitType.custom))
+                OverlayEntry(builder: (BuildContext context) {
+                  DialogProxy.contextCustom = context;
+                  return Container();
+                }),
 
-      //provided separately for attach dialog
-      if (initType.contains(SmartInitType.attach))
-        OverlayEntry(builder: (BuildContext context) {
-          DialogProxy.contextAttach = context;
-          return Container();
-        }),
+              //provided separately for attach dialog
+              if (initType.contains(SmartInitType.attach))
+                OverlayEntry(builder: (BuildContext context) {
+                  DialogProxy.contextAttach = context;
+                  return Container();
+                }),
 
-      //provided separately for loading
-      if (initType.contains(SmartInitType.loading))
-        DialogProxy.instance.entryLoading,
+              //provided separately for loading
+              if (initType.contains(SmartInitType.loading))
+                DialogProxy.instance.entryLoading,
 
-      //provided separately for toast
-      if (initType.contains(SmartInitType.toast))
-        DialogProxy.instance.entryToast,
-    ]));
+              //provided separately for toast
+              if (initType.contains(SmartInitType.toast))
+                DialogProxy.instance.entryToast,
+            ]),
+          );
   }
 }
