@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_loading.dart';
-import 'package:flutter_smart_dialog/src/custom/custom_toast.dart';
+import 'package:flutter_smart_dialog/src/custom/toast/custom_toast.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/helper/toast_helper.dart';
@@ -32,6 +32,7 @@ class DialogProxy {
   late SmartConfig config;
   late SmartOverlayEntry entryToast;
   late SmartOverlayEntry entryLoading;
+  late SmartOverlayEntry entryNotify;
   late Queue<DialogInfo> dialogQueue;
   late CustomToast _toast;
   late CustomLoading _loading;
@@ -39,13 +40,13 @@ class DialogProxy {
   bool loadingBackDismiss = true;
   DateTime? dialogLastTime;
 
-  factory DialogProxy() => instance;
   static DialogProxy? _instance;
 
   static DialogProxy get instance => _instance ??= DialogProxy._internal();
 
   static late BuildContext contextCustom;
   static late BuildContext contextAttach;
+  static late BuildContext contextToast;
   static BuildContext? contextNavigator;
 
   ///set default loading widget
@@ -66,8 +67,11 @@ class DialogProxy {
     }
 
     if (initType.contains(SmartInitType.toast)) {
-      entryToast = SmartOverlayEntry(builder: (_) => _toast.getWidget());
-      _toast = CustomToast(overlayEntry: entryToast);
+      entryToast = SmartOverlayEntry(builder: (_) => SizedBox.shrink());
+    }
+
+    if (initType.contains(SmartInitType.notify)) {
+      entryNotify = SmartOverlayEntry(builder: (_) => SizedBox.shrink());
     }
   }
 
@@ -247,7 +251,12 @@ class DialogProxy {
     required SmartToastType displayType,
     required Widget widget,
   }) {
-    return _toast.showToast(
+    CustomToast? toast;
+    var entry = SmartOverlayEntry(
+      builder: (BuildContext context) => toast!.getWidget(),
+    );
+    toast = CustomToast(overlayEntry: entry);
+    return toast.showToast(
       alignment: alignment,
       clickMaskDismiss: clickMaskDismiss,
       animationType: animationType,

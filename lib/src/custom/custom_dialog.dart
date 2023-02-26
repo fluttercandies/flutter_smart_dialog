@@ -14,6 +14,7 @@ import '../config/enum_config.dart';
 import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
 import '../smart_dialog.dart';
+import '../util/debounce_utils.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
 enum DialogType {
@@ -54,7 +55,9 @@ class CustomDialog extends BaseDialog {
     required BuildContext? bindWidget,
     required Rect? ignoreArea,
   }) {
-    if (!_checkDebounce(debounce, DialogType.custom)) return Future.value(null);
+    if (DebounceUtils.instance.banContinue(DebounceType.custom, debounce)) {
+      return Future.value(null);
+    }
 
     final dialogInfo = _handleMustOperate(
       tag: tag,
@@ -87,7 +90,11 @@ class CustomDialog extends BaseDialog {
       ignoreArea: ignoreArea,
       onMask: () {
         onMask?.call();
-        if (!clickMaskDismiss || !_clickMaskDebounce() || permanent) return;
+        if (!clickMaskDismiss ||
+            DebounceUtils.instance.banContinue(DebounceType.mask, true) ||
+            permanent) {
+          return;
+        }
         dismiss(closeType: CloseType.mask);
       },
     );
@@ -123,7 +130,9 @@ class CustomDialog extends BaseDialog {
     required bool bindPage,
     required BuildContext? bindWidget,
   }) {
-    if (!_checkDebounce(debounce, DialogType.attach)) return Future.value(null);
+    if (DebounceUtils.instance.banContinue(DebounceType.attach, debounce)) {
+      return Future.value(null);
+    }
 
     final dialogInfo = _handleMustOperate(
       tag: tag,
@@ -160,7 +169,11 @@ class CustomDialog extends BaseDialog {
       maskTriggerType: SmartDialog.config.attach.maskTriggerType,
       onMask: () {
         onMask?.call();
-        if (!clickMaskDismiss || !_clickMaskDebounce() || permanent) return;
+        if (!clickMaskDismiss ||
+            DebounceUtils.instance.banContinue(DebounceType.mask, true) ||
+            permanent) {
+          return;
+        }
         dismiss(closeType: CloseType.mask);
       },
     );
@@ -276,34 +289,6 @@ class CustomDialog extends BaseDialog {
         }
       }
     });
-  }
-
-  bool _checkDebounce(bool debounce, DialogType type) {
-    if (!debounce) return true;
-
-    var proxy = DialogProxy.instance;
-    var now = DateTime.now();
-    var debounceTime = type == DialogType.dialog
-        ? SmartDialog.config.custom.debounceTime
-        : SmartDialog.config.attach.debounceTime;
-    var prohibit = proxy.dialogLastTime != null &&
-        now.difference(proxy.dialogLastTime!) < debounceTime;
-    proxy.dialogLastTime = now;
-    if (prohibit) return false;
-
-    return true;
-  }
-
-  DateTime? clickMaskLastTime;
-
-  bool _clickMaskDebounce() {
-    var now = DateTime.now();
-    var isShake = clickMaskLastTime != null &&
-        now.difference(clickMaskLastTime!) < Duration(milliseconds: 500);
-    clickMaskLastTime = now;
-    if (isShake) return false;
-
-    return true;
   }
 
   static Future<void>? dismiss<T>({

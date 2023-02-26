@@ -139,37 +139,41 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return debugModel
-        ? widget.child ?? Container()
-        : styleBuilder(
-            Overlay(initialEntries: [
-              //main layout
-              OverlayEntry(
-                builder: (BuildContext context) => widget.child ?? Container(),
-              ),
+    if (debugModel) {
+      return styleBuilder(widget.child ?? Container());
+    }
 
-              //provided separately for custom dialog
-              if (initType.contains(SmartInitType.custom))
-                OverlayEntry(builder: (BuildContext context) {
-                  DialogProxy.contextCustom = context;
-                  return Container();
-                }),
+    return styleBuilder(
+      Overlay(initialEntries: [
+        //main layout
+        OverlayEntry(
+          builder: (BuildContext context) {
+            if (initType.contains(SmartInitType.custom)) {
+              DialogProxy.contextCustom = context;
+            }
 
-              //provided separately for attach dialog
-              if (initType.contains(SmartInitType.attach))
-                OverlayEntry(builder: (BuildContext context) {
-                  DialogProxy.contextAttach = context;
-                  return Container();
-                }),
+            if (initType.contains(SmartInitType.attach)) {
+              DialogProxy.contextAttach = context;
+            }
 
-              //provided separately for loading
-              if (initType.contains(SmartInitType.loading))
-                DialogProxy.instance.entryLoading,
+            if (initType.contains(SmartInitType.toast)) {
+              DialogProxy.contextToast = context;
+            }
 
-              //provided separately for toast
-              if (initType.contains(SmartInitType.toast))
-                DialogProxy.instance.entryToast,
-            ]),
-          );
+            return widget.child ?? Container();
+          },
+        ),
+
+        if (initType.contains(SmartInitType.notify))
+          DialogProxy.instance.entryNotify,
+
+        //provided separately for loading
+        if (initType.contains(SmartInitType.loading))
+          DialogProxy.instance.entryLoading,
+
+        if (initType.contains(SmartInitType.toast))
+          DialogProxy.instance.entryToast,
+      ]),
+    );
   }
 }

@@ -58,12 +58,14 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showToast() async {
-    for (var i = 0; i < 7; i++) {
+    for (var i = 0; i < 9; i++) {
       SmartDialog.showToast(
         'test toast ---- $i',
-        displayType: SmartToastType.onlyRefresh,
+        displayType: SmartToastType.multi,
+        animationType: SmartAnimationType.centerScale_otherSlide,
+        alignment: Alignment.bottomCenter,
       );
-      await Future.delayed(Duration(milliseconds: 500));
+      await Future.delayed(Duration(milliseconds: 200));
     }
   }
 

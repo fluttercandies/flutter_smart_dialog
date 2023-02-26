@@ -68,17 +68,10 @@ enum SmartToastType {
   /// 连续调用toast时, 如果上一条toast未消失, 仅刷新toast内容, 并不会关闭toast重新打开
   onlyRefresh,
 
-  /// Call toast continuously, during the period when the first toast exists on the screen,
-  /// other toasts called will be invalid
+  /// Can display multi toasts at the same time
   ///
-  /// 连续调用toast，在第一条toast存在界面的期间内，调用的其它toast都将无效
-  first,
-
-  /// Call toast continuously, the first toast is displayed normally，
-  /// and all toasts generated during the first toast display period，only the last toast is valid
-  ///
-  /// 连续调用toast，第一条toast正常显示，其显示期间产生的所有toast，仅最后一条toast有效
-  firstAndLast,
+  /// 可同时显示多个toast
+  multi,
 }
 
 /// Different animation types can be set for dialog (appearing and disappearing)
@@ -228,6 +221,9 @@ enum SmartInitType {
 
   /// init AttachDialog (showAttach)
   attach,
+
+  /// init NotifyDialog (showNotify)
+  notify,
 
   /// init Loading (showLoading)
   loading,
