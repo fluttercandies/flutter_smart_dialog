@@ -58,7 +58,7 @@ class CustomLoading extends BaseDialog {
       animationTime: animationTime,
       onDismiss: _handleDismiss(onDismiss, displayTime),
       useSystem: false,
-      reuse: true,
+      reuse: false,
       awaitOverType: SmartDialog.config.loading.awaitOverType,
       maskTriggerType: SmartDialog.config.loading.maskTriggerType,
       ignoreArea: null,
