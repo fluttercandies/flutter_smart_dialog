@@ -34,6 +34,11 @@ enum SmartStatus {
   /// 关闭单个dialog（attach或custom）
   dialog,
 
+  /// close single notify
+  ///
+  /// 关闭单个notify
+  notify,
+
   /// close all custom dialog, but not close toast,loading and attach dialog
   ///
   /// 关闭打开的所有custom dialog，但是不关闭toast，loading和attach dialog
@@ -48,6 +53,11 @@ enum SmartStatus {
   ///
   /// 关闭打开的所有dialog（attach和custom），但是不关闭toast和loading
   allDialog,
+
+  /// close all notify
+  ///
+  /// 关闭打开的所有notify
+  allNotify,
 }
 
 enum SmartToastType {
@@ -230,4 +240,21 @@ enum SmartInitType {
 
   /// init Toast (showToast)
   toast,
+}
+
+enum SmartNotifyType {
+  /// success
+  success,
+
+  /// failure
+  failure,
+
+  /// warn
+  warn,
+
+  /// error
+  error,
+
+  /// alert
+  alert,
 }

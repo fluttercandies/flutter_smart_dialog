@@ -224,7 +224,7 @@ class CustomToast extends BaseDialog {
     });
   }
 
-  Future<T?> dismiss<T>({bool closeAll = false}) async {
+  static Future<T?> dismiss<T>({bool closeAll = false}) async {
     ToastTool.instance.dismiss(closeAll: closeAll);
     await Future.delayed(SmartDialog.config.toast.animationTime);
     await Future.delayed(const Duration(milliseconds: 50));

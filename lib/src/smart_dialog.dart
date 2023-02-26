@@ -176,7 +176,10 @@ class SmartDialog {
     Rect? ignoreArea,
   }) {
     assert(
-      (useSystem == true && tag == null && permanent == null && keepSingle == null) ||
+      (useSystem == true &&
+              tag == null &&
+              permanent == null &&
+              keepSingle == null) ||
           (useSystem == null || useSystem == false),
       'useSystem is true; tag, keepSingle and permanent prohibit setting values',
     );
@@ -409,7 +412,10 @@ class SmartDialog {
       'targetContext and target, cannot both be null',
     );
     assert(
-      (useSystem == true && tag == null && permanent == null && keepSingle == null) ||
+      (useSystem == true &&
+              tag == null &&
+              permanent == null &&
+              keepSingle == null) ||
           (useSystem == null || useSystem == false),
       'useSystem is true; tag, keepSingle and permanent prohibit setting values',
     );
@@ -446,6 +452,161 @@ class SmartDialog {
       useSystem: useSystem ?? false,
       bindPage: bindPage ?? config.attach.bindPage,
       bindWidget: bindWidget,
+    );
+  }
+
+  /// notify dialog
+  ///
+  /// [msg]：notify msg (Use the [builder] param, this param will be invalid)
+  ///
+  /// [notifyType]：specify the notify dialog type
+  ///
+  /// [builder]：the notify dialog
+  ///
+  /// [controller]：this controller can be used to refresh the layout of the custom dialog
+  ///
+  /// [alignment]：control the location of the dialog, For details, please refer to the description of alignment parameters in [SmartConfigCustom]
+  ///
+  /// [clickMaskDismiss]：true（the dialog will be closed after click mask），false（not close）
+  ///
+  /// [animationType]：Set the animation type, For details, please refer to the [SmartAnimationType] comment
+  ///
+  /// [nonAnimationTypes]：For different scenes, the pop-up animation can be dynamically closed.
+  /// For details, please refer to [SmartNonAnimationType]
+  ///
+  /// [animationBuilder]：Support highly custom animation, please refer to [AnimationBuilder] description for details
+  ///
+  /// [usePenetrate]：true（the click event will penetrate mask），false（not penetration）
+  ///
+  /// [useAnimation]：true（use the animation），false（not use）
+  ///
+  /// [animationTime]：animation duration
+  ///
+  /// [maskColor]：the color of the mask，it is invalid if [maskWidget] set the value and [usePenetrate] is true
+  ///
+  /// [maskWidget]：highly customizable mask
+  ///
+  /// [onMask]：This callback will be triggered when the mask is clicked
+  ///
+  /// [debounce]：debounce feature
+  ///
+  /// [onDismiss]：the callback will be invoked when the dialog is closed
+  ///
+  /// [displayTime]：Controls the display time of the dialog on the screen;
+  /// the default is null, if it is null, it means that the param will not control the dialog to close;
+  ///
+  /// [tag]：If you set a tag for the dialog, you can turn it off in a targeted manner
+  ///
+  /// [keepSingle]：default (false), true (calling [show] multiple times will not generate multiple dialogs,
+  /// only single dialog will be kept), false (calling [show] multiple times will generate multiple dialogs)
+  ///
+  /// -------------------------------------------------------------------------------
+  ///
+  /// 自定义弹窗
+  ///
+  /// [msg]：notify 的信息（使用[builder]参数，该参数将失效）
+  ///
+  /// [notifyType]：指定通知通知弹窗类型
+  ///
+  /// [builder]：自定义 notify dialog
+  ///
+  /// [controller]：可使用该控制器来刷新自定义的dialog的布局
+  ///
+  /// [alignment]：控制弹窗的位置, 详细请参照[SmartConfigCustom]中alignment参数说明
+  ///
+  /// [clickMaskDismiss]：true（点击遮罩后，将关闭dialog），false（不关闭）
+  ///
+  /// [animationType]：设置动画类型, 具体可参照[SmartAnimationType]注释
+  ///
+  /// [nonAnimationTypes]：对于不同的场景, 可动态关闭弹窗动画, 具体请参照[SmartNonAnimationType]
+  ///
+  /// [animationBuilder]：支持高度自定义动画, 具体可参照[AnimationBuilder]说明
+  ///
+  /// [usePenetrate]：true（点击事件将穿透遮罩），false（不穿透）
+  ///
+  /// [useAnimation]：true（使用动画），false（不使用）
+  ///
+  /// [animationTime]：动画持续时间
+  ///
+  /// [maskColor]：遮罩颜色，如果给[maskWidget]设置了值，该参数将会失效
+  ///
+  /// [maskWidget]：可高度定制遮罩
+  ///
+  /// [onMask]：点击遮罩时，该回调将会被触发
+  ///
+  /// [debounce]：防抖功能
+  ///
+  /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
+  ///
+  /// [displayTime]：控制弹窗在屏幕上显示时间; 默认为null, 为null则代表该参数不会控制弹窗关闭;
+  ///
+  /// [tag]：如果你给dialog设置了tag, 你可以针对性的关闭它
+  ///
+  /// [keepSingle]：默认（false），true（多次调用[show]并不会生成多个dialog，仅仅保持一个dialog），
+  /// false（多次调用[show]会生成多个dialog）
+  static Future<T?> showNotify<T>({
+    required String msg,
+    required SmartNotifyType notifyType,
+    WidgetBuilder? builder,
+    SmartDialogController? controller,
+    AlignmentGeometry? alignment,
+    bool? clickMaskDismiss,
+    bool? usePenetrate,
+    bool? useAnimation,
+    SmartAnimationType? animationType,
+    List<SmartNonAnimationType>? nonAnimationTypes,
+    AnimationBuilder? animationBuilder,
+    Duration? animationTime,
+    Color? maskColor,
+    Widget? maskWidget,
+    bool? debounce,
+    VoidCallback? onDismiss,
+    VoidCallback? onMask,
+    Duration? displayTime,
+    String? tag,
+    bool? keepSingle,
+  }) {
+    return DialogProxy.instance.showNotify<T>(
+      widget: DialogScope(
+        controller: controller,
+        builder: (context) {
+          if (builder != null) {
+            return builder(context);
+          }
+
+          Widget? widget;
+          var notifyStyle = DialogProxy.instance.notifyStyle;
+          if (notifyType == SmartNotifyType.success) {
+            widget = notifyStyle.successBuilder?.call(msg);
+          } else if (notifyType == SmartNotifyType.failure) {
+            widget = notifyStyle.failureBuilder?.call(msg);
+          } else if (notifyType == SmartNotifyType.warn) {
+            widget = notifyStyle.warnBuilder?.call(msg);
+          } else if (notifyType == SmartNotifyType.alert) {
+            widget = notifyStyle.alertBuilder?.call(msg);
+          } else if (notifyType == SmartNotifyType.error) {
+            widget = notifyStyle.errorBuilder?.call(msg);
+          }
+
+          return widget ?? Container();
+        },
+      ),
+      alignment: alignment ?? config.notify.alignment,
+      clickMaskDismiss: clickMaskDismiss ?? config.notify.clickMaskDismiss,
+      animationType: animationType ?? config.notify.animationType,
+      nonAnimationTypes: nonAnimationTypes ?? config.notify.nonAnimationTypes,
+      animationBuilder: animationBuilder,
+      usePenetrate: usePenetrate ?? config.notify.usePenetrate,
+      useAnimation: useAnimation ?? config.notify.useAnimation,
+      animationTime: animationTime ?? config.notify.animationTime,
+      maskColor: maskColor ?? config.notify.maskColor,
+      maskWidget: maskWidget ?? config.notify.maskWidget,
+      debounce: debounce ?? config.notify.debounce,
+      onDismiss: onDismiss,
+      onMask: onMask,
+      displayTime: displayTime ?? config.notify.displayTime,
+      tag: tag,
+      keepSingle: keepSingle ?? false,
     );
   }
 
@@ -550,7 +711,9 @@ class SmartDialog {
       widget: DialogScope(
         controller: controller,
         builder: (context) {
-          return builder != null ? builder(context) : DialogProxy.instance.loadingBuilder(msg);
+          return builder != null
+              ? builder(context)
+              : DialogProxy.instance.loadingBuilder(msg);
         },
       ),
       alignment: alignment ?? config.loading.alignment,
@@ -663,7 +826,9 @@ class SmartDialog {
       widget: DialogScope(
         controller: controller,
         builder: (context) {
-          return builder != null ? builder(context) : DialogProxy.instance.toastBuilder(msg);
+          return builder != null
+              ? builder(context)
+              : DialogProxy.instance.toastBuilder(msg);
         },
       ),
       displayTime: displayTime ?? config.toast.displayTime,

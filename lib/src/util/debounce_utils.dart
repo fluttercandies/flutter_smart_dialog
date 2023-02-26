@@ -3,6 +3,7 @@ import '../../flutter_smart_dialog.dart';
 enum DebounceType {
   custom,
   attach,
+  notify,
   toast,
   mask,
 }
@@ -26,6 +27,8 @@ class DebounceUtils {
       limitTime = SmartDialog.config.custom.debounceTime;
     } else if (type == DebounceType.attach) {
       limitTime = SmartDialog.config.attach.debounceTime;
+    } else if (type == DebounceType.notify) {
+      limitTime = SmartDialog.config.notify.debounceTime;
     } else if (type == DebounceType.toast) {
       limitTime = SmartDialog.config.toast.debounceTime;
     } else if (type == DebounceType.mask) {

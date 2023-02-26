@@ -4,6 +4,7 @@ import 'package:flutter_smart_dialog/src/config/smart_config_loading.dart';
 import 'package:flutter_smart_dialog/src/config/smart_config_toast.dart';
 
 import 'smart_config_attach.dart';
+import 'smart_config_notify.dart';
 
 /// Global configuration is unified here
 ///
@@ -18,6 +19,11 @@ class SmartConfig {
   ///
   /// showAttach(): attach dialog全局配置项
   SmartConfigAttach attach = SmartConfigAttach();
+
+  /// showNotify(): notify dialog global config
+  ///
+  /// showNotify(): notify dialog全局配置项
+  SmartConfigNotify notify = SmartConfigNotify();
 
   /// showLoading(): loading global config
   ///

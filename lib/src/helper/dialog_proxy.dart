@@ -3,14 +3,17 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_loading.dart';
+import 'package:flutter_smart_dialog/src/custom/custom_notify.dart';
 import 'package:flutter_smart_dialog/src/custom/toast/custom_toast.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
+import 'package:flutter_smart_dialog/src/data/notify_style.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/helper/toast_helper.dart';
 
 import '../config/enum_config.dart';
 import '../config/smart_config.dart';
 import '../data/animation_param.dart';
+import '../data/notify_info.dart';
 import '../init_dialog.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
@@ -28,17 +31,25 @@ enum CloseType {
   normal,
 }
 
+enum DialogType {
+  dialog,
+  custom,
+  attach,
+  notify,
+  allDialog,
+  allCustom,
+  allAttach,
+  allNotify,
+}
+
 class DialogProxy {
   late SmartConfig config;
   late SmartOverlayEntry entryToast;
   late SmartOverlayEntry entryLoading;
   late SmartOverlayEntry entryNotify;
   late Queue<DialogInfo> dialogQueue;
-  late CustomToast _toast;
+  late Queue<NotifyInfo> notifyQueue;
   late CustomLoading _loading;
-
-  bool loadingBackDismiss = true;
-  DateTime? dialogLastTime;
 
   static DialogProxy? _instance;
 
@@ -46,6 +57,7 @@ class DialogProxy {
 
   static late BuildContext contextCustom;
   static late BuildContext contextAttach;
+  static late BuildContext contextNotify;
   static late BuildContext contextToast;
   static BuildContext? contextNavigator;
 
@@ -55,9 +67,13 @@ class DialogProxy {
   ///set default toast widget
   late FlutterSmartToastBuilder toastBuilder;
 
+  ///set default toast widget
+  late FlutterSmartNotifyStyle notifyStyle;
+
   DialogProxy._internal() {
     config = SmartConfig();
     dialogQueue = ListQueue();
+    notifyQueue = ListQueue();
   }
 
   void initialize(Set<SmartInitType> initType) {
@@ -129,6 +145,51 @@ class DialogProxy {
       bindPage: bindPage,
       bindWidget: bindWidget,
       ignoreArea: ignoreArea,
+    );
+  }
+
+  Future<T?> showNotify<T>({
+    required Widget widget,
+    required AlignmentGeometry alignment,
+    required bool usePenetrate,
+    required bool useAnimation,
+    required Duration animationTime,
+    required SmartAnimationType animationType,
+    required List<SmartNonAnimationType> nonAnimationTypes,
+    required AnimationBuilder? animationBuilder,
+    required Color maskColor,
+    required bool clickMaskDismiss,
+    required Widget? maskWidget,
+    required bool debounce,
+    required VoidCallback? onDismiss,
+    required VoidCallback? onMask,
+    required Duration? displayTime,
+    required String? tag,
+    required bool keepSingle,
+  }) {
+    CustomNotify? dialog;
+    var entry = SmartOverlayEntry(
+      builder: (BuildContext context) => dialog!.getWidget(),
+    );
+    dialog = CustomNotify(overlayEntry: entry);
+    return dialog.showNotify<T>(
+      widget: widget,
+      alignment: alignment,
+      usePenetrate: usePenetrate,
+      useAnimation: useAnimation,
+      animationTime: animationTime,
+      animationType: animationType,
+      nonAnimationTypes: nonAnimationTypes,
+      animationBuilder: animationBuilder,
+      maskColor: maskColor,
+      maskWidget: maskWidget,
+      clickMaskDismiss: clickMaskDismiss,
+      debounce: debounce,
+      onDismiss: onDismiss,
+      onMask: onMask,
+      displayTime: displayTime,
+      tag: tag,
+      keepSingle: keepSingle,
     );
   }
 
@@ -282,7 +343,7 @@ class DialogProxy {
   }) {
     if (status == SmartStatus.smart) {
       var loading = config.isExistLoading;
-      if (!loading) {
+      if ((!loading || tag != null) && dialogQueue.isNotEmpty) {
         return CustomDialog.dismiss<T>(
           type: DialogType.dialog,
           tag: tag,
@@ -291,13 +352,34 @@ class DialogProxy {
           closeType: closeType,
         );
       }
-      if (loading) return _loading.dismiss(closeType: closeType);
+      if (loading) {
+        return _loading.dismiss(closeType: closeType);
+      }
+
+      if (notifyQueue.isNotEmpty) {
+        return CustomNotify.dismiss<T>(
+          type: DialogType.notify,
+          tag: tag,
+          result: result,
+          force: force,
+          closeType: closeType,
+        );
+      }
     } else if (status == SmartStatus.toast) {
-      return _toast.dismiss();
+      return CustomToast.dismiss();
     } else if (status == SmartStatus.allToast) {
-      return _toast.dismiss(closeAll: true);
+      return CustomToast.dismiss(closeAll: true);
     } else if (status == SmartStatus.loading) {
       return _loading.dismiss(closeType: closeType);
+    } else if (status == SmartStatus.notify ||
+        status == SmartStatus.allNotify) {
+      return CustomNotify.dismiss<T>(
+        type: _convertEnum(status)!,
+        tag: tag,
+        result: result,
+        force: force,
+        closeType: closeType,
+      );
     }
 
     DialogType? type = _convertEnum(status);
@@ -318,12 +400,16 @@ class DialogProxy {
       return DialogType.custom;
     } else if (status == SmartStatus.attach) {
       return DialogType.attach;
+    } else if (status == SmartStatus.notify) {
+      return DialogType.notify;
     } else if (status == SmartStatus.allDialog) {
       return DialogType.allDialog;
     } else if (status == SmartStatus.allCustom) {
       return DialogType.allCustom;
     } else if (status == SmartStatus.allAttach) {
       return DialogType.allAttach;
+    } else if (status == SmartStatus.allNotify) {
+      return DialogType.allNotify;
     }
     return null;
   }

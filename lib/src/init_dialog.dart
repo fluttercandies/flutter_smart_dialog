@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/navigator_observer.dart';
 import 'package:flutter_smart_dialog/src/util/view_utils.dart';
-import 'package:flutter_smart_dialog/src/widget/toast_widget.dart';
 
+import 'data/notify_style.dart';
 import 'helper/dialog_proxy.dart';
 import 'helper/pop_monitor/boost_route_monitor.dart';
 import 'helper/pop_monitor/monitor_pop_route.dart';
-import 'widget/loading_widget.dart';
+import 'widget/default_widget.dart';
 
 typedef FlutterSmartToastBuilder = Widget Function(String msg);
 typedef FlutterSmartLoadingBuilder = Widget Function(String msg);
@@ -20,6 +20,7 @@ class FlutterSmartDialog extends StatefulWidget {
     required this.child,
     this.toastBuilder,
     this.loadingBuilder,
+    this.notifyStyle,
     this.styleBuilder,
     this.initType,
     this.useDebugModel,
@@ -32,6 +33,9 @@ class FlutterSmartDialog extends StatefulWidget {
 
   ///set default loading widget
   final FlutterSmartLoadingBuilder? loadingBuilder;
+
+  ///set default notify style
+  final FlutterSmartNotifyStyle? notifyStyle;
 
   ///Compatible with cupertino style
   final FlutterSmartStyleBuilder? styleBuilder;
@@ -58,6 +62,8 @@ class FlutterSmartDialog extends StatefulWidget {
     FlutterSmartToastBuilder? toastBuilder,
     //set default loading widget
     FlutterSmartLoadingBuilder? loadingBuilder,
+    //set default notify style
+    FlutterSmartNotifyStyle? notifyStyle,
     //Compatible with cupertino style
     FlutterSmartStyleBuilder? styleBuilder,
     //init type
@@ -72,6 +78,7 @@ class FlutterSmartDialog extends StatefulWidget {
           ? FlutterSmartDialog(
               toastBuilder: toastBuilder,
               loadingBuilder: loadingBuilder,
+              notifyStyle: notifyStyle,
               styleBuilder: styleBuilder,
               initType: initType,
               useDebugModel: useDebugModel,
@@ -82,6 +89,7 @@ class FlutterSmartDialog extends StatefulWidget {
               FlutterSmartDialog(
                 toastBuilder: toastBuilder,
                 loadingBuilder: loadingBuilder,
+                notifyStyle: notifyStyle,
                 styleBuilder: styleBuilder,
                 initType: initType,
                 useDebugModel: useDebugModel,
@@ -131,6 +139,17 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
           widget.loadingBuilder ?? (String msg) => LoadingWidget(msg: msg);
     }
 
+    // default notify style
+    if (initType.contains(SmartInitType.notify)) {
+      DialogProxy.instance.notifyStyle = FlutterSmartNotifyStyle(
+        successBuilder: widget.notifyStyle?.successBuilder,
+        failureBuilder: widget.notifyStyle?.failureBuilder,
+        warnBuilder: widget.notifyStyle?.warnBuilder,
+        alertBuilder: widget.notifyStyle?.alertBuilder,
+        errorBuilder: widget.notifyStyle?.errorBuilder,
+      );
+    }
+
     // debug model
     debugModel = (widget.useDebugModel ?? false) && kDebugMode;
 
@@ -154,6 +173,10 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
 
             if (initType.contains(SmartInitType.attach)) {
               DialogProxy.contextAttach = context;
+            }
+
+            if (initType.contains(SmartInitType.notify)) {
+              DialogProxy.contextNotify = context;
             }
 
             if (initType.contains(SmartInitType.toast)) {

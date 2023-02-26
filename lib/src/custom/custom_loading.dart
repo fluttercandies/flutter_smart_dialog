@@ -15,6 +15,7 @@ class CustomLoading extends BaseDialog {
   Timer? _displayTimer;
   bool _canDismiss = false;
   Future Function()? _canDismissCallback;
+  bool _loadingBackDismiss = true;
 
   Future<T?> showLoading<T>({
     required Widget widget,
@@ -33,7 +34,7 @@ class CustomLoading extends BaseDialog {
     required Duration? displayTime,
     required bool backDismiss,
   }) {
-    DialogProxy.instance.loadingBackDismiss = backDismiss;
+    _loadingBackDismiss = backDismiss;
     SmartDialog.config.loading.isExist = true;
 
     _canDismiss = false;
@@ -82,7 +83,7 @@ class CustomLoading extends BaseDialog {
   }
 
   Future<void> _realDismiss({CloseType closeType = CloseType.normal}) async {
-    if (!DialogProxy.instance.loadingBackDismiss && closeType == CloseType.back) {
+    if (!_loadingBackDismiss && closeType == CloseType.back) {
       return null;
     }
 

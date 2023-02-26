@@ -17,14 +17,7 @@ import '../smart_dialog.dart';
 import '../util/debounce_utils.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
-enum DialogType {
-  dialog,
-  custom,
-  attach,
-  allDialog,
-  allCustom,
-  allAttach,
-}
+
 
 ///main function : custom dialog
 class CustomDialog extends BaseDialog {
@@ -273,7 +266,7 @@ class CustomDialog extends BaseDialog {
         try {
           overlay(DialogProxy.contextCustom).insert(
             overlayEntry,
-            below: proxy.entryLoading,
+            below: proxy.entryNotify,
           );
         } catch (e) {
           overlay(DialogProxy.contextCustom).insert(overlayEntry);
@@ -282,7 +275,7 @@ class CustomDialog extends BaseDialog {
         try {
           overlay(DialogProxy.contextAttach).insert(
             overlayEntry,
-            below: proxy.entryLoading,
+            below: proxy.entryNotify,
           );
         } catch (e) {
           overlay(DialogProxy.contextAttach).insert(overlayEntry);
