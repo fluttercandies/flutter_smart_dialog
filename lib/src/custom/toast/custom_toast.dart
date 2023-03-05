@@ -142,12 +142,6 @@ class CustomToast extends BaseDialog {
   }) async {
     var toastQueue = ToastTool.instance.toastQueue;
     if (newToast) {
-      for (var item in toastQueue) {
-        if (item.mainDialog.overlayEntry == mainDialog.overlayEntry) {
-          return;
-        }
-      }
-
       toastQueue.addLast(ToastInfo(
         type: SmartToastType.last,
         mainDialog: mainDialog,
