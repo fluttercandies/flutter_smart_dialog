@@ -1,3 +1,15 @@
+# [4.9.0]
+- Breaking Change
+  - refactor Toast: remove 'SmartToastType.first' and 'SmartToastType.firstAndLast'
+- Feature
+  - add 'SmartToastType.multi': Can display multi toasts at the same time
+  - add showNotify: By setting NotifyType, many different types of Notify dialog can be used
+  - showNotify custom style: You can set the default dialog style for showNotify through the notifyStyle parameter in FlutterSmartDialog.init ()
+  - solve [#102](https://github.com/fluttercandies/flutter_smart_dialog/issues/102)
+  - fix [#110](https://github.com/fluttercandies/flutter_smart_dialog/issues/110)
+  - solve [#111](https://github.com/fluttercandies/flutter_smart_dialog/issues/111)
+
+
 # [4.8.x]
 - Breaking Change
   - If the 'bindPage' of the dialog is false, the dialog will not be closed when the page is closed

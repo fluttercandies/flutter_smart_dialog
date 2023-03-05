@@ -16,12 +16,16 @@ class ToastTool {
 
   Queue<ToastInfo> toastQueue = ListQueue();
 
-  Future<void> dismiss({bool closeAll = false}) async {
+  Future<void> dismiss({bool closeAll = false, ToastInfo? curToast}) async {
     if (toastQueue.isEmpty) {
       return;
     }
 
-    var curToast = toastQueue.first;
+    if (curToast != null && !toastQueue.contains(curToast)) {
+      return;
+    }
+
+    curToast = curToast ?? toastQueue.first;
     toastQueue.remove(curToast);
     if (closeAll) {
       toastQueue.clear();

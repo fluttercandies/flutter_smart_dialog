@@ -155,10 +155,12 @@ class CustomToast extends BaseDialog {
     curToast.onShowToast();
     if (toastQueue.length > 1 &&
         toastQueue.elementAt(1).type == SmartToastType.last) {
-      curToast.time = Duration(milliseconds: 50);
+      toastQueue.remove(curToast);
+      curToast.mainDialog.overlayEntry.remove();
+    } else {
+      await ToastTool.instance.delay(curToast.time);
+      await ToastTool.instance.dismiss(curToast: curToast);
     }
-    await ToastTool.instance.delay(curToast.time);
-    await ToastTool.instance.dismiss();
     ToastTool.instance.dispatchNext();
   }
 
