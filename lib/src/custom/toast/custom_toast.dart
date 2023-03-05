@@ -46,7 +46,12 @@ class CustomToast extends BaseDialog {
           below: DialogProxy.instance.entryToast,
         );
       } catch (e) {
-        overlay(DialogProxy.contextToast).insert(overlayEntry);
+        // overlay(DialogProxy.contextToast).insert(overlayEntry);
+        try {
+          overlay(DialogProxy.contextToast).insert(overlayEntry);
+        } catch (e) {
+          return;
+        }
       }
 
       mainDialog.show(
@@ -137,6 +142,12 @@ class CustomToast extends BaseDialog {
   }) async {
     var toastQueue = ToastTool.instance.toastQueue;
     if (newToast) {
+      for (var item in toastQueue) {
+        if (item.mainDialog.overlayEntry == mainDialog.overlayEntry) {
+          return;
+        }
+      }
+
       toastQueue.addLast(ToastInfo(
         type: SmartToastType.last,
         mainDialog: mainDialog,
