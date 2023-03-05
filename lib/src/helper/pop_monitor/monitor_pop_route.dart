@@ -4,7 +4,6 @@ import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 
 import '../../../flutter_smart_dialog.dart';
-import '../../config/enum_config.dart';
 import '../../data/smart_tag.dart';
 
 class MonitorPopRoute with WidgetsBindingObserver {

@@ -1,8 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
 import '../data/dialog_info.dart';

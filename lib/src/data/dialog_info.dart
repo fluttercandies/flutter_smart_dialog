@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/src/custom/custom_dialog.dart';
 
 import '../helper/dialog_proxy.dart';
 import 'base_dialog.dart';
