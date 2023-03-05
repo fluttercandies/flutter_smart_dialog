@@ -32,7 +32,7 @@ class DebounceUtils {
     } else if (type == DebounceType.toast) {
       limitTime = SmartDialog.config.toast.debounceTime;
     } else if (type == DebounceType.mask) {
-      limitTime = Duration(milliseconds: 500);
+      limitTime = const Duration(milliseconds: 500);
     }
 
     var curTime = DateTime.now();

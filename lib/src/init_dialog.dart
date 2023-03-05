@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/navigator_observer.dart';
 import 'package:flutter_smart_dialog/src/util/view_utils.dart';
+import 'package:flutter_smart_dialog/src/widget/default/notify_alter.dart';
+import 'package:flutter_smart_dialog/src/widget/default/notify_error.dart';
+import 'package:flutter_smart_dialog/src/widget/default/notify_failure.dart';
 
-import 'data/notify_style.dart';
 import 'helper/dialog_proxy.dart';
 import 'helper/pop_monitor/boost_route_monitor.dart';
 import 'helper/pop_monitor/monitor_pop_route.dart';
-import 'widget/default_widget.dart';
+import 'widget/default/loading_widget.dart';
+import 'widget/default/notify_success.dart';
+import 'widget/default/notify_warning.dart';
+import 'widget/default/toast_widget.dart';
 
 typedef FlutterSmartToastBuilder = Widget Function(String msg);
 typedef FlutterSmartLoadingBuilder = Widget Function(String msg);
@@ -124,12 +129,13 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
           SmartInitType.attach,
           SmartInitType.loading,
           SmartInitType.toast,
+          SmartInitType.notify,
         };
 
     // solve Flutter Inspector -> select widget mode function failure problem
     DialogProxy.instance.initialize(initType);
 
-    // default toast / loading
+    // default toast / loading / notify
     if (initType.contains(SmartInitType.toast)) {
       DialogProxy.instance.toastBuilder =
           widget.toastBuilder ?? (String msg) => ToastWidget(msg: msg);
@@ -138,15 +144,17 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
       DialogProxy.instance.loadingBuilder =
           widget.loadingBuilder ?? (String msg) => LoadingWidget(msg: msg);
     }
-
-    // default notify style
     if (initType.contains(SmartInitType.notify)) {
+      var notify = widget.notifyStyle;
       DialogProxy.instance.notifyStyle = FlutterSmartNotifyStyle(
-        successBuilder: widget.notifyStyle?.successBuilder,
-        failureBuilder: widget.notifyStyle?.failureBuilder,
-        warnBuilder: widget.notifyStyle?.warnBuilder,
-        alertBuilder: widget.notifyStyle?.alertBuilder,
-        errorBuilder: widget.notifyStyle?.errorBuilder,
+        successBuilder:
+            notify?.successBuilder ?? (msg) => NotifySuccess(msg: msg),
+        failureBuilder:
+            notify?.failureBuilder ?? (msg) => NotifyFailure(msg: msg),
+        warningBuilder:
+            notify?.warningBuilder ?? (msg) => NotifyWarning(msg: msg),
+        alertBuilder: notify?.alertBuilder ?? (msg) => NotifyAlter(msg: msg),
+        errorBuilder: notify?.errorBuilder ?? (msg) => NotifyError(msg: msg),
       );
     }
 

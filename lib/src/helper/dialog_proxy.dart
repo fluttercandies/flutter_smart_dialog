@@ -166,6 +166,7 @@ class DialogProxy {
     required Duration? displayTime,
     required String? tag,
     required bool keepSingle,
+    required SmartBackType backType,
   }) {
     CustomNotify? dialog;
     var entry = SmartOverlayEntry(
@@ -190,6 +191,7 @@ class DialogProxy {
       displayTime: displayTime,
       tag: tag,
       keepSingle: keepSingle,
+      backType: backType,
     );
   }
 

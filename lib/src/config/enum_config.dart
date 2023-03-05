@@ -242,15 +242,36 @@ enum SmartInitType {
   toast,
 }
 
-enum SmartNotifyType {
+enum SmartBackType {
+  /// Interception returns the event, closes the dialog,
+  /// but does not close the page (if the dialog exists on the interface)
+  ///
+  /// 拦截返回事件, 关闭dialog, 但不会关闭页面 (如果dialog存在在界面上)
+  normal,
+
+  /// Interception returns the event without closing the dialog or closing the page
+  ///
+  /// 拦截返回事件, 不关闭dialog, 也不关闭页面
+  block,
+
+  /// Do not intercept the return event, the return event will not close the dialog
+  ///
+  /// 不拦截返回事件, 返回事件将不会关闭dialog
+  ignore,
+}
+
+/// Prompt dialog to distinguish different types of showNotify
+///
+/// 用以区别showNotify不同类型的提示弹窗
+enum NotifyType {
   /// success
   success,
 
   /// failure
   failure,
 
-  /// warn
-  warn,
+  /// warning
+  warning,
 
   /// error
   error,

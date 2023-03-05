@@ -455,7 +455,7 @@ class SmartDialog {
     );
   }
 
-  /// notify dialog
+  /// By setting NotifyType, many different types of Notify dialog can be used
   ///
   /// [msg]：notify msg (Use the [builder] param, this param will be invalid)
   ///
@@ -500,13 +500,15 @@ class SmartDialog {
   /// [keepSingle]：default (false), true (calling [show] multiple times will not generate multiple dialogs,
   /// only single dialog will be kept), false (calling [show] multiple times will generate multiple dialogs)
   ///
+  /// [backType]：For different processing types of return events,
+  /// please refer to the description of [SmartBackType] for details
   /// -------------------------------------------------------------------------------
   ///
-  /// 自定义弹窗
+  /// 通过设置NotifyType, 可使用多种不同类型的提示弹窗
   ///
   /// [msg]：notify 的信息（使用[builder]参数，该参数将失效）
   ///
-  /// [notifyType]：指定通知通知弹窗类型
+  /// [notifyType]：指定通知弹窗类型
   ///
   /// [builder]：自定义 notify dialog
   ///
@@ -544,9 +546,11 @@ class SmartDialog {
   ///
   /// [keepSingle]：默认（false），true（多次调用[show]并不会生成多个dialog，仅仅保持一个dialog），
   /// false（多次调用[show]会生成多个dialog）
+  ///
+  /// [backType]：对于返回事件不同的处理类型, 具体可参照[SmartBackType]说明
   static Future<T?> showNotify<T>({
     required String msg,
-    required SmartNotifyType notifyType,
+    required NotifyType notifyType,
     WidgetBuilder? builder,
     SmartDialogController? controller,
     AlignmentGeometry? alignment,
@@ -565,6 +569,7 @@ class SmartDialog {
     Duration? displayTime,
     String? tag,
     bool? keepSingle,
+    SmartBackType? backType,
   }) {
     return DialogProxy.instance.showNotify<T>(
       widget: DialogScope(
@@ -576,15 +581,15 @@ class SmartDialog {
 
           Widget? widget;
           var notifyStyle = DialogProxy.instance.notifyStyle;
-          if (notifyType == SmartNotifyType.success) {
+          if (notifyType == NotifyType.success) {
             widget = notifyStyle.successBuilder?.call(msg);
-          } else if (notifyType == SmartNotifyType.failure) {
+          } else if (notifyType == NotifyType.failure) {
             widget = notifyStyle.failureBuilder?.call(msg);
-          } else if (notifyType == SmartNotifyType.warn) {
-            widget = notifyStyle.warnBuilder?.call(msg);
-          } else if (notifyType == SmartNotifyType.alert) {
+          } else if (notifyType == NotifyType.warning) {
+            widget = notifyStyle.warningBuilder?.call(msg);
+          } else if (notifyType == NotifyType.alert) {
             widget = notifyStyle.alertBuilder?.call(msg);
-          } else if (notifyType == SmartNotifyType.error) {
+          } else if (notifyType == NotifyType.error) {
             widget = notifyStyle.errorBuilder?.call(msg);
           }
 
@@ -607,6 +612,7 @@ class SmartDialog {
       displayTime: displayTime ?? config.notify.displayTime,
       tag: tag,
       keepSingle: keepSingle ?? false,
+      backType: backType ?? config.notify.backType,
     );
   }
 

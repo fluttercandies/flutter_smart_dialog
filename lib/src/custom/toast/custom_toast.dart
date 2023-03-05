@@ -110,7 +110,7 @@ class CustomToast extends BaseDialog {
 
     if (newToast) {
       toastQueue.addLast(ToastInfo(
-        type: SmartToastType.last,
+        type: SmartToastType.normal,
         mainDialog: mainDialog,
         time: time,
         onShowToast: onShowToast,

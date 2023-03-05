@@ -21,6 +21,7 @@ class SmartConfigNotify {
     this.awaitOverType = SmartAwaitOverType.dialogDismiss,
     this.maskTriggerType = SmartMaskTriggerType.up,
     this.nonAnimationTypes = const [],
+    this.backType = SmartBackType.ignore,
     this.isExist = false,
   });
 
@@ -122,6 +123,12 @@ class SmartConfigNotify {
   ///
   /// 对于不同的场景, 可动态关闭弹窗动画, 具体请参照[SmartNonAnimationType]
   final List<SmartNonAnimationType> nonAnimationTypes;
+
+  /// For different processing types of return events,
+  /// please refer to the description of [SmartBackType] for details
+  ///
+  /// 对于返回事件不同的处理类型, 具体可参照[SmartBackType]说明
+  final SmartBackType backType;
 
   /// whether custom dialog(show()) exist on the screen
   ///

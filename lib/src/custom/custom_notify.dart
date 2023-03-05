@@ -36,6 +36,7 @@ class CustomNotify extends BaseDialog {
     required Duration? displayTime,
     required String? tag,
     required bool keepSingle,
+    required SmartBackType backType,
   }) {
     if (DebounceUtils.instance.banContinue(DebounceType.notify, debounce)) {
       return Future.value(null);
@@ -46,6 +47,7 @@ class CustomNotify extends BaseDialog {
       keepSingle: keepSingle,
       debounce: debounce,
       displayTime: displayTime,
+      backType: backType,
     );
     return mainDialog.show<T>(
       widget: widget,
@@ -102,6 +104,7 @@ class CustomNotify extends BaseDialog {
     required bool keepSingle,
     required bool debounce,
     required Duration? displayTime,
+    required SmartBackType backType,
   }) {
     SmartDialog.config.notify.isExist = true;
 
@@ -112,6 +115,7 @@ class CustomNotify extends BaseDialog {
         singleNotifyInfo = NotifyInfo(
           dialog: this,
           tag: tag ?? SmartTag.keepSingle,
+          backType: backType,
         );
         _pushDialog(singleNotifyInfo);
       }
@@ -121,7 +125,7 @@ class CustomNotify extends BaseDialog {
       tag = tag ?? '${hashCode + Random().nextDouble()}';
 
       // handle dialog stack
-      notifyInfo = NotifyInfo(dialog: this, tag: tag);
+      notifyInfo = NotifyInfo(dialog: this, tag: tag, backType: backType);
       _pushDialog(notifyInfo);
     }
 
@@ -146,7 +150,7 @@ class CustomNotify extends BaseDialog {
   }
 
   static Future<void>? dismiss<T>({
-    DialogType type = DialogType.dialog,
+    DialogType type = DialogType.notify,
     String? tag,
     T? result,
     bool force = false,

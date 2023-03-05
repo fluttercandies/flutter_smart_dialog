@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -35,6 +37,12 @@ class SmartDialogPage extends StatelessWidget {
             child: Text('showLoading'),
           ),
 
+          //notify
+          ElevatedButton(
+            onPressed: () => _showNotify(),
+            child: Text('showNotify'),
+          ),
+
           //dialog
           ElevatedButton(
             onPressed: () => _show(),
@@ -58,15 +66,10 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showToast() async {
-    for (var i = 0; i < 9; i++) {
-      SmartDialog.showToast(
-        'test toast ---- $i',
-        displayType: SmartToastType.normal,
-      );
-      await Future.delayed(Duration(milliseconds: 500));
-    }
-
-    SmartDialog.dismiss(status: SmartStatus.allToast);
+    SmartDialog.showToast(
+      'test toast ---- ${Random().nextInt(999)}',
+      displayType: SmartToastType.multi,
+    );
   }
 
   void _show() async {
@@ -158,5 +161,13 @@ class SmartDialogPage extends StatelessWidget {
     SmartDialog.showLoading();
     await Future.delayed(Duration(seconds: 2));
     SmartDialog.dismiss();
+  }
+
+  void _showNotify() async {
+    SmartDialog.showNotify(
+      msg: '请求成功',
+      notifyType: NotifyType.failure,
+      backType: SmartBackType.block,
+    );
   }
 }

@@ -32,42 +32,6 @@ class RouteRecord {
     routeQueue.remove(route);
   }
 
-  bool handleSmartDialog() {
-    bool shouldHandle = true;
-    try {
-      //handle loading
-      if (SmartDialog.config.isExistLoading) {
-        return true;
-      }
-
-      //handle dialog
-      if (DialogProxy.instance.dialogQueue.isEmpty) {
-        if (routeQueue.isNotEmpty) routeQueue.clear();
-        shouldHandle = false;
-      } else {
-        var info = DialogProxy.instance.dialogQueue.last;
-
-        //deal with system dialog
-        if (info.useSystem && routeQueue.isNotEmpty) {
-          var route = routeQueue.last;
-          if (route.settings.name != SmartTag.systemDialog) {
-            shouldHandle = false;
-          }
-        } else {
-          // deal with bindPage and permanent dialog
-          if (!info.dialog.mainDialog.visible || info.permanent) {
-            shouldHandle = false;
-          }
-        }
-      }
-    } catch (e) {
-      shouldHandle = false;
-      print('SmartDialog back event error:${e.toString()}');
-    }
-
-    return shouldHandle;
-  }
-
   void _hideDialog(Route<dynamic>? curRoute) {
     if (curRoute == null || DialogProxy.instance.dialogQueue.isEmpty) return;
     for (var item in DialogProxy.instance.dialogQueue) {
