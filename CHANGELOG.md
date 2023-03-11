@@ -10,6 +10,7 @@
 - Stability
   - fix [#110](https://github.com/fluttercandies/flutter_smart_dialog/issues/110)
   - fix [#118](https://github.com/fluttercandies/flutter_smart_dialog/issues/118)
+  - optimize route monitor
 
 
 # [4.8.x]
