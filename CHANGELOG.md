@@ -6,8 +6,10 @@
   - add showNotify: By setting NotifyType, many different types of Notify dialog can be used
   - showNotify custom style: You can set the default dialog style for showNotify through the notifyStyle parameter in FlutterSmartDialog.init ()
   - solve [#102](https://github.com/fluttercandies/flutter_smart_dialog/issues/102)
-  - fix [#110](https://github.com/fluttercandies/flutter_smart_dialog/issues/110)
   - solve [#111](https://github.com/fluttercandies/flutter_smart_dialog/issues/111)
+- Stability
+  - fix [#110](https://github.com/fluttercandies/flutter_smart_dialog/issues/110)
+  - fix [#118](https://github.com/fluttercandies/flutter_smart_dialog/issues/118)
 
 
 # [4.8.x]

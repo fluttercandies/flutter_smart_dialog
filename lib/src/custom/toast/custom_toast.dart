@@ -46,12 +46,7 @@ class CustomToast extends BaseDialog {
           below: DialogProxy.instance.entryToast,
         );
       } catch (e) {
-        // overlay(DialogProxy.contextToast).insert(overlayEntry);
-        try {
-          overlay(DialogProxy.contextToast).insert(overlayEntry);
-        } catch (e) {
-          return;
-        }
+        overlay(DialogProxy.contextToast).insert(overlayEntry);
       }
 
       mainDialog.show(
@@ -112,7 +107,6 @@ class CustomToast extends BaseDialog {
     bool newToast = true,
   }) async {
     var toastQueue = ToastTool.instance.toastQueue;
-
     if (newToast) {
       toastQueue.addLast(ToastInfo(
         type: SmartToastType.normal,
@@ -120,18 +114,18 @@ class CustomToast extends BaseDialog {
         time: time,
         onShowToast: onShowToast,
       ));
-    }
 
-    if (toastQueue.length > 1 && toastQueue.first.using) {
-      return;
+      if (toastQueue.length > 1) {
+        return;
+      }
     }
 
     var curToast = toastQueue.first;
-    curToast.using = true;
     curToast.onShowToast();
-    await ToastTool.instance.delay(time);
-    await ToastTool.instance.dismiss();
-    ToastTool.instance.dispatchNext();
+    await ToastTool.instance.delay(time, onInvoke: () async {
+      await ToastTool.instance.dismiss();
+      ToastTool.instance.dispatchNext();
+    });
   }
 
   static Future<void> lastToast({
@@ -141,32 +135,27 @@ class CustomToast extends BaseDialog {
     bool newToast = true,
   }) async {
     var toastQueue = ToastTool.instance.toastQueue;
-    if (newToast) {
-      toastQueue.addLast(ToastInfo(
-        type: SmartToastType.last,
-        mainDialog: mainDialog,
-        time: time,
-        onShowToast: onShowToast,
-      ));
-      ToastTool.instance.overLastDelay();
+    if (toastQueue.isNotEmpty) {
+      for (var item in toastQueue) {
+        if (item.mainDialog.overlayEntry.mounted) {
+          item.mainDialog.overlayEntry.remove();
+        }
+      }
+      toastQueue.clear();
+      ToastTool.instance.cancelLastDelay();
     }
 
-    if (toastQueue.length > 1 && toastQueue.first.using) {
-      return;
-    }
-
+    toastQueue.addLast(ToastInfo(
+      type: SmartToastType.last,
+      mainDialog: mainDialog,
+      time: time,
+      onShowToast: onShowToast,
+    ));
     var curToast = toastQueue.first;
-    curToast.using = true;
     curToast.onShowToast();
-    if (toastQueue.length > 1 &&
-        toastQueue.elementAt(1).type == SmartToastType.last) {
-      toastQueue.remove(curToast);
-      curToast.mainDialog.overlayEntry.remove();
-    } else {
-      await ToastTool.instance.delay(curToast.time);
-      await ToastTool.instance.dismiss(curToast: curToast);
-    }
-    ToastTool.instance.dispatchNext();
+    await ToastTool.instance.delay(curToast.time, onInvoke: () {
+      ToastTool.instance.dismiss();
+    });
   }
 
   static Timer? _onlyTime;
@@ -246,8 +235,6 @@ class ToastInfo {
     required this.time,
     required this.onShowToast,
   });
-
-  bool using = false;
 
   final MainDialog mainDialog;
 

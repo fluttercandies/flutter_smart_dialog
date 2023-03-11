@@ -164,10 +164,6 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showNotify() async {
-    SmartDialog.showNotify(
-      msg: '请求成功',
-      notifyType: NotifyType.failure,
-      backType: SmartBackType.block,
-    );
+    SmartDialog.showNotify(msg: '请求成功', notifyType: NotifyType.failure);
   }
 }

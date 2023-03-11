@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:flutter/cupertino.dart';
+
 import '../../../flutter_smart_dialog.dart';
 import 'custom_toast.dart';
 
@@ -16,37 +18,34 @@ class ToastTool {
 
   Queue<ToastInfo> toastQueue = ListQueue();
 
-  Future<void> dismiss({bool closeAll = false, ToastInfo? curToast}) async {
+  Future<void> dismiss({bool closeAll = false}) async {
     if (toastQueue.isEmpty) {
       return;
     }
 
-    if (curToast != null && !toastQueue.contains(curToast)) {
-      return;
-    }
+    var curToast = toastQueue.first;
+    await curToast.mainDialog.dismiss();
+    await Future.delayed(SmartDialog.config.toast.intervalTime);
+    curToast.mainDialog.overlayEntry.remove();
 
-    curToast = curToast ?? toastQueue.first;
     toastQueue.remove(curToast);
     if (closeAll) {
       toastQueue.clear();
     }
-
-    await curToast.mainDialog.dismiss();
-    await Future.delayed(SmartDialog.config.toast.intervalTime);
-    curToast.mainDialog.overlayEntry.remove();
     if (toastQueue.length > 1) return;
     SmartDialog.config.toast.isExist = false;
   }
 
-  Future<void> delay(Duration duration) {
+  Future<void> delay(Duration duration, {VoidCallback? onInvoke}) {
     var completer = _curCompleter = Completer();
     _curTime = Timer(duration, () {
       if (!completer.isCompleted) completer.complete();
+      onInvoke?.call();
     });
     return completer.future;
   }
 
-  void overLastDelay() async {
+  void cancelLastDelay() async {
     _curTime?.cancel();
     if (!(_curCompleter?.isCompleted ?? true)) _curCompleter?.complete();
   }
@@ -57,16 +56,8 @@ class ToastTool {
     }
 
     var nextToast = toastQueue.first;
-
     if (nextToast.type == SmartToastType.normal) {
       await CustomToast.normalToast(
-        time: nextToast.time,
-        onShowToast: nextToast.onShowToast,
-        mainDialog: nextToast.mainDialog,
-        newToast: false,
-      );
-    } else if (nextToast.type == SmartToastType.last) {
-      await CustomToast.lastToast(
         time: nextToast.time,
         onShowToast: nextToast.onShowToast,
         mainDialog: nextToast.mainDialog,
