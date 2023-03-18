@@ -26,14 +26,30 @@ class ToastTool {
     var curToast = toastQueue.first;
     await curToast.mainDialog.dismiss();
     await Future.delayed(SmartDialog.config.toast.intervalTime);
-    curToast.mainDialog.overlayEntry.remove();
+    if (curToast.mainDialog.overlayEntry.mounted) {
+      curToast.mainDialog.overlayEntry.remove();
+    }
 
     toastQueue.remove(curToast);
     if (closeAll) {
-      toastQueue.clear();
+      clearAllToast();
     }
     if (toastQueue.length > 1) return;
     SmartDialog.config.toast.isExist = false;
+  }
+
+  void clearAllToast() {
+    if (toastQueue.isEmpty) {
+      return;
+    }
+
+    cancelLastDelay();
+    toastQueue.forEach((element) {
+      if (element.mainDialog.overlayEntry.mounted) {
+        element.mainDialog.overlayEntry.remove();
+      }
+    });
+    toastQueue.clear();
   }
 
   Future<void> delay(Duration duration, {VoidCallback? onInvoke}) {

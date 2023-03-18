@@ -132,7 +132,6 @@ class CustomToast extends BaseDialog {
     required Duration time,
     required ToastCallback onShowToast,
     required MainDialog mainDialog,
-    bool newToast = true,
   }) async {
     var toastQueue = ToastTool.instance.toastQueue;
     if (toastQueue.isNotEmpty) {
@@ -167,23 +166,25 @@ class CustomToast extends BaseDialog {
     required Widget? widget,
     required ToastCallback? onShowToast,
     required MainDialog mainDialog,
-    bool newToast = true,
   }) async {
     var toastQueue = ToastTool.instance.toastQueue;
-    if (toastQueue.isEmpty ||
-        (newToast && toastQueue.first.type != SmartToastType.onlyRefresh)) {
+    if (toastQueue.length >= 2 ||
+        (toastQueue.isNotEmpty &&
+            toastQueue.first.type != SmartToastType.onlyRefresh)) {
+      ToastTool.instance.clearAllToast();
+    }
+
+    if (toastQueue.isEmpty) {
       toastQueue.addLast(ToastInfo(
         type: SmartToastType.onlyRefresh,
         mainDialog: mainDialog,
         time: time,
         onShowToast: onShowToast!,
       ));
-    }
 
-    if (_onlyDialogScope == null) {
       _onlyDialogScope = (widget as ToastHelper).child as DialogScope;
-      onShowToast?.call();
-    } else {
+      onShowToast.call();
+    } else if (_onlyDialogScope != null) {
       onShowToast = null;
       var scope = _onlyDialogScope!;
       if (_onlyToastController == null) {
@@ -200,9 +201,8 @@ class CustomToast extends BaseDialog {
     }
 
     _onlyTime?.cancel();
-    _onlyTime = Timer(time, () {
-      ToastTool.instance.dismiss();
-      _onlyTime = null;
+    _onlyTime = Timer(time, () async {
+      await ToastTool.instance.dismiss();
       _onlyDialogScope = null;
       _onlyToastController = null;
     });
