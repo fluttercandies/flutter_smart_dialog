@@ -33,7 +33,7 @@ dependencies:
     path: ../
   # windows
 #  flutter_smart_dialog:
-#    path: ..\..\flutter_smart_dialog
+#    path: ..\
 
 dev_dependencies:
   flutter_test:
