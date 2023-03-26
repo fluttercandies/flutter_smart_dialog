@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
 
 class ViewUtils {
-  static bool routeSafeUse = false;
-
   static void addSafeUse(VoidCallback callback) {
     var schedulerPhase = schedulerBinding.schedulerPhase;
     if (schedulerPhase == SchedulerPhase.persistentCallbacks) {
@@ -19,4 +17,3 @@ WidgetsBinding get widgetsBinding => WidgetsBinding.instance;
 SchedulerBinding get schedulerBinding => SchedulerBinding.instance;
 
 OverlayState overlay(BuildContext context) => Overlay.of(context)!;
-
