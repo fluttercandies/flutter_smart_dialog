@@ -6,6 +6,7 @@ export 'src/config/smart_config_attach.dart';
 export 'src/config/smart_config_custom.dart';
 export 'src/config/smart_config_loading.dart';
 export 'src/config/smart_config_toast.dart';
+export 'src/config/smart_config_notify.dart';
 export 'src/data/animation_param.dart' show AnimationParam;
 export 'src/data/notify_style.dart';
 /// dialog
