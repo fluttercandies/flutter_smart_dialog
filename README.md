@@ -1,18 +1,20 @@
 [![pub](https://img.shields.io/pub/v/flutter_smart_dialog?label=pub&logo=dart)](https://pub.dev/packages/flutter_smart_dialog/install) [![stars](https://img.shields.io/github/stars/fluttercandies/flutter_smart_dialog?logo=github)](https://github.com/fluttercandies/flutter_smart_dialog)  [![issues](https://img.shields.io/github/issues/fluttercandies/flutter_smart_dialog?logo=github)](https://github.com/fluttercandies/flutter_smart_dialog/issues) [![commit](https://img.shields.io/github/last-commit/fluttercandies/flutter_smart_dialog?logo=github)](https://github.com/fluttercandies/flutter_smart_dialog/commits)
 
+Function and Usage（Must read！）：[super detailed guide](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
+
+功能和用法（必看！）： [超详细指南](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
+
+***
+
 Language:  English | [中文](https://juejin.cn/post/7026150456673959943)
 
 Migrate doc：[3.x migrate 4.0](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/3.x%20migrate%204.0.md) | [3.x 迁移 4.0](https://juejin.cn/post/7093867453012246565)
 
 Flutter 2：Please use `flutter_smart_dialog: 4.2.5`
 
-Flutter 3：Please use the latest version
-
 # Introduction
 
 An elegant Flutter Dialog solution.
-
-- [pub](https://pub.flutter-io.cn/packages/flutter_smart_dialog)，[github](https://github.com/fluttercandies/flutter_smart_dialog)，[web effect](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
 
 # Some Effect
 
