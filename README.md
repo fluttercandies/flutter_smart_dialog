@@ -1,6 +1,6 @@
 [![pub](https://img.shields.io/pub/v/flutter_smart_dialog?label=pub&logo=dart)](https://pub.dev/packages/flutter_smart_dialog/install) [![stars](https://img.shields.io/github/stars/fluttercandies/flutter_smart_dialog?logo=github)](https://github.com/fluttercandies/flutter_smart_dialog)  [![issues](https://img.shields.io/github/issues/fluttercandies/flutter_smart_dialog?logo=github)](https://github.com/fluttercandies/flutter_smart_dialog/issues) [![commit](https://img.shields.io/github/last-commit/fluttercandies/flutter_smart_dialog?logo=github)](https://github.com/fluttercandies/flutter_smart_dialog/commits)
 
-Function and Usage（Must read！）：[super detailed guide](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
+Feature and Usage（Must read！）：[super detailed guide](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
 
 功能和用法（必看！）： [超详细指南](https://xdd666t.github.io/flutter_use/web/index.html#/smartDialog)
 
