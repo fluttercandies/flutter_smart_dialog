@@ -136,9 +136,7 @@ class CustomToast extends BaseDialog {
     var toastQueue = ToastTool.instance.toastQueue;
     if (toastQueue.isNotEmpty) {
       for (var item in toastQueue) {
-        if (item.mainDialog.overlayEntry.mounted) {
-          item.mainDialog.overlayEntry.remove();
-        }
+        item.mainDialog.overlayEntry.remove();
       }
       toastQueue.clear();
       ToastTool.instance.cancelLastDelay();

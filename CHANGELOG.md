@@ -11,7 +11,8 @@
   * fix [#110](https://github.com/fluttercandies/flutter_smart_dialog/issues/110)
   * fix [#118](https://github.com/fluttercandies/flutter_smart_dialog/issues/118)
   * fix [#122](https://github.com/fluttercandies/flutter_smart_dialog/issues/122)
-  * fix [#126](https://github.com/fluttercandies/flutter_smart_dialog/issues/126)
+  * fix [#126](https://github.com/fluttercandies/flutter_smart_dialog/issues/126)  
+  * fix [#128](https://github.com/fluttercandies/flutter_smart_dialog/issues/128)
   * optimize route monitor
 
 
