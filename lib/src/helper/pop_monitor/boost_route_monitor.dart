@@ -26,7 +26,7 @@ class BoostRouteMonitor {
         return;
       }
 
-      await Future.delayed(Duration(milliseconds: 1));
+      await Future.delayed(const Duration(milliseconds: 1));
       if (route?.isActive == false) {
         _monitorRouteMount(route, ++count);
         return;
@@ -72,7 +72,7 @@ class BoostRouteMonitor {
       }
     } catch (e) {
       shouldHandle = false;
-      print('SmartDialog back event error:${e.toString()}');
+      debugPrint('SmartDialog back event error:${e.toString()}');
     }
 
     return shouldHandle;

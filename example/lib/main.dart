@@ -3,13 +3,15 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SmartDialogPage(),
+      home: const SmartDialogPage(),
       navigatorObservers: [FlutterSmartDialog.observer],
       builder: FlutterSmartDialog.init(),
     );
@@ -17,48 +19,50 @@ class MyApp extends StatelessWidget {
 }
 
 class SmartDialogPage extends StatelessWidget {
+  const SmartDialogPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: Text('SmartDialog-EasyDemo')),
+      appBar: AppBar(title: const Text('SmartDialog-EasyDemo')),
       body: Container(
-        margin: EdgeInsets.all(30),
+        margin: const EdgeInsets.all(30),
         child: Wrap(spacing: 20, children: [
           //toast
           ElevatedButton(
             onPressed: () => _showToast(),
-            child: Text('showToast'),
+            child: const Text('showToast'),
           ),
 
           //loading
           ElevatedButton(
             onPressed: () => _showLoading(),
-            child: Text('showLoading'),
+            child: const Text('showLoading'),
           ),
 
           //notify
           ElevatedButton(
             onPressed: () => _showNotify(),
-            child: Text('showNotify'),
+            child: const Text('showNotify'),
           ),
 
           //dialog
           ElevatedButton(
             onPressed: () => _show(),
-            child: Text('show'),
+            child: const Text('show'),
           ),
 
           //attach
           ElevatedButton(
             onPressed: () => _showAttach(context),
-            child: Text('showAttach'),
+            child: const Text('showAttach'),
           ),
 
           //attach
           ElevatedButton(
             onPressed: () => _bindPage(context),
-            child: Text('bindPage'),
+            child: const Text('bindPage'),
           ),
         ]),
       ),
@@ -82,7 +86,7 @@ class SmartDialogPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         alignment: Alignment.center,
-        child: Text(
+        child: const Text(
           'easy custom dialog',
           style: TextStyle(color: Colors.white),
         ),
@@ -91,7 +95,7 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showAttach(BuildContext ctx) {
-    var attachDialog = (BuildContext context) {
+    attachDialog(BuildContext context) {
       SmartDialog.showAttach(
         targetContext: context,
         alignment: Alignment.bottomCenter,
@@ -104,7 +108,7 @@ class SmartDialogPage extends StatelessWidget {
           return Container(height: 50, width: 30, color: Colors.red);
         },
       );
-    };
+    }
 
     //target widget
     SmartDialog.show(
@@ -121,7 +125,7 @@ class SmartDialogPage extends StatelessWidget {
           child: Builder(builder: (context) {
             return ElevatedButton(
               onPressed: () => attachDialog(context),
-              child: Text('target widget'),
+              child: const Text('target widget'),
             );
           }),
         );
@@ -145,13 +149,13 @@ class SmartDialogPage extends StatelessWidget {
             Navigator.push(ctx, MaterialPageRoute(builder: (_) {
               return Scaffold(
                 appBar: AppBar(
-                  title: Text("New Page"),
+                  title: const Text("New Page"),
                 ),
-                body: Center(child: Text("New Page")),
+                body: const Center(child: Text("New Page")),
               );
             }));
           },
-          child: Text('to new page'),
+          child: const Text('to new page'),
         ),
       );
     });
@@ -159,7 +163,7 @@ class SmartDialogPage extends StatelessWidget {
 
   void _showLoading() async {
     SmartDialog.showLoading();
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     SmartDialog.dismiss();
   }
 

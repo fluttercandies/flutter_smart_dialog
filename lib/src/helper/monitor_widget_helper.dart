@@ -29,7 +29,7 @@ class MonitorWidgetHelper {
       }
       prohibitMonitor = true;
       var removeList = <DialogInfo>[];
-      monitorDialogQueue.forEach((item) {
+      for (var item in monitorDialogQueue) {
         try {
           var context = item.bindWidget;
           if (context == null) {
@@ -43,7 +43,7 @@ class MonitorWidgetHelper {
             " the 'bindWidget' dialog dismiss automatically",
           );
         }
-      });
+      }
       for (var i = removeList.length; i > 0; i--) {
         DialogProxy.instance.dismiss(
           status: SmartStatus.dialog,

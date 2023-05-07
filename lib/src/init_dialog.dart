@@ -20,7 +20,7 @@ typedef FlutterSmartLoadingBuilder = Widget Function(String msg);
 typedef FlutterSmartStyleBuilder = Widget Function(Widget child);
 
 class FlutterSmartDialog extends StatefulWidget {
-  FlutterSmartDialog({
+  const FlutterSmartDialog({
     Key? key,
     required this.child,
     this.toastBuilder,
@@ -52,7 +52,7 @@ class FlutterSmartDialog extends StatefulWidget {
   final bool? useDebugModel;
 
   @override
-  _FlutterSmartDialogState createState() => _FlutterSmartDialogState();
+  State<FlutterSmartDialog> createState() => _FlutterSmartDialogState();
 
   static final observer = SmartNavigatorObserver();
 
@@ -117,7 +117,7 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
         var navigator = widget.child as Navigator;
         var key = navigator.key as GlobalKey;
         DialogProxy.contextNavigator = key.currentContext;
-      } catch (e) {}
+      } catch (_) {}
     });
 
     // init param

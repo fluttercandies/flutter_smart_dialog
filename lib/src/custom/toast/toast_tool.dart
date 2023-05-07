@@ -44,11 +44,11 @@ class ToastTool {
     }
 
     cancelLastDelay();
-    toastQueue.forEach((element) {
+    for (var element in toastQueue) {
       if (element.mainDialog.overlayEntry.mounted) {
         element.mainDialog.overlayEntry.remove();
       }
-    });
+    }
     toastQueue.clear();
   }
 

@@ -84,7 +84,7 @@ class CustomLoading extends BaseDialog {
 
   Future<void> _realDismiss({CloseType closeType = CloseType.normal}) async {
     if (!_loadingBackDismiss && closeType == CloseType.back) {
-      return null;
+      return;
     }
 
     await mainDialog.dismiss(closeType: closeType);

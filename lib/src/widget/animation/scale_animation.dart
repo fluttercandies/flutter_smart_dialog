@@ -17,7 +17,7 @@ class ScaleAnimation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScaleTransition(
-      alignment: alignment ?? Alignment(0, 0),
+      alignment: alignment ?? const Alignment(0, 0),
       scale: CurvedAnimation(parent: controller, curve: Curves.linear),
       child: child,
     );

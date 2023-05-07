@@ -76,7 +76,7 @@ class SmartDialogWidget extends StatefulWidget {
   final Rect? ignoreArea;
 
   @override
-  _SmartDialogWidgetState createState() => _SmartDialogWidgetState();
+  State<SmartDialogWidget> createState() => _SmartDialogWidgetState();
 }
 
 class _SmartDialogWidgetState extends State<SmartDialogWidget>
@@ -94,11 +94,11 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   void _resetState() {
     var startTime = widget.animationTime;
-    widget.nonAnimationTypes.forEach((nonAnimationType) {
+    for (var nonAnimationType in widget.nonAnimationTypes) {
       if (widget.controller.judgeOpenDialogType(nonAnimationType)) {
         startTime = Duration.zero;
       }
-    });
+    }
 
     if (_maskController == null) {
       _maskController = AnimationController(vsync: this, duration: startTime);
@@ -178,8 +178,8 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
     Widget scale = ScaleAnimation(controller: _bodyController, child: child);
     Widget slide = SlideAnimation(
       controller: _bodyController,
-      child: child,
       alignment: widget.alignment,
+      child: child,
     );
     Widget animation = fade;
 
@@ -210,13 +210,13 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
     // dismiss type
     var endTime = _bodyController.duration ?? widget.animationTime;
-    widget.nonAnimationTypes.forEach((dismissType) {
+    for (var dismissType in widget.nonAnimationTypes) {
       if (widget.controller.judgeDismissDialogType(closeType, dismissType)) {
         _maskController!.duration = Duration.zero;
         _bodyController.duration = Duration.zero;
         endTime = Duration.zero;
       }
-    });
+    }
 
     //over animation
     _maskController!.reverse();
@@ -240,8 +240,8 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 class SmartDialogWidgetController extends BaseController {
   _SmartDialogWidgetState? _state;
 
-  void _bind(_SmartDialogWidgetState _state) {
-    this._state = _state;
+  void _bind(_SmartDialogWidgetState state) {
+    _state = state;
   }
 
   @override

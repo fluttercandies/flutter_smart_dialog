@@ -50,7 +50,7 @@ class HighlightMaskAnimation extends StatelessWidget {
         ),
         child: Stack(children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               // any color
               color: Colors.white,
               backgroundBlendMode: BlendMode.dstOut,
@@ -68,11 +68,11 @@ class HighlightMaskAnimation extends StatelessWidget {
       child: mask,
     );
     if (highlightBuilder != null) {
-      nonAnimationTypes.forEach((element) {
+      for (var element in nonAnimationTypes) {
         if (element == SmartNonAnimationType.highlightMask_nonAnimation) {
           maskAnimation = mask;
         }
-      });
+      }
     }
 
     return maskAnimation;

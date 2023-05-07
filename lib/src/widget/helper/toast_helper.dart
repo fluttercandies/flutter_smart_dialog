@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 
 class ToastHelper extends StatefulWidget {
-  ToastHelper({
+  const ToastHelper({
     Key? key,
     required this.consumeEvent,
     required this.child,
@@ -13,7 +13,7 @@ class ToastHelper extends StatefulWidget {
   final Widget child;
 
   @override
-  _ToastHelperState createState() => _ToastHelperState();
+  State<ToastHelper> createState() => _ToastHelperState();
 }
 
 class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {

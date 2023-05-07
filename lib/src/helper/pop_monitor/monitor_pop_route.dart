@@ -86,7 +86,7 @@ class MonitorPopRoute with WidgetsBindingObserver {
       }
     } catch (e) {
       shouldHandle = false;
-      print('SmartDialog back event error:${e.toString()}');
+      debugPrint('SmartDialog back event error:${e.toString()}');
     }
 
     return shouldHandle;

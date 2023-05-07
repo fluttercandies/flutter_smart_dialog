@@ -59,10 +59,10 @@ class MainDialog {
       animationBuilder: animationBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
-      child: widget,
       onMask: onMask,
       maskTriggerType: maskTriggerType,
       ignoreArea: ignoreArea,
+      child: widget,
     );
 
     _handleCommonOperate(
@@ -165,7 +165,7 @@ class MainDialog {
           barrierColor: Colors.transparent,
           barrierDismissible: false,
           useSafeArea: false,
-          routeSettings: RouteSettings(name: SmartTag.systemDialog),
+          routeSettings: const RouteSettings(name: SmartTag.systemDialog),
           builder: (BuildContext context) => tempWidget,
         );
       });

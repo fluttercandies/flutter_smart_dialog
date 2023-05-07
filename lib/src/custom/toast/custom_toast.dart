@@ -38,7 +38,7 @@ class CustomToast extends BaseDialog {
       return;
     }
 
-    ToastCallback showToast = () {
+    showToast() {
       SmartDialog.config.toast.isExist = true;
       try {
         overlay(DialogProxy.contextToast).insert(
@@ -68,7 +68,7 @@ class CustomToast extends BaseDialog {
         ignoreArea: null,
         onMask: () => clickMaskDismiss ? ToastTool.instance.dismiss() : null,
       );
-    };
+    }
 
     if (displayType == SmartToastType.normal) {
       await normalToast(
@@ -189,12 +189,12 @@ class CustomToast extends BaseDialog {
         if (scope.controller != null) {
           _onlyToastController = scope.controller;
         } else {
-          scope.info.state?.setController(
+          scope.info.action?.setController(
             _onlyToastController = SmartDialogController(),
           );
         }
       }
-      scope.info.state?.replaceBuilder(widget);
+      scope.info.action?.replaceBuilder(widget);
       _onlyToastController?.refresh();
     }
 

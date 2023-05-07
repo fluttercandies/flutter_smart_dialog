@@ -39,7 +39,7 @@ class SmartConfigCompatible {
   /// 可使用[animationDuration]设置动画时间；
   /// 是否使用loading动画（默认：true，仅仅针对中间位置的dialog）；true:使用渐隐动画  false：使用缩放动画，
   bool isLoading = true;
-  Duration animationDuration = Duration(milliseconds: 260);
+  Duration animationDuration = const Duration(milliseconds: 260);
 
   /// default（true），true（use the animation），false（not use）
   ///
@@ -72,7 +72,7 @@ class SmartConfigCompatible {
   /// 防抖功能（debounce），它作用于toast和dialog上：默认（false）;
   /// 可以通过[debounceTime]参数设置防抖时间
   bool debounce = false;
-  Duration debounceTime = Duration(milliseconds: 300);
+  Duration debounceTime = const Duration(milliseconds: 300);
 
   /// whether custom dialog，attach and loading  exist on the screen
   ///

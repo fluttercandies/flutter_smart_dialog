@@ -291,9 +291,7 @@ class CompatibleSmartDialog {
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       debounce: debounceTemp ?? config.debounce,
-      highlightBuilder: highlightBuilder != null
-          ? highlightBuilder
-          : (Offset targetOffset, Size targetSize) {
+      highlightBuilder: highlightBuilder ?? (Offset targetOffset, Size targetSize) {
               return highlight ?? Positioned(child: Container());
             },
       onDismiss: onDismiss,
@@ -484,11 +482,11 @@ class CompatibleSmartDialog {
       animationBuilder: null,
       usePenetrate: isPenetrateTemp ?? true,
       useAnimation: isUseAnimationTemp ?? true,
-      animationTime: animationDurationTemp ?? Duration(milliseconds: 200),
+      animationTime: animationDurationTemp ?? const Duration(milliseconds: 200),
       maskColor: maskColorTemp ?? config.maskColor,
       maskWidget: maskWidgetTemp ?? config.maskWidget,
       consumeEvent: consumeEvent ?? false,
-      displayTime: time ?? Duration(milliseconds: 2000),
+      displayTime: time ?? const Duration(milliseconds: 2000),
       debounce: debounceTemp ?? config.debounce,
       displayType: type ?? SmartToastType.normal,
       widget: widget ?? DialogProxy.instance.toastBuilder(msg),
@@ -522,7 +520,7 @@ class CompatibleSmartDialog {
   Future<void> dismiss({
     SmartStatus? status,
     String? tag,
-    @deprecated int closeType = 0,
+    @Deprecated("please use status") int closeType = 0,
   }) async {
     var instance = DialogProxy.instance;
     if (status == null) {

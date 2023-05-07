@@ -45,28 +45,28 @@ class _SlideAnimationState extends State<SlideAnimation>
   ///处理下内容widget动画方向
   void _dealContentAnimate() {
     AlignmentGeometry? alignment = widget.alignment;
-    var _offset = Offset(0, 0);
+    var offset = const Offset(0, 0);
 
     if (alignment == Alignment.bottomCenter ||
         alignment == Alignment.bottomLeft ||
         alignment == Alignment.bottomRight) {
       //靠下
-      _offset = Offset(0, 1);
+      offset = const Offset(0, 1);
     } else if (alignment == Alignment.topCenter ||
         alignment == Alignment.topLeft ||
         alignment == Alignment.topRight) {
       //靠上
-      _offset = Offset(0, -1);
+      offset = const Offset(0, -1);
     } else if (alignment == Alignment.centerLeft) {
       //靠左
-      _offset = Offset(-1, 0);
+      offset = const Offset(-1, 0);
     } else if (alignment == Alignment.centerRight) {
       //靠右
-      _offset = Offset(1, 0);
+      offset = const Offset(1, 0);
     } else {
       //居中使用缩放动画,空结构体,不需要操作
     }
 
-    _tween = Tween<Offset>(begin: _offset, end: Offset.zero);
+    _tween = Tween<Offset>(begin: offset, end: Offset.zero);
   }
 }

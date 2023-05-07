@@ -83,11 +83,11 @@ class DialogProxy {
     }
 
     if (initType.contains(SmartInitType.toast)) {
-      entryToast = SmartOverlayEntry(builder: (_) => SizedBox.shrink());
+      entryToast = SmartOverlayEntry(builder: (_) => const SizedBox.shrink());
     }
 
     if (initType.contains(SmartInitType.notify)) {
-      entryNotify = SmartOverlayEntry(builder: (_) => SizedBox.shrink());
+      entryNotify = SmartOverlayEntry(builder: (_) => const SizedBox.shrink());
     }
   }
 

@@ -114,7 +114,7 @@ class AttachDialogWidget extends StatefulWidget {
   final Rect? maskIgnoreArea;
 
   @override
-  _AttachDialogWidgetState createState() => _AttachDialogWidgetState();
+  State<AttachDialogWidget> createState() => _AttachDialogWidgetState();
 }
 
 class _AttachDialogWidgetState extends State<AttachDialogWidget>
@@ -139,11 +139,11 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   void _resetState() {
     var startTime = widget.animationTime;
-    widget.nonAnimationTypes.forEach((nonAnimationType) {
+    for (var nonAnimationType in widget.nonAnimationTypes) {
       if (widget.controller.judgeOpenDialogType(nonAnimationType)) {
         startTime = Duration.zero;
       }
-    });
+    }
 
     if (_maskController == null) {
       _maskController = AnimationController(vsync: this, duration: startTime);
@@ -276,7 +276,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     Widget fade = FadeAnimation(controller: _bodyController, child: child);
     Widget scale = ScaleAnimation(
       controller: _bodyController,
-      alignment: _scaleAlignment ?? Alignment(0, 0),
+      alignment: _scaleAlignment ?? const Alignment(0, 0),
       child: child,
     );
     Widget size = SizeAnimation(
@@ -314,13 +314,13 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
     // dismiss type
     var endTime = _bodyController.duration ?? widget.animationTime;
-    widget.nonAnimationTypes.forEach((dismissType) {
+    for (var dismissType in widget.nonAnimationTypes) {
       if (widget.controller.judgeDismissDialogType(closeType, dismissType)) {
         _maskController!.duration = Duration.zero;
         _bodyController.duration = Duration.zero;
         endTime = Duration.zero;
       }
-    });
+    }
 
     //over animation
     _maskController!.reverse();
@@ -343,8 +343,8 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 class AttachDialogController extends BaseController {
   _AttachDialogWidgetState? _state;
 
-  void _bind(_AttachDialogWidgetState _state) {
-    this._state = _state;
+  void _bind(_AttachDialogWidgetState state) {
+    _state = state;
   }
 
   @override

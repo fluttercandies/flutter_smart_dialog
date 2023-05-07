@@ -40,7 +40,7 @@ class SmartNavigatorObserver extends NavigatorObserver {
     //smart close dialog
     var removeList = <DialogInfo>[];
     for (var item in DialogProxy.instance.dialogQueue) {
-      if (item.route == route && item.bindPage && !(item.route is PopupRoute)) {
+      if (item.route == route && item.bindPage && item.route is! PopupRoute) {
         removeList.add(item);
       }
     }

@@ -3,8 +3,14 @@ import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 
 part 'smart_dialog_controller.dart';
 
+abstract class DialogScopeAction {
+  void setController(SmartDialogController? controller);
+
+  void replaceBuilder(Widget? child);
+}
+
 class DialogScopeInfo {
-  _DialogScopeState? state;
+  DialogScopeAction? action;
 }
 
 class DialogScope extends StatefulWidget {
@@ -21,15 +27,17 @@ class DialogScope extends StatefulWidget {
   final DialogScopeInfo info = DialogScopeInfo();
 
   @override
-  State<DialogScope> createState() => info.state = _DialogScopeState();
+  State<DialogScope> createState() => _DialogScopeState();
 }
 
-class _DialogScopeState extends State<DialogScope> {
+class _DialogScopeState extends State<DialogScope>
+    implements DialogScopeAction {
   VoidCallback? _callback;
   Widget? _child;
 
   @override
   void initState() {
+    widget.info.action = this;
     setController(widget.controller);
     super.initState();
   }
@@ -39,8 +47,9 @@ class _DialogScopeState extends State<DialogScope> {
     return _child ?? widget.builder(context);
   }
 
-  void setController(SmartDialogController? _controller) {
-    _controller?._setListener(_callback = () {
+  @override
+  void setController(SmartDialogController? controller) {
+    controller?._setListener(_callback = () {
       ViewUtils.addSafeUse(() {
         if (mounted) {
           setState(() {});
@@ -49,6 +58,7 @@ class _DialogScopeState extends State<DialogScope> {
     });
   }
 
+  @override
   void replaceBuilder(Widget? child) {
     _child = child;
   }
