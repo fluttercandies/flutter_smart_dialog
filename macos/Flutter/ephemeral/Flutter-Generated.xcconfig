@@ -1,0 +1,11 @@
+// This is a generated file; do not edit or check into version control.
+FLUTTER_ROOT=/Users/xdd666/Develop/SDK/flutter_sdk
+FLUTTER_APPLICATION_PATH=/Users/xdd666/Develop/Github/flutter_smart_dialog
+COCOAPODS_PARALLEL_CODE_SIGN=true
+FLUTTER_BUILD_DIR=build
+FLUTTER_BUILD_NAME=4.9.0
+FLUTTER_BUILD_NUMBER=6
+DART_OBFUSCATION=false
+TRACK_WIDGET_CREATION=true
+TREE_SHAKE_ICONS=false
+PACKAGE_CONFIG=.dart_tool/package_config.json
