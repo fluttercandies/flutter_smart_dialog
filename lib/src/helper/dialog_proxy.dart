@@ -352,13 +352,23 @@ class DialogProxy {
       }
 
       if (notifyQueue.isNotEmpty) {
-        return CustomNotify.dismiss<T>(
-          type: DialogType.notify,
-          tag: tag,
-          result: result,
-          force: force,
-          closeType: closeType,
-        );
+        bool useNotify = (tag == null);
+        if (tag != null) {
+          for (var element in notifyQueue) {
+            if (element.tag == tag) {
+              useNotify = true;
+            }
+          }
+        }
+        if (useNotify) {
+          return CustomNotify.dismiss<T>(
+            type: DialogType.notify,
+            tag: tag,
+            result: result,
+            force: force,
+            closeType: closeType,
+          );
+        }
       }
 
       if (dialogQueue.isNotEmpty) {
