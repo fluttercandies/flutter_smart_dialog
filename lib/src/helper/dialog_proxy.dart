@@ -345,22 +345,25 @@ class DialogProxy {
   }) {
     if (status == SmartStatus.smart) {
       var loading = config.isExistLoading;
-      if ((!loading || tag != null) && dialogQueue.isNotEmpty) {
-        return CustomDialog.dismiss<T>(
-          type: DialogType.dialog,
-          tag: tag,
-          result: result,
-          force: force,
-          closeType: closeType,
-        );
-      }
-      if (loading) {
+
+      if (loading &&
+          (tag == null || (dialogQueue.isEmpty && notifyQueue.isEmpty))) {
         return _loading.dismiss(closeType: closeType);
       }
 
       if (notifyQueue.isNotEmpty) {
         return CustomNotify.dismiss<T>(
           type: DialogType.notify,
+          tag: tag,
+          result: result,
+          force: force,
+          closeType: closeType,
+        );
+      }
+
+      if (dialogQueue.isNotEmpty) {
+        return CustomDialog.dismiss<T>(
+          type: DialogType.dialog,
           tag: tag,
           result: result,
           force: force,

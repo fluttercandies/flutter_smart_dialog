@@ -9,7 +9,8 @@ import '../data/base_dialog.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
 class CustomLoading extends BaseDialog {
-  CustomLoading({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
+  CustomLoading({required SmartOverlayEntry overlayEntry})
+      : super(overlayEntry);
 
   Timer? _timer;
   Timer? _displayTimer;
@@ -86,12 +87,11 @@ class CustomLoading extends BaseDialog {
     if (!_loadingBackDismiss && closeType == CloseType.back) {
       return;
     }
-
     await mainDialog.dismiss(closeType: closeType);
-    SmartDialog.config.loading.isExist = false;
   }
 
   Future<void> dismiss({CloseType closeType = CloseType.normal}) async {
+    SmartDialog.config.loading.isExist = false;
     _canDismissCallback = () => _realDismiss(closeType: closeType);
     if (_canDismiss) await _canDismissCallback?.call();
   }
