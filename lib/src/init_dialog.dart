@@ -54,7 +54,7 @@ class FlutterSmartDialog extends StatefulWidget {
   @override
   State<FlutterSmartDialog> createState() => _FlutterSmartDialogState();
 
-  static final observer = SmartNavigatorObserver();
+  static SmartNavigatorObserver get observer => SmartNavigatorObserver();
 
   ///Compatible with flutter_boost
   static Route<dynamic>? boostMonitor(Route<dynamic>? route) =>
