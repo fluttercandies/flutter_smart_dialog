@@ -313,14 +313,14 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     if (_maskController == null) return;
 
     // dismiss type
-    var endTime = _bodyController.duration ?? widget.animationTime;
+    var endTime = widget.animationTime;
     for (var dismissType in widget.nonAnimationTypes) {
       if (widget.controller.judgeDismissDialogType(closeType, dismissType)) {
-        _maskController!.duration = Duration.zero;
-        _bodyController.duration = Duration.zero;
         endTime = Duration.zero;
       }
     }
+    _maskController!.duration = endTime;
+    _bodyController.duration = endTime;
 
     //over animation
     _maskController!.reverse();
