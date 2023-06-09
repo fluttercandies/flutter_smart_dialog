@@ -23,6 +23,7 @@ class SmartConfigToast {
     this.intervalTime = const Duration(milliseconds: 100),
     this.awaitOverType = SmartAwaitOverType.dialogDismiss,
     this.maskTriggerType = SmartMaskTriggerType.up,
+    this.nonAnimationTypes = const [],
     this.isExist = false,
   });
 
@@ -132,6 +133,12 @@ class SmartConfigToast {
   ///
   /// 点击遮罩时, 被触发时机的类型 (具体请查看[SmartMaskTriggerType]注释)
   final SmartMaskTriggerType maskTriggerType;
+
+  /// For different scenes, the pop-up animation can be dynamically closed.
+  /// For details, please refer to [SmartNonAnimationType]
+  ///
+  /// 对于不同的场景, 可动态关闭弹窗动画, 具体请参照[SmartNonAnimationType]
+  final List<SmartNonAnimationType> nonAnimationTypes;
 
   /// whether toast(showToast()) exist on the screen
   ///

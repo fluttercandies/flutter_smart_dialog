@@ -753,6 +753,9 @@ class SmartDialog {
   ///
   /// [animationType]：For details, please refer to the [SmartAnimationType] comment
   ///
+  /// [nonAnimationTypes]：For different scenes, the pop-up animation can be dynamically closed.
+  /// For details, please refer to [SmartNonAnimationType]
+  ///
   /// [animationBuilder]：Support highly custom animation, please refer to [AnimationBuilder] description for details
   ///
   /// [usePenetrate]：true（the click event will penetrate mask），
@@ -766,12 +769,17 @@ class SmartDialog {
   ///
   /// [maskWidget]：highly customizable mask
   ///
+  /// [onDismiss]：This callback will be triggered when the dialog is closed
+  ///
+  /// [onMask]：This callback will be triggered when the mask is clicked
+  ///
+  /// [consumeEvent]：true (toast will consume touch events),
+  /// false (toast no longer consumes events, touch events can penetrate toast)
+  ///
   /// [debounce]：debounce feature
   ///
   /// [displayType]：provider multiple display logic，
   /// please refer to [SmartToastType] comment for detailed description
-  ///
-  /// [consumeEvent]：true (toast will consume touch events), false (toast no longer consumes events, touch events can penetrate toast)
   ///
   /// [builder]：the custom toast
   ///
@@ -791,6 +799,8 @@ class SmartDialog {
   ///
   /// [animationType]：具体可参照[SmartAnimationType]注释
   ///
+  /// [nonAnimationTypes]：对于不同的场景, 可动态关闭弹窗动画, 具体请参照[SmartNonAnimationType]
+  ///
   /// [animationBuilder]：支持高度自定义动画, 具体可参照[AnimationBuilder]说明
   ///
   /// [usePenetrate]：true（点击事件将穿透遮罩），false（不穿透）
@@ -803,11 +813,15 @@ class SmartDialog {
   ///
   /// [maskWidget]：可高度定制遮罩
   ///
+  /// [onDismiss]：在dialog被关闭的时候，该回调将会被触发
+  ///
+  /// [onMask]：点击遮罩时，该回调将会被触发
+  ///
+  /// [consumeEvent]：true（toast会消耗触摸事件），false（toast不再消耗事件，触摸事件能穿透toast）
+  ///
   /// [debounce]：防抖功能
   ///
   /// [displayType]：提供多种显示逻辑，详细描述请查看 [SmartToastType] 注释
-  ///
-  /// [consumeEvent]：true（toast会消耗触摸事件），false（toast不再消耗事件，触摸事件能穿透toast）
   ///
   /// [builder]：自定义toast
   static Future<void> showToast(
@@ -817,12 +831,15 @@ class SmartDialog {
     AlignmentGeometry? alignment,
     bool? clickMaskDismiss,
     SmartAnimationType? animationType,
+    List<SmartNonAnimationType>? nonAnimationTypes,
     AnimationBuilder? animationBuilder,
     bool? usePenetrate,
     bool? useAnimation,
     Duration? animationTime,
     Color? maskColor,
     Widget? maskWidget,
+    VoidCallback? onDismiss,
+    VoidCallback? onMask,
     bool? consumeEvent,
     bool? debounce,
     SmartToastType? displayType,
@@ -841,12 +858,15 @@ class SmartDialog {
       alignment: alignment ?? config.toast.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.toast.clickMaskDismiss,
       animationType: animationType ?? config.toast.animationType,
+      nonAnimationTypes: nonAnimationTypes ?? config.toast.nonAnimationTypes,
       animationBuilder: animationBuilder,
       usePenetrate: usePenetrate ?? config.toast.usePenetrate,
       useAnimation: useAnimation ?? config.toast.useAnimation,
       animationTime: animationTime ?? config.toast.animationTime,
       maskColor: maskColor ?? config.toast.maskColor,
       maskWidget: maskWidget ?? config.toast.maskWidget,
+      onDismiss: onDismiss,
+      onMask: onMask,
       debounce: debounce ?? config.toast.debounce,
       displayType: displayType ?? config.toast.displayType,
       consumeEvent: consumeEvent ?? config.toast.consumeEvent,

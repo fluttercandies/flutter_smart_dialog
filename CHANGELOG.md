@@ -1,5 +1,7 @@
 # [4.9.1]
 * fix [#132](https://github.com/fluttercandies/flutter_smart_dialog/issues/132)
+* optimize nonAnimationTypes
+* toast add some param
 
 # [4.9.0]
 * Breaking Change

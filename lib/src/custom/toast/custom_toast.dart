@@ -23,6 +23,7 @@ class CustomToast extends BaseDialog {
     required AlignmentGeometry alignment,
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
+    required List<SmartNonAnimationType> nonAnimationTypes,
     required AnimationBuilder? animationBuilder,
     required bool usePenetrate,
     required bool useAnimation,
@@ -30,6 +31,8 @@ class CustomToast extends BaseDialog {
     required Color maskColor,
     required Widget? maskWidget,
     required Duration displayTime,
+    required VoidCallback? onDismiss,
+    required VoidCallback? onMask,
     required bool debounce,
     required SmartToastType displayType,
     required Widget widget,
@@ -56,17 +59,24 @@ class CustomToast extends BaseDialog {
         maskWidget: maskWidget,
         animationTime: animationTime,
         animationType: animationType,
-        nonAnimationTypes: const [],
+        nonAnimationTypes: nonAnimationTypes,
         animationBuilder: animationBuilder,
         useAnimation: useAnimation,
         usePenetrate: usePenetrate,
-        onDismiss: null,
+        onDismiss: onDismiss,
         useSystem: false,
         reuse: false,
         awaitOverType: SmartDialog.config.toast.awaitOverType,
         maskTriggerType: SmartDialog.config.toast.maskTriggerType,
         ignoreArea: null,
-        onMask: () => clickMaskDismiss ? ToastTool.instance.dismiss() : null,
+        onMask: () {
+          onMask?.call();
+          if (!clickMaskDismiss ||
+              DebounceUtils.instance.banContinue(DebounceType.mask, true)) {
+            return;
+          }
+          ToastTool.instance.dismiss();
+        },
       );
     }
 
