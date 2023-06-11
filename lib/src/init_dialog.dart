@@ -114,9 +114,16 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
   void initState() {
     ViewUtils.addSafeUse(() {
       try {
-        var navigator = widget.child as Navigator;
-        var key = navigator.key as GlobalKey;
-        DialogProxy.contextNavigator = key.currentContext;
+        BuildContext? context;
+        if (widget.child is Navigator) {
+          context = getNavigatorContext(widget.child as Navigator);
+        } else if (widget.child is FocusScope) {
+          var focusScope = widget.child as FocusScope;
+          if (focusScope.child is Navigator) {
+            context = getNavigatorContext(focusScope.child as Navigator);
+          }
+        }
+        DialogProxy.contextNavigator = context;
       } catch (_) {}
     });
 
@@ -206,5 +213,13 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
           DialogProxy.instance.entryToast,
       ]),
     );
+  }
+
+  BuildContext? getNavigatorContext(Navigator navigator) {
+    BuildContext? context;
+    if (navigator.key is GlobalKey) {
+      context = (navigator.key as GlobalKey).currentContext;
+    }
+    return context;
   }
 }

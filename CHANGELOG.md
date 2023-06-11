@@ -1,7 +1,8 @@
-# [4.9.1]
+# [4.9.x]
 * fix [#132](https://github.com/fluttercandies/flutter_smart_dialog/issues/132)
 * optimize nonAnimationTypes
 * toast add some param
+*  fix [#135](https://github.com/fluttercandies/flutter_smart_dialog/issues/135)
 
 # [4.9.0]
 * Breaking Change
