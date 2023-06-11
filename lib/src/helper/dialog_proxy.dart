@@ -44,7 +44,6 @@ enum DialogType {
 
 class DialogProxy {
   late SmartConfig config;
-  late SmartOverlayEntry entryToast;
   late SmartOverlayEntry entryLoading;
   late SmartOverlayEntry entryNotify;
   late Queue<DialogInfo> dialogQueue;
@@ -80,10 +79,6 @@ class DialogProxy {
     if (initType.contains(SmartInitType.loading)) {
       entryLoading = SmartOverlayEntry(builder: (_) => _loading.getWidget());
       _loading = CustomLoading(overlayEntry: entryLoading);
-    }
-
-    if (initType.contains(SmartInitType.toast)) {
-      entryToast = SmartOverlayEntry(builder: (_) => const SizedBox.shrink());
     }
 
     if (initType.contains(SmartInitType.notify)) {

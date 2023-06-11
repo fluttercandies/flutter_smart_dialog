@@ -202,15 +202,12 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
           },
         ),
 
-        if (initType.contains(SmartInitType.notify))
-          DialogProxy.instance.entryNotify,
+        // if (initType.contains(SmartInitType.notify))
+        //   DialogProxy.instance.entryNotify,
 
         //provided separately for loading
         if (initType.contains(SmartInitType.loading))
           DialogProxy.instance.entryLoading,
-
-        if (initType.contains(SmartInitType.toast))
-          DialogProxy.instance.entryToast,
       ]),
     );
   }

@@ -70,10 +70,14 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showToast() async {
-    SmartDialog.showToast(
-      'test toast ---- ${Random().nextInt(999)}',
-      displayType: SmartToastType.onlyRefresh,
-    );
+    SmartDialog.showToast('test toast ---- ${Random().nextInt(999)}');
+
+    // for (var i = 0; i < 9; i++) {
+    //   SmartDialog.showToast(
+    //     'test toast ---- $i',
+    //     displayType: SmartToastType.multi,
+    //   );
+    // }
   }
 
   void _show() async {

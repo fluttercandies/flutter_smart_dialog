@@ -13,11 +13,10 @@ import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import '../config/enum_config.dart';
 import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
+import '../data/notify_info.dart';
 import '../smart_dialog.dart';
 import '../util/debounce_utils.dart';
 import '../widget/helper/smart_overlay_entry.dart';
-
-
 
 ///main function : custom dialog
 class CustomDialog extends BaseDialog {
@@ -262,24 +261,20 @@ class CustomDialog extends BaseDialog {
 
     // insert the dialog carrier into the page
     ViewUtils.addSafeUse(() {
-      if (dialogInfo.type == DialogType.custom) {
-        try {
-          overlay(DialogProxy.contextCustom).insert(
-            overlayEntry,
-            below: proxy.entryNotify,
-          );
-        } catch (e) {
-          overlay(DialogProxy.contextCustom).insert(overlayEntry);
-        }
-      } else {
-        try {
-          overlay(DialogProxy.contextAttach).insert(
-            overlayEntry,
-            below: proxy.entryNotify,
-          );
-        } catch (e) {
-          overlay(DialogProxy.contextAttach).insert(overlayEntry);
-        }
+      NotifyInfo? firstNotify =
+          proxy.notifyQueue.isNotEmpty ? proxy.notifyQueue.first : null;
+      BuildContext overlayContext = dialogInfo.type == DialogType.custom
+          ? DialogProxy.contextCustom
+          : DialogProxy.contextAttach;
+      try {
+        overlay(overlayContext).insert(
+          overlayEntry,
+          below: firstNotify != null
+              ? firstNotify.dialog.overlayEntry
+              : proxy.entryLoading,
+        );
+      } catch (e) {
+        overlay(overlayContext).insert(overlayEntry);
       }
     });
   }

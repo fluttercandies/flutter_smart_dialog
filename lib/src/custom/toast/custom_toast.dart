@@ -43,14 +43,7 @@ class CustomToast extends BaseDialog {
 
     showToast() {
       SmartDialog.config.toast.isExist = true;
-      try {
-        overlay(DialogProxy.contextToast).insert(
-          overlayEntry,
-          below: DialogProxy.instance.entryToast,
-        );
-      } catch (e) {
-        overlay(DialogProxy.contextToast).insert(overlayEntry);
-      }
+      overlay(DialogProxy.contextToast).insert(overlayEntry);
 
       mainDialog.show(
         widget: widget,
