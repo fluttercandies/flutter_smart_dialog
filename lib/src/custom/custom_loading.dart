@@ -46,10 +46,18 @@ class CustomLoading extends BaseDialog {
       _canDismissCallback?.call();
     });
 
+    List<SmartNonAnimationType> nonAnimations = [];
+    var continueLoading = SmartNonAnimationType.continueLoading_nonAnimation;
+    if (SmartDialog.config.isExistLoading &&
+        nonAnimationTypes.contains(continueLoading)) {
+      nonAnimations.addAll(nonAnimationTypes);
+      nonAnimations.add(SmartNonAnimationType.openDialog_nonAnimation);
+    }
+
     return mainDialog.show<T>(
       widget: widget,
       animationType: animationType,
-      nonAnimationTypes: nonAnimationTypes,
+      nonAnimationTypes: nonAnimations,
       animationBuilder: animationBuilder,
       alignment: alignment,
       maskColor: maskColor,

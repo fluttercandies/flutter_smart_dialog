@@ -21,6 +21,7 @@ class SmartConfigLoading {
     this.maskTriggerType = SmartMaskTriggerType.up,
     this.nonAnimationTypes = const [
       SmartNonAnimationType.routeClose_nonAnimation,
+      SmartNonAnimationType.continueLoading_nonAnimation,
     ],
     this.isExist = false,
   });

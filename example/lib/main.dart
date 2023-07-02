@@ -166,8 +166,12 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showLoading() async {
-    SmartDialog.showLoading();
-    await Future.delayed(const Duration(seconds: 2));
+    SmartDialog.showLoading(msg: "test one");
+    await Future.delayed(const Duration(seconds: 1));
+    SmartDialog.showLoading(msg: "test two");
+    await Future.delayed(const Duration(seconds: 1));
+    SmartDialog.showLoading(msg: "test three");
+    await Future.delayed(const Duration(seconds: 1));
     SmartDialog.dismiss();
   }
 

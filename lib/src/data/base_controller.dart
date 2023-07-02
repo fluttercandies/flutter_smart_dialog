@@ -5,14 +5,6 @@ import '../helper/dialog_proxy.dart';
 abstract class BaseController {
   Future<void> dismiss({CloseType closeType = CloseType.normal});
 
-  bool judgeOpenDialogType(SmartNonAnimationType nonAnimationType) {
-    if (nonAnimationType == SmartNonAnimationType.openDialog_nonAnimation) {
-      return true;
-    }
-
-    return false;
-  }
-
   bool judgeDismissDialogType(
     CloseType closeType,
     SmartNonAnimationType nonAnimationType,

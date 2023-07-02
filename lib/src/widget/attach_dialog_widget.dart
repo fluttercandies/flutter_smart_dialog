@@ -139,10 +139,12 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
 
   void _resetState() {
     var startTime = widget.animationTime;
-    for (var nonAnimationType in widget.nonAnimationTypes) {
-      if (widget.controller.judgeOpenDialogType(nonAnimationType)) {
-        startTime = Duration.zero;
-      }
+    var openDialog = SmartNonAnimationType.openDialog_nonAnimation;
+    if (widget.nonAnimationTypes.contains(openDialog)) {
+      startTime = Duration.zero;
+    }
+    if (!widget.useAnimation) {
+      startTime = Duration.zero;
     }
 
     if (_maskController == null) {
@@ -185,7 +187,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       alignment: widget.alignment,
       originChild: _child,
       builder: (Widget child) {
-        return widget.useAnimation ? _buildBodyAnimation(child) : child;
+        return _buildBodyAnimation(child);
       },
       belowBuilder: (targetOffset, targetSize) {
         return [
@@ -319,6 +321,10 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
         endTime = Duration.zero;
       }
     }
+    if (!widget.useAnimation) {
+      endTime = Duration.zero;
+    }
+
     _maskController!.duration = endTime;
     _bodyController.duration = endTime;
 
@@ -326,9 +332,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     _maskController!.reverse();
     _bodyController.reverse();
     _animationParam?.onDismiss?.call();
-    if (widget.useAnimation) {
-      await Future.delayed(endTime);
-    }
+    await Future.delayed(endTime);
   }
 
   @override

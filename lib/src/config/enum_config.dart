@@ -188,6 +188,11 @@ enum SmartNonAnimationType {
   /// 注: ColorFiltered和FadeTransition动画组件冲突, 会造成频闪bug,
   /// flutter2.10.5和flutter3.3.5能稳定复现，flutter3.0.5版本则不存在这个问题
   highlightMask_nonAnimation,
+
+  /// Continuously call Loading, no flickering animation
+  ///
+  /// 连续调用Loading, 无闪烁动画
+  continueLoading_nonAnimation,
 }
 
 /// The alignment effect when the attach dialog selects different alignment properties

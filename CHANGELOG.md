@@ -3,6 +3,9 @@
 * optimize nonAnimationTypes
 * toast add some param
 * fix [#135](https://github.com/fluttercandies/flutter_smart_dialog/issues/135)
+* optimize loading [#137](https://github.com/fluttercandies/flutter_smart_dialog/issues/137)
+* optimize 'show debug point'
+
 
 # [4.9.0]
 * Breaking Change

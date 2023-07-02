@@ -94,10 +94,12 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
 
   void _resetState() {
     var startTime = widget.animationTime;
-    for (var nonAnimationType in widget.nonAnimationTypes) {
-      if (widget.controller.judgeOpenDialogType(nonAnimationType)) {
-        startTime = Duration.zero;
-      }
+    var openDialog = SmartNonAnimationType.openDialog_nonAnimation;
+    if (widget.nonAnimationTypes.contains(openDialog)) {
+      startTime = Duration.zero;
+    }
+    if (!widget.useAnimation) {
+      startTime = Duration.zero;
     }
 
     if (_maskController == null) {
@@ -154,7 +156,7 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
         //内容Widget动画
         Container(
           alignment: widget.alignment,
-          child: widget.useAnimation ? _buildBodyAnimation() : widget.child,
+          child: _buildBodyAnimation(),
         ),
       ]),
     );
@@ -215,6 +217,10 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
         endTime = Duration.zero;
       }
     }
+    if (!widget.useAnimation) {
+      endTime = Duration.zero;
+    }
+
     _maskController!.duration = endTime;
     _bodyController.duration = endTime;
 
@@ -222,9 +228,7 @@ class _SmartDialogWidgetState extends State<SmartDialogWidget>
     _maskController!.reverse();
     _bodyController.reverse();
     _animationParam?.onDismiss?.call();
-    if (widget.useAnimation) {
-      await Future.delayed(endTime);
-    }
+    await Future.delayed(endTime);
   }
 
   @override
