@@ -35,6 +35,13 @@ class CustomLoading extends BaseDialog {
     required Duration? displayTime,
     required bool backDismiss,
   }) {
+    List<SmartNonAnimationType> nonAnimations = [...nonAnimationTypes];
+    var continueLoading = SmartNonAnimationType.continueLoading_nonAnimation;
+    if (SmartDialog.config.loading.isExist &&
+        nonAnimations.contains(continueLoading)) {
+      nonAnimations.add(SmartNonAnimationType.openDialog_nonAnimation);
+    }
+
     _loadingBackDismiss = backDismiss;
     SmartDialog.config.loading.isExist = true;
 
@@ -45,14 +52,6 @@ class CustomLoading extends BaseDialog {
       _canDismiss = true;
       _canDismissCallback?.call();
     });
-
-    List<SmartNonAnimationType> nonAnimations = [];
-    var continueLoading = SmartNonAnimationType.continueLoading_nonAnimation;
-    if (SmartDialog.config.isExistLoading &&
-        nonAnimationTypes.contains(continueLoading)) {
-      nonAnimations.addAll(nonAnimationTypes);
-      nonAnimations.add(SmartNonAnimationType.openDialog_nonAnimation);
-    }
 
     return mainDialog.show<T>(
       widget: widget,
