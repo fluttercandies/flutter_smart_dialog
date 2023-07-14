@@ -91,15 +91,18 @@ class CustomLoading extends BaseDialog {
   }
 
   Future<void> _realDismiss({CloseType closeType = CloseType.normal}) async {
-    if (!_loadingBackDismiss && closeType == CloseType.back) {
-      return;
-    }
+    SmartDialog.config.loading.isExist = false;
     await mainDialog.dismiss(closeType: closeType);
   }
 
   Future<void> dismiss({CloseType closeType = CloseType.normal}) async {
-    SmartDialog.config.loading.isExist = false;
+    if (!_loadingBackDismiss && closeType == CloseType.back) {
+      return;
+    }
     _canDismissCallback = () => _realDismiss(closeType: closeType);
-    if (_canDismiss) await _canDismissCallback?.call();
+    if (_canDismiss) {
+      SmartDialog.config.loading.isExist = false;
+      await _canDismissCallback?.call();
+    }
   }
 }
