@@ -50,11 +50,15 @@ class CustomDialog extends BaseDialog {
     if (DebounceUtils.instance.banContinue(DebounceType.custom, debounce)) {
       return Future.value(null);
     }
-
+    if (keepSingle) {
+      var singleDialogInfo = _getDialog(tag: tag ?? SmartTag.keepSingle);
+      if (singleDialogInfo != null) {
+        return Future.value(null);
+      }
+    }
     final dialogInfo = _handleMustOperate(
       tag: tag,
       backDismiss: backDismiss,
-      keepSingle: keepSingle,
       debounce: debounce,
       type: DialogType.custom,
       permanent: permanent,
@@ -125,11 +129,15 @@ class CustomDialog extends BaseDialog {
     if (DebounceUtils.instance.banContinue(DebounceType.attach, debounce)) {
       return Future.value(null);
     }
-
+    if (keepSingle) {
+      var singleDialogInfo = _getDialog(tag: tag ?? SmartTag.keepSingle);
+      if (singleDialogInfo != null) {
+        return Future.value(null);
+      }
+    }
     final dialogInfo = _handleMustOperate(
       tag: tag,
       backDismiss: backDismiss,
-      keepSingle: keepSingle,
       debounce: debounce,
       type: DialogType.attach,
       permanent: permanent,
@@ -196,7 +204,6 @@ class CustomDialog extends BaseDialog {
   DialogInfo _handleMustOperate({
     required String? tag,
     required bool backDismiss,
-    required bool keepSingle,
     required bool debounce,
     required DialogType type,
     required bool permanent,
@@ -209,41 +216,21 @@ class CustomDialog extends BaseDialog {
     SmartDialog.config.attach.isExist = DialogType.attach == type;
 
     DialogInfo dialogInfo;
-    if (keepSingle) {
-      var singleDialogInfo = _getDialog(tag: tag ?? SmartTag.keepSingle);
-      if (singleDialogInfo == null) {
-        singleDialogInfo = DialogInfo(
-          dialog: this,
-          backDismiss: backDismiss,
-          type: type,
-          tag: tag ?? SmartTag.keepSingle,
-          permanent: permanent,
-          useSystem: useSystem,
-          bindPage: bindPage,
-          route: RouteRecord.curRoute,
-          bindWidget: bindWidget,
-        );
-        _pushDialog(singleDialogInfo);
-      }
-      mainDialog = singleDialogInfo.dialog.mainDialog;
-      dialogInfo = singleDialogInfo;
-    } else {
-      tag = tag ?? '${hashCode + Random().nextDouble()}';
+    tag = tag ?? '${hashCode + Random().nextDouble()}';
 
-      // handle dialog stack
-      dialogInfo = DialogInfo(
-        dialog: this,
-        backDismiss: backDismiss,
-        type: type,
-        tag: tag,
-        permanent: permanent,
-        useSystem: useSystem,
-        bindPage: bindPage,
-        route: RouteRecord.curRoute,
-        bindWidget: bindWidget,
-      );
-      _pushDialog(dialogInfo);
-    }
+    // handle dialog stack
+    dialogInfo = DialogInfo(
+      dialog: this,
+      backDismiss: backDismiss,
+      type: type,
+      tag: tag,
+      permanent: permanent,
+      useSystem: useSystem,
+      bindPage: bindPage,
+      route: RouteRecord.curRoute,
+      bindWidget: bindWidget,
+    );
+    _pushDialog(dialogInfo);
 
     return dialogInfo;
   }

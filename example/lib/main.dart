@@ -64,6 +64,11 @@ class SmartDialogPage extends StatelessWidget {
             onPressed: () => _bindPage(context),
             child: const Text('bindPage'),
           ),
+
+          ElevatedButton(
+            onPressed: () => _keepSingle(),
+            child: const Text('keepSingle'),
+          ),
         ]),
       ),
     );
@@ -177,5 +182,27 @@ class SmartDialogPage extends StatelessWidget {
 
   void _showNotify() async {
     SmartDialog.showNotify(msg: '请求成功', notifyType: NotifyType.failure);
+  }
+
+  void _keepSingle() async {
+    SmartDialog.show(
+      tag: "single",
+      keepSingle: true,
+      builder: (_) {
+        return Container(
+          height: 300,
+          width: 300,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: Colors.white,
+          ),
+          alignment: Alignment.center,
+          child: ElevatedButton(
+            onPressed: () => _keepSingle(),
+            child: const Text('single dialog'),
+          ),
+        );
+      },
+    );
   }
 }
