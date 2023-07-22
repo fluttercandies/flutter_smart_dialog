@@ -45,6 +45,7 @@ class MainDialog {
     required SmartMaskTriggerType maskTriggerType,
     required AnimationBuilder? animationBuilder,
     required Rect? ignoreArea,
+    required bool keepSingle,
   }) {
     //custom dialog
     _widget = SmartDialogWidget(
@@ -55,7 +56,10 @@ class MainDialog {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
-      nonAnimationTypes: nonAnimationTypes,
+      nonAnimationTypes: processNonAnimationTypes(
+        nonAnimationTypes: nonAnimationTypes,
+        keepSingle: keepSingle,
+      ),
       animationBuilder: animationBuilder,
       maskColor: maskColor,
       maskWidget: maskWidget,
@@ -99,6 +103,7 @@ class MainDialog {
     required VoidCallback? onDismiss,
     required bool useSystem,
     required SmartAwaitOverType awaitOverType,
+    required bool keepSingle,
   }) {
     //attach dialog
     _widget = AttachDialogWidget(
@@ -112,7 +117,10 @@ class MainDialog {
       useAnimation: useAnimation,
       animationTime: animationTime,
       animationType: animationType,
-      nonAnimationTypes: nonAnimationTypes,
+      nonAnimationTypes: processNonAnimationTypes(
+        nonAnimationTypes: nonAnimationTypes,
+        keepSingle: keepSingle,
+      ),
       animationBuilder: animationBuilder,
       scalePointBuilder: scalePointBuilder,
       maskColor: maskColor,
@@ -134,6 +142,21 @@ class MainDialog {
     //wait dialog dismiss
     var completer = _completer = Completer<T?>();
     return completer.future;
+  }
+
+  List<SmartNonAnimationType> processNonAnimationTypes({
+    required List<SmartNonAnimationType> nonAnimationTypes,
+    required bool keepSingle,
+  }) {
+    List<SmartNonAnimationType> nonAnimations = [...nonAnimationTypes];
+    var continueKeepSingle = SmartNonAnimationType.continueKeepSingle;
+    if (nonAnimations.contains(continueKeepSingle) &&
+        keepSingle &&
+        _completer != null) {
+      nonAnimations.add(SmartNonAnimationType.openDialog_nonAnimation);
+    }
+
+    return nonAnimations;
   }
 
   void _handleCommonOperate({

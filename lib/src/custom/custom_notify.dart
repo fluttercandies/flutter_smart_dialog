@@ -66,6 +66,7 @@ class CustomNotify extends BaseDialog {
       awaitOverType: SmartDialog.config.notify.awaitOverType,
       maskTriggerType: SmartDialog.config.notify.maskTriggerType,
       ignoreArea: null,
+      keepSingle: keepSingle,
       onMask: () {
         onMask?.call();
         if (!clickMaskDismiss ||

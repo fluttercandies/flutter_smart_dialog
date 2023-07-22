@@ -193,6 +193,11 @@ enum SmartNonAnimationType {
   ///
   /// 连续调用Loading, 无闪烁动画
   continueLoading_nonAnimation,
+
+  /// The keepSingle dialog is called continuously, and there is no animation at intervals
+  ///
+  /// keepSingle弹窗连续调用, 间隔无动画
+  continueKeepSingle,
 }
 
 /// The alignment effect when the attach dialog selects different alignment properties

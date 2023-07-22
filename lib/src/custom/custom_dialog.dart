@@ -80,6 +80,7 @@ class CustomDialog extends BaseDialog {
       awaitOverType: SmartDialog.config.custom.awaitOverType,
       maskTriggerType: SmartDialog.config.custom.maskTriggerType,
       ignoreArea: ignoreArea,
+      keepSingle: keepSingle,
       onMask: () {
         onMask?.call();
         if (!clickMaskDismiss ||
@@ -159,6 +160,7 @@ class CustomDialog extends BaseDialog {
       useSystem: useSystem,
       awaitOverType: SmartDialog.config.attach.awaitOverType,
       maskTriggerType: SmartDialog.config.attach.maskTriggerType,
+      keepSingle: keepSingle,
       onMask: () {
         onMask?.call();
         if (!clickMaskDismiss ||
