@@ -4,14 +4,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
-import 'package:flutter_smart_dialog/src/util/view_utils.dart';
+import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 
 import '../config/enum_config.dart';
 import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
 import '../data/notify_info.dart';
+import '../kit/debounce_utils.dart';
 import '../smart_dialog.dart';
-import '../util/debounce_utils.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
 ///main function : notify dialog

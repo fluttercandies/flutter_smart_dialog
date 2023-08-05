@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/navigator_observer.dart';
-import 'package:flutter_smart_dialog/src/util/view_utils.dart';
+import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/default/notify_alter.dart';
 import 'package:flutter_smart_dialog/src/widget/default/notify_error.dart';
 import 'package:flutter_smart_dialog/src/widget/default/notify_failure.dart';

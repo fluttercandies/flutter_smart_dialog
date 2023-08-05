@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/custom/main_dialog.dart';
-import 'package:flutter_smart_dialog/src/util/debounce_utils.dart';
+import 'package:flutter_smart_dialog/src/kit/debounce_utils.dart';
 
 import '../../data/animation_param.dart';
 import '../../data/base_dialog.dart';
 import '../../helper/dialog_proxy.dart';
-import '../../util/view_utils.dart';
+import '../../kit/view_utils.dart';
 import '../../widget/helper/dialog_scope.dart';
 import '../../widget/helper/smart_overlay_entry.dart';
 import '../../widget/helper/toast_helper.dart';

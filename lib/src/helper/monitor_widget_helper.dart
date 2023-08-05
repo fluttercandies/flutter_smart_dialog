@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
-import 'package:flutter_smart_dialog/src/util/log.dart';
-import 'package:flutter_smart_dialog/src/util/view_utils.dart';
+import 'package:flutter_smart_dialog/src/kit/log.dart';
+import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 
 import '../data/dialog_info.dart';
 

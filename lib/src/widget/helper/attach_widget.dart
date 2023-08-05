@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 
-import '../../util/view_utils.dart';
 import '../attach_dialog_widget.dart';
 
 typedef AttachBuilder = Widget Function(Widget child);

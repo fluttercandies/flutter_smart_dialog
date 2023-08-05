@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
-import 'package:flutter_smart_dialog/src/util/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/animation/highlight_mask_animation.dart';
 import 'package:flutter_smart_dialog/src/widget/animation/scale_animation.dart';
 import 'package:flutter_smart_dialog/src/widget/helper/attach_widget.dart';
@@ -10,6 +9,7 @@ import 'package:flutter_smart_dialog/src/widget/helper/mask_event.dart';
 
 import '../data/animation_param.dart';
 import '../helper/dialog_proxy.dart';
+import '../kit/view_utils.dart';
 import 'animation/fade_animation.dart';
 import 'animation/size_animation.dart';
 

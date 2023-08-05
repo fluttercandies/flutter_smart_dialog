@@ -60,6 +60,24 @@ enum SmartStatus {
   allNotify,
 }
 
+/// dialog type
+enum SmartAllDialogType {
+  /// custom dialog（show）
+  custom,
+
+  /// attach dialog（showAttach）
+  attach,
+
+  /// notify dialog（showNotify）
+  notify,
+
+  /// loading（showLoading）
+  loading,
+
+  /// toast（showToast）
+  toast,
+}
+
 enum SmartToastType {
   /// Each toast will be displayed, after the current toast disappears，
   /// the next toast will be displayed

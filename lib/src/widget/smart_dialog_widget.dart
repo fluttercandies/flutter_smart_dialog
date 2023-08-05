@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
-import 'package:flutter_smart_dialog/src/util/view_utils.dart';
+import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/animation/fade_animation.dart';
 import 'package:flutter_smart_dialog/src/widget/animation/scale_animation.dart';
 import 'package:flutter_smart_dialog/src/widget/animation/slide_animation.dart';

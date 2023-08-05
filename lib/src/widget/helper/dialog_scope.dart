@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/src/util/view_utils.dart';
+import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 
 part 'smart_dialog_controller.dart';
 
