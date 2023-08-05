@@ -6,6 +6,7 @@
 * optimize loading [#137](https://github.com/fluttercandies/flutter_smart_dialog/issues/137)
 * optimize 'show debug point'
 * fix [#142](https://github.com/fluttercandies/flutter_smart_dialog/issues/142)
+* add checkExist
 
 
 # [4.9.0]

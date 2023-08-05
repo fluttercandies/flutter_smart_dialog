@@ -25,12 +25,16 @@ class SmartNavigatorObserver extends NavigatorObserver {
     RouteRecord.curRoute = previousRoute;
     RouteRecord.instance.pop(route, previousRoute);
 
-    if (!SmartDialog.config.isExist ||
-        route.settings.name == SmartTag.systemDialog) {
+    var checkDialog = SmartDialog.config.checkExist(dialogTypes: {
+      SmartAllDialogType.custom,
+      SmartAllDialogType.attach,
+      SmartAllDialogType.loading,
+    });
+    if (!checkDialog || route.settings.name == SmartTag.systemDialog) {
       return;
     }
 
-    if (SmartDialog.config.isExistLoading) {
+    if (SmartDialog.config.loading.isExist) {
       DialogProxy.instance.dismiss(
         status: SmartStatus.loading,
         closeType: CloseType.route,

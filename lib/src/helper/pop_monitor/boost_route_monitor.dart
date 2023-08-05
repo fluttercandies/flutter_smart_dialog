@@ -54,7 +54,7 @@ class BoostRouteMonitor {
     bool shouldHandle = false;
     try {
       //handle loading
-      if (SmartDialog.config.isExistLoading) {
+      if (SmartDialog.config.loading.isExist) {
         return true;
       }
 

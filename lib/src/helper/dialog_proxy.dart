@@ -345,7 +345,7 @@ class DialogProxy {
     CloseType closeType = CloseType.normal,
   }) {
     if (status == SmartStatus.smart) {
-      var loading = config.isExistLoading;
+      var loading = config.loading.isExist;
 
       if (loading &&
           (tag == null || (dialogQueue.isEmpty && notifyQueue.isEmpty))) {

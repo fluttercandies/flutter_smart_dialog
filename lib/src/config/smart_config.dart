@@ -41,6 +41,7 @@ class SmartConfig {
     Set<SmartAllDialogType> dialogTypes = const {
       SmartAllDialogType.custom,
       SmartAllDialogType.attach,
+      SmartAllDialogType.loading,
     },
   }) {
     return DialogKit.instance.checkExist(tag: tag, dialogTypes: dialogTypes);

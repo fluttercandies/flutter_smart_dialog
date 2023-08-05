@@ -8,7 +8,7 @@ homepage: https://github.com/fluttercandies/flutter_smart_dialog
 # flutter pub publish --server=https://pub.dartlang.org
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.12.0 <4.0.0'
   flutter: ">=3.0.0"
 
 dependencies:

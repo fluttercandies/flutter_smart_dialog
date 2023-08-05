@@ -16,6 +16,7 @@ class SmartDialog {
   /// Compatible with older versions
   ///
   /// 兼容老版本
+  @Deprecated("5.0 will be deleted and is not recommended for continued use")
   static CompatibleSmartDialog compatible = CompatibleSmartDialog.instance;
 
   /// SmartDialog global config

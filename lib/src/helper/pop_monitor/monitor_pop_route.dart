@@ -22,7 +22,7 @@ class MonitorPopRoute with WidgetsBindingObserver {
   @override
   Future<bool> didPopRoute() async {
     //loading
-    if (SmartDialog.config.isExistLoading) {
+    if (SmartDialog.config.loading.isExist) {
       DialogProxy.instance.dismiss(
         status: SmartStatus.loading,
         closeType: CloseType.back,
