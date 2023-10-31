@@ -27,20 +27,21 @@ class DialogKit {
       return false;
     }
 
+    bool result = false;
     if (dialogTypes.contains(SmartAllDialogType.custom)) {
-      return SmartDialog.config.custom.isExist;
+      result = SmartDialog.config.custom.isExist;
     }
-    if (dialogTypes.contains(SmartAllDialogType.attach)) {
-      return SmartDialog.config.attach.isExist;
+    if (!result && dialogTypes.contains(SmartAllDialogType.attach)) {
+      result = SmartDialog.config.attach.isExist;
     }
-    if (dialogTypes.contains(SmartAllDialogType.notify)) {
-      return SmartDialog.config.notify.isExist;
+    if (!result && dialogTypes.contains(SmartAllDialogType.notify)) {
+      result = SmartDialog.config.notify.isExist;
     }
-    if (dialogTypes.contains(SmartAllDialogType.loading)) {
-      return SmartDialog.config.loading.isExist;
+    if (!result && dialogTypes.contains(SmartAllDialogType.loading)) {
+      result = SmartDialog.config.loading.isExist;
     }
-    if (dialogTypes.contains(SmartAllDialogType.toast)) {
-      return SmartDialog.config.toast.isExist;
+    if (!result && dialogTypes.contains(SmartAllDialogType.toast)) {
+      result = SmartDialog.config.toast.isExist;
     }
 
     return false;
