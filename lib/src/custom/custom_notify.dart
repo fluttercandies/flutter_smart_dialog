@@ -73,7 +73,7 @@ class CustomNotify extends BaseDialog {
             DebounceUtils.instance.banContinue(DebounceType.mask, true)) {
           return;
         }
-        dismiss(closeType: CloseType.mask);
+        dismiss(closeType: CloseType.mask, tag: notifyInfo.tag);
       },
     );
   }

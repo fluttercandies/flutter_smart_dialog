@@ -88,7 +88,7 @@ class CustomDialog extends BaseDialog {
             permanent) {
           return;
         }
-        dismiss(closeType: CloseType.mask);
+        dismiss(closeType: CloseType.mask, tag: dialogInfo.tag);
       },
     );
   }
@@ -168,7 +168,7 @@ class CustomDialog extends BaseDialog {
             permanent) {
           return;
         }
-        dismiss(closeType: CloseType.mask);
+        dismiss(closeType: CloseType.mask, tag: dialogInfo.tag);
       },
     );
   }
