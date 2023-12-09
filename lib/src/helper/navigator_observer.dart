@@ -15,15 +15,29 @@ class SmartNavigatorObserver extends NavigatorObserver {
   }
 
   @override
-  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {}
+  void didReplace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    RouteRecord.curRoute = newRoute;
+    RouteRecord.instance.replace(newRoute: newRoute, oldRoute: oldRoute);
+    _removeDialog(oldRoute);
+  }
 
   @override
-  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {}
+  void didRemove(Route<dynamic> route, Route<dynamic>? previousRoute) {
+    RouteRecord.instance.remove(route);
+    _removeDialog(route);
+  }
 
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) async {
     RouteRecord.curRoute = previousRoute;
     RouteRecord.instance.pop(route, previousRoute);
+    _removeDialog(route);
+  }
+
+  void _removeDialog(Route<dynamic>? route) {
+    if (route == null) {
+      return;
+    }
 
     var checkDialog = SmartDialog.config.checkExist(dialogTypes: {
       SmartAllDialogType.custom,

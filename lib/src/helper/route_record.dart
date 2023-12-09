@@ -24,8 +24,21 @@ class RouteRecord {
     routeQueue.add(route);
   }
 
+  void replace({Route<dynamic>? newRoute, Route<dynamic>? oldRoute}) {
+    if (DialogProxy.instance.dialogQueue.isEmpty) return;
+    routeQueue.remove(oldRoute);
+    if (newRoute != null) {
+      routeQueue.add(newRoute);
+    }
+  }
+
   void pop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     _appearDialog(route, previousRoute);
+    if (routeQueue.isEmpty) return;
+    routeQueue.remove(route);
+  }
+
+  void remove(Route<dynamic> route) {
     if (routeQueue.isEmpty) return;
     routeQueue.remove(route);
   }
