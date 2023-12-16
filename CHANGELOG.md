@@ -7,6 +7,7 @@
 * optimize 'show debug point'
 * fix [#142](https://github.com/fluttercandies/flutter_smart_dialog/issues/142)
 * add checkExist
+* fix [#162](https://github.com/fluttercandies/flutter_smart_dialog/issues/162)
 
 
 # [4.9.0]
