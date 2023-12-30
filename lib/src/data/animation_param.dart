@@ -110,7 +110,7 @@ class AnimationParam {
   });
 
   /// showXxx#alignment
-  AlignmentGeometry alignment;
+  Alignment alignment;
 
   /// showXxx#animationTime
   Duration animationTime;

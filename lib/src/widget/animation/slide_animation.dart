@@ -8,7 +8,7 @@ class SlideAnimation extends StatefulWidget {
     required this.child,
   }) : super(key: key);
 
-  final AlignmentGeometry alignment;
+  final Alignment alignment;
 
   final Widget child;
 
@@ -44,7 +44,7 @@ class _SlideAnimationState extends State<SlideAnimation>
 
   ///处理下内容widget动画方向
   void _dealContentAnimate() {
-    AlignmentGeometry? alignment = widget.alignment;
+    Alignment? alignment = widget.alignment;
     var offset = const Offset(0, 0);
 
     if (alignment == Alignment.bottomCenter ||

@@ -18,7 +18,7 @@ It is not difficult to locate the coordinates of the target widget; but it is ne
 
 ````dart
 void _attachLocation() {
-  attachDialog(BuildContext context, AlignmentGeometry alignment) async {
+  attachDialog(BuildContext context, Alignment alignment) async {
     SmartDialog.showAttach(
       targetContext: context,
       usePenetrate: true,

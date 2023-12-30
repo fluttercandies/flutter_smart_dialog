@@ -31,7 +31,7 @@ class SmartConfigCompatible {
   /// centerLeft：dialog位于屏幕左边，动画默认为位移动画，自左而右，
   ///
   /// centerRight：dialog位于屏幕左边，动画默认为位移动画，自右而左，
-  AlignmentGeometry alignment = Alignment.center;
+  Alignment alignment = Alignment.center;
 
   /// the animation duration can be adjusted by the [animationDuration] param；
   /// default（true），true（use the opacity animation），false（use the scale transition animation）

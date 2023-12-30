@@ -20,7 +20,7 @@ class CustomNotify extends BaseDialog {
 
   Future<T?> showNotify<T>({
     required Widget widget,
-    required AlignmentGeometry alignment,
+    required Alignment alignment,
     required bool usePenetrate,
     required bool useAnimation,
     required Duration animationTime,

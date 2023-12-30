@@ -10,7 +10,7 @@ class SizeAnimation extends StatelessWidget {
 
   final AnimationController controller;
 
-  final AlignmentGeometry alignment;
+  final Alignment alignment;
 
   final Widget child;
 

@@ -39,7 +39,7 @@ class AttachWidget extends StatefulWidget {
 
   final BeforeBuilder? beforeBuilder;
 
-  final AlignmentGeometry alignment;
+  final Alignment alignment;
 
   final Widget originChild;
 
@@ -215,7 +215,7 @@ class _AttachWidgetState extends State<AttachWidget> {
   }
 
   /// 计算attach alignment类型的偏移量
-  double _calculateDx(AlignmentGeometry alignment, Size selfSize) {
+  double _calculateDx(Alignment alignment, Size selfSize) {
     double offset = 0;
     var type = SmartDialog.config.attach.attachAlignmentType;
 

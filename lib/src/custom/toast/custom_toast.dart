@@ -20,7 +20,7 @@ class CustomToast extends BaseDialog {
   CustomToast({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
 
   Future<void> showToast({
-    required AlignmentGeometry alignment,
+    required Alignment alignment,
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
     required List<SmartNonAnimationType> nonAnimationTypes,

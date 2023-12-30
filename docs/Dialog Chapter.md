@@ -11,7 +11,7 @@
 ````dart
 void _dialogLocation() async {
   locationDialog({
-    required AlignmentGeometry alignment,
+    required Alignment alignment,
     double width = double.infinity,
     double height = double.infinity,
   }) async {
@@ -63,7 +63,7 @@ SmartDialog.show(
 ````dart
 void _dialogStack() async {
   stackDialog({
-    required AlignmentGeometry alignment,
+    required Alignment alignment,
     required String tag,
     double width = double.infinity,
     double height = double.infinity,

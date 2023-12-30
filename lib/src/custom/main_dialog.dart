@@ -29,7 +29,7 @@ class MainDialog {
 
   Future<T?> show<T>({
     required Widget widget,
-    required AlignmentGeometry alignment,
+    required Alignment alignment,
     required bool usePenetrate,
     required bool useAnimation,
     required Duration animationTime,
@@ -86,7 +86,7 @@ class MainDialog {
     required Widget widget,
     required TargetBuilder? targetBuilder,
     required ReplaceBuilder? replaceBuilder,
-    required AlignmentGeometry alignment,
+    required Alignment alignment,
     required bool usePenetrate,
     required bool useAnimation,
     required Duration animationTime,

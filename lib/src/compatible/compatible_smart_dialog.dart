@@ -94,7 +94,7 @@ class CompatibleSmartDialog {
   /// false（使用SmartDialog），此参数可彻底解决在弹窗上跳转页面问题
   Future<void> show({
     required Widget widget,
-    AlignmentGeometry? alignmentTemp,
+    Alignment? alignmentTemp,
     bool? clickBgDismissTemp,
     bool? isLoadingTemp,
     bool? isPenetrateTemp,
@@ -244,7 +244,7 @@ class CompatibleSmartDialog {
     required BuildContext? targetContext,
     required Widget widget,
     Offset? target,
-    AlignmentGeometry? alignmentTemp,
+    Alignment? alignmentTemp,
     bool? clickBgDismissTemp,
     bool? isLoadingTemp,
     bool? isPenetrateTemp,

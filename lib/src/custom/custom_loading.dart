@@ -20,7 +20,7 @@ class CustomLoading extends BaseDialog {
 
   Future<T?> showLoading<T>({
     required Widget widget,
-    required AlignmentGeometry alignment,
+    required Alignment alignment,
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
     required List<SmartNonAnimationType> nonAnimationTypes,

@@ -42,7 +42,7 @@ class SmartDialogWidget extends StatefulWidget {
   final VoidCallback onMask;
 
   /// 内容控件方向
-  final AlignmentGeometry alignment;
+  final Alignment alignment;
 
   /// 是否穿透背景,交互背景之后控件
   final bool usePenetrate;

@@ -88,7 +88,7 @@ class DialogProxy {
 
   Future<T?> show<T>({
     required Widget widget,
-    required AlignmentGeometry alignment,
+    required Alignment alignment,
     required bool usePenetrate,
     required bool useAnimation,
     required Duration animationTime,
@@ -145,7 +145,7 @@ class DialogProxy {
 
   Future<T?> showNotify<T>({
     required Widget widget,
-    required AlignmentGeometry alignment,
+    required Alignment alignment,
     required bool usePenetrate,
     required bool useAnimation,
     required Duration animationTime,
@@ -195,7 +195,7 @@ class DialogProxy {
     required Widget widget,
     required TargetBuilder? targetBuilder,
     required ReplaceBuilder? replaceBuilder,
-    required AlignmentGeometry alignment,
+    required Alignment alignment,
     required bool usePenetrate,
     required bool useAnimation,
     required Duration animationTime,
@@ -258,7 +258,7 @@ class DialogProxy {
   }
 
   Future<T?> showLoading<T>({
-    required AlignmentGeometry alignment,
+    required Alignment alignment,
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
     required List<SmartNonAnimationType> nonAnimationTypes,
@@ -294,7 +294,7 @@ class DialogProxy {
   }
 
   Future<void> showToast({
-    required AlignmentGeometry alignment,
+    required Alignment alignment,
     required bool clickMaskDismiss,
     required SmartAnimationType animationType,
     required List<SmartNonAnimationType> nonAnimationTypes,
