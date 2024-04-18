@@ -12,4 +12,12 @@ class SmartOverlayEntry extends OverlayEntry {
   void markNeedsBuild() {
     ViewUtils.addSafeUse(() => super.markNeedsBuild());
   }
+
+  @override
+  void remove() {
+    if(!mounted) {
+      return;
+    }
+    super.remove();
+  }
 }
