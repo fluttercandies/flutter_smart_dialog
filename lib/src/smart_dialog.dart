@@ -84,7 +84,7 @@ class SmartDialog {
   /// [bindWidget]：bind the dialog to a Widget, when the widget is not visible, the dialog is automatically hidden,
   /// and when the widget is visible, the dialog is automatically displayed; Applicable to PageView, TabView, etc., bind its sub-pages,
   /// and when switching pages, the dialog can also interact reasonably
-  /// Note: [bindPage] handles routing logic higher than [bindWidget]; if not expected, [bindPage] can be set to false
+  /// Note: The processing logic of [bindWidget] takes precedence over [bindPage]. When [bindWidget] is not null, [bindPage] will be automatically set to false.
   ///
   /// [ignoreArea]： dialog placeholder ignores area, supports up, down, left and right areas, set area, dialog will not occupy space in this area;
   /// Example: ignoreArea: Rect.fromLTRB (0,0,0,30), there will be 30 gaps at the bottom, and neither dialog nor mask will occupy this area;
@@ -145,7 +145,7 @@ class SmartDialog {
   ///
   /// [bindWidget]：将dialog与某个Widget绑定, 当该widget不可见时, dialog自动隐藏, 该widget可见时, dialog自动显示;
   /// 适用于PageView, TabView之类, 绑定其子页面, 切换页面时, dialog也能合理交互
-  /// 注意: [bindPage]处理路由逻辑高于[bindWidget]; 如不符合预期, 可将[bindPage]设置为false
+  /// 注意: [bindWidget]处理逻辑高于[bindPage], 当[bindWidget]不为null, [bindPage]将自动被设置为false
   ///
   /// [ignoreArea]：dialog占位忽略区域, 支持上下左右区域, 设置的区域, dialog将不会在此区域占位;
   /// 例: ignoreArea: Rect.fromLTRB(0, 0, 0, 30), 底部会有30空隙, dialog和mask都不会占位该区域;
@@ -209,7 +209,7 @@ class SmartDialog {
       keepSingle: keepSingle ?? false,
       permanent: permanent ?? false,
       useSystem: useSystem ?? false,
-      bindPage: bindPage ?? config.custom.bindPage,
+      bindPage: (bindPage ?? config.custom.bindPage) && bindWidget == null,
       bindWidget: bindWidget,
       ignoreArea: ignoreArea,
     );
@@ -300,7 +300,7 @@ class SmartDialog {
   /// [bindWidget]：bind the dialog to a Widget, when the widget is not visible, the dialog is automatically hidden,
   /// and when the widget is visible, the dialog is automatically displayed; Applicable to PageView, TabView, etc., bind its sub-pages,
   /// and when switching pages, the dialog can also interact reasonably
-  /// Note: [bindPage] handles routing logic higher than [bindWidget]; if not expected, [bindPage] can be set to false
+  /// Note: The processing logic of [bindWidget] takes precedence over [bindPage]. When [bindWidget] is not null, [bindPage] will be automatically set to false.
   /// -------------------------------------------------------------------------------
   ///
   /// 定位弹窗
@@ -376,7 +376,7 @@ class SmartDialog {
   ///
   /// [bindWidget]：将dialog与某个Widget绑定, 当该widget不可见时, dialog自动隐藏, 该widget可见时, dialog自动显示;
   /// 适用于PageView, TabView之类, 绑定其子页面, 切换页面时, dialog也能合理交互
-  /// 注意: [bindPage]处理路由逻辑高于[bindWidget]; 如不符合预期, 可将[bindPage]设置为false
+  /// 注意: [bindWidget]处理路由逻辑高于[bindPage], 当[bindWidget]不为null, [bindPage]将自动被设置为false
   static Future<T?> showAttach<T>({
     required BuildContext? targetContext,
     required WidgetBuilder builder,
@@ -451,7 +451,7 @@ class SmartDialog {
       keepSingle: keepSingle ?? false,
       permanent: permanent ?? false,
       useSystem: useSystem ?? false,
-      bindPage: bindPage ?? config.attach.bindPage,
+      bindPage: (bindPage ?? config.attach.bindPage) && bindWidget == null,
       bindWidget: bindWidget,
     );
   }

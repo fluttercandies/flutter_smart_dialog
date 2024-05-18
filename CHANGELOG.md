@@ -10,6 +10,7 @@
 * fix [#162](https://github.com/fluttercandies/flutter_smart_dialog/issues/162)
 * break change: "AlignmentGeometry" adjust to "Alignment"
 * fix [#185](https://github.com/fluttercandies/flutter_smart_dialog/issues/185)
+* optimize bindWidget, when bindWidget is not null, bindPage will be automatically set to false.
 
 
 # [4.9.0]
