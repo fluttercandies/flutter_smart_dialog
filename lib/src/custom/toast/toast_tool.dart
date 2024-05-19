@@ -23,19 +23,23 @@ class ToastTool {
       return;
     }
 
+    if (closeAll) {
+      clearAllToast();
+      SmartDialog.config.toast.isExist = false;
+      return;
+    }
+
     var curToast = toastQueue.first;
+    toastQueue.remove(curToast);
+    if (toastQueue.isEmpty) {
+      SmartDialog.config.toast.isExist = false;
+    }
+
     await curToast.mainDialog.dismiss();
-    await Future.delayed(SmartDialog.config.toast.intervalTime);
     if (curToast.mainDialog.overlayEntry.mounted) {
       curToast.mainDialog.overlayEntry.remove();
     }
-
-    toastQueue.remove(curToast);
-    if (closeAll) {
-      clearAllToast();
-    }
-    if (toastQueue.length > 1) return;
-    SmartDialog.config.toast.isExist = false;
+    await Future.delayed(SmartDialog.config.toast.intervalTime);
   }
 
   void clearAllToast() {

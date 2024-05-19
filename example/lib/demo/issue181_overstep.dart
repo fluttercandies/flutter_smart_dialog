@@ -101,7 +101,7 @@ class _TestingDialogState extends State<_TestingDialog>
                     InkWell(
                       onTap: () {
                         SmartDialog.dismiss();
-                        print("111111111111");
+                        debugPrint("111111111111");
                       },
                       child: const Row(children: [
                         Icon(Icons.close),
@@ -111,7 +111,7 @@ class _TestingDialogState extends State<_TestingDialog>
                     InkWell(
                       onTap: () {
                         SmartDialog.dismiss();
-                        print("2222222222222");
+                        debugPrint("2222222222222");
                       },
                       child: const Row(children: [
                         Icon(Icons.close),

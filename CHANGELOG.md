@@ -11,6 +11,8 @@
 * break change: "AlignmentGeometry" adjust to "Alignment"
 * fix [#185](https://github.com/fluttercandies/flutter_smart_dialog/issues/185)
 * optimize bindWidget, when bindWidget is not null, bindPage will be automatically set to false.
+* Reconstruct the implementation of initialization (fix [#109](https://github.com/fluttercandies/flutter_smart_dialog/issues/109), [#183](https://github.com/fluttercandies/flutter_smart_dialog/issues/183))
+
 
 
 # [4.9.0]

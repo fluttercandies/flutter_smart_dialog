@@ -231,6 +231,8 @@ class MainDialog {
       awaitOverType: SmartAwaitOverType.dialogDismiss,
       result: result,
     );
+
+    DialogProxy.instance.smartOverlayController.dismiss();
   }
 
   Widget getWidget() => Offstage(offstage: !visible, child: _widget);

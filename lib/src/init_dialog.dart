@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/navigator_observer.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/default/notify_alter.dart';
 import 'package:flutter_smart_dialog/src/widget/default/notify_error.dart';
 import 'package:flutter_smart_dialog/src/widget/default/notify_failure.dart';
+import 'package:flutter_smart_dialog/src/widget/helper/smart_overlay.dart';
 
 import 'helper/dialog_proxy.dart';
 import 'helper/pop_monitor/boost_route_monitor.dart';
@@ -28,7 +28,6 @@ class FlutterSmartDialog extends StatefulWidget {
     this.notifyStyle,
     this.styleBuilder,
     this.initType,
-    this.useDebugModel,
   }) : super(key: key);
 
   final Widget? child;
@@ -47,9 +46,6 @@ class FlutterSmartDialog extends StatefulWidget {
 
   ///inti type
   final Set<SmartInitType>? initType;
-
-  ///if you set 'useDebugModel' to true, the SmartDialog function will be closed
-  final bool? useDebugModel;
 
   @override
   State<FlutterSmartDialog> createState() => _FlutterSmartDialogState();
@@ -73,8 +69,6 @@ class FlutterSmartDialog extends StatefulWidget {
     FlutterSmartStyleBuilder? styleBuilder,
     //init type
     Set<SmartInitType>? initType,
-    //if you set 'useDebugModel' to true, the SmartDialog function will be closed
-    bool? useDebugModel,
   }) {
     MonitorPopRoute.instance;
 
@@ -86,7 +80,6 @@ class FlutterSmartDialog extends StatefulWidget {
               notifyStyle: notifyStyle,
               styleBuilder: styleBuilder,
               initType: initType,
-              useDebugModel: useDebugModel,
               child: child,
             )
           : builder(
@@ -97,7 +90,6 @@ class FlutterSmartDialog extends StatefulWidget {
                 notifyStyle: notifyStyle,
                 styleBuilder: styleBuilder,
                 initType: initType,
-                useDebugModel: useDebugModel,
                 child: child,
               ),
             );
@@ -108,7 +100,6 @@ class FlutterSmartDialog extends StatefulWidget {
 class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
   late FlutterSmartStyleBuilder styleBuilder;
   late Set<SmartInitType> initType;
-  late bool debugModel;
 
   @override
   void initState() {
@@ -165,51 +156,21 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
       );
     }
 
-    // debug model
-    debugModel = (widget.useDebugModel ?? false) && kDebugMode;
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (debugModel) {
-      return styleBuilder(widget.child ?? Container());
-    }
+    return styleBuilder(Stack(children: [
+      // main widget
+      widget.child ?? const SizedBox.shrink(),
 
-    return styleBuilder(
-      Overlay(initialEntries: [
-        //main layout
-        OverlayEntry(
-          builder: (BuildContext context) {
-            if (initType.contains(SmartInitType.custom)) {
-              DialogProxy.contextCustom = context;
-            }
-
-            if (initType.contains(SmartInitType.attach)) {
-              DialogProxy.contextAttach = context;
-            }
-
-            if (initType.contains(SmartInitType.notify)) {
-              DialogProxy.contextNotify = context;
-            }
-
-            if (initType.contains(SmartInitType.toast)) {
-              DialogProxy.contextToast = context;
-            }
-
-            return widget.child ?? Container();
-          },
-        ),
-
-        // if (initType.contains(SmartInitType.notify))
-        //   DialogProxy.instance.entryNotify,
-
-        //provided separately for loading
-        if (initType.contains(SmartInitType.loading))
-          DialogProxy.instance.entryLoading,
-      ]),
-    );
+      // dialog
+      SmartOverlay(
+        initType: initType,
+        controller: DialogProxy.instance.smartOverlayController,
+      )
+    ]));
   }
 
   BuildContext? getNavigatorContext(Navigator navigator) {

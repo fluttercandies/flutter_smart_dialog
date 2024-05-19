@@ -28,6 +28,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
+  # 用于处理widget是否可见检测 https://pub.flutter-io.cn/packages/visibility_detector
+  visibility_detector:
   # mac
   flutter_smart_dialog:
     path: ../
