@@ -263,18 +263,11 @@ class CustomDialog extends BaseDialog {
 
     // insert the dialog carrier into the page
     ViewUtils.addSafeUse(() {
-      NotifyInfo? firstNotify =
-          proxy.notifyQueue.isNotEmpty ? proxy.notifyQueue.first : null;
       BuildContext overlayContext = dialogInfo.type == DialogType.custom
-          ? DialogProxy.contextCustom
-          : DialogProxy.contextAttach;
+          ? DialogProxy.timelyContextCustom
+          : DialogProxy.timelyContextAttach;
       try {
-        overlay(overlayContext).insert(
-          overlayEntry,
-          below: firstNotify != null
-              ? firstNotify.dialog.overlayEntry
-              : proxy.entryLoading,
-        );
+        overlay(overlayContext).insert(overlayEntry, below: proxy.entryNotify);
       } catch (e) {
         overlay(overlayContext).insert(overlayEntry);
       }

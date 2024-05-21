@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../flutter_smart_dialog.dart';
@@ -25,11 +26,17 @@ class SmartOverlay extends StatefulWidget {
 class _SmartOverlayState extends State<SmartOverlay> {
   bool visible = false;
 
+  // bool _visible = false;
+  // set visible(bool value) => _visible = value;
+  // bool get visible => _visible || !kDebugMode;
+
   @override
   void initState() {
     widget.controller?._setListener(
       onShow: () {
-        setState(() => visible = true);
+        setState(() {
+          visible = true;
+        });
       },
       onDismiss: () => widgetsBinding.addPostFrameCallback((_) {
         setState(() {
@@ -40,6 +47,11 @@ class _SmartOverlayState extends State<SmartOverlay> {
             SmartAllDialogType.loading,
             SmartAllDialogType.toast,
           });
+
+          if (!visible) {
+            DialogProxy.instance.entryNotify.remove();
+            DialogProxy.instance.entryLoading.remove();
+          }
         });
       }),
     );
@@ -49,7 +61,6 @@ class _SmartOverlayState extends State<SmartOverlay> {
   @override
   Widget build(BuildContext context) {
     if (!visible) {
-      DialogProxy.instance.entryLoading.remove();
       return const SizedBox.shrink();
     }
 
@@ -76,6 +87,9 @@ class _SmartOverlayState extends State<SmartOverlay> {
             return const SizedBox.shrink();
           },
         ),
+
+      if (visible && widget.initType.contains(SmartInitType.notify))
+        DialogProxy.instance.entryNotify,
 
       // loading
       if (visible && widget.initType.contains(SmartInitType.loading))

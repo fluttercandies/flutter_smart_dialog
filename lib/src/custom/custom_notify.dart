@@ -140,12 +140,12 @@ class CustomNotify extends BaseDialog {
     // insert the dialog carrier into the page
     ViewUtils.addSafeUse(() {
       try {
-        overlay(DialogProxy.contextNotify).insert(
+        overlay(DialogProxy.timelyContextNotify).insert(
           overlayEntry,
           below: proxy.entryLoading,
         );
       } catch (e) {
-        overlay(DialogProxy.contextNotify).insert(overlayEntry);
+        overlay(DialogProxy.timelyContextNotify).insert(overlayEntry);
       }
     });
   }

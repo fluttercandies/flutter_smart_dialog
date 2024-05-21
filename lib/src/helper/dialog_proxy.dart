@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
@@ -46,6 +47,7 @@ enum DialogType {
 class DialogProxy {
   late SmartConfig config;
   late SmartOverlayEntry entryLoading;
+  late SmartOverlayEntry entryNotify;
   late Queue<DialogInfo> dialogQueue;
   late Queue<NotifyInfo> notifyQueue;
   late CustomLoading loadingWidget;
@@ -59,6 +61,15 @@ class DialogProxy {
   static late BuildContext contextAttach;
   static late BuildContext contextNotify;
   static late BuildContext contextToast;
+
+  static BuildContext get timelyContextCustom => contextCustom;
+
+  static BuildContext get timelyContextAttach => contextAttach;
+
+  static BuildContext get timelyContextNotify => contextNotify;
+
+  static BuildContext get timelyContextToast => contextToast;
+
   static BuildContext? contextNavigator;
 
   ///set default loading widget
@@ -83,6 +94,11 @@ class DialogProxy {
         return loadingWidget.getWidget();
       });
       loadingWidget = CustomLoading(overlayEntry: entryLoading);
+    }
+
+
+    if (initType.contains(SmartInitType.notify)) {
+      entryNotify = SmartOverlayEntry(builder: (_) => const SizedBox.shrink());
     }
   }
 
@@ -342,8 +358,17 @@ class DialogProxy {
     );
   }
 
+  Completer<void>? showCompleter;
+
   Future<void> beforeShow() async {
+    if (showCompleter?.isCompleted == false) {
+      showCompleter?.complete();
+      showCompleter = null;
+    }
+
+    showCompleter = Completer();
     await smartOverlayController.show();
+    showCompleter?.complete();
   }
 
   Future<void>? dismiss<T>({
@@ -352,7 +377,11 @@ class DialogProxy {
     T? result,
     bool force = false,
     CloseType closeType = CloseType.normal,
-  }) {
+  }) async {
+    if (showCompleter?.isCompleted == false) {
+      await showCompleter?.future;
+    }
+
     if (status == SmartStatus.smart) {
       var loading = config.loading.isExist;
 
@@ -408,7 +437,7 @@ class DialogProxy {
     }
 
     DialogType? type = _convertEnum(status);
-    if (type == null) return null;
+    if (type == null) return;
     return CustomDialog.dismiss<T>(
       type: type,
       tag: tag,

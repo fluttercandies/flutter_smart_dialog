@@ -176,6 +176,21 @@ class SmartDialogPage extends StatelessWidget {
   }
 
   void _showNotify() async {
-    SmartDialog.showNotify(msg: '请求成功', notifyType: NotifyType.failure);
+    Alignment getAlignment() {
+      var random = Random().nextInt(100) % 5;
+      var alignment = Alignment.topCenter;
+      if (random == 0) alignment = Alignment.topCenter;
+      if (random == 1) alignment = Alignment.centerLeft;
+      if (random == 2) alignment = Alignment.center;
+      if (random == 3) alignment = Alignment.centerRight;
+      if (random == 4) alignment = Alignment.bottomCenter;
+      return alignment;
+    }
+
+    SmartDialog.showNotify(
+      msg: '请求成功: ${Random().nextInt(999)}',
+      notifyType: NotifyType.success,
+      alignment: getAlignment(),
+    );
   }
 }
