@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/src/widget/helper/smart_overlay_entry.dart';
 
 import '../../../flutter_smart_dialog.dart';
 import '../../helper/dialog_proxy.dart';
@@ -66,7 +66,7 @@ class _SmartOverlayState extends State<SmartOverlay> {
 
     return Overlay(initialEntries: [
       if (visible)
-        OverlayEntry(
+        SmartOverlayEntry(
           builder: (BuildContext context) {
             if (widget.initType.contains(SmartInitType.custom)) {
               DialogProxy.contextCustom = context;

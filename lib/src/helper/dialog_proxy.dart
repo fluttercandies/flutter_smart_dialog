@@ -96,7 +96,6 @@ class DialogProxy {
       loadingWidget = CustomLoading(overlayEntry: entryLoading);
     }
 
-
     if (initType.contains(SmartInitType.notify)) {
       entryNotify = SmartOverlayEntry(builder: (_) => const SizedBox.shrink());
     }
@@ -127,7 +126,7 @@ class DialogProxy {
     required BuildContext? bindWidget,
     required Rect? ignoreArea,
   }) async {
-    await beforeShow();
+    await _beforeShow();
     CustomDialog? dialog;
     var entry = SmartOverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
@@ -180,7 +179,7 @@ class DialogProxy {
     required bool keepSingle,
     required SmartBackType backType,
   }) async {
-    await beforeShow();
+    await _beforeShow();
     CustomNotify? dialog;
     var entry = SmartOverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
@@ -238,7 +237,7 @@ class DialogProxy {
     required bool bindPage,
     required BuildContext? bindWidget,
   }) async {
-    await beforeShow();
+    await _beforeShow();
     CustomDialog? dialog;
     var entry = SmartOverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
@@ -293,7 +292,7 @@ class DialogProxy {
     required bool backDismiss,
     required Widget widget,
   }) async {
-    await beforeShow();
+    await _beforeShow();
     return loadingWidget.showLoading<T>(
       alignment: alignment,
       clickMaskDismiss: clickMaskDismiss,
@@ -332,7 +331,7 @@ class DialogProxy {
     required SmartToastType displayType,
     required Widget widget,
   }) async {
-    await beforeShow();
+    await _beforeShow();
     CustomToast? toast;
     var entry = SmartOverlayEntry(
       builder: (BuildContext context) => toast!.getWidget(),
@@ -358,17 +357,20 @@ class DialogProxy {
     );
   }
 
-  Completer<void>? showCompleter;
+  Completer<void>? _showCompleter;
 
-  Future<void> beforeShow() async {
-    if (showCompleter?.isCompleted == false) {
-      showCompleter?.complete();
-      showCompleter = null;
-    }
-
-    showCompleter = Completer();
+  Future<void> _beforeShow() async {
+    _beforeShowComplete();
+    _showCompleter = Completer();
     await smartOverlayController.show();
-    showCompleter?.complete();
+    _beforeShowComplete();
+  }
+
+  void _beforeShowComplete() {
+    if (_showCompleter?.isCompleted == false) {
+      _showCompleter?.complete();
+      _showCompleter = null;
+    }
   }
 
   Future<void>? dismiss<T>({
@@ -378,8 +380,8 @@ class DialogProxy {
     bool force = false,
     CloseType closeType = CloseType.normal,
   }) async {
-    if (showCompleter?.isCompleted == false) {
-      await showCompleter?.future;
+    if (_showCompleter?.isCompleted == false) {
+      await _showCompleter?.future;
     }
 
     if (status == SmartStatus.smart) {

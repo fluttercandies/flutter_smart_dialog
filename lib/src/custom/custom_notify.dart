@@ -10,8 +10,8 @@ import '../config/enum_config.dart';
 import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
 import '../data/notify_info.dart';
-import '../smart_dialog.dart';
 import '../kit/debounce_utils.dart';
+import '../smart_dialog.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
 ///main function : notify dialog
