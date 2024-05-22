@@ -47,11 +47,6 @@ class _SmartOverlayState extends State<SmartOverlay> {
             SmartAllDialogType.loading,
             SmartAllDialogType.toast,
           });
-
-          if (!visible) {
-            DialogProxy.instance.entryNotify.remove();
-            DialogProxy.instance.entryLoading.remove();
-          }
         });
       }),
     );
@@ -61,6 +56,8 @@ class _SmartOverlayState extends State<SmartOverlay> {
   @override
   Widget build(BuildContext context) {
     if (!visible) {
+      DialogProxy.instance.entryNotify.remove();
+      DialogProxy.instance.entryLoading.remove();
       return const SizedBox.shrink();
     }
 
