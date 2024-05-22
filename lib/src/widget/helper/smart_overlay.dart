@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/widget/helper/smart_overlay_entry.dart';
 
@@ -24,32 +25,30 @@ class SmartOverlay extends StatefulWidget {
 }
 
 class _SmartOverlayState extends State<SmartOverlay> {
-  bool visible = false;
-
-  // bool _visible = false;
-  // set visible(bool value) => _visible = value;
-  // bool get visible => _visible || !kDebugMode;
+  bool visible = !kDebugMode;
 
   @override
   void initState() {
-    widget.controller?._setListener(
-      onShow: () {
-        setState(() {
-          visible = true;
-        });
-      },
-      onDismiss: () => widgetsBinding.addPostFrameCallback((_) {
-        setState(() {
-          visible = SmartDialog.config.checkExist(dialogTypes: {
-            SmartAllDialogType.custom,
-            SmartAllDialogType.attach,
-            SmartAllDialogType.notify,
-            SmartAllDialogType.loading,
-            SmartAllDialogType.toast,
+    if (kDebugMode) {
+      widget.controller?._setListener(
+        onShow: () {
+          setState(() {
+            visible = true;
           });
-        });
-      }),
-    );
+        },
+        onDismiss: () => widgetsBinding.addPostFrameCallback((_) {
+          setState(() {
+            visible = SmartDialog.config.checkExist(dialogTypes: {
+              SmartAllDialogType.custom,
+              SmartAllDialogType.attach,
+              SmartAllDialogType.notify,
+              SmartAllDialogType.loading,
+              SmartAllDialogType.toast,
+            });
+          });
+        }),
+      );
+    }
     super.initState();
   }
 
