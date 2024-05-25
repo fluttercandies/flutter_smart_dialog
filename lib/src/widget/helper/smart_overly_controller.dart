@@ -7,6 +7,10 @@ class SmartOverlayController {
 
   // show
   Future<void> show() async {
+    if (_onShow == null) {
+      return;
+    }
+
     _onShow?.call();
     var completer = Completer();
     widgetsBinding.addPostFrameCallback((timeStamp) {
@@ -17,6 +21,10 @@ class SmartOverlayController {
 
   // dismiss
   void dismiss() {
+    if (_onDismiss == null) {
+      return;
+    }
+
     _onDismiss?.call();
   }
 
