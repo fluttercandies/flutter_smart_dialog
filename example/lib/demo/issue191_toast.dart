@@ -27,5 +27,14 @@ class MyApp extends StatelessWidget {
     await Future.delayed(const Duration(seconds: 1));
     await SmartDialog.dismiss(status: SmartStatus.loading);
     SmartDialog.showToast('test toast');
+    // SmartDialog.show(
+    //   builder: (_) {
+    //     return Container(
+    //       color: Colors.white,
+    //       padding: const EdgeInsets.all(30),
+    //       child: const Text('test dialog'),
+    //     );
+    //   },
+    // );
   }
 }

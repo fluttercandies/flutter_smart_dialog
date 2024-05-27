@@ -233,6 +233,9 @@ class MainDialog {
     );
 
     DialogProxy.instance.smartOverlayController.dismiss();
+
+    // safety await
+    await Future.delayed(const Duration(milliseconds: 20));
   }
 
   Widget getWidget() => Offstage(offstage: !visible, child: _widget);
