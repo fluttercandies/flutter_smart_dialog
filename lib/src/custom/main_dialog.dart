@@ -232,7 +232,7 @@ class MainDialog {
       result: result,
     );
 
-    DialogProxy.instance.smartOverlayController.dismiss();
+    await DialogProxy.instance.smartOverlayController.dismiss();
 
     // safety await
     await Future.delayed(const Duration(milliseconds: 20));

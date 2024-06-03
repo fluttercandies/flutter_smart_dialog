@@ -2,8 +2,8 @@ part of 'smart_overlay.dart';
 
 /// SmartOverlay Controller
 class SmartOverlayController {
-  VoidCallback? _onShow;
-  VoidCallback? _onDismiss;
+  FutureVoidCallback? _onShow;
+  FutureVoidCallback? _onDismiss;
 
   // show
   Future<void> show() async {
@@ -11,26 +11,21 @@ class SmartOverlayController {
       return;
     }
 
-    _onShow?.call();
-    var completer = Completer();
-    widgetsBinding.addPostFrameCallback((timeStamp) {
-      completer.complete();
-    });
-    await completer.future;
+    await _onShow?.call();
   }
 
   // dismiss
-  void dismiss() {
+  Future<void> dismiss() async {
     if (_onDismiss == null) {
       return;
     }
 
-    _onDismiss?.call();
+    await _onDismiss?.call();
   }
 
   void _setListener({
-    VoidCallback? onShow,
-    VoidCallback? onDismiss,
+    FutureVoidCallback? onShow,
+    FutureVoidCallback? onDismiss,
   }) {
     _onShow = onShow;
     _onDismiss = onDismiss;

@@ -6,6 +6,7 @@ import 'package:flutter_smart_dialog/src/widget/helper/smart_overlay_entry.dart'
 
 import '../../../flutter_smart_dialog.dart';
 import '../../helper/dialog_proxy.dart';
+import '../../kit/typedef.dart';
 import '../../kit/view_utils.dart';
 
 part 'smart_overly_controller.dart';
@@ -25,31 +26,58 @@ class SmartOverlay extends StatefulWidget {
 }
 
 class _SmartOverlayState extends State<SmartOverlay> {
-  bool visible = !kDebugMode;
+  bool isDebugModel = /*false*/ kDebugMode;
+  bool visible = true;
 
   @override
   void initState() {
-    if (kDebugMode) {
-      widget.controller?._setListener(
-        onShow: () {
-          setState(() {
-            visible = true;
-          });
-        },
-        onDismiss: () => widgetsBinding.addPostFrameCallback((_) {
-          setState(() {
-            visible = SmartDialog.config.checkExist(dialogTypes: {
-              SmartAllDialogType.custom,
-              SmartAllDialogType.attach,
-              SmartAllDialogType.notify,
-              SmartAllDialogType.loading,
-              SmartAllDialogType.toast,
-            });
-          });
-        }),
-      );
+    visible = !isDebugModel;
+    if (isDebugModel) {
+      widget.controller?._setListener(onShow: onShow, onDismiss: onDismiss);
     }
     super.initState();
+  }
+
+  Future<void> onShow() async {
+    if (visible) {
+      return;
+    }
+
+    var completer = Completer();
+    ViewUtils.addSafeUse(() {
+      setState(() => visible = true);
+      completer.complete();
+    });
+    await completer.future;
+
+    completer = Completer();
+    widgetsBinding.addPostFrameCallback((timeStamp) {
+      completer.complete();
+    });
+    await completer.future;
+  }
+
+  Future<void> onDismiss() async {
+    if (!visible) {
+      return;
+    }
+
+    var dialogExist = SmartDialog.config.checkExist(dialogTypes: {
+      SmartAllDialogType.custom,
+      SmartAllDialogType.attach,
+      SmartAllDialogType.notify,
+      SmartAllDialogType.loading,
+      SmartAllDialogType.toast,
+    });
+
+    if (!dialogExist) {
+      var completer = Completer();
+      ViewUtils.addSafeUse(() {
+        setState(() => visible = false);
+        completer.complete();
+      });
+      await completer.future;
+    }
   }
 
   @override

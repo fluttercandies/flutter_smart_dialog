@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       },
     );
 
-    // await Future.delayed(const Duration(milliseconds: 1));
+    // await Future.delayed(const Duration(milliseconds: 1000));
     SmartDialog.dismiss();
   }
 }

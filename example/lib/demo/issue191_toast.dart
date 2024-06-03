@@ -23,10 +23,32 @@ class MyApp extends StatelessWidget {
   }
 
   void _show() async {
-    SmartDialog.showLoading();
-    await Future.delayed(const Duration(seconds: 1));
-    await SmartDialog.dismiss(status: SmartStatus.loading);
-    SmartDialog.showToast('test toast');
+    SmartDialog.showLoading<void>(msg: "test one");
+    SmartDialog.dismiss<void>(status: SmartStatus.loading);
+    SmartDialog.show<void>(
+      clickMaskDismiss: false,
+      builder: (_) {
+        Widget child = Container(
+          height: 80,
+          width: 180,
+          color: Colors.black,
+          alignment: Alignment.center,
+          child: const Text(
+            'test two',
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+        return child;
+      },
+      displayTime: const Duration(milliseconds: 2000),
+      keepSingle: true,
+      backDismiss: false,
+    );
+
+    // SmartDialog.showLoading();
+    // await Future.delayed(const Duration(seconds: 1));
+    // await SmartDialog.dismiss(status: SmartStatus.loading);
+    // SmartDialog.showToast('test toast');
     // SmartDialog.show(
     //   builder: (_) {
     //     return Container(

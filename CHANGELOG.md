@@ -1,3 +1,10 @@
+# [4.9.7+x]
+* optimize bindWidget, when bindWidget is not null, bindPage will be automatically set to false.
+* Reconstruct the implementation of initialization
+* Show Debug Paint: fix [#109](https://github.com/fluttercandies/flutter_smart_dialog/issues/109), [#115](https://github.com/fluttercandies/flutter_smart_dialog/issues/115)
+* fix [#183](https://github.com/fluttercandies/flutter_smart_dialog/issues/183)
+* 4.9.7 bugfix: [#188](https://github.com/fluttercandies/flutter_smart_dialog/issues/188), [#189](https://github.com/fluttercandies/flutter_smart_dialog/issues/189),   [#190](https://github.com/fluttercandies/flutter_smart_dialog/issues/190),  [#191](https://github.com/fluttercandies/flutter_smart_dialog/issues/191),  [#192](https://github.com/fluttercandies/flutter_smart_dialog/issues/192)
+
 # [4.9.x]
 * fix [#132](https://github.com/fluttercandies/flutter_smart_dialog/issues/132)
 * optimize nonAnimationTypes
@@ -10,10 +17,6 @@
 * fix [#162](https://github.com/fluttercandies/flutter_smart_dialog/issues/162)
 * break change: "AlignmentGeometry" adjust to "Alignment"
 * fix [#185](https://github.com/fluttercandies/flutter_smart_dialog/issues/185)
-* optimize bindWidget, when bindWidget is not null, bindPage will be automatically set to false.
-* Reconstruct the implementation of initialization (fix [#109](https://github.com/fluttercandies/flutter_smart_dialog/issues/109), [#183](https://github.com/fluttercandies/flutter_smart_dialog/issues/183))
-* fix [#188](https://github.com/fluttercandies/flutter_smart_dialog/issues/188), [#189](https://github.com/fluttercandies/flutter_smart_dialog/issues/189)
-
 
 # [4.9.0]
 * Breaking Change
