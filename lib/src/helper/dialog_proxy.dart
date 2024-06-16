@@ -8,7 +8,6 @@ import 'package:flutter_smart_dialog/src/custom/custom_notify.dart';
 import 'package:flutter_smart_dialog/src/custom/toast/custom_toast.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/data/notify_style.dart';
-import 'package:flutter_smart_dialog/src/kit/log.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/helper/toast_helper.dart';
 
@@ -19,7 +18,7 @@ import '../data/notify_info.dart';
 import '../init_dialog.dart';
 import '../widget/helper/smart_overlay.dart';
 import '../widget/helper/smart_overlay_entry.dart';
-import 'ShowHelper.dart';
+import 'show_helper.dart';
 
 enum CloseType {
   // back event
