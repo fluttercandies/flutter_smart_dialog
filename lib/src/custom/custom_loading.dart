@@ -102,6 +102,7 @@ class CustomLoading extends BaseDialog {
     }
     _canDismissCallback = () => _realDismiss(closeType: closeType);
     if (_canDismiss) {
+      _canDismiss = false;
       SmartDialog.config.loading.isExist = false;
       await _canDismissCallback?.call();
     }

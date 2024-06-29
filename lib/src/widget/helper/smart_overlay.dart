@@ -28,6 +28,7 @@ class SmartOverlay extends StatefulWidget {
 class _SmartOverlayState extends State<SmartOverlay> {
   bool isDebugModel = /*false*/ kDebugMode;
   bool visible = true;
+  Completer? showCompleter;
 
   @override
   void initState() {
@@ -42,6 +43,8 @@ class _SmartOverlayState extends State<SmartOverlay> {
     if (visible) {
       return;
     }
+    if (showCompleter?.isCompleted == false) showCompleter?.complete();
+    showCompleter = Completer();
 
     var completer = Completer();
     ViewUtils.addSafeUse(() {
@@ -50,11 +53,11 @@ class _SmartOverlayState extends State<SmartOverlay> {
     });
     await completer.future;
 
-    completer = Completer();
+    // await show isExist
     widgetsBinding.addPostFrameCallback((timeStamp) {
-      completer.complete();
+      if (showCompleter?.isCompleted == false) showCompleter?.complete();
     });
-    await completer.future;
+    await showCompleter?.future;
   }
 
   Future<void> onDismiss() async {
@@ -62,6 +65,7 @@ class _SmartOverlayState extends State<SmartOverlay> {
       return;
     }
 
+    await showCompleter?.future;
     var dialogExist = SmartDialog.config.checkExist(dialogTypes: {
       SmartAllDialogType.custom,
       SmartAllDialogType.attach,
@@ -89,34 +93,33 @@ class _SmartOverlayState extends State<SmartOverlay> {
     }
 
     return Overlay(initialEntries: [
-      if (visible)
-        SmartOverlayEntry(
-          builder: (BuildContext context) {
-            if (widget.initType.contains(SmartInitType.custom)) {
-              DialogProxy.contextCustom = context;
-            }
+      SmartOverlayEntry(
+        builder: (BuildContext context) {
+          if (widget.initType.contains(SmartInitType.custom)) {
+            DialogProxy.contextCustom = context;
+          }
 
-            if (widget.initType.contains(SmartInitType.attach)) {
-              DialogProxy.contextAttach = context;
-            }
+          if (widget.initType.contains(SmartInitType.attach)) {
+            DialogProxy.contextAttach = context;
+          }
 
-            if (widget.initType.contains(SmartInitType.notify)) {
-              DialogProxy.contextNotify = context;
-            }
+          if (widget.initType.contains(SmartInitType.notify)) {
+            DialogProxy.contextNotify = context;
+          }
 
-            if (widget.initType.contains(SmartInitType.toast)) {
-              DialogProxy.contextToast = context;
-            }
+          if (widget.initType.contains(SmartInitType.toast)) {
+            DialogProxy.contextToast = context;
+          }
 
-            return const SizedBox.shrink();
-          },
-        ),
+          return const SizedBox.shrink();
+        },
+      ),
 
-      if (visible && widget.initType.contains(SmartInitType.notify))
+      if (widget.initType.contains(SmartInitType.notify))
         DialogProxy.instance.entryNotify,
 
       // loading
-      if (visible && widget.initType.contains(SmartInitType.loading))
+      if (widget.initType.contains(SmartInitType.loading))
         DialogProxy.instance.entryLoading,
     ]);
   }
