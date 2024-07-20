@@ -14,6 +14,11 @@ class MyApp extends StatelessWidget {
       home: const SmartDialogPage(),
       navigatorObservers: [FlutterSmartDialog.observer],
       builder: FlutterSmartDialog.init(),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple, brightness: Brightness.dark),
+        brightness: Brightness.dark,
+        useMaterial3: true,
+      ),
     );
   }
 }

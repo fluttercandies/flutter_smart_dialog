@@ -4,6 +4,7 @@
 * Show Debug Paint: fix [#109](https://github.com/fluttercandies/flutter_smart_dialog/issues/109), [#115](https://github.com/fluttercandies/flutter_smart_dialog/issues/115)
 * fix [#183](https://github.com/fluttercandies/flutter_smart_dialog/issues/183)
 * 4.9.7 bugfix: [#188](https://github.com/fluttercandies/flutter_smart_dialog/issues/188), [#189](https://github.com/fluttercandies/flutter_smart_dialog/issues/189),   [#190](https://github.com/fluttercandies/flutter_smart_dialog/issues/190),  [#191](https://github.com/fluttercandies/flutter_smart_dialog/issues/191),  [#192](https://github.com/fluttercandies/flutter_smart_dialog/issues/192),  [#200](https://github.com/fluttercandies/flutter_smart_dialog/issues/200)
+* adjust default widget style
 
 # [4.9.x]
 * fix [#132](https://github.com/fluttercandies/flutter_smart_dialog/issues/132)

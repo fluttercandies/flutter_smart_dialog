@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../kit/view_utils.dart';
+
 class ToastWidget extends StatelessWidget {
   const ToastWidget({Key? key, required this.msg}) : super(key: key);
 
@@ -12,10 +14,10 @@ class ToastWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 50),
       padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.black,
+        color: ThemeStyle.backgroundColor,
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Text(msg, style: const TextStyle(color: Colors.white)),
+      child: Text(msg, style: TextStyle(color: ThemeStyle.textColor)),
     );
   }
 }

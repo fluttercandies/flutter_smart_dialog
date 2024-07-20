@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../kit/view_utils.dart';
+
 class NotifyWarning extends StatelessWidget {
   const NotifyWarning({
     Key? key,
@@ -13,14 +15,18 @@ class NotifyWarning extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: Colors.black,
+        color: ThemeStyle.backgroundColor,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        const Icon(Icons.warning_amber_outlined, size: 22, color: Colors.white),
+        Icon(
+          Icons.warning_amber_outlined,
+          size: 22,
+          color: ThemeStyle.textColor,
+        ),
         Container(
           margin: const EdgeInsets.only(top: 5),
-          child: Text(msg, style: const TextStyle(color: Colors.white)),
+          child: Text(msg, style: TextStyle(color: ThemeStyle.textColor)),
         ),
       ]),
     );
