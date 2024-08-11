@@ -39,7 +39,7 @@ class SmartNavigatorObserver extends NavigatorObserver {
       return;
     }
 
-    var checkDialog = SmartDialog.config.checkExist(dialogTypes: {
+    var checkDialog = SmartDialog.checkExist(dialogTypes: {
       SmartAllDialogType.custom,
       SmartAllDialogType.attach,
       SmartAllDialogType.loading,

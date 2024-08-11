@@ -7,6 +7,7 @@ import 'compatible/compatible_smart_dialog.dart';
 import 'config/smart_config.dart';
 import 'data/animation_param.dart';
 import 'helper/dialog_proxy.dart';
+import 'kit/dialog_kit.dart';
 import 'widget/attach_dialog_widget.dart';
 import 'widget/helper/dialog_scope.dart';
 
@@ -907,5 +908,20 @@ class SmartDialog {
       result: result,
       force: force,
     );
+  }
+
+  /// Check whether the relevant dialog exists on the interface,
+  /// if the tag attribute is used, dialogTypes will be invalid
+  ///
+  /// 检查相关dialog是否存在于界面上，如果使用tag属性，dialogTypes将失效
+  static bool checkExist({
+    String? tag,
+    Set<SmartAllDialogType> dialogTypes = const {
+      SmartAllDialogType.custom,
+      SmartAllDialogType.attach,
+      SmartAllDialogType.loading,
+    },
+  }) {
+    return DialogKit.instance.checkExist(tag: tag, dialogTypes: dialogTypes);
   }
 }

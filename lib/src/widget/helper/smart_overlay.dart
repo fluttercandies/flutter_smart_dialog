@@ -66,7 +66,7 @@ class _SmartOverlayState extends State<SmartOverlay> {
     }
 
     await showCompleter?.future;
-    var dialogExist = SmartDialog.config.checkExist(dialogTypes: {
+    var dialogExist = SmartDialog.checkExist(dialogTypes: {
       SmartAllDialogType.custom,
       SmartAllDialogType.attach,
       SmartAllDialogType.notify,

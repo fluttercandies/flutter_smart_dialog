@@ -36,6 +36,7 @@ class SmartConfig {
   /// if the tag attribute is used, dialogTypes will be invalid
   ///
   /// 检查相关dialog是否存在于界面上，如果使用tag属性，dialogTypes将失效
+  @Deprecated("please use SmartDialog.checkExist()")
   bool checkExist({
     String? tag,
     Set<SmartAllDialogType> dialogTypes = const {
