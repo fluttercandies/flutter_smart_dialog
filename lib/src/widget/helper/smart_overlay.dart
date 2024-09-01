@@ -46,12 +46,9 @@ class _SmartOverlayState extends State<SmartOverlay> {
     if (showCompleter?.isCompleted == false) showCompleter?.complete();
     showCompleter = Completer();
 
-    var completer = Completer();
-    ViewUtils.addSafeUse(() {
+    await ViewUtils.awaitSafeUse(onPostFrame: () {
       setState(() => visible = true);
-      completer.complete();
     });
-    await completer.future;
 
     // await show isExist
     widgetsBinding.addPostFrameCallback((timeStamp) {

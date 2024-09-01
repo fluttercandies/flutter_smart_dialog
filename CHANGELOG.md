@@ -1,5 +1,6 @@
 # [4.9.8+x]
 * SmartDialog.config.checkExist() adjust to SmartDialog.checkExist()
+* Fix [#209](https://github.com/fluttercandies/flutter_smart_dialog/issues/209)
 
 * # [4.9.7+x]
 * optimize bindWidget, when bindWidget is not null, bindPage will be automatically set to false.

@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 
@@ -12,6 +13,31 @@ class ViewUtils {
     } else {
       callback();
     }
+  }
+
+  static Future<void> awaitSafeUse({VoidCallback? onPostFrame}) async {
+    final completer = Completer();
+    var schedulerPhase = schedulerBinding.schedulerPhase;
+    if (schedulerPhase == SchedulerPhase.persistentCallbacks) {
+      widgetsBinding.addPostFrameCallback((timeStamp) {
+        onPostFrame?.call();
+        if (!completer.isCompleted) completer.complete();
+      });
+    } else {
+      onPostFrame?.call();
+      if (!completer.isCompleted) completer.complete();
+    }
+
+    await completer.future;
+  }
+
+  static Future<void> awaitPostFrame({VoidCallback? onPostFrame}) async {
+    final completer = Completer();
+    widgetsBinding.addPostFrameCallback((timeStamp) {
+      onPostFrame?.call();
+      if (!completer.isCompleted) completer.complete();
+    });
+    await completer.future;
   }
 
   static bool isDarkModel() {

@@ -226,16 +226,16 @@ class MainDialog {
       Navigator.pop(DialogProxy.contextNavigator!);
     }
 
+    await DialogProxy.instance.smartOverlayController.dismiss();
+
+    // safety await
+    await ViewUtils.awaitPostFrame();
+
     //end waiting
     _handleAwaitOver<T>(
       awaitOverType: SmartAwaitOverType.dialogDismiss,
       result: result,
     );
-
-    await DialogProxy.instance.smartOverlayController.dismiss();
-
-    // safety await
-    await Future.delayed(const Duration(milliseconds: 20));
   }
 
   Widget getWidget() => Offstage(offstage: !visible, child: _widget);
