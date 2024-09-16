@@ -226,8 +226,6 @@ class MainDialog {
       Navigator.pop(DialogProxy.contextNavigator!);
     }
 
-    await DialogProxy.instance.smartOverlayController.dismiss();
-
     // safety await
     await ViewUtils.awaitPostFrame();
 

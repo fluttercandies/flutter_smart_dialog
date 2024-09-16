@@ -5,7 +5,6 @@ import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/default/notify_alter.dart';
 import 'package:flutter_smart_dialog/src/widget/default/notify_error.dart';
 import 'package:flutter_smart_dialog/src/widget/default/notify_failure.dart';
-import 'package:flutter_smart_dialog/src/widget/helper/smart_overlay.dart';
 
 import 'helper/dialog_proxy.dart';
 import 'helper/pop_monitor/boost_route_monitor.dart';
@@ -161,16 +160,39 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return styleBuilder(Stack(children: [
-      // main widget
-      widget.child ?? const SizedBox.shrink(),
+    return styleBuilder(
+      Overlay(initialEntries: [
+        //main layout
+        OverlayEntry(
+          builder: (BuildContext context) {
+            if (initType.contains(SmartInitType.custom)) {
+              DialogProxy.contextCustom = context;
+            }
 
-      // dialog
-      SmartOverlay(
-        initType: initType,
-        controller: DialogProxy.instance.smartOverlayController,
-      )
-    ]));
+            if (initType.contains(SmartInitType.attach)) {
+              DialogProxy.contextAttach = context;
+            }
+
+            if (initType.contains(SmartInitType.notify)) {
+              DialogProxy.contextNotify = context;
+            }
+
+            if (initType.contains(SmartInitType.toast)) {
+              DialogProxy.contextToast = context;
+            }
+
+            return widget.child ?? Container();
+          },
+        ),
+
+        // if (initType.contains(SmartInitType.notify))
+        //   DialogProxy.instance.entryNotify,
+
+        //provided separately for loading
+        if (initType.contains(SmartInitType.loading))
+          DialogProxy.instance.entryLoading,
+      ]),
+    );
   }
 
   BuildContext? getNavigatorContext(Navigator navigator) {

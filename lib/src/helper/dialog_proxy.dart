@@ -16,9 +16,7 @@ import '../config/smart_config.dart';
 import '../data/animation_param.dart';
 import '../data/notify_info.dart';
 import '../init_dialog.dart';
-import '../widget/helper/smart_overlay.dart';
 import '../widget/helper/smart_overlay_entry.dart';
-import 'show_helper.dart';
 
 enum CloseType {
   // back event
@@ -48,7 +46,6 @@ enum DialogType {
 class DialogProxy {
   late SmartConfig config;
   late SmartOverlayEntry entryLoading;
-  late SmartOverlayEntry entryNotify;
   late Queue<DialogInfo> dialogQueue;
   late Queue<NotifyInfo> notifyQueue;
   late CustomLoading loadingWidget;
@@ -62,14 +59,6 @@ class DialogProxy {
   static late BuildContext contextNotify;
   static late BuildContext contextToast;
 
-  static BuildContext get timelyContextCustom => contextCustom;
-
-  static BuildContext get timelyContextAttach => contextAttach;
-
-  static BuildContext get timelyContextNotify => contextNotify;
-
-  static BuildContext get timelyContextToast => contextToast;
-
   static BuildContext? contextNavigator;
 
   ///set default loading widget
@@ -81,14 +70,10 @@ class DialogProxy {
   ///set default toast widget
   late FlutterSmartNotifyStyle notifyStyle;
 
-  var smartOverlayController = SmartOverlayController();
-  late ShowHelper showHelper;
-
   DialogProxy._internal() {
     config = SmartConfig();
     dialogQueue = ListQueue();
     notifyQueue = ListQueue();
-    showHelper = ShowHelper(smartOverlayController);
   }
 
   void initialize(Set<SmartInitType> initType) {
@@ -97,10 +82,6 @@ class DialogProxy {
         return loadingWidget.getWidget();
       });
       loadingWidget = CustomLoading(overlayEntry: entryLoading);
-    }
-
-    if (initType.contains(SmartInitType.notify)) {
-      entryNotify = SmartOverlayEntry(builder: (_) => const SizedBox.shrink());
     }
   }
 
@@ -128,8 +109,7 @@ class DialogProxy {
     required bool bindPage,
     required BuildContext? bindWidget,
     required Rect? ignoreArea,
-  }) async {
-    await showHelper.beforeShow();
+  }) {
     CustomDialog? dialog;
     var entry = SmartOverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
@@ -181,8 +161,7 @@ class DialogProxy {
     required String? tag,
     required bool keepSingle,
     required SmartBackType backType,
-  }) async {
-    await showHelper.beforeShow();
+  }) {
     CustomNotify? dialog;
     var entry = SmartOverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
@@ -239,8 +218,7 @@ class DialogProxy {
     required bool useSystem,
     required bool bindPage,
     required BuildContext? bindWidget,
-  }) async {
-    await showHelper.beforeShow();
+  }) {
     CustomDialog? dialog;
     var entry = SmartOverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
@@ -294,8 +272,7 @@ class DialogProxy {
     required Duration? displayTime,
     required bool backDismiss,
     required Widget widget,
-  }) async {
-    await showHelper.beforeShow();
+  }) {
     return loadingWidget.showLoading<T>(
       alignment: alignment,
       clickMaskDismiss: clickMaskDismiss,
@@ -333,8 +310,7 @@ class DialogProxy {
     required bool debounce,
     required SmartToastType displayType,
     required Widget widget,
-  }) async {
-    await showHelper.beforeShow();
+  }) {
     CustomToast? toast;
     var entry = SmartOverlayEntry(
       builder: (BuildContext context) => toast!.getWidget(),
@@ -366,8 +342,7 @@ class DialogProxy {
     T? result,
     bool force = false,
     CloseType closeType = CloseType.normal,
-  }) async {
-    await showHelper.awaitShow();
+  }) {
     if (status == SmartStatus.smart) {
       var loading = config.loading.isExist;
 
@@ -423,7 +398,7 @@ class DialogProxy {
     }
 
     DialogType? type = _convertEnum(status);
-    if (type == null) return;
+    if (type == null) return null;
     return CustomDialog.dismiss<T>(
       type: type,
       tag: tag,
