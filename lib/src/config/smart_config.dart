@@ -1,5 +1,4 @@
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_smart_dialog/src/compatible/smart_config_compatible.dart';
 
 import '../kit/dialog_kit.dart';
 
@@ -47,12 +46,6 @@ class SmartConfig {
   }) {
     return DialogKit.instance.checkExist(tag: tag, dialogTypes: dialogTypes);
   }
-
-  /// Compatible with older versions
-  ///
-  /// 兼容老版本配置
-  @Deprecated("5.0 will be deleted and is not recommended for continued use")
-  SmartConfigCompatible compatible = SmartConfigCompatible();
 
   /// whether custom dialog，attach and loading  exist on the screen
   ///

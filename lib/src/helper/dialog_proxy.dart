@@ -7,6 +7,7 @@ import 'package:flutter_smart_dialog/src/custom/custom_loading.dart';
 import 'package:flutter_smart_dialog/src/custom/custom_notify.dart';
 import 'package:flutter_smart_dialog/src/custom/toast/custom_toast.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
+import 'package:flutter_smart_dialog/src/data/loading_info.dart';
 import 'package:flutter_smart_dialog/src/data/notify_style.dart';
 import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/helper/toast_helper.dart';
@@ -16,6 +17,7 @@ import '../config/smart_config.dart';
 import '../data/animation_param.dart';
 import '../data/notify_info.dart';
 import '../init_dialog.dart';
+import '../kit/typedef.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
 enum CloseType {
@@ -48,7 +50,7 @@ class DialogProxy {
   late SmartOverlayEntry entryLoading;
   late Queue<DialogInfo> dialogQueue;
   late Queue<NotifyInfo> notifyQueue;
-  late CustomLoading loadingWidget;
+  late LoadingInfo loadingInfo = LoadingInfo();
 
   static DialogProxy? _instance;
 
@@ -79,9 +81,9 @@ class DialogProxy {
   void initialize(Set<SmartInitType> initType) {
     if (initType.contains(SmartInitType.loading)) {
       entryLoading = SmartOverlayEntry(builder: (_) {
-        return loadingWidget.getWidget();
+        return loadingInfo.loadingWidget.getWidget();
       });
-      loadingWidget = CustomLoading(overlayEntry: entryLoading);
+      loadingInfo.loadingWidget = CustomLoading(overlayEntry: entryLoading);
     }
   }
 
@@ -102,13 +104,14 @@ class DialogProxy {
     required VoidCallback? onMask,
     required Duration? displayTime,
     required String? tag,
-    required bool backDismiss,
     required bool keepSingle,
     required bool permanent,
     required bool useSystem,
     required bool bindPage,
     required BuildContext? bindWidget,
     required Rect? ignoreArea,
+    required SmartBackType? backType,
+    required SmartOnBack? onBack,
   }) {
     CustomDialog? dialog;
     var entry = SmartOverlayEntry(
@@ -132,13 +135,14 @@ class DialogProxy {
       onMask: onMask,
       displayTime: displayTime,
       tag: tag,
-      backDismiss: backDismiss,
       keepSingle: keepSingle,
       permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
       bindWidget: bindWidget,
       ignoreArea: ignoreArea,
+      backType: backType,
+      onBack: onBack,
     );
   }
 
@@ -161,6 +165,7 @@ class DialogProxy {
     required String? tag,
     required bool keepSingle,
     required SmartBackType backType,
+    required SmartOnBack? onBack,
   }) {
     CustomNotify? dialog;
     var entry = SmartOverlayEntry(
@@ -186,6 +191,7 @@ class DialogProxy {
       tag: tag,
       keepSingle: keepSingle,
       backType: backType,
+      onBack: onBack,
     );
   }
 
@@ -212,12 +218,13 @@ class DialogProxy {
     required VoidCallback? onDismiss,
     required Duration? displayTime,
     required String? tag,
-    required bool backDismiss,
     required bool keepSingle,
     required bool permanent,
     required bool useSystem,
     required bool bindPage,
     required BuildContext? bindWidget,
+    required SmartBackType? backType,
+    required SmartOnBack? onBack,
   }) {
     CustomDialog? dialog;
     var entry = SmartOverlayEntry(
@@ -247,12 +254,13 @@ class DialogProxy {
       onDismiss: onDismiss,
       displayTime: displayTime,
       tag: tag,
-      backDismiss: backDismiss,
       keepSingle: keepSingle,
       permanent: permanent,
       useSystem: useSystem,
       bindPage: bindPage,
       bindWidget: bindWidget,
+      backType: backType,
+      onBack: onBack,
     );
   }
 
@@ -270,10 +278,13 @@ class DialogProxy {
     required VoidCallback? onDismiss,
     required VoidCallback? onMask,
     required Duration? displayTime,
-    required bool backDismiss,
     required Widget widget,
+    required SmartBackType backType,
+    required SmartOnBack? onBack,
   }) {
-    return loadingWidget.showLoading<T>(
+    loadingInfo.onBack = onBack;
+    loadingInfo.backType = backType;
+    return loadingInfo.loadingWidget.showLoading<T>(
       alignment: alignment,
       clickMaskDismiss: clickMaskDismiss,
       animationType: animationType,
@@ -287,7 +298,6 @@ class DialogProxy {
       onDismiss: onDismiss,
       onMask: onMask,
       displayTime: displayTime,
-      backDismiss: backDismiss,
       widget: widget,
     );
   }
@@ -348,7 +358,7 @@ class DialogProxy {
 
       if (loading &&
           (tag == null || (dialogQueue.isEmpty && notifyQueue.isEmpty))) {
-        return loadingWidget.dismiss(closeType: closeType);
+        return loadingInfo.loadingWidget.dismiss(closeType: closeType);
       }
 
       if (notifyQueue.isNotEmpty) {
@@ -385,7 +395,7 @@ class DialogProxy {
     } else if (status == SmartStatus.allToast) {
       return CustomToast.dismiss(closeAll: true);
     } else if (status == SmartStatus.loading) {
-      return loadingWidget.dismiss(closeType: closeType);
+      return loadingInfo.loadingWidget.dismiss(closeType: closeType);
     } else if (status == SmartStatus.notify ||
         status == SmartStatus.allNotify) {
       return CustomNotify.dismiss<T>(

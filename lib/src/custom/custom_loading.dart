@@ -16,7 +16,6 @@ class CustomLoading extends BaseDialog {
   Timer? _displayTimer;
   bool _canDismiss = false;
   Future Function()? _canDismissCallback;
-  bool _loadingBackDismiss = true;
 
   Future<T?> showLoading<T>({
     required Widget widget,
@@ -33,7 +32,6 @@ class CustomLoading extends BaseDialog {
     required VoidCallback? onDismiss,
     required VoidCallback? onMask,
     required Duration? displayTime,
-    required bool backDismiss,
   }) {
     List<SmartNonAnimationType> nonAnimations = [...nonAnimationTypes];
     var continueLoading = SmartNonAnimationType.continueLoading_nonAnimation;
@@ -42,7 +40,6 @@ class CustomLoading extends BaseDialog {
       nonAnimations.add(SmartNonAnimationType.openDialog_nonAnimation);
     }
 
-    _loadingBackDismiss = backDismiss;
     SmartDialog.config.loading.isExist = true;
 
     _canDismiss = false;
@@ -97,9 +94,6 @@ class CustomLoading extends BaseDialog {
   }
 
   Future<void> dismiss({CloseType closeType = CloseType.normal}) async {
-    if (!_loadingBackDismiss && closeType == CloseType.back) {
-      return;
-    }
     _canDismissCallback = () => _realDismiss(closeType: closeType);
     if (_canDismiss) {
       _canDismiss = false;

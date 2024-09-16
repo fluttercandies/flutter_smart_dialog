@@ -14,7 +14,6 @@ class SmartConfigLoading {
     this.usePenetrate = false,
     this.maskColor = const Color.fromRGBO(0, 0, 0, 0.46),
     this.maskWidget,
-    this.backDismiss = true,
     this.clickMaskDismiss = false,
     this.leastLoadingTime = const Duration(milliseconds: 0),
     this.awaitOverType = SmartAwaitOverType.dialogDismiss,
@@ -23,6 +22,7 @@ class SmartConfigLoading {
       SmartNonAnimationType.routeClose_nonAnimation,
       SmartNonAnimationType.continueLoading_nonAnimation,
     ],
+    this.backType = SmartBackType.normal,
     this.isExist = false,
   });
 
@@ -84,14 +84,6 @@ class SmartConfigLoading {
   /// 遮罩Widget，可高度自定义你自己的遮罩背景：[usePenetrate]设置为true，该参数失效
   final Widget? maskWidget;
 
-  /// true（the back event will close the loading but not close the page），
-  /// false（the back event not close the loading and not close page），
-  /// you still can use the dismiss method to close the loading
-  ///
-  /// true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
-  /// 你仍然可以使用dismiss方法来关闭loading
-  final bool backDismiss;
-
   /// true（dialog will be closed after click background），false（not close）
   ///
   /// true（点击遮罩关闭dialog），false（不关闭）
@@ -118,6 +110,12 @@ class SmartConfigLoading {
   ///
   /// 对于不同的场景, 可动态关闭弹窗动画, 具体请参照[SmartNonAnimationType]
   final List<SmartNonAnimationType> nonAnimationTypes;
+
+  /// For different processing types of return events,
+  /// please refer to the description of [SmartBackType] for details
+  ///
+  /// 对于返回事件不同的处理类型, 具体可参照[SmartBackType]说明
+  final SmartBackType backType;
 
   /// whether loading(showLoading()) exist on the screen
   ///

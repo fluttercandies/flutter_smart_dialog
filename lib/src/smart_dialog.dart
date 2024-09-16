@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_smart_dialog/src/kit/typedef.dart';
 
-import 'compatible/compatible_smart_dialog.dart';
 import 'config/smart_config.dart';
 import 'data/animation_param.dart';
 import 'helper/dialog_proxy.dart';
@@ -13,12 +13,6 @@ import 'widget/helper/dialog_scope.dart';
 
 class SmartDialog {
   SmartDialog._();
-
-  /// Compatible with older versions
-  ///
-  /// 兼容老版本
-  @Deprecated("5.0 will be deleted and is not recommended for continued use")
-  static CompatibleSmartDialog compatible = CompatibleSmartDialog.instance;
 
   /// SmartDialog global config
   ///
@@ -90,6 +84,12 @@ class SmartDialog {
   /// [ignoreArea]： dialog placeholder ignores area, supports up, down, left and right areas, set area, dialog will not occupy space in this area;
   /// Example: ignoreArea: Rect.fromLTRB (0,0,0,30), there will be 30 gaps at the bottom, and neither dialog nor mask will occupy this area;
   /// Applies to: do not want the dialog to overwrite the navigation bar area such as BottomNavigationBar, NavigationRail
+  ///
+  /// [backType]：For different processing types of return events,
+  /// please refer to the description of [SmartBackType] for details
+  ///
+  /// [onBack]： Return event monitoring, return true, which means to intercept the back event;
+  /// return false, which means not to intercept, and perform operations such as closing the dialog normally
   /// -------------------------------------------------------------------------------
   ///
   /// 自定义弹窗
@@ -151,6 +151,10 @@ class SmartDialog {
   /// [ignoreArea]：dialog占位忽略区域, 支持上下左右区域, 设置的区域, dialog将不会在此区域占位;
   /// 例: ignoreArea: Rect.fromLTRB(0, 0, 0, 30), 底部会有30空隙, dialog和mask都不会占位该区域;
   /// 适用于: 不想dialog覆盖BottomNavigationBar, NavigationRail之类的导航栏区域
+  ///
+  /// [backType]：对于返回事件不同的处理类型, 具体可参照[SmartBackType]说明
+  ///
+  /// [onBack]：返回事件监听，返回true，代表拦截此次返回事件；返回false，代表不拦截，正常执行关闭弹窗等操作
   static Future<T?> show<T>({
     required WidgetBuilder builder,
     SmartDialogController? controller,
@@ -169,13 +173,15 @@ class SmartDialog {
     VoidCallback? onMask,
     Duration? displayTime,
     String? tag,
-    bool? backDismiss,
+    @Deprecated("please use backType") bool? backDismiss,
     bool? keepSingle,
     bool? permanent,
     bool? useSystem,
     bool? bindPage,
     BuildContext? bindWidget,
     Rect? ignoreArea,
+    SmartBackType? backType,
+    SmartOnBack? onBack,
   }) {
     assert(
       (useSystem == true &&
@@ -206,13 +212,17 @@ class SmartDialog {
       onMask: onMask,
       displayTime: displayTime,
       tag: tag,
-      backDismiss: backDismiss ?? config.custom.backDismiss,
       keepSingle: keepSingle ?? false,
       permanent: permanent ?? false,
       useSystem: useSystem ?? false,
       bindPage: (bindPage ?? config.custom.bindPage) && bindWidget == null,
       bindWidget: bindWidget,
       ignoreArea: ignoreArea,
+      backType: backType ??
+          (backDismiss == null
+              ? config.custom.backType
+              : (backDismiss ? SmartBackType.normal : SmartBackType.block)),
+      onBack: onBack,
     );
   }
 
@@ -302,6 +312,12 @@ class SmartDialog {
   /// and when the widget is visible, the dialog is automatically displayed; Applicable to PageView, TabView, etc., bind its sub-pages,
   /// and when switching pages, the dialog can also interact reasonably
   /// Note: The processing logic of [bindWidget] takes precedence over [bindPage]. When [bindWidget] is not null, [bindPage] will be automatically set to false.
+  ///
+  /// [backType]：For different processing types of return events,
+  /// please refer to the description of [SmartBackType] for details
+  ///
+  /// [onBack]：Return event monitoring, return true, which means to intercept the back event;
+  /// return false, which means not to intercept, and perform operations such as closing the dialog normally
   /// -------------------------------------------------------------------------------
   ///
   /// 定位弹窗
@@ -378,6 +394,10 @@ class SmartDialog {
   /// [bindWidget]：将dialog与某个Widget绑定, 当该widget不可见时, dialog自动隐藏, 该widget可见时, dialog自动显示;
   /// 适用于PageView, TabView之类, 绑定其子页面, 切换页面时, dialog也能合理交互
   /// 注意: [bindWidget]处理路由逻辑高于[bindPage], 当[bindWidget]不为null, [bindPage]将自动被设置为false
+  ///
+  /// [backType]：对于返回事件不同的处理类型, 具体可参照[SmartBackType]说明
+  ///
+  /// [onBack]：返回事件监听，返回true，代表拦截此次返回事件；返回false，代表不拦截，正常执行关闭弹窗等操作
   static Future<T?> showAttach<T>({
     required BuildContext? targetContext,
     required WidgetBuilder builder,
@@ -402,12 +422,14 @@ class SmartDialog {
     VoidCallback? onDismiss,
     Duration? displayTime,
     String? tag,
-    bool? backDismiss,
+    @Deprecated("please use backType") bool? backDismiss,
     bool? keepSingle,
     bool? permanent,
     bool? useSystem,
     bool? bindPage,
     BuildContext? bindWidget,
+    SmartBackType? backType,
+    SmartOnBack? onBack,
   }) {
     assert(
       targetContext != null || targetBuilder != null,
@@ -448,12 +470,16 @@ class SmartDialog {
       onDismiss: onDismiss,
       displayTime: displayTime,
       tag: tag,
-      backDismiss: backDismiss ?? config.attach.backDismiss,
       keepSingle: keepSingle ?? false,
       permanent: permanent ?? false,
       useSystem: useSystem ?? false,
       bindPage: (bindPage ?? config.attach.bindPage) && bindWidget == null,
       bindWidget: bindWidget,
+      backType: backType ??
+          (backDismiss == null
+              ? config.attach.backType
+              : (backDismiss ? SmartBackType.normal : SmartBackType.block)),
+      onBack: onBack,
     );
   }
 
@@ -504,6 +530,9 @@ class SmartDialog {
   ///
   /// [backType]：For different processing types of return events,
   /// please refer to the description of [SmartBackType] for details
+  ///
+  /// [onBack]： Return event monitoring, return true, which means to intercept the back event;
+  /// return false, which means not to intercept, and perform operations such as closing the dialog normally
   /// -------------------------------------------------------------------------------
   ///
   /// 通过设置NotifyType, 可使用多种不同类型的提示弹窗
@@ -550,6 +579,8 @@ class SmartDialog {
   /// false（多次调用[show]会生成多个dialog）
   ///
   /// [backType]：对于返回事件不同的处理类型, 具体可参照[SmartBackType]说明
+  ///
+  /// [onBack]：返回事件监听，返回true，代表拦截此次返回事件；返回false，代表不拦截，正常执行关闭弹窗等操作
   static Future<T?> showNotify<T>({
     required String msg,
     required NotifyType notifyType,
@@ -572,6 +603,7 @@ class SmartDialog {
     String? tag,
     bool? keepSingle,
     SmartBackType? backType,
+    SmartOnBack? onBack,
   }) {
     return DialogProxy.instance.showNotify<T>(
       widget: DialogScope(
@@ -615,6 +647,7 @@ class SmartDialog {
       tag: tag,
       keepSingle: keepSingle ?? false,
       backType: backType ?? config.notify.backType,
+      onBack: onBack,
     );
   }
 
@@ -657,6 +690,12 @@ class SmartDialog {
   /// false（the back event not close the loading and not close page），
   /// you still can use the dismiss method to close the loading
   ///
+  /// [backType]：For different processing types of return events,
+  /// please refer to the description of [SmartBackType] for details
+  ///
+  /// [onBack]： Return event monitoring, return true, which means to intercept the back event;
+  /// return false, which means not to intercept, and perform operations such as closing the dialog normally
+  ///
   /// [builder]：the custom loading
   /// -------------------------------------------------------------------------------
   ///
@@ -695,6 +734,10 @@ class SmartDialog {
   /// [backDismiss]：true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
   /// 你仍然可以使用dismiss方法来关闭loading
   ///
+  /// [backType]：对于返回事件不同的处理类型, 具体可参照[SmartBackType]说明
+  ///
+  /// [onBack]：返回事件监听，返回true，代表拦截此次返回事件；返回false，代表不拦截，正常执行关闭弹窗等操作
+  ///
   /// [builder]：自定义loading
   static Future<T?> showLoading<T>({
     String msg = 'loading...',
@@ -712,7 +755,9 @@ class SmartDialog {
     VoidCallback? onDismiss,
     VoidCallback? onMask,
     Duration? displayTime,
-    bool? backDismiss,
+    @Deprecated("please use backType") bool? backDismiss,
+    SmartBackType? backType,
+    SmartOnBack? onBack,
     WidgetBuilder? builder,
   }) {
     return DialogProxy.instance.showLoading<T>(
@@ -737,7 +782,11 @@ class SmartDialog {
       onDismiss: onDismiss,
       onMask: onMask,
       displayTime: displayTime,
-      backDismiss: backDismiss ?? config.loading.backDismiss,
+      backType: backType ??
+          (backDismiss == null
+              ? config.loading.backType
+              : (backDismiss ? SmartBackType.normal : SmartBackType.block)),
+      onBack: onBack,
     );
   }
 

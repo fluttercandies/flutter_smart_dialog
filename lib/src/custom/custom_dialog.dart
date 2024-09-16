@@ -15,6 +15,7 @@ import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
 import '../data/notify_info.dart';
 import '../kit/debounce_utils.dart';
+import '../kit/typedef.dart';
 import '../smart_dialog.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
@@ -39,13 +40,14 @@ class CustomDialog extends BaseDialog {
     required VoidCallback? onMask,
     required Duration? displayTime,
     required String? tag,
-    required bool backDismiss,
     required bool keepSingle,
     required bool permanent,
     required bool useSystem,
     required bool bindPage,
     required BuildContext? bindWidget,
     required Rect? ignoreArea,
+    required SmartBackType? backType,
+    required SmartOnBack? onBack,
   }) {
     if (DebounceUtils.instance.banContinue(DebounceType.custom, debounce)) {
       return Future.value(null);
@@ -53,7 +55,6 @@ class CustomDialog extends BaseDialog {
 
     final dialogInfo = _handleMustOperate(
       tag: tag,
-      backDismiss: backDismiss,
       keepSingle: keepSingle,
       debounce: debounce,
       type: DialogType.custom,
@@ -62,6 +63,8 @@ class CustomDialog extends BaseDialog {
       bindPage: bindPage,
       bindWidget: bindWidget,
       displayTime: displayTime,
+      backType: backType,
+      onBack: onBack,
     );
     return mainDialog.show<T>(
       widget: widget,
@@ -116,12 +119,13 @@ class CustomDialog extends BaseDialog {
     required VoidCallback? onDismiss,
     required Duration? displayTime,
     required String? tag,
-    required bool backDismiss,
     required bool keepSingle,
     required bool permanent,
     required bool useSystem,
     required bool bindPage,
     required BuildContext? bindWidget,
+    required SmartBackType? backType,
+    required SmartOnBack? onBack,
   }) {
     if (DebounceUtils.instance.banContinue(DebounceType.attach, debounce)) {
       return Future.value(null);
@@ -129,7 +133,6 @@ class CustomDialog extends BaseDialog {
 
     final dialogInfo = _handleMustOperate(
       tag: tag,
-      backDismiss: backDismiss,
       keepSingle: keepSingle,
       debounce: debounce,
       type: DialogType.attach,
@@ -138,6 +141,8 @@ class CustomDialog extends BaseDialog {
       bindPage: bindPage,
       bindWidget: bindWidget,
       displayTime: displayTime,
+      backType: backType,
+      onBack: onBack,
     );
     return mainDialog.showAttach<T>(
       targetContext: targetContext,
@@ -197,7 +202,6 @@ class CustomDialog extends BaseDialog {
 
   DialogInfo _handleMustOperate({
     required String? tag,
-    required bool backDismiss,
     required bool keepSingle,
     required bool debounce,
     required DialogType type,
@@ -206,6 +210,8 @@ class CustomDialog extends BaseDialog {
     required bool bindPage,
     required BuildContext? bindWidget,
     required Duration? displayTime,
+    required SmartBackType? backType,
+    required SmartOnBack? onBack,
   }) {
     SmartDialog.config.custom.isExist = DialogType.custom == type;
     SmartDialog.config.attach.isExist = DialogType.attach == type;
@@ -216,7 +222,6 @@ class CustomDialog extends BaseDialog {
       if (singleDialogInfo == null) {
         singleDialogInfo = DialogInfo(
           dialog: this,
-          backDismiss: backDismiss,
           type: type,
           tag: tag ?? SmartTag.keepSingle,
           permanent: permanent,
@@ -224,6 +229,8 @@ class CustomDialog extends BaseDialog {
           bindPage: bindPage,
           route: RouteRecord.curRoute,
           bindWidget: bindWidget,
+          backType: backType,
+          onBack: onBack,
         );
         _pushDialog(singleDialogInfo);
       }
@@ -235,7 +242,6 @@ class CustomDialog extends BaseDialog {
       // handle dialog stack
       dialogInfo = DialogInfo(
         dialog: this,
-        backDismiss: backDismiss,
         type: type,
         tag: tag,
         permanent: permanent,
@@ -243,6 +249,8 @@ class CustomDialog extends BaseDialog {
         bindPage: bindPage,
         route: RouteRecord.curRoute,
         bindWidget: bindWidget,
+        backType: backType,
+        onBack: onBack,
       );
       _pushDialog(dialogInfo);
     }
@@ -417,11 +425,6 @@ class CustomDialog extends BaseDialog {
         info = item;
         break;
       }
-    }
-
-    //handle prohibiting back event
-    if (info != null && (!info.backDismiss && closeType == CloseType.back)) {
-      return null;
     }
 
     return info;

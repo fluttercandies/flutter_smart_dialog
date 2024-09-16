@@ -23,11 +23,19 @@ class MonitorPopRoute with WidgetsBindingObserver {
   Future<bool> didPopRoute() async {
     //loading
     if (SmartDialog.config.loading.isExist) {
-      DialogProxy.instance.dismiss(
-        status: SmartStatus.loading,
-        closeType: CloseType.back,
-      );
-      return true;
+      final loadingInfo = DialogProxy.instance.loadingInfo;
+      if (await loadingInfo.onBack?.call() == true) {
+        return true;
+      }
+      if (loadingInfo.backType == SmartBackType.normal) {
+        DialogProxy.instance.dismiss(
+          status: SmartStatus.loading,
+          closeType: CloseType.back,
+        );
+        return true;
+      } else if (loadingInfo.backType == SmartBackType.block) {
+        return true;
+      }
     }
 
     //notify
@@ -35,6 +43,10 @@ class MonitorPopRoute with WidgetsBindingObserver {
       var notifyQueue = DialogProxy.instance.notifyQueue;
       for (var i = notifyQueue.length - 1; i >= 0; i--) {
         var item = notifyQueue.elementAt(i);
+
+        if (await item.onBack?.call() == true) {
+          return true;
+        }
         if (item.backType == SmartBackType.normal) {
           DialogProxy.instance.dismiss(
             status: SmartStatus.notify,
@@ -50,11 +62,17 @@ class MonitorPopRoute with WidgetsBindingObserver {
 
     // handle contain system dialog and common condition
     if (handleSmartDialog()) {
-      DialogProxy.instance.dismiss(
-        status: SmartStatus.dialog,
-        closeType: CloseType.back,
-      );
-      return true;
+      var lastDialog = DialogProxy.instance.dialogQueue.last;
+      if (lastDialog.backType == SmartBackType.normal &&
+          await lastDialog.onBack?.call() != true) {
+        DialogProxy.instance.dismiss(
+          status: SmartStatus.dialog,
+          closeType: CloseType.back,
+        );
+        return true;
+      } else if (lastDialog.backType == SmartBackType.block) {
+        return true;
+      }
     }
 
     return super.didPopRoute();

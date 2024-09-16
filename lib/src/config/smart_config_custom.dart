@@ -24,6 +24,7 @@ class SmartConfigCustom {
     this.nonAnimationTypes = const [
       SmartNonAnimationType.routeClose_nonAnimation,
     ],
+    this.backType = SmartBackType.normal,
     this.isExist = false,
   });
 
@@ -110,6 +111,7 @@ class SmartConfigCustom {
   ///
   /// true（返回事件将关闭loading，但是不会关闭页面），false（返回事件不会关闭loading，也不会关闭页面），
   /// 你仍然可以使用dismiss方法来关闭dialog
+  @Deprecated("please use backType")
   final bool backDismiss;
 
   /// Bind the dialog to the current page, the bound page is not on the top of the stack,
@@ -135,6 +137,12 @@ class SmartConfigCustom {
   ///
   /// 对于不同的场景, 可动态关闭弹窗动画, 具体请参照[SmartNonAnimationType]
   final List<SmartNonAnimationType> nonAnimationTypes;
+
+  /// For different processing types of return events,
+  /// please refer to the description of [SmartBackType] for details
+  ///
+  /// 对于返回事件不同的处理类型, 具体可参照[SmartBackType]说明
+  final SmartBackType backType;
 
   /// whether custom dialog(show()) exist on the screen
   ///

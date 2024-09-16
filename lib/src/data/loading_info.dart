@@ -1,0 +1,14 @@
+import 'dart:async';
+
+import '../../flutter_smart_dialog.dart';
+import '../custom/custom_loading.dart';
+import '../kit/typedef.dart';
+import 'base_dialog.dart';
+
+class LoadingInfo {
+  late CustomLoading loadingWidget;
+
+  SmartBackType? backType;
+
+  SmartOnBack? onBack;
+}

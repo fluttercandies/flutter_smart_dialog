@@ -11,6 +11,7 @@ import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
 import '../data/notify_info.dart';
 import '../kit/debounce_utils.dart';
+import '../kit/typedef.dart';
 import '../smart_dialog.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
@@ -37,6 +38,7 @@ class CustomNotify extends BaseDialog {
     required String? tag,
     required bool keepSingle,
     required SmartBackType backType,
+    required SmartOnBack? onBack,
   }) {
     if (DebounceUtils.instance.banContinue(DebounceType.notify, debounce)) {
       return Future.value(null);
@@ -48,6 +50,7 @@ class CustomNotify extends BaseDialog {
       debounce: debounce,
       displayTime: displayTime,
       backType: backType,
+      onBack: onBack,
     );
     return mainDialog.show<T>(
       widget: widget,
@@ -106,6 +109,7 @@ class CustomNotify extends BaseDialog {
     required bool debounce,
     required Duration? displayTime,
     required SmartBackType backType,
+    required SmartOnBack? onBack,
   }) {
     SmartDialog.config.notify.isExist = true;
 
@@ -117,6 +121,7 @@ class CustomNotify extends BaseDialog {
           dialog: this,
           tag: tag ?? SmartTag.keepSingle,
           backType: backType,
+          onBack: onBack,
         );
         _pushDialog(singleNotifyInfo);
       }
@@ -126,7 +131,12 @@ class CustomNotify extends BaseDialog {
       tag = tag ?? '${hashCode + Random().nextDouble()}';
 
       // handle dialog stack
-      notifyInfo = NotifyInfo(dialog: this, tag: tag, backType: backType);
+      notifyInfo = NotifyInfo(
+        dialog: this,
+        tag: tag,
+        backType: backType,
+        onBack: onBack,
+      );
       _pushDialog(notifyInfo);
     }
 
