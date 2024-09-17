@@ -35,12 +35,17 @@ class BoostRouteMonitor {
       if (route is ModalRoute) {
         willPopCallback() async {
           if (_handleSmartDialog()) {
-            DialogProxy.instance.dismiss(status: SmartStatus.smart, closeType: CloseType.back);
+            DialogProxy.instance.dismiss(
+              status: SmartStatus.smart,
+              closeType: CloseType.back,
+            );
             return false;
           }
           return true;
         }
 
+        // TODO: `addScopedWillPopCallback()` was deprecated after v3.12.0-1.0.pre.
+        // ignore: deprecated_member_use
         route.addScopedWillPopCallback(willPopCallback);
         DialogProxy.contextNavigator = route.subtreeContext;
       }

@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       },
       displayTime: const Duration(milliseconds: 2000),
       keepSingle: true,
-      backDismiss: false,
+      backType: SmartBackType.block,
     );
 
     // SmartDialog.showLoading();

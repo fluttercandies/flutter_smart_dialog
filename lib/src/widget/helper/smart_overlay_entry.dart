@@ -15,7 +15,7 @@ class SmartOverlayEntry extends OverlayEntry {
 
   @override
   void remove() {
-    if(!mounted) {
+    if (!mounted) {
       return;
     }
     super.remove();

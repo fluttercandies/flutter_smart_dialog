@@ -9,6 +9,7 @@ export 'src/config/smart_config_notify.dart';
 export 'src/config/smart_config_toast.dart';
 export 'src/data/animation_param.dart' show AnimationParam;
 export 'src/data/notify_style.dart';
+
 /// dialog
 export 'src/init_dialog.dart';
 export 'src/smart_dialog.dart';

@@ -23,10 +23,10 @@ class MyApp extends StatelessWidget {
   }
 
   void _show() async {
-    print("before:${DateTime.now().millisecondsSinceEpoch}");
+    debugPrint("before:${DateTime.now().millisecondsSinceEpoch}");
     var result = await SmartDialog.show<bool>(
         tag: 'tag',
-        backDismiss: false,
+        backType: SmartBackType.block,
         clickMaskDismiss: false,
         builder: (_) {
           return ElevatedButton(
@@ -37,12 +37,12 @@ class MyApp extends StatelessWidget {
           );
         },
         onDismiss: () {
-          print("onDismiss:${DateTime.now().millisecondsSinceEpoch}");
+          debugPrint("onDismiss:${DateTime.now().millisecondsSinceEpoch}");
           // showLoading()放在这里能正常显示
           // SmartDialog.showLoading();
         });
 
-    print("aftermiss:${DateTime.now().millisecondsSinceEpoch}");
+    debugPrint("aftermiss:${DateTime.now().millisecondsSinceEpoch}");
     if (result == true) {
       // showLoading() 放在这里需要加一点延时才能显示Loading
       // await Future.delayed(const Duration(seconds: 1));

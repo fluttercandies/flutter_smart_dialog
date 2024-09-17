@@ -80,7 +80,10 @@ class _TestingDialogState extends State<_TestingDialog>
           alignment: Alignment.bottomCenter,
           children: [
             // 这里,点击事件也可以传递到遮罩
-            SizedBox(height: MediaQuery.of(context).size.height,width: MediaQuery.of(context).size.width),
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+            ),
             Container(height: 300, color: Colors.blue),
             AnimatedBuilder(
               animation: animationController,

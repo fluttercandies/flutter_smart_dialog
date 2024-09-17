@@ -16,7 +16,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 /// @Describe: 测试
 ///
 /// @Author: LiWeNHuI
@@ -63,7 +62,7 @@ class _DemoPageState extends State<DemoPage> {
       maskColor: Colors.transparent,
       clickMaskDismiss: false,
       displayTime: const Duration(milliseconds: 1500),
-      backDismiss: false,
+      backType: SmartBackType.block,
     );
   }
 
@@ -74,7 +73,7 @@ class _DemoPageState extends State<DemoPage> {
       builder: (BuildContext ctx) {
         return Dialog(
           insetPadding:
-          const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
+              const EdgeInsets.symmetric(vertical: 24, horizontal: 32),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           child: PopScope(
             canPop: false,
@@ -113,7 +112,7 @@ class _DemoPageState extends State<DemoPage> {
                       animationBuilder: (_, Widget child, ___) =>
                           TestAnimation(animationParam: ___, child: child),
                       displayTime: const Duration(milliseconds: 2300),
-                      backDismiss: false,
+                      backType: SmartBackType.block,
                       keepSingle: true,
                     );
                   },
@@ -165,12 +164,12 @@ class _TestAnimationState extends State<TestAnimation>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     )..addListener(() {
-      if (controller.value > .3 && !isStart) {
-        isStart = true;
+        if (controller.value > .3 && !isStart) {
+          isStart = true;
 
-        bodyController.forward();
-      }
-    });
+          bodyController.forward();
+        }
+      });
 
     bodyController = AnimationController(
       duration: const Duration(milliseconds: 8000),

@@ -85,8 +85,10 @@ class _AttachWidgetState extends State<AttachWidget> {
       return Opacity(opacity: _postFrameOpacity, child: _originChild);
     });
 
-    List<Widget> below = widget.belowBuilder?.call(targetOffset, targetSize) ?? [];
-    List<Widget> above = widget.aboveBuilder?.call(targetOffset, targetSize) ?? [];
+    List<Widget> below =
+        widget.belowBuilder?.call(targetOffset, targetSize) ?? [];
+    List<Widget> above =
+        widget.aboveBuilder?.call(targetOffset, targetSize) ?? [];
     return Stack(children: [
       //blow
       for (var belowWidget in below) belowWidget,
@@ -152,7 +154,9 @@ class _AttachWidgetState extends State<AttachWidget> {
     } else if (alignment == Alignment.topRight) {
       _targetRect = _adjustReactInfo(
         bottom: screen.height - targetOffset.dy,
-        left: targetOffset.dx + targetSize.width + _calculateDx(alignment, selfSize),
+        left: targetOffset.dx +
+            targetSize.width +
+            _calculateDx(alignment, selfSize),
         fixedVertical: true,
       );
     } else if (alignment == Alignment.centerLeft) {
@@ -188,7 +192,9 @@ class _AttachWidgetState extends State<AttachWidget> {
     } else if (alignment == Alignment.bottomRight) {
       _targetRect = _adjustReactInfo(
         top: targetOffset.dy + targetSize.height,
-        left: targetOffset.dx + targetSize.width + _calculateDx(alignment, selfSize),
+        left: targetOffset.dx +
+            targetSize.width +
+            _calculateDx(alignment, selfSize),
         fixedVertical: true,
       );
     }
@@ -227,7 +233,8 @@ class _AttachWidgetState extends State<AttachWidget> {
       } else {
         offset = -(selfSize.width / 2);
       }
-    } else if (alignment == Alignment.topRight || alignment == Alignment.bottomRight) {
+    } else if (alignment == Alignment.topRight ||
+        alignment == Alignment.bottomRight) {
       if (type == SmartAttachAlignmentType.inside) {
         offset = -selfSize.width;
       } else if (type == SmartAttachAlignmentType.outside) {
