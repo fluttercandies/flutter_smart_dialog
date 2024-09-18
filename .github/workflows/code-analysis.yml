@@ -1,0 +1,55 @@
+name: Code Analysis
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  code-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+      - name: Prepare dependencies
+        run: |
+          flutter --version
+          flutter pub get
+      - name: Check Dart code formatting
+        run: |
+          dart format . -o none --set-exit-if-changed
+      - name: Analyze Dart code
+        run: |
+          flutter analyze .
+      - name: Generate dartdoc
+        run: |
+          dart pub global activate dartdoc
+          dart pub global run dartdoc .
+  test:
+    needs: [code-analysis]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        flutter-version: ['']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: ${{ matrix.flutter-version }}
+      - name: Prepare dependencies
+        run: |
+          flutter --version
+          flutter pub get
+      - name: Test
+        run: flutter test

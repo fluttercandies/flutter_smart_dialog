@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  void _show() async{
+  void _show() async {
     SmartDialog.show(
       builder: (_) {
         return Container(

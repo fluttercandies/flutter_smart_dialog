@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
                   );
                 },
                 animationType: SmartAnimationType.centerFade_otherSlide,
-                backDismiss: true,
+                backType: SmartBackType.normal,
                 keepSingle: true,
                 debounce: true,
               );
