@@ -4,9 +4,12 @@ import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 
 import '../attach_dialog_widget.dart';
 
-typedef AttachBuilder = Widget Function(Widget child);
+typedef AttachBuilder = Widget Function(
+  Widget child,
+  AttachAdjustParam? adjustParam,
+);
 
-typedef BeforeBuilder = Widget Function(
+typedef BeforeBuilder = AttachAdjustParam Function(
   Offset targetOffset,
   Size targetSize,
   Offset selfOffset,
@@ -37,7 +40,7 @@ class AttachWidget extends StatefulWidget {
   /// 自定义坐标点
   final TargetBuilder? targetBuilder;
 
-  final BeforeBuilder? beforeBuilder;
+  final BeforeBuilder beforeBuilder;
 
   final Alignment alignment;
 
@@ -63,10 +66,13 @@ class _AttachWidgetState extends State<AttachWidget> {
   BuildContext? _childContext;
   late Widget _originChild;
 
+  late Alignment _alignment;
+  AttachAdjustParam? _adjustParam;
+
   @override
   void initState() {
+    _alignment = widget.alignment;
     _resetState();
-
     super.initState();
   }
 
@@ -99,7 +105,7 @@ class _AttachWidgetState extends State<AttachWidget> {
         right: _targetRect?.right,
         top: _targetRect?.top,
         bottom: _targetRect?.bottom,
-        child: widget.builder(child),
+        child: widget.builder(child, _adjustParam),
       ),
 
       //above
@@ -137,7 +143,7 @@ class _AttachWidgetState extends State<AttachWidget> {
     final screen = MediaQuery.of(context).size;
 
     //动画方向及其位置
-    final alignment = widget.alignment;
+    final alignment = _alignment;
 
     if (alignment == Alignment.topLeft) {
       _targetRect = _adjustReactInfo(
@@ -199,20 +205,24 @@ class _AttachWidgetState extends State<AttachWidget> {
       );
     }
 
-    if (widget.beforeBuilder != null) {
-      _originChild = widget.beforeBuilder!.call(
-        targetOffset,
-        targetSize,
-        Offset(
-          _targetRect?.left != null
-              ? _targetRect!.left!
-              : screen.width - ((_targetRect?.right ?? 0) + selfSize.width),
-          _targetRect?.top != null
-              ? _targetRect!.top!
-              : screen.height - ((_targetRect?.bottom ?? 0) + selfSize.height),
-        ),
-        selfSize,
-      );
+    AttachAdjustParam adjustParam = _adjustParam = widget.beforeBuilder.call(
+      targetOffset,
+      targetSize,
+      Offset(
+        _targetRect?.left != null
+            ? _targetRect!.left!
+            : screen.width - ((_targetRect?.right ?? 0) + selfSize.width),
+        _targetRect?.top != null
+            ? _targetRect!.top!
+            : screen.height - ((_targetRect?.bottom ?? 0) + selfSize.height),
+      ),
+      selfSize,
+    );
+    _originChild = adjustParam.builder?.call(context) ?? _originChild;
+    if (_alignment != adjustParam.alignment) {
+      _alignment = adjustParam.alignment ?? Alignment.center;
+      _handleLocation();
+      return;
     }
 
     //第一帧后恢复透明度,同时重置位置信息

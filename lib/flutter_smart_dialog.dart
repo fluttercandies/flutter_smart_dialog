@@ -8,6 +8,9 @@ export 'src/config/smart_config_loading.dart';
 export 'src/config/smart_config_notify.dart';
 export 'src/config/smart_config_toast.dart';
 export 'src/data/animation_param.dart' show AnimationParam;
+
+/// model
+export 'src/data/attach_model.dart';
 export 'src/data/notify_style.dart';
 
 /// dialog

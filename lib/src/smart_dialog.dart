@@ -232,10 +232,12 @@ class SmartDialog {
   ///
   /// [builder]：the custom dialog
   ///
-  /// [replaceBuilder]：The widget returned in [replaceBuilder] will replace the widget returned in [builder];
-  /// [replaceBuilder] will callback the offset and size of the target widget and the offset and size of the dialog itself.
+  /// [replaceBuilder]：deprecated, please use adjustBuilder
+  ///
+  /// [adjustBuilder]：The widget returned in [adjustBuilder] will replace the widget returned in [builder];
+  /// [adjustBuilder] will callback the offset and size of the target widget and the offset and size of the dialog itself.
   /// You can customize a suitable replacement widget according to these parameters.
-  /// It is strongly recommended that the width and height of the custom widget returned by [replaceBuilder] should be consistent with that in [builder],
+  /// It is strongly recommended that the width and height of the custom widget returned by [adjustBuilder] should be consistent with that in [builder],
   /// and the positioning information in showAttach is calculated based on the widget in [builder].
   ///
   /// [controller]：this controller can be used to refresh the layout of the custom dialog
@@ -326,9 +328,11 @@ class SmartDialog {
   ///
   /// [builder]：自定义 dialog
   ///
-  /// [replaceBuilder]：[replaceBuilder]中返回widget会替换掉[builder]中返回的widget;
-  /// [replaceBuilder]将回调目标widget的坐标,大小和dialog自身的坐标,大小,你可以根据这些参数,重新自定义一个合适的替换widget,
-  /// 强烈建议[replaceBuilder]返回的自定义的widget宽高和[builder]中的保持一致, showAttach中定位信息都是根据[builder]中widget计算得来的
+  /// [replaceBuilder]：已废弃, 请使用adjustBuilder
+  ///
+  /// [adjustBuilder]：[adjustBuilder]中返回widget会替换掉[builder]中返回的widget;
+  /// [adjustBuilder]将回调目标widget的坐标,大小和dialog自身的坐标,大小,你可以根据这些参数,重新自定义一个合适的替换widget,
+  /// 强烈建议[adjustBuilder]返回的自定义的widget宽高和[builder]中的保持一致, showAttach中定位信息都是根据[builder]中widget计算得来的
   ///
   /// [controller]：可使用该控制器来刷新自定义的dialog的布局
   ///
@@ -401,7 +405,8 @@ class SmartDialog {
   static Future<T?> showAttach<T>({
     required BuildContext? targetContext,
     required WidgetBuilder builder,
-    ReplaceBuilder? replaceBuilder,
+    @Deprecated("Please use adjustBuilder") ReplaceBuilder? replaceBuilder,
+    AdjustBuilder? adjustBuilder,
     SmartDialogController? controller,
     TargetBuilder? targetBuilder,
     Alignment? alignment,
@@ -452,6 +457,7 @@ class SmartDialog {
       ),
       targetBuilder: targetBuilder,
       replaceBuilder: replaceBuilder,
+      adjustBuilder: adjustBuilder,
       alignment: alignment ?? config.attach.alignment,
       clickMaskDismiss: clickMaskDismiss ?? config.attach.clickMaskDismiss,
       animationType: animationType ?? config.attach.animationType,

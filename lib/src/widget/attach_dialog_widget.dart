@@ -30,6 +30,8 @@ typedef ReplaceBuilder = Widget Function(
   Size selfSize,
 );
 
+typedef AdjustBuilder = AttachAdjustParam Function(AttachParam attachParam);
+
 typedef ScalePointBuilder = Offset Function(Size selfSize);
 
 class AttachDialogWidget extends StatefulWidget {
@@ -39,6 +41,7 @@ class AttachDialogWidget extends StatefulWidget {
     required this.targetContext,
     required this.targetBuilder,
     required this.replaceBuilder,
+    required this.adjustBuilder,
     required this.controller,
     required this.animationTime,
     required this.useAnimation,
@@ -63,6 +66,8 @@ class AttachDialogWidget extends StatefulWidget {
   final TargetBuilder? targetBuilder;
 
   final ReplaceBuilder? replaceBuilder;
+
+  final AdjustBuilder? adjustBuilder;
 
   /// 是否使用动画
   final bool useAnimation;
@@ -186,8 +191,8 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       beforeBuilder: beforeBuilder,
       alignment: widget.alignment,
       originChild: _child,
-      builder: (Widget child) {
-        return _buildBodyAnimation(child);
+      builder: (Widget child, AttachAdjustParam? adjustParam) {
+        return _buildBodyAnimation(child, adjustParam);
       },
       belowBuilder: (targetOffset, targetSize) {
         return [
@@ -219,12 +224,14 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     );
   }
 
-  Widget beforeBuilder(
+  AttachAdjustParam beforeBuilder(
     Offset targetOffset,
     Size targetSize,
     Offset selfOffset,
     Size selfSize,
   ) {
+    AttachAdjustParam? adjustParam;
+
     //替换控件builder
     if (widget.replaceBuilder != null) {
       Widget replaceChildBuilder() {
@@ -247,6 +254,32 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       }
     }
 
+    // 处理调整组件
+    if (widget.adjustBuilder != null) {
+      adjustParam = widget.adjustBuilder!(
+        AttachParam(
+          targetOffset: targetOffset,
+          targetSize: targetSize,
+          selfWidget: widget.child,
+          selfOffset: selfOffset,
+          selfSize: selfSize,
+        ),
+      );
+
+      final WidgetBuilder? adjustWidgetBuilder = adjustParam.builder;
+      if (adjustWidgetBuilder != null) {
+        // 必须要写在DialogScope的builder之外,保证在scalePointBuilder之前触发adjustBuilder
+        adjustWidgetBuilder(context);
+        //保证controller能刷新replaceBuilder
+        if (widget.child is DialogScope) {
+          _child = DialogScope(
+            controller: (widget.child as DialogScope).controller,
+            builder: (context) => adjustWidgetBuilder(context),
+          );
+        }
+      }
+    }
+
     //缩放动画的缩放点
     if (widget.scalePointBuilder != null) {
       var halfWidth = selfSize.width / 2;
@@ -259,16 +292,20 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       _scaleAlignment = Alignment(rateX, rateY);
     }
 
-    return _child;
+    return AttachAdjustParam(
+      alignment: adjustParam?.alignment ?? widget.alignment,
+      builder: (context) => _child,
+    );
   }
 
-  Widget _buildBodyAnimation(Widget child) {
+  Widget _buildBodyAnimation(Widget child, AttachAdjustParam? adjustParam) {
+    var alignment = adjustParam?.alignment ?? widget.alignment;
     if (widget.animationBuilder != null) {
       return widget.animationBuilder!.call(
         _bodyController,
         child,
         _animationParam = AnimationParam(
-          alignment: widget.alignment,
+          alignment: alignment,
           animationTime: widget.animationTime,
         ),
       );
@@ -282,7 +319,7 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
       child: child,
     );
     Widget size = SizeAnimation(
-      alignment: widget.alignment,
+      alignment: alignment,
       controller: _bodyController,
       child: child,
     );
@@ -294,13 +331,13 @@ class _AttachDialogWidgetState extends State<AttachDialogWidget>
     } else if (type == SmartAnimationType.scale) {
       animation = scale;
     } else if (type == SmartAnimationType.centerFade_otherSlide) {
-      if (widget.alignment == Alignment.center) {
+      if (alignment == Alignment.center) {
         animation = fade;
       } else {
         animation = size;
       }
     } else if (type == SmartAnimationType.centerScale_otherSlide) {
-      if (widget.alignment == Alignment.center) {
+      if (alignment == Alignment.center) {
         animation = scale;
       } else {
         animation = size;

@@ -6,6 +6,7 @@
 * Break change
   * Delete CompatibleSmartDialog
   * Delete SmartConfigCustom/SmartConfigAttach/SmartConfigLoading backDismiss
+* Add AdjustBuilder
 
 * # [4.9.7+x]
 * optimize bindWidget, when bindWidget is not null, bindPage will be automatically set to false.
