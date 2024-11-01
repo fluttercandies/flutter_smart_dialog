@@ -283,6 +283,7 @@ class DialogProxy {
     required Widget widget,
     required SmartBackType backType,
     required SmartOnBack? onBack,
+    SmartAwaitOverType? awaitOverType,
   }) {
     loadingInfo.onBack = onBack;
     loadingInfo.backType = backType;
@@ -301,6 +302,7 @@ class DialogProxy {
       onMask: onMask,
       displayTime: displayTime,
       widget: widget,
+      awaitOverType: awaitOverType,
     );
   }
 
@@ -358,8 +360,7 @@ class DialogProxy {
     if (status == SmartStatus.smart) {
       var loading = config.loading.isExist;
 
-      if (loading &&
-          (tag == null || (dialogQueue.isEmpty && notifyQueue.isEmpty))) {
+      if (loading && (tag == null || (dialogQueue.isEmpty && notifyQueue.isEmpty))) {
         return loadingInfo.loadingWidget.dismiss(closeType: closeType);
       }
 
@@ -398,8 +399,7 @@ class DialogProxy {
       return CustomToast.dismiss(closeAll: true);
     } else if (status == SmartStatus.loading) {
       return loadingInfo.loadingWidget.dismiss(closeType: closeType);
-    } else if (status == SmartStatus.notify ||
-        status == SmartStatus.allNotify) {
+    } else if (status == SmartStatus.notify || status == SmartStatus.allNotify) {
       return CustomNotify.dismiss<T>(
         type: _convertEnum(status)!,
         tag: tag,

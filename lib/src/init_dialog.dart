@@ -1,21 +1,46 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_smart_dialog/src/helper/navigator_observer.dart';
-import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
-import 'package:flutter_smart_dialog/src/widget/default/notify_alter.dart';
-import 'package:flutter_smart_dialog/src/widget/default/notify_error.dart';
-import 'package:flutter_smart_dialog/src/widget/default/notify_failure.dart';
-
+import '../flutter_smart_dialog.dart';
+import 'config/smart_config_attributes.dart';
+import 'helper/navigator_observer.dart';
+import 'kit/view_utils.dart';
+import 'widget/default/notify_alert.dart';
 import 'helper/dialog_proxy.dart';
 import 'helper/pop_monitor/boost_route_monitor.dart';
 import 'helper/pop_monitor/monitor_pop_route.dart';
 import 'widget/default/loading_widget.dart';
-import 'widget/default/notify_success.dart';
-import 'widget/default/notify_warning.dart';
 import 'widget/default/toast_widget.dart';
 
-typedef FlutterSmartToastBuilder = Widget Function(String msg);
-typedef FlutterSmartLoadingBuilder = Widget Function(String msg);
+/// A typedef for a function that builds a customizable toast widget.
+typedef FlutterSmartToastBuilder = Widget Function({
+  required String msg,
+  String? title,
+  Widget? titleWidget,
+  Widget? leadingWidget,
+  Widget? trailingWidget,
+  Color? color,
+  Color? txtColor,
+  TextStyle? txtStyle,
+  EdgeInsets? margin,
+  double? spaceAroundTxt,
+  EdgeInsets? padding,
+  bool isHorizontal,
+  TextStyle? titleStyle,
+  BorderRadius? borderRadius,
+});
+
+/// A typedef for a function that builds a customizable loading widget.
+typedef FlutterSmartLoadingBuilder = Widget Function({
+  String? msg,
+  Color? color,
+  Color? txtColor,
+  Color? loadingColor,
+  double spacer,
+  Widget? loadingIndicator,
+  BorderRadius? borderRadius,
+  TextStyle? msgStyle,
+  bool isHorizontal,
+});
+
 typedef FlutterSmartStyleBuilder = Widget Function(Widget child);
 
 class FlutterSmartDialog extends StatefulWidget {
@@ -27,6 +52,7 @@ class FlutterSmartDialog extends StatefulWidget {
     this.notifyStyle,
     this.styleBuilder,
     this.initType,
+    this.defaultAttributes,
   }) : super(key: key);
 
   final Widget? child;
@@ -46,14 +72,16 @@ class FlutterSmartDialog extends StatefulWidget {
   ///inti type
   final Set<SmartInitType>? initType;
 
+  ///set default attributes
+  final SmartConfigAttributes? defaultAttributes;
+
   @override
   State<FlutterSmartDialog> createState() => _FlutterSmartDialogState();
 
   static SmartNavigatorObserver get observer => SmartNavigatorObserver();
 
   ///Compatible with flutter_boost
-  static Route<dynamic>? boostMonitor(Route<dynamic>? route) =>
-      BoostRouteMonitor.instance.push(route);
+  static Route<dynamic>? boostMonitor(Route<dynamic>? route) => BoostRouteMonitor.instance.push(route);
 
   ///recommend the way of init
   static TransitionBuilder init({
@@ -68,6 +96,8 @@ class FlutterSmartDialog extends StatefulWidget {
     FlutterSmartStyleBuilder? styleBuilder,
     //init type
     Set<SmartInitType>? initType,
+    //set default attributes
+    SmartConfigAttributes? defaultAttributes,
   }) {
     MonitorPopRoute.instance;
 
@@ -79,6 +109,7 @@ class FlutterSmartDialog extends StatefulWidget {
               notifyStyle: notifyStyle,
               styleBuilder: styleBuilder,
               initType: initType,
+              defaultAttributes: defaultAttributes,
               child: child,
             )
           : builder(
@@ -89,6 +120,7 @@ class FlutterSmartDialog extends StatefulWidget {
                 notifyStyle: notifyStyle,
                 styleBuilder: styleBuilder,
                 initType: initType,
+                defaultAttributes: defaultAttributes,
                 child: child,
               ),
             );
@@ -118,8 +150,7 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
     });
 
     // init param
-    styleBuilder = widget.styleBuilder ??
-        (Widget child) => Material(color: Colors.transparent, child: child);
+    styleBuilder = widget.styleBuilder ?? (Widget child) => Material(color: Colors.transparent, child: child);
     initType = widget.initType ??
         {
           SmartInitType.custom,
@@ -129,29 +160,82 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
           SmartInitType.notify,
         };
 
+    if (widget.defaultAttributes != null) {
+      DialogProxy.instance.config.configureDefaultAttributes(widget.defaultAttributes!);
+    }
+
     // solve Flutter Inspector -> select widget mode function failure problem
     DialogProxy.instance.initialize(initType);
 
     // default toast / loading / notify
     if (initType.contains(SmartInitType.toast)) {
-      DialogProxy.instance.toastBuilder =
-          widget.toastBuilder ?? (String msg) => ToastWidget(msg: msg);
+      DialogProxy.instance.toastBuilder = widget.toastBuilder ??
+          (((
+                  {required String msg,
+                  String? title,
+                  Widget? titleWidget,
+                  Widget? leadingWidget,
+                  Widget? trailingWidget,
+                  Color? color,
+                  Color? txtColor,
+                  TextStyle? txtStyle,
+                  EdgeInsets? margin,
+                  double? spaceAroundTxt,
+                  EdgeInsets? padding,
+                  bool isHorizontal = true,
+                  TextStyle? titleStyle,
+                  BorderRadius? borderRadius}) =>
+              ToastWidget(
+                msg: msg,
+                title: title,
+                titleWidget: titleWidget,
+                leadingWidget: leadingWidget,
+                trailingWidget: trailingWidget,
+                color: color,
+                txtColor: txtColor,
+                txtStyle: txtStyle,
+                margin: margin,
+                spaceAroundTxt: spaceAroundTxt,
+                padding: padding,
+                isHorizontal: isHorizontal,
+                titleStyle: titleStyle,
+                borderRadius: borderRadius,
+              )));
     }
+
     if (initType.contains(SmartInitType.loading)) {
-      DialogProxy.instance.loadingBuilder =
-          widget.loadingBuilder ?? (String msg) => LoadingWidget(msg: msg);
+      DialogProxy.instance.loadingBuilder = widget.loadingBuilder ??
+          (
+                  {String? msg,
+                  Color? color,
+                  Color? txtColor,
+                  Color? loadingColor,
+                  double spacer = 20,
+                  Widget? loadingIndicator,
+                  BorderRadius? borderRadius,
+                  TextStyle? msgStyle,
+                  bool isHorizontal = false}) =>
+              LoadingWidget(
+                msg: msg,
+                color: color,
+                txtColor: txtColor,
+                loadingColor: loadingColor,
+                spacer: spacer,
+                loadingIndicator: loadingIndicator,
+                borderRadius: borderRadius,
+                msgStyle: msgStyle,
+                isHorizontal: isHorizontal,
+              );
     }
+
     if (initType.contains(SmartInitType.notify)) {
       var notify = widget.notifyStyle;
       DialogProxy.instance.notifyStyle = FlutterSmartNotifyStyle(
-        successBuilder:
-            notify?.successBuilder ?? (msg) => NotifySuccess(msg: msg),
-        failureBuilder:
-            notify?.failureBuilder ?? (msg) => NotifyFailure(msg: msg),
-        warningBuilder:
-            notify?.warningBuilder ?? (msg) => NotifyWarning(msg: msg),
-        alertBuilder: notify?.alertBuilder ?? (msg) => NotifyAlter(msg: msg),
-        errorBuilder: notify?.errorBuilder ?? (msg) => NotifyError(msg: msg),
+        successBuilder: notify?.successBuilder ?? defaultSuccessBuilder,
+        failureBuilder: notify?.failureBuilder ?? defaultFailureBuilder,
+        warningBuilder: notify?.warningBuilder ?? defaultWarningBuilder,
+        alertBuilder: notify?.alertBuilder ?? defaultAlertBuilder,
+        errorBuilder: notify?.errorBuilder ?? defaultErrorBuilder,
       );
     }
 
@@ -189,8 +273,7 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
         //   DialogProxy.instance.entryNotify,
 
         //provided separately for loading
-        if (initType.contains(SmartInitType.loading))
-          DialogProxy.instance.entryLoading,
+        if (initType.contains(SmartInitType.loading)) DialogProxy.instance.entryLoading,
       ]),
     );
   }

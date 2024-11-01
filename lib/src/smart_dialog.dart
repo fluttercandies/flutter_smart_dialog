@@ -1,11 +1,15 @@
 import 'dart:async';
+import 'dart:collection';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_smart_dialog/src/data/notify_info.dart';
 import 'package:flutter_smart_dialog/src/kit/typedef.dart';
 
 import 'config/smart_config.dart';
 import 'data/animation_param.dart';
+import 'data/dialog_info.dart';
 import 'helper/dialog_proxy.dart';
 import 'kit/dialog_kit.dart';
 import 'widget/attach_dialog_widget.dart';
@@ -184,11 +188,7 @@ class SmartDialog {
     SmartOnBack? onBack,
   }) {
     assert(
-      (useSystem == true &&
-              tag == null &&
-              permanent == null &&
-              keepSingle == null) ||
-          (useSystem == null || useSystem == false),
+      (useSystem == true && tag == null && permanent == null && keepSingle == null) || (useSystem == null || useSystem == false),
       'useSystem is true; tag, keepSingle and permanent prohibit setting values',
     );
 
@@ -218,10 +218,7 @@ class SmartDialog {
       bindPage: (bindPage ?? config.custom.bindPage) && bindWidget == null,
       bindWidget: bindWidget,
       ignoreArea: ignoreArea,
-      backType: backType ??
-          (backDismiss == null
-              ? config.custom.backType
-              : (backDismiss ? SmartBackType.normal : SmartBackType.block)),
+      backType: backType ?? (backDismiss == null ? config.custom.backType : (backDismiss ? SmartBackType.normal : SmartBackType.block)),
       onBack: onBack,
     );
   }
@@ -441,11 +438,7 @@ class SmartDialog {
       'targetContext and target, cannot both be null',
     );
     assert(
-      (useSystem == true &&
-              tag == null &&
-              permanent == null &&
-              keepSingle == null) ||
-          (useSystem == null || useSystem == false),
+      (useSystem == true && tag == null && permanent == null && keepSingle == null) || (useSystem == null || useSystem == false),
       'useSystem is true; tag, keepSingle and permanent prohibit setting values',
     );
 
@@ -481,10 +474,7 @@ class SmartDialog {
       useSystem: useSystem ?? false,
       bindPage: (bindPage ?? config.attach.bindPage) && bindWidget == null,
       bindWidget: bindWidget,
-      backType: backType ??
-          (backDismiss == null
-              ? config.attach.backType
-              : (backDismiss ? SmartBackType.normal : SmartBackType.block)),
+      backType: backType ?? (backDismiss == null ? config.attach.backType : (backDismiss ? SmartBackType.normal : SmartBackType.block)),
       onBack: onBack,
     );
   }
@@ -539,6 +529,33 @@ class SmartDialog {
   ///
   /// [onBack]： Return event monitoring, return true, which means to intercept the back event;
   /// return false, which means not to intercept, and perform operations such as closing the dialog normally
+  /// [title] - The title of the toast, displayed above the message if [titleWidget] is not provided.
+  ///
+  /// [titleWidget] - Custom widget for the title, used instead of [title] if provided.
+  ///
+  /// [leadingWidget] - Widget displayed before the title and message, typically an icon.
+  ///
+  /// [trailingWidget] - Widget displayed after the title and message, typically an icon or button.
+  ///
+  /// [color] - Background color of the toast container. Defaults to theme's background color.
+  ///
+  /// [txtColor] - Text color for both title and message if [txtStyle] or [titleStyle] is not provided.
+  ///
+  /// [txtStyle] - Text style for the message text.
+  ///
+  /// [margin] - Space between the title/message and the container edges.
+  ///
+  /// [padding] - Padding inside the container around the title and message.
+  ///
+  /// [spaceAroundTxt] - Space between the title, message, and any leading or trailing widget.
+  ///
+  /// [isHorizontal] - If `true`, the layout is horizontal; otherwise, it is vertical.
+  ///
+  /// [msg] - The main message displayed in the toast. This is a required parameter.
+  ///
+  /// [titleStyle] - Text style for the title, allowing customization of font size, weight, etc.
+  ///
+  /// [borderRadius] - Border radius for the toast container.
   /// -------------------------------------------------------------------------------
   ///
   /// 通过设置NotifyType, 可使用多种不同类型的提示弹窗
@@ -587,6 +604,7 @@ class SmartDialog {
   /// [backType]：对于返回事件不同的处理类型, 具体可参照[SmartBackType]说明
   ///
   /// [onBack]：返回事件监听，返回true，代表拦截此次返回事件；返回false，代表不拦截，正常执行关闭弹窗等操作
+  ///
   static Future<T?> showNotify<T>({
     required String msg,
     required NotifyType notifyType,
@@ -608,8 +626,21 @@ class SmartDialog {
     Duration? displayTime,
     String? tag,
     bool? keepSingle,
+    bool isHorizontal = false,
     SmartBackType? backType,
     SmartOnBack? onBack,
+    String? title,
+    Widget? titleWidget,
+    Widget? leadingWidget,
+    Widget? trailingWidget,
+    Color? color,
+    Color? txtColor,
+    TextStyle? txtStyle,
+    EdgeInsets? margin,
+    double? spaceAroundTxt,
+    EdgeInsets? padding,
+    TextStyle? titleStyle,
+    BorderRadius? borderRadius,
   }) {
     return DialogProxy.instance.showNotify<T>(
       widget: DialogScope(
@@ -621,18 +652,29 @@ class SmartDialog {
 
           Widget? widget;
           var notifyStyle = DialogProxy.instance.notifyStyle;
-          if (notifyType == NotifyType.success) {
-            widget = notifyStyle.successBuilder?.call(msg);
-          } else if (notifyType == NotifyType.failure) {
-            widget = notifyStyle.failureBuilder?.call(msg);
-          } else if (notifyType == NotifyType.warning) {
-            widget = notifyStyle.warningBuilder?.call(msg);
-          } else if (notifyType == NotifyType.alert) {
-            widget = notifyStyle.alertBuilder?.call(msg);
-          } else if (notifyType == NotifyType.error) {
-            widget = notifyStyle.errorBuilder?.call(msg);
-          }
+          FlutterSmartToastBuilder? flutterSmartToastBuilder = {
+            NotifyType.success: notifyStyle.successBuilder,
+            NotifyType.failure: notifyStyle.failureBuilder,
+            NotifyType.warning: notifyStyle.warningBuilder,
+            NotifyType.alert: notifyStyle.alertBuilder,
+            NotifyType.error: notifyStyle.errorBuilder,
+          }[notifyType];
 
+          widget = flutterSmartToastBuilder?.call(
+            msg: msg,
+            title: title,
+            titleWidget: titleWidget,
+            trailingWidget: trailingWidget,
+            color: color,
+            txtColor: txtColor,
+            txtStyle: txtStyle,
+            margin: margin,
+            spaceAroundTxt: spaceAroundTxt,
+            padding: padding,
+            isHorizontal: isHorizontal,
+            titleStyle: titleStyle,
+            borderRadius: borderRadius,
+          );
           return widget ?? Container();
         },
       ),
@@ -703,6 +745,25 @@ class SmartDialog {
   /// return false, which means not to intercept, and perform operations such as closing the dialog normally
   ///
   /// [builder]：the custom loading
+  ///
+  /// [color] - Background color of the widget. Defaults to theme's background color.
+  ///
+  /// [txtColor] - Text color for the loading message. Defaults to theme's text color.
+  ///
+  /// [loadingColor] - Color of the loading indicator. Defaults to [txtColor] or theme's text color.
+  ///
+  /// [spacer] - Space between the loading indicator and message text. Default is 20.
+  ///
+  /// [loadingIndicator] - Custom loading indicator widget. Defaults to a [CircularProgressIndicator].
+  ///
+  /// [borderRadius] - Border radius for the container. Defaults to 15 if not specified.
+  ///
+  /// [msgStyle] - Text style for the message, allowing customization of font size, color, etc.
+  ///
+  /// [isHorizontal] - If `true`, the layout is horizontal; otherwise, it is vertical.
+  ///
+  /// [padding] - Dialog padding.
+
   /// -------------------------------------------------------------------------------
   ///
   /// loading弹窗
@@ -745,34 +806,53 @@ class SmartDialog {
   /// [onBack]：返回事件监听，返回true，代表拦截此次返回事件；返回false，代表不拦截，正常执行关闭弹窗等操作
   ///
   /// [builder]：自定义loading
-  static Future<T?> showLoading<T>({
-    String msg = 'loading...',
-    SmartDialogController? controller,
-    Alignment? alignment,
-    bool? clickMaskDismiss,
-    SmartAnimationType? animationType,
-    List<SmartNonAnimationType>? nonAnimationTypes,
-    AnimationBuilder? animationBuilder,
-    bool? usePenetrate,
-    bool? useAnimation,
-    Duration? animationTime,
-    Color? maskColor,
-    Widget? maskWidget,
-    VoidCallback? onDismiss,
-    VoidCallback? onMask,
-    Duration? displayTime,
-    @Deprecated("please use backType") bool? backDismiss,
-    SmartBackType? backType,
-    SmartOnBack? onBack,
-    WidgetBuilder? builder,
-  }) {
+  static Future<T?> showLoading<T>(
+      {String msg = 'loading...',
+      SmartDialogController? controller,
+      Alignment? alignment,
+      bool? clickMaskDismiss,
+      SmartAnimationType? animationType,
+      List<SmartNonAnimationType>? nonAnimationTypes,
+      AnimationBuilder? animationBuilder,
+      bool? usePenetrate,
+      bool? useAnimation,
+      Duration? animationTime,
+      Color? maskColor,
+      Widget? maskWidget,
+      VoidCallback? onDismiss,
+      VoidCallback? onMask,
+      Duration? displayTime,
+      @Deprecated("please use backType") bool? backDismiss,
+      SmartBackType? backType,
+      SmartOnBack? onBack,
+      WidgetBuilder? builder,
+      Color? color,
+      Color? txtColor,
+      Color? loadingColor,
+      double spacer = 20,
+      Widget? loadingIndicator,
+      BorderRadius? borderRadius,
+      TextStyle? msgStyle,
+      bool isHorizontal = false,
+      SmartAwaitOverType? awaitOverType}) {
+    print('showLoading backType = $backType');
     return DialogProxy.instance.showLoading<T>(
       widget: DialogScope(
         controller: controller,
         builder: (context) {
           return builder != null
               ? builder(context)
-              : DialogProxy.instance.loadingBuilder(msg);
+              : DialogProxy.instance.loadingBuilder(
+                  msg: msg,
+                  color: color,
+                  txtColor: txtColor,
+                  loadingColor: loadingColor,
+                  spacer: spacer,
+                  loadingIndicator: loadingIndicator,
+                  borderRadius: borderRadius,
+                  msgStyle: msgStyle,
+                  isHorizontal: isHorizontal,
+                );
         },
       ),
       alignment: alignment ?? config.loading.alignment,
@@ -786,12 +866,10 @@ class SmartDialog {
       maskColor: maskColor ?? config.loading.maskColor,
       maskWidget: maskWidget ?? config.loading.maskWidget,
       onDismiss: onDismiss,
+      awaitOverType: awaitOverType,
       onMask: onMask,
       displayTime: displayTime,
-      backType: backType ??
-          (backDismiss == null
-              ? config.loading.backType
-              : (backDismiss ? SmartBackType.normal : SmartBackType.block)),
+      backType: backType ?? (backDismiss == null ? config.loading.backType : (backDismiss ? SmartBackType.normal : SmartBackType.block)),
       onBack: onBack,
     );
   }
@@ -840,6 +918,34 @@ class SmartDialog {
   ///
   /// [builder]：the custom toast
   ///
+  /// [title] - The title of the toast, displayed above the message if [titleWidget] is not provided.
+  ///
+  /// [titleWidget] - Custom widget for the title, used instead of [title] if provided.
+  ///
+  /// [leadingWidget] - Widget displayed before the title and message, typically an icon.
+  ///
+  /// [trailingWidget] - Widget displayed after the title and message, typically an icon or button.
+  ///
+  /// [color] - Background color of the toast container. Defaults to theme's background color.
+  ///
+  /// [txtColor] - Text color for both title and message if [txtStyle] or [titleStyle] is not provided.
+  ///
+  /// [txtStyle] - Text style for the message text.
+  ///
+  /// [margin] - Space between the title/message and the container edges.
+  ///
+  /// [padding] - Padding inside the container around the title and message.
+  ///
+  /// [spaceAroundTxt] - Space between the title, message, and any leading or trailing widget.
+  ///
+  /// [isHorizontal] - If `true`, the layout is horizontal; otherwise, it is vertical.
+  ///
+  /// [msg] - The main message displayed in the toast. This is a required parameter.
+  ///
+  /// [titleStyle] - Text style for the title, allowing customization of font size, weight, etc.
+  ///
+  /// [borderRadius] - Border radius for the toast container.
+
   /// -------------------------------------------------------------------------------
   ///
   /// toast消息
@@ -901,6 +1007,20 @@ class SmartDialog {
     bool? debounce,
     SmartToastType? displayType,
     WidgetBuilder? builder,
+    // ToastWidget specific parameters
+    String? title,
+    Widget? titleWidget,
+    Widget? leadingWidget,
+    Widget? trailingWidget,
+    Color? color,
+    Color? txtColor,
+    TextStyle? txtStyle,
+    EdgeInsets? margin,
+    double spaceAroundTxt = 8,
+    EdgeInsets? padding,
+    bool isHorizontal = true,
+    TextStyle? titleStyle,
+    BorderRadius? borderRadius,
   }) async {
     return DialogProxy.instance.showToast(
       widget: DialogScope(
@@ -908,7 +1028,22 @@ class SmartDialog {
         builder: (context) {
           return builder != null
               ? builder(context)
-              : DialogProxy.instance.toastBuilder(msg);
+              : DialogProxy.instance.toastBuilder(
+                  msg: msg,
+                  title: title,
+                  titleWidget: titleWidget,
+                  leadingWidget: leadingWidget,
+                  trailingWidget: trailingWidget,
+                  color: color,
+                  txtColor: txtColor,
+                  txtStyle: txtStyle,
+                  margin: margin,
+                  spaceAroundTxt: spaceAroundTxt,
+                  padding: padding,
+                  isHorizontal: isHorizontal,
+                  titleStyle: titleStyle,
+                  borderRadius: borderRadius,
+                );
         },
       ),
       displayTime: displayTime ?? config.toast.displayTime,
@@ -979,4 +1114,68 @@ class SmartDialog {
   }) {
     return DialogKit.instance.checkExist(tag: tag, dialogTypes: dialogTypes);
   }
+
+  /// check isAnyShown
+  static bool get isAnyShown => checkExist(dialogTypes: {
+        SmartAllDialogType.custom,
+        SmartAllDialogType.attach,
+        SmartAllDialogType.loading,
+        SmartAllDialogType.notify,
+        SmartAllDialogType.toast,
+      });
+
+  /// check isDialogShown
+  static bool get isDialogShown => isCustomShown || isAttachShown;
+
+  /// check isToastShown
+  static bool get isToastShown => checkExist(dialogTypes: {SmartAllDialogType.toast});
+
+  /// check isNotifyShown
+  static bool get isNotifyShown => checkExist(dialogTypes: {SmartAllDialogType.notify});
+
+  /// check isAttachShown
+  static bool get isAttachShown => checkExist(dialogTypes: {SmartAllDialogType.attach});
+
+  /// check isLoadingShown
+  static bool get isLoadingShown => checkExist(dialogTypes: {SmartAllDialogType.loading});
+
+  /// check isCustomShown
+  static bool get isCustomShown => checkExist(dialogTypes: {SmartAllDialogType.custom});
+
+  /// get firstDialogInfo
+  static DialogInfo? get firstDialogInfo => DialogProxy.instance.dialogQueue.firstOrNull;
+
+  /// get lastDialogInfo
+  static DialogInfo? get lastDialogInfo => DialogProxy.instance.dialogQueue.lastOrNull;
+
+  /// get dialogQueueInfo
+  static Queue<DialogInfo> get dialogQueueInfo => DialogProxy.instance.dialogQueue;
+
+  /// get firstNotifyInfo
+  static NotifyInfo? get firstNotifyInfo => DialogProxy.instance.notifyQueue.firstOrNull;
+
+  /// get lastNotifyInfo
+  static NotifyInfo? get lastNotifyInfo => DialogProxy.instance.notifyQueue.lastOrNull;
+
+  /// get notifyQueueInfo
+  static Queue<NotifyInfo> get notifyQueueInfo => DialogProxy.instance.notifyQueue;
+
+  /// check isCurrentDialogBackDismissible
+  /// bool includeLoading to check loading or not
+  static bool isCurrentDialogBackDismissible({bool includeLoading = true}) {
+    if (!isAnyShown) return true;
+
+    // Check custom dialog conditions
+    if (config.custom.isExist && lastDialogInfo?.backType != SmartBackType.normal) return false;
+
+    // Additional check for loading dialogs if includeLoading is true
+    if (includeLoading && config.loading.isExist && (DialogProxy.instance.loadingInfo.backType != SmartBackType.normal)) return false;
+
+    return true;
+  }
+}
+
+extension SmartDialogIterableExtensions<T> on Iterable<T> {
+  T? get firstOrNull => isEmpty ? null : first;
+  T? get lastOrNull => isEmpty ? null : last;
 }

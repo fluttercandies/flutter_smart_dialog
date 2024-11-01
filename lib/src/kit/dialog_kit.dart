@@ -27,23 +27,24 @@ class DialogKit {
       return false;
     }
 
-    var result = false;
+    if (dialogTypes.isEmpty) return false;
+
     if (dialogTypes.contains(SmartAllDialogType.custom)) {
-      result = SmartDialog.config.custom.isExist || result;
+      if (SmartDialog.config.custom.isExist) return true;
     }
     if (dialogTypes.contains(SmartAllDialogType.attach)) {
-      result = SmartDialog.config.attach.isExist || result;
+      if (SmartDialog.config.attach.isExist) return true;
     }
     if (dialogTypes.contains(SmartAllDialogType.notify)) {
-      result = SmartDialog.config.notify.isExist || result;
+      if (SmartDialog.config.notify.isExist) return true;
     }
     if (dialogTypes.contains(SmartAllDialogType.loading)) {
-      result = SmartDialog.config.loading.isExist || result;
+      if (SmartDialog.config.loading.isExist) return true;
     }
     if (dialogTypes.contains(SmartAllDialogType.toast)) {
-      result = SmartDialog.config.toast.isExist || result;
+      if (SmartDialog.config.toast.isExist) return true;
     }
 
-    return result;
+    return false;
   }
 }

@@ -9,8 +9,7 @@ import '../data/base_dialog.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
 class CustomLoading extends BaseDialog {
-  CustomLoading({required SmartOverlayEntry overlayEntry})
-      : super(overlayEntry);
+  CustomLoading({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
 
   Timer? _timer;
   Timer? _displayTimer;
@@ -32,11 +31,11 @@ class CustomLoading extends BaseDialog {
     required VoidCallback? onDismiss,
     required VoidCallback? onMask,
     required Duration? displayTime,
+    required SmartAwaitOverType? awaitOverType,
   }) {
     List<SmartNonAnimationType> nonAnimations = [...nonAnimationTypes];
     var continueLoading = SmartNonAnimationType.continueLoading_nonAnimation;
-    if (SmartDialog.config.loading.isExist &&
-        nonAnimations.contains(continueLoading)) {
+    if (SmartDialog.config.loading.isExist && nonAnimations.contains(continueLoading)) {
       nonAnimations.add(SmartNonAnimationType.openDialog_nonAnimation);
     }
 
@@ -64,7 +63,7 @@ class CustomLoading extends BaseDialog {
       onDismiss: _handleDismiss(onDismiss, displayTime),
       useSystem: false,
       reuse: false,
-      awaitOverType: SmartDialog.config.loading.awaitOverType,
+      awaitOverType: awaitOverType ?? SmartDialog.config.loading.awaitOverType,
       maskTriggerType: SmartDialog.config.loading.maskTriggerType,
       ignoreArea: null,
       keepSingle: false,
