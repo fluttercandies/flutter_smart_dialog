@@ -1163,7 +1163,7 @@ class SmartDialog {
   /// check isCurrentDialogBackDismissible
   /// bool includeLoading to check loading or not
   static bool isCurrentDialogBackDismissible({bool includeLoading = true}) {
-    if (!isAnyShown) return true;
+    if (!isAnyShown) return false;
 
     // Check custom dialog conditions
     if (config.custom.isExist && lastDialogInfo?.backType != SmartBackType.normal) return false;
