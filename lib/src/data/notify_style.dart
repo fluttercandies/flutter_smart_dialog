@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/widget/default/toast_widget.dart';
 
 import '../../flutter_smart_dialog.dart';
-import '../widget/default/notify_alert.dart';
+import '../widget/default/notify_widget.dart';
 
 class FlutterSmartNotifyStyle {
   const FlutterSmartNotifyStyle({
