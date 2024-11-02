@@ -37,7 +37,7 @@ An elegant Flutter Dialog solution.
 - **Support positioning widget, display the specified location dialog**
 - **Support highlight feature，dissolve the specified location mask**
 
-- **Easily implement toast，loading，attach dialog，custome dialog**
+- **Easily implement toast，loading，attach dialog，custome dialog，custome notify**
 
 # Quick start
 
@@ -88,20 +88,50 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      home: HomePage,
       // here
       navigatorObservers: [FlutterSmartDialog.observer],
       // here
       builder: FlutterSmartDialog.init(
-        //default toast widget
+        //custom default toast widget
         toastBuilder: (String msg) => CustomToastWidget(msg: msg),
-        //default loading widget
+        //custom default loading widget
         loadingBuilder: (String msg) => CustomLoadingWidget(msg: msg),
+        //custom default notify widget
+        notifyStyle: FlutterSmartNotifyStyle(
+          successBuilder: (String msg) => CustomSuccessWidget(msg: msg),
+          failureBuilder: (String msg) => CustomFailureWidget(msg: msg),
+          warningBuilder: (String msg) => CustomWarningWidget(msg: msg),
+          alertBuilder: (String msg) => CustomAlertWidget(msg: msg),
+          errorBuilder: (String msg) => CustomErrorWidget(msg: msg),
+        ),
       ),
     );
   }
 }
 ````
+
+- SmartDialog supports default global configuration
+
+```dart
+SmartDialog.config
+  ..custom = SmartConfigCustom(
+    maskColor: Colors.black.withOpacity(0.35),
+    useAnimation: true,
+  )
+  ..attach = SmartConfigAttach(
+    animationType: SmartAnimationType.scale,
+    usePenetrate: false,
+  )
+  ..loading = SmartConfigLoading(
+    clickMaskDismiss: false,
+    leastLoadingTime: const Duration(milliseconds: 0),
+  )
+  ..toast = SmartConfigToast(
+    intervalTime: const Duration(milliseconds: 100),
+    displayTime: const Duration(milliseconds: 2000),
+  );
+```
 
 ## Easy usage
 
@@ -142,54 +172,3 @@ SmartDialog.show(builder: (context) {
 ```
 
 ![dialogEasy](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211102232821.gif)
-
-# You may have questions
-
-For details, please check： [Some Consideration Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Some%20Consideration.md)
-
-![initBack](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092132.gif)
-
-![hardClose](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092201.gif)
-
-# Attach Chapter
-
-For details, please check： [Attach Chapter Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Attach%20Chapter.md)
-
-This is a very important function. I wanted to add it a long time ago, but it was busy and has been shelved; New Year's Day (2022.1.1) started, and it took some time to complete this function and related demos.
-
-![attachLocation](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103161314.gif)
-
-![attachImitate](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103161431.gif)
-
-![attachGuide](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20220103161443.gif)
-
-# Dialog Chapter
-
-For details, please check： [Dialog Chapter Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Dialog%20Chapter.md)
-
-![dialogLocation](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092433.gif)
-
-![dialogPenetrate](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092442.gif)
-
-![dialogStack](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211106214858.gif)
-
-# Loading Chapter
-
-For details, please check： [Loading Chapter Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Loading%20Chapter.md)
-
-![loadingOne](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092313.gif)
-
-![loadingSmile](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092359.gif)
-
-![loadingNormal](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092413.gif)
-
-# Toast Chapter
-
-For details, please check： [Toast Chapter Details](https://github.com/fluttercandies/flutter_smart_dialog/blob/master/docs/Toast%20Chapter.md)
-
-![toastOne](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092214.gif)
-
-![toastSmart](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092228.gif)
-
-![toastCustom](https://raw.githubusercontent.com/xdd666t/MyData/master/pic/flutter/blog/20211103092253.gif)
-
