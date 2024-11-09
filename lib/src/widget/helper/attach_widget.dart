@@ -95,7 +95,10 @@ class _AttachWidgetState extends State<AttachWidget>
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
-    _resetState();
+    // The latency threshold is approximately 8 milliseconds
+    Future.delayed(const Duration(milliseconds: 30), () {
+      _resetState();
+    });
   }
 
   @override
