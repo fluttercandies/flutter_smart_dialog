@@ -112,10 +112,6 @@ class SmartDialogPage extends StatelessWidget {
         targetContext: context,
         alignment: Alignment.bottomCenter,
         animationType: SmartAnimationType.scale,
-        highlightBuilder: (_, __) {
-          return Positioned(child: Container());
-        },
-        scalePointBuilder: (selfSize) => Offset(selfSize.width, 0),
         builder: (_) {
           return Container(height: 50, width: 30, color: Colors.red);
         },

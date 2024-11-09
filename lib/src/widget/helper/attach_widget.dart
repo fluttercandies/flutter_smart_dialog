@@ -54,7 +54,8 @@ class AttachWidget extends StatefulWidget {
   State<AttachWidget> createState() => _AttachWidgetState();
 }
 
-class _AttachWidgetState extends State<AttachWidget> {
+class _AttachWidgetState extends State<AttachWidget>
+    with WidgetsBindingObserver {
   late double _postFrameOpacity;
 
   //offset size
@@ -71,17 +72,30 @@ class _AttachWidgetState extends State<AttachWidget> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     _alignment = widget.alignment;
     _resetState();
     super.initState();
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   void didUpdateWidget(covariant AttachWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
     if (oldWidget.originChild != widget.originChild ||
         oldWidget.targetContext != widget.targetContext ||
         oldWidget.targetBuilder != widget.targetBuilder) _resetState();
-    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void didChangeMetrics() {
+    super.didChangeMetrics();
+    _resetState();
   }
 
   @override
