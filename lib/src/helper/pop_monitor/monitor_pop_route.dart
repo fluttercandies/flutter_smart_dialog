@@ -61,7 +61,7 @@ class MonitorPopRoute with WidgetsBindingObserver {
     }
 
     // handle contain system dialog and common condition
-    if (handleSmartDialog()) {
+    if (MonitorPopRoute.handleSmartDialog()) {
       var lastDialog = DialogProxy.instance.dialogQueue.last;
       if (lastDialog.backType == SmartBackType.normal &&
           await lastDialog.onBack?.call() != true) {
@@ -78,7 +78,7 @@ class MonitorPopRoute with WidgetsBindingObserver {
     return super.didPopRoute();
   }
 
-  bool handleSmartDialog() {
+  static bool handleSmartDialog() {
     bool shouldHandle = true;
     var routeQueue = RouteRecord.instance.routeQueue;
     try {

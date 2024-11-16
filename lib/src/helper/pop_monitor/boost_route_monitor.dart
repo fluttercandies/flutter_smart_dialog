@@ -4,6 +4,8 @@ import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/kit/log.dart';
 import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 
+import 'monitor_pop_route.dart';
+
 class BoostRouteMonitor {
   static BoostRouteMonitor? _instance;
 
@@ -34,7 +36,7 @@ class BoostRouteMonitor {
 
       if (route is ModalRoute) {
         willPopCallback() async {
-          if (_handleSmartDialog()) {
+          if (MonitorPopRoute.handleSmartDialog()) {
             DialogProxy.instance.dismiss(
               status: SmartStatus.smart,
               closeType: CloseType.back,
@@ -53,33 +55,5 @@ class BoostRouteMonitor {
       SmartLog.d(e);
       _monitorRouteMount(route, ++count);
     }
-  }
-
-  bool _handleSmartDialog() {
-    bool shouldHandle = false;
-    try {
-      //handle loading
-      if (SmartDialog.config.loading.isExist) {
-        return true;
-      }
-
-      //handle dialog
-      var dialogQueue = DialogProxy.instance.dialogQueue;
-
-      if (dialogQueue.isEmpty) {
-        return false;
-      }
-
-      for (var item in DialogProxy.instance.dialogQueue) {
-        if (!item.permanent) {
-          shouldHandle = true;
-        }
-      }
-    } catch (e) {
-      shouldHandle = false;
-      debugPrint('SmartDialog back event error:${e.toString()}');
-    }
-
-    return shouldHandle;
   }
 }
