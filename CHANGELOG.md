@@ -8,6 +8,7 @@
   * Delete SmartConfigCustom/SmartConfigAttach/SmartConfigLoading backDismiss
 * Add AdjustBuilder
 * Fix [#229](https://github.com/fluttercandies/flutter_smart_dialog/issues/229), [#235](https://github.com/fluttercandies/flutter_smart_dialog/issues/235)
+* Fix [#248](https://github.com/fluttercandies/flutter_smart_dialog/issues/248)
 
 * # [4.9.7+x]
 * optimize bindWidget, when bindWidget is not null, bindPage will be automatically set to false.

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/kit/log.dart';
 import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
@@ -35,15 +34,10 @@ class BoostRouteMonitor {
       }
 
       if (route is ModalRoute) {
+        // WillPopCallback 该回调函数返回一个 Future<bool>
+        // 如果返回 true，则允许返回操作；如果返回 false，则阻止返回操作
         willPopCallback() async {
-          if (MonitorPopRoute.handleSmartDialog()) {
-            DialogProxy.instance.dismiss(
-              status: SmartStatus.smart,
-              closeType: CloseType.back,
-            );
-            return false;
-          }
-          return true;
+          return !(await MonitorPopRoute.handBackEvent());
         }
 
         // TODO: `addScopedWillPopCallback()` was deprecated after v3.12.0-1.0.pre.

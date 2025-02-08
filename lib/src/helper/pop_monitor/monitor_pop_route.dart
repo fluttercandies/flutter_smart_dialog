@@ -21,6 +21,12 @@ class MonitorPopRoute with WidgetsBindingObserver {
 
   @override
   Future<bool> didPopRoute() async {
+    return MonitorPopRoute.handBackEvent();
+  }
+
+  // 返回出true, 表示当前已处理, 需要拦截
+  // 返回出false, 表示当前无需处理, 无需拦截
+  static Future<bool> handBackEvent() async {
     //loading
     if (SmartDialog.config.loading.isExist) {
       final loadingInfo = DialogProxy.instance.loadingInfo;
@@ -75,7 +81,7 @@ class MonitorPopRoute with WidgetsBindingObserver {
       }
     }
 
-    return super.didPopRoute();
+    return false;
   }
 
   static bool handleSmartDialog() {
