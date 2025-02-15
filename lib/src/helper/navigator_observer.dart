@@ -9,7 +9,7 @@ import 'dialog_proxy.dart';
 class SmartNavigatorObserver extends NavigatorObserver {
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    DialogProxy.contextNavigator ??= navigator?.context;
+    DialogProxy.contextNavigator = navigator?.context;
     RouteRecord.curRoute = route;
     RouteRecord.instance.push(route, previousRoute);
   }
