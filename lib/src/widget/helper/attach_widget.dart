@@ -89,7 +89,9 @@ class _AttachWidgetState extends State<AttachWidget>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.originChild != widget.originChild ||
         oldWidget.targetContext != widget.targetContext ||
-        oldWidget.targetBuilder != widget.targetBuilder) _resetState();
+        oldWidget.targetBuilder != widget.targetBuilder) {
+      _resetState();
+    }
   }
 
   @override
