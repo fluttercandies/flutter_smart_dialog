@@ -111,7 +111,7 @@ class SmartDialogPage extends StatelessWidget {
       SmartDialog.showAttach(
         targetContext: context,
         alignment: Alignment.bottomCenter,
-        animationType: SmartAnimationType.scale,
+        animationType: SmartAnimationType.centerScale_otherSlide,
         builder: (_) {
           return Container(height: 50, width: 30, color: Colors.red);
         },

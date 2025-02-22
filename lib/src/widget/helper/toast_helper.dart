@@ -32,9 +32,11 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
     ViewUtils.addSafeUse(() {
       if (!mounted) return;
 
-      final renderBox = _childContext!.findRenderObject() as RenderBox;
-      selfOffset = renderBox.localToGlobal(Offset.zero);
-      selfSize = renderBox.size;
+      final renderBox = _childContext?.findRenderObject() as RenderBox?;
+      if (renderBox != null) {
+        selfOffset = renderBox.localToGlobal(Offset.zero);
+        selfSize = renderBox.size;
+      }
       _dealKeyboard();
     });
     super.initState();

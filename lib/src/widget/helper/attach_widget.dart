@@ -136,8 +136,8 @@ class _AttachWidgetState extends State<AttachWidget>
     _originChild = widget.originChild;
     _postFrameOpacity = 0;
 
-    if (widget.targetContext != null) {
-      final renderBox = widget.targetContext!.findRenderObject() as RenderBox;
+    final renderBox = widget.targetContext?.findRenderObject() as RenderBox?;
+    if (renderBox != null) {
       targetOffset = renderBox.localToGlobal(Offset.zero);
       targetSize = renderBox.size;
     }
