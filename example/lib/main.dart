@@ -36,7 +36,7 @@ class SmartDialogPage extends StatelessWidget {
       appBar: AppBar(title: const Text('SmartDialog-EasyDemo')),
       body: Container(
         margin: const EdgeInsets.all(30),
-        child: Wrap(spacing: 20, children: [
+        child: Wrap(spacing: 20, runSpacing: 20, children: [
           //toast
           ElevatedButton(
             onPressed: () => _showToast(),
