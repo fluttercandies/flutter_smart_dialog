@@ -30,7 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.0
   # 用于处理widget是否可见检测 https://pub.flutter-io.cn/packages/visibility_detector
   visibility_detector:
-  flutter_inappwebview: ^6.1.5
+#  flutter_inappwebview: ^6.1.5
   # mac
   flutter_smart_dialog:
     path: ../
