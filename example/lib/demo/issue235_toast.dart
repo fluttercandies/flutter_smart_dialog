@@ -34,12 +34,13 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  Future show(String msg) {
-    return SmartDialog.showToast(
+  Future show(String msg) async {
+    await SmartDialog.dismiss();
+    await SmartDialog.showToast(
       msg,
       alignment: Alignment.center,
+      displayTime: const Duration(seconds: 2),
       displayType: SmartToastType.last,
-      displayTime: const Duration(seconds: 3),
     );
   }
 }
