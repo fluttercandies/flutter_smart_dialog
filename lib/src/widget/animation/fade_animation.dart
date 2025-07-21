@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class FadeAnimation extends StatelessWidget {
+class FadeAnimation extends StatefulWidget {
   const FadeAnimation({
     Key? key,
     required this.controller,
@@ -12,10 +12,32 @@ class FadeAnimation extends StatelessWidget {
   final Widget child;
 
   @override
+  State<FadeAnimation> createState() => _FadeAnimationState();
+}
+
+class _FadeAnimationState extends State<FadeAnimation> {
+  late CurvedAnimation _curvedAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _curvedAnimation = CurvedAnimation(
+      parent: widget.controller,
+      curve: Curves.linear,
+    );
+  }
+
+  @override
+  void dispose() {
+    _curvedAnimation.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FadeTransition(
-      opacity: CurvedAnimation(parent: controller, curve: Curves.linear),
-      child: child,
+      opacity: _curvedAnimation,
+      child: widget.child,
     );
   }
 }
