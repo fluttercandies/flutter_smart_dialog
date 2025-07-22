@@ -38,7 +38,6 @@ class ToastTool {
     await curToast.mainDialog.dismiss();
     if (curToast.mainDialog.overlayEntry.mounted) {
       curToast.mainDialog.overlayEntry.remove();
-      curToast.mainDialog.overlayEntry.dispose();
     }
     await Future.delayed(SmartDialog.config.toast.intervalTime);
   }
@@ -52,7 +51,6 @@ class ToastTool {
     for (var element in toastQueue) {
       if (element.mainDialog.overlayEntry.mounted) {
         element.mainDialog.overlayEntry.remove();
-        element.mainDialog.overlayEntry.dispose();
       }
     }
     toastQueue.clear();

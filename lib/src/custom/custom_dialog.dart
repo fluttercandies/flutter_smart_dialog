@@ -384,7 +384,6 @@ class CustomDialog extends BaseDialog {
       closeType: closeType,
     );
     customDialog.overlayEntry.remove();
-    customDialog.overlayEntry.dispose();
   }
 
   static DialogInfo? _getDialog({

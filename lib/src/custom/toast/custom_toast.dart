@@ -145,7 +145,6 @@ class CustomToast extends BaseDialog {
       for (var item in toastQueue) {
         await ViewUtils.awaitPostFrame(onPostFrame: () {
           item.mainDialog.overlayEntry.remove();
-          item.mainDialog.overlayEntry.dispose();
         });
       }
       toastQueue.clear();
@@ -225,7 +224,6 @@ class CustomToast extends BaseDialog {
     Timer(time, () async {
       await mainDialog.dismiss();
       mainDialog.overlayEntry.remove();
-      mainDialog.overlayEntry.dispose();
     });
   }
 

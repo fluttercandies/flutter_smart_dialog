@@ -19,5 +19,6 @@ class SmartOverlayEntry extends OverlayEntry {
       return;
     }
     super.remove();
+    super.dispose();
   }
 }
