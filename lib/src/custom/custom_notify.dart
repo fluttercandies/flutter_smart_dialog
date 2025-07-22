@@ -211,6 +211,7 @@ class CustomNotify extends BaseDialog {
       closeType: closeType,
     );
     customDialog.overlayEntry.remove();
+    customDialog.overlayEntry.dispose();
   }
 
   static NotifyInfo? _getDialog({String? tag}) {
