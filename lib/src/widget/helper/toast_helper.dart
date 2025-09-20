@@ -33,7 +33,7 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
       if (!mounted) return;
 
       final renderBox = _childContext?.findRenderObject() as RenderBox?;
-      if (renderBox != null) {
+      if (renderBox != null && renderBox.hasSize) {
         selfOffset = renderBox.localToGlobal(Offset.zero);
         selfSize = renderBox.size;
       }
