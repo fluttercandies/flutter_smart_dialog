@@ -34,10 +34,10 @@ class AttachWidget extends StatefulWidget {
     this.aboveBuilder,
   }) : super(key: key);
 
-  /// 目标widget
+  /// target widget
   final BuildContext? targetContext;
 
-  /// 自定义坐标点
+  /// custom target point
   final TargetBuilder? targetBuilder;
 
   final BeforeBuilder beforeBuilder;
@@ -58,11 +58,11 @@ class _AttachWidgetState extends State<AttachWidget>
     with WidgetsBindingObserver {
   late double _postFrameOpacity;
 
-  //offset size
-  late Offset targetOffset;
-  late Size targetSize;
+  // offset & size
+  Offset targetOffset = Offset.zero;
+  Size targetSize = Size.zero;
 
-  //target info
+  // target info
   RectInfo? _targetRect;
   BuildContext? _childContext;
   late Widget _originChild;
@@ -97,8 +97,11 @@ class _AttachWidgetState extends State<AttachWidget>
   @override
   void didChangeMetrics() {
     super.didChangeMetrics();
-    // The latency threshold is approximately 8 milliseconds
+    // The latency threshold is approximately 8 milliseconds.
     Future.delayed(const Duration(milliseconds: 30), () {
+      if (!mounted) {
+        return;
+      }
       _resetState();
     });
   }
@@ -115,10 +118,7 @@ class _AttachWidgetState extends State<AttachWidget>
     List<Widget> above =
         widget.aboveBuilder?.call(targetOffset, targetSize) ?? [];
     return Stack(children: [
-      //blow
       for (var belowWidget in below) belowWidget,
-
-      //target
       Positioned(
         left: _targetRect?.left,
         right: _targetRect?.right,
@@ -126,42 +126,66 @@ class _AttachWidgetState extends State<AttachWidget>
         bottom: _targetRect?.bottom,
         child: widget.builder(child, _adjustParam),
       ),
-
-      //above
       for (var aboveWidget in above) aboveWidget,
     ]);
   }
 
   void _resetState() {
+    if (!mounted) {
+      return;
+    }
+
     _originChild = widget.originChild;
     _postFrameOpacity = 0;
+    _targetRect = null;
 
-    final renderBox = widget.targetContext?.findRenderObject() as RenderBox?;
-    if (renderBox != null) {
-      targetOffset = renderBox.localToGlobal(Offset.zero);
-      targetSize = renderBox.size;
-    }
+    final hasTargetInfo = _tryUpdateTargetInfo();
     if (widget.targetBuilder != null) {
-      targetOffset = widget.targetContext != null
-          ? widget.targetBuilder!(
-              targetOffset,
-              Size(targetSize.width, targetSize.height),
-            )
-          : widget.targetBuilder!(Offset.zero, Size.zero);
-      targetSize = widget.targetContext != null ? targetSize : Size.zero;
+      final customOffset = widget.targetBuilder!(
+        targetOffset,
+        Size(targetSize.width, targetSize.height),
+      );
+      if (_isValidOffset(customOffset)) {
+        targetOffset = customOffset;
+      }
+
+      // targetBuilder can work without targetContext.
+      if (widget.targetContext == null && !hasTargetInfo) {
+        final fallbackOffset = widget.targetBuilder!(Offset.zero, Size.zero);
+        targetOffset =
+            _isValidOffset(fallbackOffset) ? fallbackOffset : Offset.zero;
+        targetSize = Size.zero;
+      }
+    }
+
+    // targetContext exists but currently unavailable (inactive/not laid out).
+    if (!hasTargetInfo &&
+        widget.targetContext != null &&
+        widget.targetBuilder == null) {
+      return;
     }
 
     ViewUtils.addSafeUse(() {
-      if (mounted) _handleLocation();
+      if (mounted) {
+        _handleLocation();
+      }
     });
   }
 
-  /// 处理: 方向及其位置
   void _handleLocation() {
-    final selfSize = (_childContext!.findRenderObject() as RenderBox).size;
-    final screen = MediaQuery.of(context).size;
+    final selfRenderBox = _safeRenderBox(_childContext);
+    if (selfRenderBox == null ||
+        !_isValidOffset(targetOffset) ||
+        !_isValidSize(targetSize)) {
+      return;
+    }
 
-    //动画方向及其位置
+    final selfSize = selfRenderBox.size;
+    final screen = MediaQuery.of(context).size;
+    if (!_isValidSize(selfSize) || !_isValidSize(screen)) {
+      return;
+    }
+
     final alignment = _alignment;
 
     if (alignment == Alignment.topLeft) {
@@ -244,12 +268,13 @@ class _AttachWidgetState extends State<AttachWidget>
       return;
     }
 
-    //第一帧后恢复透明度,同时重置位置信息
     _postFrameOpacity = 1;
+    if (!mounted) {
+      return;
+    }
     setState(() {});
   }
 
-  /// 计算attach alignment类型的偏移量
   double _calculateDx(Alignment alignment, Size selfSize) {
     double offset = 0;
     var type = SmartDialog.config.attach.attachAlignmentType;
@@ -284,11 +309,18 @@ class _AttachWidgetState extends State<AttachWidget>
     bool fixedHorizontal = false,
     bool fixedVertical = false,
   }) {
-    final childSize = (_childContext!.findRenderObject() as RenderBox).size;
+    final childRenderBox = _safeRenderBox(_childContext);
     final screen = MediaQuery.of(context).size;
     var rectInfo = RectInfo(left: left, right: right, top: top, bottom: bottom);
+    if (childRenderBox == null || !_isValidSize(screen)) {
+      return rectInfo;
+    }
 
-    //处理左右边界问题
+    final childSize = childRenderBox.size;
+    if (!_isValidSize(childSize)) {
+      return rectInfo;
+    }
+
     if (!fixedHorizontal && left != null) {
       if (left < 0) {
         rectInfo.left = 0;
@@ -302,7 +334,6 @@ class _AttachWidgetState extends State<AttachWidget>
       }
     }
 
-    //处理上下边界问题
     if (!fixedVertical && top != null) {
       if (top < 0) {
         rectInfo.top = 0;
@@ -317,6 +348,50 @@ class _AttachWidgetState extends State<AttachWidget>
     }
 
     return rectInfo;
+  }
+
+  bool _tryUpdateTargetInfo() {
+    final renderBox = _safeRenderBox(widget.targetContext);
+    if (renderBox == null) {
+      return false;
+    }
+
+    try {
+      final offset = renderBox.localToGlobal(Offset.zero);
+      final size = renderBox.size;
+      if (!_isValidOffset(offset) || !_isValidSize(size)) {
+        return false;
+      }
+      targetOffset = offset;
+      targetSize = size;
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  RenderBox? _safeRenderBox(BuildContext? context) {
+    if (context == null) {
+      return null;
+    }
+
+    try {
+      final renderObject = context.findRenderObject();
+      if (renderObject is RenderBox &&
+          renderObject.attached &&
+          renderObject.hasSize) {
+        return renderObject;
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  bool _isValidOffset(Offset offset) {
+    return offset.dx.isFinite && offset.dy.isFinite;
+  }
+
+  bool _isValidSize(Size size) {
+    return size.width.isFinite && size.height.isFinite;
   }
 }
 

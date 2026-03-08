@@ -30,12 +30,8 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
     widgetsBinding.addObserver(this);
 
     ViewUtils.addSafeUse(() {
-      if (!mounted) return;
-
-      final renderBox = _childContext?.findRenderObject() as RenderBox?;
-      if (renderBox != null && renderBox.hasSize) {
-        selfOffset = renderBox.localToGlobal(Offset.zero);
-        selfSize = renderBox.size;
+      if (!mounted || !_updateSelfInfo()) {
+        return;
       }
       _dealKeyboard();
     });
@@ -69,21 +65,57 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
 
   void _dealKeyboard() {
     ViewUtils.addSafeUse(() {
-      if (!mounted || selfOffset == null || selfSize == null) return;
+      if (!mounted || !_updateSelfInfo()) {
+        return;
+      }
 
       var screen = MediaQuery.of(context).size;
       var childToBottom = screen.height - (selfOffset!.dy + selfSize!.height);
       var keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
       if (childToBottom < 0) {
-        _keyboardHeight = keyboardHeight;
-        setState(() {});
+        _updateKeyboardHeight(keyboardHeight);
         return;
       }
       if (childToBottom - keyboardHeight > -30) {
         return;
       }
-      _keyboardHeight = keyboardHeight - childToBottom;
-      setState(() {});
+      _updateKeyboardHeight(keyboardHeight - childToBottom);
     });
+  }
+
+  bool _updateSelfInfo() {
+    final childContext = _childContext;
+    if (!(childContext?.mounted ?? false)) {
+      selfOffset = null;
+      selfSize = null;
+      return false;
+    }
+
+    final renderObject = childContext!.findRenderObject();
+    if (renderObject is! RenderBox ||
+        !renderObject.attached ||
+        !renderObject.hasSize) {
+      selfOffset = null;
+      selfSize = null;
+      return false;
+    }
+
+    try {
+      selfOffset = renderObject.localToGlobal(Offset.zero);
+      selfSize = renderObject.size;
+      return true;
+    } catch (_) {
+      selfOffset = null;
+      selfSize = null;
+      return false;
+    }
+  }
+
+  void _updateKeyboardHeight(double value) {
+    if (_keyboardHeight == value) {
+      return;
+    }
+    _keyboardHeight = value;
+    setState(() {});
   }
 }

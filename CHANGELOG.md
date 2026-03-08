@@ -1,3 +1,9 @@
+# [5.0.0]
+* Breaking change: Align `onBack` interception behavior for dialog/attach. When `onBack` returns `true`, the back event is always intercepted. Fix [#284](https://github.com/fluttercandies/flutter_smart_dialog/issues/284)
+* Fix [#282](https://github.com/fluttercandies/flutter_smart_dialog/issues/282): avoid calling `OverlayEntry.markNeedsBuild` after the entry is disposed during rapid toast updates
+* Fix [#280](https://github.com/fluttercandies/flutter_smart_dialog/issues/280): harden toast layout measurement to avoid `Bad state: RenderBox was not laid out` during page transitions
+* Fix [#288](https://github.com/fluttercandies/flutter_smart_dialog/issues/288): harden `showAttach` + `bindWidget` lifecycle/geometry checks to avoid inactive-element renderObject errors and invalid transform matrix assertions
+
 # [4.9.8+x]
 * SmartDialog.config.checkExist() adjust to SmartDialog.checkExist()
 * Fix [#209](https://github.com/fluttercandies/flutter_smart_dialog/issues/209)

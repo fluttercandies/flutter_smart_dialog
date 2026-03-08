@@ -8,16 +8,24 @@ class SmartOverlayEntry extends OverlayEntry {
     bool maintainState = false,
   }) : super(builder: builder, opaque: opaque, maintainState: maintainState);
 
+  bool _disposedByOwner = false;
+
   @override
   void markNeedsBuild() {
-    ViewUtils.addSafeUse(() => super.markNeedsBuild());
+    ViewUtils.addSafeUse(() {
+      if (_disposedByOwner || !mounted) {
+        return;
+      }
+      super.markNeedsBuild();
+    });
   }
 
   @override
   void remove() {
-    if (!mounted) {
+    if (_disposedByOwner || !mounted) {
       return;
     }
+    _disposedByOwner = true;
     super.remove();
     super.dispose();
   }

@@ -69,8 +69,10 @@ class MonitorPopRoute with WidgetsBindingObserver {
     // handle contain system dialog and common condition
     if (MonitorPopRoute.handleSmartDialog()) {
       var lastDialog = DialogProxy.instance.dialogQueue.last;
-      if (lastDialog.backType == SmartBackType.normal &&
-          await lastDialog.onBack?.call() != true) {
+      if (await lastDialog.onBack?.call() == true) {
+        return true;
+      }
+      if (lastDialog.backType == SmartBackType.normal) {
         DialogProxy.instance.dismiss(
           status: SmartStatus.dialog,
           closeType: CloseType.back,

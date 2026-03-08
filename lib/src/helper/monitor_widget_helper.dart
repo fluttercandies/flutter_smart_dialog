@@ -30,19 +30,17 @@ class MonitorWidgetHelper {
       prohibitMonitor = true;
       var removeList = <DialogInfo>[];
       for (var item in monitorDialogQueue) {
-        try {
-          var context = item.bindWidget;
-          if (context == null) {
-            throw Error();
-          }
-          _calculate(context, item);
-        } catch (e) {
+        final context = item.bindWidget;
+        if (!_isContextMounted(context)) {
           removeList.add(item);
           SmartLog.d(
             "The element(hashcode: ${item.bindWidget.hashCode}) is recycled and"
             " the 'bindWidget' dialog dismiss automatically",
           );
+          continue;
         }
+
+        _calculate(context!, item);
       }
       for (var i = removeList.length; i > 0; i--) {
         DialogProxy.instance.dismiss(
@@ -55,9 +53,10 @@ class MonitorWidgetHelper {
   }
 
   void _calculate(BuildContext context, DialogInfo item) {
-    var renderObject = context.findRenderObject() as RenderBox?;
+    var renderObject = _safeRenderBox(context);
     if (renderObject == null) {
-      throw Error();
+      item.dialog.hide();
+      return;
     }
 
     if (RouteRecord.curRoute == item.route) {
@@ -69,28 +68,46 @@ class MonitorWidgetHelper {
         _handleDialog(renderObject, item);
       }
     }
-    // var viewport = RenderAbstractViewport.of(renderObject);
-    // var revealedOffset = viewport?.getOffsetToReveal(renderObject, 0.0);
-    // if (revealedOffset != null) {
-    //   // NonPage Scene
-    //   handleDialog();
-    // } else {
-    //   // Page Scene
-    //   if (!item.bindPage) {
-    //     handleDialog();
-    //   }
-    // }
   }
 
-  _handleDialog(RenderBox renderObject, DialogInfo item) {
-    var selfOffset = renderObject.localToGlobal(Offset.zero);
-    if (selfOffset.dx < 0 ||
-        selfOffset.dy < 0 ||
-        selfOffset.dx.isNaN ||
-        selfOffset.dy.isNaN) {
+  void _handleDialog(RenderBox renderObject, DialogInfo item) {
+    try {
+      var selfOffset = renderObject.localToGlobal(Offset.zero);
+      if (selfOffset.dx < 0 ||
+          selfOffset.dy < 0 ||
+          selfOffset.dx.isNaN ||
+          selfOffset.dy.isNaN ||
+          selfOffset.dx.isInfinite ||
+          selfOffset.dy.isInfinite) {
+        item.dialog.hide();
+      } else {
+        item.dialog.appear();
+      }
+    } catch (_) {
       item.dialog.hide();
-    } else {
-      item.dialog.appear();
     }
+  }
+
+  bool _isContextMounted(BuildContext? context) {
+    if (context == null) {
+      return false;
+    }
+    if (context is Element) {
+      return context.mounted;
+    }
+    return true;
+  }
+
+  RenderBox? _safeRenderBox(BuildContext context) {
+    try {
+      var renderObject = context.findRenderObject();
+      if (renderObject is RenderBox &&
+          renderObject.attached &&
+          renderObject.hasSize) {
+        return renderObject;
+      }
+    } catch (_) {}
+
+    return null;
   }
 }
