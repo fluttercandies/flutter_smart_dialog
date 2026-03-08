@@ -11,6 +11,7 @@
 * Fix [#248](https://github.com/fluttercandies/flutter_smart_dialog/issues/248)
 * Fix [#253](https://github.com/fluttercandies/flutter_smart_dialog/issues/253)
 * Merge [#272](https://github.com/fluttercandies/flutter_smart_dialog/pull/272)
+* Fix [#280](https://github.com/fluttercandies/flutter_smart_dialog/issues/280)
 
 * # [4.9.7+x]
 * optimize bindWidget, when bindWidget is not null, bindPage will be automatically set to false.
