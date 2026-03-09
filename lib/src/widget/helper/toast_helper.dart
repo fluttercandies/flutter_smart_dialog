@@ -84,6 +84,10 @@ class _ToastHelperState extends State<ToastHelper> with WidgetsBindingObserver {
   }
 
   bool _updateSelfInfo() {
+    if (selfOffset != null) {
+      return true;
+    }
+
     final childContext = _childContext;
     if (!(childContext?.mounted ?? false)) {
       selfOffset = null;
