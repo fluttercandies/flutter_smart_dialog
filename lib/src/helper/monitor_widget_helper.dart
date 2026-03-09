@@ -53,6 +53,14 @@ class MonitorWidgetHelper {
   }
 
   void _calculate(BuildContext context, DialogInfo item) {
+    final curRoute = RouteRecord.curRoute;
+    if (item.bindWidget != null &&
+        curRoute != item.route &&
+        curRoute is! PopupRoute) {
+      item.dialog.hide();
+      return;
+    }
+
     var renderObject = _safeRenderBox(context);
     if (renderObject == null) {
       item.dialog.hide();

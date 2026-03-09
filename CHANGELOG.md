@@ -1,3 +1,6 @@
+# [5.0.1]
+* Fix [#291](https://github.com/fluttercandies/flutter_smart_dialog/issues/291): `showAttach`/`bindWidget` now hides when pushing custom page routes (non-`PopupRoute`) and reappears after popping back, matching `MaterialPageRoute` behavior
+
 # [5.0.0]
 * Breaking change: Align `onBack` interception behavior for dialog/attach. When `onBack` returns `true`, the back event is always intercepted. Fix [#284](https://github.com/fluttercandies/flutter_smart_dialog/issues/284)
 * Fix [#282](https://github.com/fluttercandies/flutter_smart_dialog/issues/282): avoid calling `OverlayEntry.markNeedsBuild` after the entry is disposed during rapid toast updates
