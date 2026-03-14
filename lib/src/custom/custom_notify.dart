@@ -3,11 +3,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
+import 'package:flutter_smart_dialog/src/data/show_param.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 
 import '../config/enum_config.dart';
-import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
 import '../data/notify_info.dart';
 import '../kit/debounce_utils.dart';
@@ -20,64 +20,51 @@ class CustomNotify extends BaseDialog {
   CustomNotify({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
 
   Future<T?> showNotify<T>({
-    required Widget widget,
-    required Alignment alignment,
-    required bool usePenetrate,
-    required bool useAnimation,
-    required Duration animationTime,
-    required SmartAnimationType animationType,
-    required List<SmartNonAnimationType> nonAnimationTypes,
-    required AnimationBuilder? animationBuilder,
-    required Color maskColor,
-    required bool clickMaskDismiss,
-    required bool debounce,
-    required Widget? maskWidget,
-    required VoidCallback? onDismiss,
-    required VoidCallback? onMask,
-    required Duration? displayTime,
-    required String? tag,
-    required bool keepSingle,
-    required SmartBackType backType,
-    required SmartOnBack? onBack,
+    required SmartShowNotifyParam param,
   }) {
-    if (DebounceUtils.instance.banContinue(DebounceType.notify, debounce)) {
+    if (DebounceUtils.instance
+        .banContinue(DebounceType.notify, param.debounce)) {
       return Future.value(null);
     }
 
     final notifyInfo = _handleMustOperate(
-      tag: tag,
-      keepSingle: keepSingle,
-      debounce: debounce,
-      displayTime: displayTime,
-      backType: backType,
-      onBack: onBack,
+      tag: param.tag,
+      keepSingle: param.keepSingle,
+      debounce: param.debounce,
+      displayTime: param.displayTime,
+      backType: param.backType,
+      onBack: param.onBack,
     );
     return mainDialog.show<T>(
-      widget: widget,
-      alignment: alignment,
-      usePenetrate: usePenetrate,
-      useAnimation: useAnimation,
-      animationTime: animationTime,
-      animationType: animationType,
-      nonAnimationTypes: nonAnimationTypes,
-      animationBuilder: animationBuilder,
-      maskColor: maskColor,
-      maskWidget: maskWidget,
-      onDismiss: _handleDismiss(onDismiss, displayTime, notifyInfo),
-      useSystem: false,
-      reuse: true,
-      awaitOverType: SmartDialog.config.notify.awaitOverType,
-      maskTriggerType: SmartDialog.config.notify.maskTriggerType,
-      ignoreArea: null,
-      keepSingle: keepSingle,
-      onMask: () {
-        onMask?.call();
-        if (!clickMaskDismiss ||
-            DebounceUtils.instance.banContinue(DebounceType.mask, true)) {
-          return;
-        }
-        dismiss(closeType: CloseType.mask, tag: notifyInfo.tag);
-      },
+      param: SmartMainDialogParam(
+        widget: param.widget,
+        alignment: param.alignment,
+        clickMaskDismiss: param.clickMaskDismiss,
+        animationType: param.animationType,
+        nonAnimationTypes: param.nonAnimationTypes,
+        animationBuilder: param.animationBuilder,
+        usePenetrate: param.usePenetrate,
+        useAnimation: param.useAnimation,
+        animationTime: param.animationTime,
+        maskColor: param.maskColor,
+        maskWidget: param.maskWidget,
+        onDismiss:
+            _handleDismiss(param.onDismiss, param.displayTime, notifyInfo),
+        useSystem: false,
+        reuse: true,
+        awaitOverType: SmartDialog.config.notify.awaitOverType,
+        maskTriggerType: SmartDialog.config.notify.maskTriggerType,
+        ignoreArea: null,
+        keepSingle: param.keepSingle,
+        onMask: () {
+          param.onMask?.call();
+          if (!param.clickMaskDismiss ||
+              DebounceUtils.instance.banContinue(DebounceType.mask, true)) {
+            return;
+          }
+          dismiss(closeType: CloseType.mask, tag: notifyInfo.tag);
+        },
+      ),
     );
   }
 

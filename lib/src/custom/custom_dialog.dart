@@ -3,15 +3,14 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
+import 'package:flutter_smart_dialog/src/data/show_param.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/helper/monitor_widget_helper.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
-import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 
 import '../config/enum_config.dart';
-import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
 import '../data/notify_info.dart';
 import '../kit/debounce_utils.dart';
@@ -24,159 +23,117 @@ class CustomDialog extends BaseDialog {
   CustomDialog({required SmartOverlayEntry overlayEntry}) : super(overlayEntry);
 
   Future<T?> show<T>({
-    required Widget widget,
-    required Alignment alignment,
-    required bool usePenetrate,
-    required bool useAnimation,
-    required Duration animationTime,
-    required SmartAnimationType animationType,
-    required List<SmartNonAnimationType> nonAnimationTypes,
-    required AnimationBuilder? animationBuilder,
-    required Color maskColor,
-    required bool clickMaskDismiss,
-    required bool debounce,
-    required Widget? maskWidget,
-    required VoidCallback? onDismiss,
-    required VoidCallback? onMask,
-    required Duration? displayTime,
-    required String? tag,
-    required bool keepSingle,
-    required bool permanent,
-    required bool useSystem,
-    required bool bindPage,
-    required BuildContext? bindWidget,
-    required Rect? ignoreArea,
-    required SmartBackType? backType,
-    required SmartOnBack? onBack,
+    required SmartShowCustomParam param,
   }) {
-    if (DebounceUtils.instance.banContinue(DebounceType.custom, debounce)) {
+    if (DebounceUtils.instance
+        .banContinue(DebounceType.custom, param.debounce)) {
       return Future.value(null);
     }
 
     final dialogInfo = _handleMustOperate(
-      tag: tag,
-      keepSingle: keepSingle,
-      debounce: debounce,
+      tag: param.tag,
+      keepSingle: param.keepSingle,
+      debounce: param.debounce,
       type: DialogType.custom,
-      permanent: permanent,
-      useSystem: useSystem,
-      bindPage: bindPage,
-      bindWidget: bindWidget,
-      displayTime: displayTime,
-      backType: backType,
-      onBack: onBack,
+      permanent: param.permanent,
+      useSystem: param.useSystem,
+      bindPage: param.bindPage,
+      bindWidget: param.bindWidget,
+      displayTime: param.displayTime,
+      backType: param.backType,
+      onBack: param.onBack,
     );
     return mainDialog.show<T>(
-      widget: widget,
-      alignment: alignment,
-      usePenetrate: usePenetrate,
-      useAnimation: useAnimation,
-      animationTime: animationTime,
-      animationType: animationType,
-      nonAnimationTypes: nonAnimationTypes,
-      animationBuilder: animationBuilder,
-      maskColor: maskColor,
-      maskWidget: maskWidget,
-      onDismiss: _handleDismiss(onDismiss, displayTime, dialogInfo),
-      useSystem: useSystem,
-      reuse: true,
-      awaitOverType: SmartDialog.config.custom.awaitOverType,
-      maskTriggerType: SmartDialog.config.custom.maskTriggerType,
-      ignoreArea: ignoreArea,
-      keepSingle: keepSingle,
-      onMask: () {
-        onMask?.call();
-        if (!clickMaskDismiss ||
-            DebounceUtils.instance.banContinue(DebounceType.mask, true) ||
-            permanent) {
-          return;
-        }
-        dismiss(closeType: CloseType.mask, tag: dialogInfo.tag);
-      },
+      param: SmartMainDialogParam(
+        widget: param.widget,
+        alignment: param.alignment,
+        clickMaskDismiss: param.clickMaskDismiss,
+        animationType: param.animationType,
+        nonAnimationTypes: param.nonAnimationTypes,
+        animationBuilder: param.animationBuilder,
+        usePenetrate: param.usePenetrate,
+        useAnimation: param.useAnimation,
+        animationTime: param.animationTime,
+        maskColor: param.maskColor,
+        maskWidget: param.maskWidget,
+        onDismiss:
+            _handleDismiss(param.onDismiss, param.displayTime, dialogInfo),
+        useSystem: param.useSystem,
+        reuse: true,
+        awaitOverType: SmartDialog.config.custom.awaitOverType,
+        maskTriggerType: SmartDialog.config.custom.maskTriggerType,
+        ignoreArea: param.ignoreArea,
+        keepSingle: param.keepSingle,
+        onMask: () {
+          param.onMask?.call();
+          if (!param.clickMaskDismiss ||
+              DebounceUtils.instance.banContinue(DebounceType.mask, true) ||
+              param.permanent) {
+            return;
+          }
+          dismiss(closeType: CloseType.mask, tag: dialogInfo.tag);
+        },
+      ),
     );
   }
 
   Future<T?> showAttach<T>({
-    required BuildContext? targetContext,
-    required Widget widget,
-    required TargetBuilder? targetBuilder,
-    required ReplaceBuilder? replaceBuilder,
-    required AdjustBuilder? adjustBuilder,
-    required Alignment alignment,
-    required bool usePenetrate,
-    required bool useAnimation,
-    required Duration animationTime,
-    required SmartAnimationType animationType,
-    required List<SmartNonAnimationType> nonAnimationTypes,
-    required AnimationBuilder? animationBuilder,
-    required ScalePointBuilder? scalePointBuilder,
-    required Color maskColor,
-    required bool clickMaskDismiss,
-    required Widget? maskWidget,
-    required Rect? maskIgnoreArea,
-    required VoidCallback? onMask,
-    required bool debounce,
-    required HighlightBuilder? highlightBuilder,
-    required VoidCallback? onDismiss,
-    required Duration? displayTime,
-    required String? tag,
-    required bool keepSingle,
-    required bool permanent,
-    required bool useSystem,
-    required bool bindPage,
-    required BuildContext? bindWidget,
-    required SmartBackType? backType,
-    required SmartOnBack? onBack,
+    required SmartShowAttachParam param,
   }) {
-    if (DebounceUtils.instance.banContinue(DebounceType.attach, debounce)) {
+    if (DebounceUtils.instance
+        .banContinue(DebounceType.attach, param.debounce)) {
       return Future.value(null);
     }
 
     final dialogInfo = _handleMustOperate(
-      tag: tag,
-      keepSingle: keepSingle,
-      debounce: debounce,
+      tag: param.tag,
+      keepSingle: param.keepSingle,
+      debounce: param.debounce,
       type: DialogType.attach,
-      permanent: permanent,
-      useSystem: useSystem,
-      bindPage: bindPage,
-      bindWidget: bindWidget,
-      displayTime: displayTime,
-      backType: backType,
-      onBack: onBack,
+      permanent: param.permanent,
+      useSystem: param.useSystem,
+      bindPage: param.bindPage,
+      bindWidget: param.bindWidget,
+      displayTime: param.displayTime,
+      backType: param.backType,
+      onBack: param.onBack,
     );
     return mainDialog.showAttach<T>(
-      targetContext: targetContext,
-      widget: widget,
-      targetBuilder: targetBuilder,
-      replaceBuilder: replaceBuilder,
-      adjustBuilder: adjustBuilder,
-      alignment: alignment,
-      usePenetrate: usePenetrate,
-      useAnimation: useAnimation,
-      animationTime: animationTime,
-      animationType: animationType,
-      nonAnimationTypes: nonAnimationTypes,
-      animationBuilder: animationBuilder,
-      scalePointBuilder: scalePointBuilder,
-      highlightBuilder: highlightBuilder,
-      maskColor: maskColor,
-      maskWidget: maskWidget,
-      maskIgnoreArea: maskIgnoreArea,
-      onDismiss: _handleDismiss(onDismiss, displayTime, dialogInfo),
-      useSystem: useSystem,
-      awaitOverType: SmartDialog.config.attach.awaitOverType,
-      maskTriggerType: SmartDialog.config.attach.maskTriggerType,
-      keepSingle: keepSingle,
-      onMask: () {
-        onMask?.call();
-        if (!clickMaskDismiss ||
-            DebounceUtils.instance.banContinue(DebounceType.mask, true) ||
-            permanent) {
-          return;
-        }
-        dismiss(closeType: CloseType.mask, tag: dialogInfo.tag);
-      },
+      param: SmartMainAttachParam(
+        targetContext: param.targetContext,
+        widget: param.widget,
+        targetBuilder: param.targetBuilder,
+        replaceBuilder: param.replaceBuilder,
+        adjustBuilder: param.adjustBuilder,
+        alignment: param.alignment,
+        clickMaskDismiss: param.clickMaskDismiss,
+        animationType: param.animationType,
+        nonAnimationTypes: param.nonAnimationTypes,
+        animationBuilder: param.animationBuilder,
+        scalePointBuilder: param.scalePointBuilder,
+        usePenetrate: param.usePenetrate,
+        useAnimation: param.useAnimation,
+        animationTime: param.animationTime,
+        maskColor: param.maskColor,
+        maskWidget: param.maskWidget,
+        maskIgnoreArea: param.maskIgnoreArea,
+        onMask: () {
+          param.onMask?.call();
+          if (!param.clickMaskDismiss ||
+              DebounceUtils.instance.banContinue(DebounceType.mask, true) ||
+              param.permanent) {
+            return;
+          }
+          dismiss(closeType: CloseType.mask, tag: dialogInfo.tag);
+        },
+        highlightBuilder: param.highlightBuilder,
+        onDismiss:
+            _handleDismiss(param.onDismiss, param.displayTime, dialogInfo),
+        maskTriggerType: SmartDialog.config.attach.maskTriggerType,
+        useSystem: param.useSystem,
+        awaitOverType: SmartDialog.config.attach.awaitOverType,
+        keepSingle: param.keepSingle,
+      ),
     );
   }
 

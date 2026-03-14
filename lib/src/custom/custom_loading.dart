@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:flutter_smart_dialog/src/data/show_param.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 
-import '../data/animation_param.dart';
 import '../data/base_dialog.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
@@ -18,22 +18,9 @@ class CustomLoading extends BaseDialog {
   Future Function()? _canDismissCallback;
 
   Future<T?> showLoading<T>({
-    required Widget widget,
-    required Alignment alignment,
-    required bool clickMaskDismiss,
-    required SmartAnimationType animationType,
-    required List<SmartNonAnimationType> nonAnimationTypes,
-    required AnimationBuilder? animationBuilder,
-    required bool usePenetrate,
-    required bool useAnimation,
-    required Duration animationTime,
-    required Color maskColor,
-    required Widget? maskWidget,
-    required VoidCallback? onDismiss,
-    required VoidCallback? onMask,
-    required Duration? displayTime,
+    required SmartShowLoadingParam param,
   }) {
-    List<SmartNonAnimationType> nonAnimations = [...nonAnimationTypes];
+    List<SmartNonAnimationType> nonAnimations = [...param.nonAnimationTypes];
     var continueLoading = SmartNonAnimationType.continueLoading_nonAnimation;
     if (SmartDialog.config.loading.isExist &&
         nonAnimations.contains(continueLoading)) {
@@ -51,28 +38,31 @@ class CustomLoading extends BaseDialog {
     });
 
     return mainDialog.show<T>(
-      widget: widget,
-      animationType: animationType,
-      nonAnimationTypes: nonAnimations,
-      animationBuilder: animationBuilder,
-      alignment: alignment,
-      maskColor: maskColor,
-      maskWidget: maskWidget,
-      usePenetrate: usePenetrate,
-      useAnimation: useAnimation,
-      animationTime: animationTime,
-      onDismiss: _handleDismiss(onDismiss, displayTime),
-      useSystem: false,
-      reuse: false,
-      awaitOverType: SmartDialog.config.loading.awaitOverType,
-      maskTriggerType: SmartDialog.config.loading.maskTriggerType,
-      ignoreArea: null,
-      keepSingle: false,
-      onMask: () {
-        onMask?.call();
-        if (!clickMaskDismiss) return;
-        _realDismiss();
-      },
+      param: SmartMainDialogParam(
+        widget: param.widget,
+        alignment: param.alignment,
+        clickMaskDismiss: param.clickMaskDismiss,
+        animationType: param.animationType,
+        nonAnimationTypes: nonAnimations,
+        animationBuilder: param.animationBuilder,
+        usePenetrate: param.usePenetrate,
+        useAnimation: param.useAnimation,
+        animationTime: param.animationTime,
+        maskColor: param.maskColor,
+        maskWidget: param.maskWidget,
+        onDismiss: _handleDismiss(param.onDismiss, param.displayTime),
+        useSystem: false,
+        reuse: false,
+        awaitOverType: SmartDialog.config.loading.awaitOverType,
+        maskTriggerType: SmartDialog.config.loading.maskTriggerType,
+        ignoreArea: null,
+        keepSingle: false,
+        onMask: () {
+          param.onMask?.call();
+          if (!param.clickMaskDismiss) return;
+          _realDismiss();
+        },
+      ),
     );
   }
 

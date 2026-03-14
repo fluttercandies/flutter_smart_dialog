@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/src/data/base_controller.dart';
+import 'package:flutter_smart_dialog/src/data/show_param.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
@@ -9,7 +10,6 @@ import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
 import 'package:flutter_smart_dialog/src/widget/smart_dialog_widget.dart';
 
 import '../config/enum_config.dart';
-import '../data/animation_param.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
 ///main function : customize dialog
@@ -28,52 +28,35 @@ class MainDialog {
   SmartAwaitOverType _awaitOverType = SmartAwaitOverType.dialogDismiss;
 
   Future<T?> show<T>({
-    required Widget widget,
-    required Alignment alignment,
-    required bool usePenetrate,
-    required bool useAnimation,
-    required Duration animationTime,
-    required SmartAnimationType animationType,
-    required List<SmartNonAnimationType> nonAnimationTypes,
-    required Color maskColor,
-    required Widget? maskWidget,
-    required VoidCallback onMask,
-    required VoidCallback? onDismiss,
-    required bool useSystem,
-    required bool reuse,
-    required SmartAwaitOverType awaitOverType,
-    required SmartMaskTriggerType maskTriggerType,
-    required AnimationBuilder? animationBuilder,
-    required Rect? ignoreArea,
-    required bool keepSingle,
+    required SmartMainDialogParam param,
   }) {
     //custom dialog
     _widget = SmartDialogWidget(
-      key: reuse ? _uniqueKey : UniqueKey(),
+      key: param.reuse ? _uniqueKey : UniqueKey(),
       controller: _controller = SmartDialogWidgetController(),
-      alignment: alignment,
-      usePenetrate: usePenetrate,
-      useAnimation: useAnimation,
-      animationTime: animationTime,
-      animationType: animationType,
+      alignment: param.alignment,
+      usePenetrate: param.usePenetrate,
+      useAnimation: param.useAnimation,
+      animationTime: param.animationTime,
+      animationType: param.animationType,
       nonAnimationTypes: processNonAnimationTypes(
-        nonAnimationTypes: nonAnimationTypes,
-        keepSingle: keepSingle,
+        nonAnimationTypes: param.nonAnimationTypes,
+        keepSingle: param.keepSingle,
       ),
-      animationBuilder: animationBuilder,
-      maskColor: maskColor,
-      maskWidget: maskWidget,
-      onMask: onMask,
-      maskTriggerType: maskTriggerType,
-      ignoreArea: ignoreArea,
-      child: widget,
+      animationBuilder: param.animationBuilder,
+      maskColor: param.maskColor,
+      maskWidget: param.maskWidget,
+      onMask: param.onMask ?? () {},
+      maskTriggerType: param.maskTriggerType,
+      ignoreArea: param.ignoreArea,
+      child: param.widget,
     );
 
     _handleCommonOperate(
-      animationTime: animationTime,
-      onDismiss: onDismiss,
-      useSystem: useSystem,
-      awaitOverType: awaitOverType,
+      animationTime: param.animationTime,
+      onDismiss: param.onDismiss,
+      useSystem: param.useSystem,
+      awaitOverType: param.awaitOverType,
     );
 
     //wait dialog dismiss
@@ -82,63 +65,41 @@ class MainDialog {
   }
 
   Future<T?> showAttach<T>({
-    required BuildContext? targetContext,
-    required Widget widget,
-    required TargetBuilder? targetBuilder,
-    required ReplaceBuilder? replaceBuilder,
-    required AdjustBuilder? adjustBuilder,
-    required Alignment alignment,
-    required bool usePenetrate,
-    required bool useAnimation,
-    required Duration animationTime,
-    required SmartAnimationType animationType,
-    required List<SmartNonAnimationType> nonAnimationTypes,
-    required AnimationBuilder? animationBuilder,
-    required ScalePointBuilder? scalePointBuilder,
-    required Color maskColor,
-    required Widget? maskWidget,
-    required Rect? maskIgnoreArea,
-    required SmartMaskTriggerType maskTriggerType,
-    required VoidCallback onMask,
-    required HighlightBuilder? highlightBuilder,
-    required VoidCallback? onDismiss,
-    required bool useSystem,
-    required SmartAwaitOverType awaitOverType,
-    required bool keepSingle,
+    required SmartMainAttachParam param,
   }) {
     //attach dialog
     _widget = AttachDialogWidget(
       key: _uniqueKey,
-      targetContext: targetContext,
-      targetBuilder: targetBuilder,
-      replaceBuilder: replaceBuilder,
-      adjustBuilder: adjustBuilder,
+      targetContext: param.targetContext,
+      targetBuilder: param.targetBuilder,
+      replaceBuilder: param.replaceBuilder,
+      adjustBuilder: param.adjustBuilder,
       controller: _controller = AttachDialogController(),
-      alignment: alignment,
-      usePenetrate: usePenetrate,
-      useAnimation: useAnimation,
-      animationTime: animationTime,
-      animationType: animationType,
+      alignment: param.alignment,
+      usePenetrate: param.usePenetrate,
+      useAnimation: param.useAnimation,
+      animationTime: param.animationTime,
+      animationType: param.animationType,
       nonAnimationTypes: processNonAnimationTypes(
-        nonAnimationTypes: nonAnimationTypes,
-        keepSingle: keepSingle,
+        nonAnimationTypes: param.nonAnimationTypes,
+        keepSingle: param.keepSingle,
       ),
-      animationBuilder: animationBuilder,
-      scalePointBuilder: scalePointBuilder,
-      maskColor: maskColor,
-      maskWidget: maskWidget,
-      maskTriggerType: maskTriggerType,
-      onMask: onMask,
-      maskIgnoreArea: maskIgnoreArea,
-      highlightBuilder: highlightBuilder,
-      child: widget,
+      animationBuilder: param.animationBuilder,
+      scalePointBuilder: param.scalePointBuilder,
+      maskColor: param.maskColor,
+      maskWidget: param.maskWidget,
+      maskTriggerType: param.maskTriggerType,
+      onMask: param.onMask ?? () {},
+      maskIgnoreArea: param.maskIgnoreArea,
+      highlightBuilder: param.highlightBuilder,
+      child: param.widget,
     );
 
     _handleCommonOperate(
-      animationTime: animationTime,
-      onDismiss: onDismiss,
-      useSystem: useSystem,
-      awaitOverType: awaitOverType,
+      animationTime: param.animationTime,
+      onDismiss: param.onDismiss,
+      useSystem: param.useSystem,
+      awaitOverType: param.awaitOverType,
     );
 
     //wait dialog dismiss

@@ -9,15 +9,13 @@ import 'package:flutter_smart_dialog/src/custom/toast/custom_toast.dart';
 import 'package:flutter_smart_dialog/src/data/dialog_info.dart';
 import 'package:flutter_smart_dialog/src/data/loading_info.dart';
 import 'package:flutter_smart_dialog/src/data/notify_style.dart';
-import 'package:flutter_smart_dialog/src/widget/attach_dialog_widget.dart';
+import 'package:flutter_smart_dialog/src/data/show_param.dart';
 import 'package:flutter_smart_dialog/src/widget/helper/toast_helper.dart';
 
 import '../config/enum_config.dart';
 import '../config/smart_config.dart';
-import '../data/animation_param.dart';
 import '../data/notify_info.dart';
 import '../init_dialog.dart';
-import '../kit/typedef.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
 enum CloseType {
@@ -88,240 +86,48 @@ class DialogProxy {
   }
 
   Future<T?> show<T>({
-    required Widget widget,
-    required Alignment alignment,
-    required bool usePenetrate,
-    required bool useAnimation,
-    required Duration animationTime,
-    required SmartAnimationType animationType,
-    required List<SmartNonAnimationType> nonAnimationTypes,
-    required AnimationBuilder? animationBuilder,
-    required Color maskColor,
-    required bool clickMaskDismiss,
-    required Widget? maskWidget,
-    required bool debounce,
-    required VoidCallback? onDismiss,
-    required VoidCallback? onMask,
-    required Duration? displayTime,
-    required String? tag,
-    required bool keepSingle,
-    required bool permanent,
-    required bool useSystem,
-    required bool bindPage,
-    required BuildContext? bindWidget,
-    required Rect? ignoreArea,
-    required SmartBackType? backType,
-    required SmartOnBack? onBack,
+    required SmartShowCustomParam param,
   }) {
     CustomDialog? dialog;
     var entry = SmartOverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
     );
     dialog = CustomDialog(overlayEntry: entry);
-    return dialog.show<T>(
-      widget: widget,
-      alignment: alignment,
-      usePenetrate: usePenetrate,
-      useAnimation: useAnimation,
-      animationTime: animationTime,
-      animationType: animationType,
-      nonAnimationTypes: nonAnimationTypes,
-      animationBuilder: animationBuilder,
-      maskColor: maskColor,
-      maskWidget: maskWidget,
-      clickMaskDismiss: clickMaskDismiss,
-      debounce: debounce,
-      onDismiss: onDismiss,
-      onMask: onMask,
-      displayTime: displayTime,
-      tag: tag,
-      keepSingle: keepSingle,
-      permanent: permanent,
-      useSystem: useSystem,
-      bindPage: bindPage,
-      bindWidget: bindWidget,
-      ignoreArea: ignoreArea,
-      backType: backType,
-      onBack: onBack,
-    );
+    return dialog.show<T>(param: param);
   }
 
   Future<T?> showNotify<T>({
-    required Widget widget,
-    required Alignment alignment,
-    required bool usePenetrate,
-    required bool useAnimation,
-    required Duration animationTime,
-    required SmartAnimationType animationType,
-    required List<SmartNonAnimationType> nonAnimationTypes,
-    required AnimationBuilder? animationBuilder,
-    required Color maskColor,
-    required bool clickMaskDismiss,
-    required Widget? maskWidget,
-    required bool debounce,
-    required VoidCallback? onDismiss,
-    required VoidCallback? onMask,
-    required Duration? displayTime,
-    required String? tag,
-    required bool keepSingle,
-    required SmartBackType backType,
-    required SmartOnBack? onBack,
+    required SmartShowNotifyParam param,
   }) {
     CustomNotify? dialog;
     var entry = SmartOverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
     );
     dialog = CustomNotify(overlayEntry: entry);
-    return dialog.showNotify<T>(
-      widget: widget,
-      alignment: alignment,
-      usePenetrate: usePenetrate,
-      useAnimation: useAnimation,
-      animationTime: animationTime,
-      animationType: animationType,
-      nonAnimationTypes: nonAnimationTypes,
-      animationBuilder: animationBuilder,
-      maskColor: maskColor,
-      maskWidget: maskWidget,
-      clickMaskDismiss: clickMaskDismiss,
-      debounce: debounce,
-      onDismiss: onDismiss,
-      onMask: onMask,
-      displayTime: displayTime,
-      tag: tag,
-      keepSingle: keepSingle,
-      backType: backType,
-      onBack: onBack,
-    );
+    return dialog.showNotify<T>(param: param);
   }
 
   Future<T?> showAttach<T>({
-    required BuildContext? targetContext,
-    required Widget widget,
-    required TargetBuilder? targetBuilder,
-    required ReplaceBuilder? replaceBuilder,
-    required AdjustBuilder? adjustBuilder,
-    required Alignment alignment,
-    required bool usePenetrate,
-    required bool useAnimation,
-    required Duration animationTime,
-    required SmartAnimationType animationType,
-    required List<SmartNonAnimationType> nonAnimationTypes,
-    required AnimationBuilder? animationBuilder,
-    required ScalePointBuilder? scalePointBuilder,
-    required bool clickMaskDismiss,
-    required Color maskColor,
-    required Widget? maskWidget,
-    required Rect? maskIgnoreArea,
-    required VoidCallback? onMask,
-    required HighlightBuilder? highlightBuilder,
-    required bool debounce,
-    required VoidCallback? onDismiss,
-    required Duration? displayTime,
-    required String? tag,
-    required bool keepSingle,
-    required bool permanent,
-    required bool useSystem,
-    required bool bindPage,
-    required BuildContext? bindWidget,
-    required SmartBackType? backType,
-    required SmartOnBack? onBack,
+    required SmartShowAttachParam param,
   }) {
     CustomDialog? dialog;
     var entry = SmartOverlayEntry(
       builder: (BuildContext context) => dialog!.getWidget(),
     );
     dialog = CustomDialog(overlayEntry: entry);
-    return dialog.showAttach<T>(
-      targetContext: targetContext,
-      widget: widget,
-      targetBuilder: targetBuilder,
-      replaceBuilder: replaceBuilder,
-      adjustBuilder: adjustBuilder,
-      alignment: alignment,
-      usePenetrate: usePenetrate,
-      useAnimation: useAnimation,
-      animationTime: animationTime,
-      animationType: animationType,
-      nonAnimationTypes: nonAnimationTypes,
-      animationBuilder: animationBuilder,
-      scalePointBuilder: scalePointBuilder,
-      maskColor: maskColor,
-      maskWidget: maskWidget,
-      maskIgnoreArea: maskIgnoreArea,
-      onMask: onMask,
-      highlightBuilder: highlightBuilder,
-      clickMaskDismiss: clickMaskDismiss,
-      debounce: debounce,
-      onDismiss: onDismiss,
-      displayTime: displayTime,
-      tag: tag,
-      keepSingle: keepSingle,
-      permanent: permanent,
-      useSystem: useSystem,
-      bindPage: bindPage,
-      bindWidget: bindWidget,
-      backType: backType,
-      onBack: onBack,
-    );
+    return dialog.showAttach<T>(param: param);
   }
 
   Future<T?> showLoading<T>({
-    required Alignment alignment,
-    required bool clickMaskDismiss,
-    required SmartAnimationType animationType,
-    required List<SmartNonAnimationType> nonAnimationTypes,
-    required AnimationBuilder? animationBuilder,
-    required bool usePenetrate,
-    required bool useAnimation,
-    required Duration animationTime,
-    required Color maskColor,
-    required Widget? maskWidget,
-    required VoidCallback? onDismiss,
-    required VoidCallback? onMask,
-    required Duration? displayTime,
-    required Widget widget,
-    required SmartBackType backType,
-    required SmartOnBack? onBack,
+    required SmartShowLoadingParam param,
   }) {
-    loadingInfo.onBack = onBack;
-    loadingInfo.backType = backType;
-    return loadingInfo.loadingWidget.showLoading<T>(
-      alignment: alignment,
-      clickMaskDismiss: clickMaskDismiss,
-      animationType: animationType,
-      nonAnimationTypes: nonAnimationTypes,
-      animationBuilder: animationBuilder,
-      maskColor: maskColor,
-      maskWidget: maskWidget,
-      usePenetrate: usePenetrate,
-      useAnimation: useAnimation,
-      animationTime: animationTime,
-      onDismiss: onDismiss,
-      onMask: onMask,
-      displayTime: displayTime,
-      widget: widget,
-    );
+    loadingInfo.onBack = param.onBack;
+    loadingInfo.backType = param.backType;
+    return loadingInfo.loadingWidget.showLoading<T>(param: param);
   }
 
   Future<void> showToast({
-    required Alignment alignment,
-    required bool clickMaskDismiss,
-    required SmartAnimationType animationType,
-    required List<SmartNonAnimationType> nonAnimationTypes,
-    required AnimationBuilder? animationBuilder,
-    required bool usePenetrate,
-    required bool useAnimation,
-    required Duration animationTime,
-    required Color maskColor,
-    required Widget? maskWidget,
-    required VoidCallback? onDismiss,
-    required VoidCallback? onMask,
-    required bool consumeEvent,
-    required Duration displayTime,
-    required bool debounce,
-    required SmartToastType displayType,
-    required Widget widget,
+    required SmartShowToastParam param,
   }) {
     CustomToast? toast;
     var entry = SmartOverlayEntry(
@@ -329,22 +135,10 @@ class DialogProxy {
     );
     toast = CustomToast(overlayEntry: entry);
     return toast.showToast(
-      alignment: alignment,
-      clickMaskDismiss: clickMaskDismiss,
-      animationType: animationType,
-      nonAnimationTypes: nonAnimationTypes,
-      animationBuilder: animationBuilder,
-      usePenetrate: usePenetrate,
-      useAnimation: useAnimation,
-      animationTime: animationTime,
-      maskColor: maskColor,
-      maskWidget: maskWidget,
-      onDismiss: onDismiss,
-      onMask: onMask,
-      displayTime: displayTime,
-      debounce: debounce,
-      displayType: displayType,
-      widget: ToastHelper(consumeEvent: consumeEvent, child: widget),
+      param: param.copyWith(
+        widget:
+            ToastHelper(consumeEvent: param.consumeEvent, child: param.widget),
+      ),
     );
   }
 
