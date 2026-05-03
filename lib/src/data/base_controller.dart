@@ -18,7 +18,7 @@ abstract class BaseController {
         nonAnimationType == SmartNonAnimationType.maskClose_nonAnimation) {
       return true;
     } else if (closeType == CloseType.back &&
-        nonAnimationType == SmartNonAnimationType.maskClose_nonAnimation) {
+        nonAnimationType == SmartNonAnimationType.backClose_nonAnimation) {
       return true;
     }
 
