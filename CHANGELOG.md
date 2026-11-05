@@ -1,3 +1,9 @@
+# [5.3.1]
+* Fix [#296](https://github.com/fluttercandies/flutter_smart_dialog/pull/296): keep only the newest `last`/`onlyRefresh` replacement when calls arrive while the previous toast is closing
+* Avoid reading an empty toast queue when it is cleared during the interval between serial toasts
+* Keep `SmartDialog.config.toast.isExist` and `SmartDialog.checkExist()` accurate until closing toast overlays are removed, including when concurrent multi toasts finish
+* Make `SmartStatus.allToast` wait for detached closing toasts and cancel their pending replacements
+
 # [5.3.0]
 * Breaking: remove the deprecated `backDismiss` parameters and `SmartConfigCustom`/`SmartConfigAttach.backDismiss`; use `backType: SmartBackType.normal` for the old `true` behavior or `SmartBackType.block` for the old `false` behavior
 * Breaking: remove the deprecated `showAttach.replaceBuilder` parameter; use `adjustBuilder` and return an `AttachAdjustParam` with a builder when replacing the attached widget
