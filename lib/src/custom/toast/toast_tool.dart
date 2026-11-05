@@ -55,11 +55,7 @@ class ToastTool {
     return _startSerial(info);
   }
 
-  Future<void> _showLast(ToastInfo info) async {
-    await _clearSerial();
-    toastQueue.addLast(info);
-    await _startSerial(info);
-  }
+  Future<void> _showLast(ToastInfo info) => _replaceSerial(info);
 
   Future<void> _showOnlyRefresh(ToastInfo info) {
     final active = _activeSerial;
@@ -80,10 +76,23 @@ class ToastTool {
     return _replaceSerialWithOnlyRefresh(info);
   }
 
-  Future<void> _replaceSerialWithOnlyRefresh(ToastInfo info) async {
-    await _clearSerial();
+  Future<void> _replaceSerialWithOnlyRefresh(ToastInfo info) {
+    unawaited(_replaceSerial(info));
+    return Future<void>.value();
+  }
+
+  /// Detaches the current serial queue and enqueues [info] synchronously, so a
+  /// replacement requested while the previous toast is still closing cannot be
+  /// overtaken by, or enqueued behind, a later replacement.
+  Future<void> _replaceSerial(ToastInfo info) async {
+    final previous = _detachSerial();
     toastQueue.addLast(info);
-    unawaited(_startSerial(info));
+    if (previous != null) {
+      await _close(previous);
+    }
+    // A newer replacement detached and cancelled [info] while we were waiting.
+    if (info.closed) return;
+    await _startSerial(info);
   }
 
   Future<void> _showMulti(ToastInfo info) {
@@ -141,6 +150,8 @@ class ToastTool {
 
     if (dispatchNext && toastQueue.isNotEmpty) {
       await Future<void>.delayed(SmartDialog.config.toast.intervalTime);
+      // The queue may have been cleared or replaced during the interval.
+      if (toastQueue.isEmpty) return;
       final next = toastQueue.first;
       if (!next.shown && !next.closed) {
         unawaited(_startSerial(next));
@@ -148,8 +159,10 @@ class ToastTool {
     }
   }
 
-  Future<void> _clearSerial() async {
-    if (toastQueue.isEmpty) return;
+  /// Removes every serial entry synchronously: queued entries are cancelled and
+  /// the shown one, if any, is returned for the caller to close.
+  ToastInfo? _detachSerial() {
+    if (toastQueue.isEmpty) return null;
     final entries = toastQueue.toList(growable: false);
     toastQueue.clear();
     final active = entries.first.shown ? entries.first : null;
@@ -157,10 +170,8 @@ class ToastTool {
       if (identical(info, active)) continue;
       _cancelQueued(info);
     }
-    if (active != null) {
-      await _close(active);
-    }
     _syncExist();
+    return active;
   }
 
   Future<void> _closeAll() async {

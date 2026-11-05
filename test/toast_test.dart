@@ -7,6 +7,36 @@ import 'package:material_ui/material_ui.dart';
 import 'test_harness.dart';
 
 void main() {
+  testWidgets('back-to-back last toasts during a close keep only the newest', (
+    tester,
+  ) async {
+    await pumpSmartDialogApp(tester);
+
+    _showLastToast('last-a');
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 150));
+    expect(find.text('last-a'), findsOneWidget);
+
+    // Both replacements arrive while 'last-a' is still running its close animation.
+    _showLastToast('last-b');
+    _showLastToast('last-c');
+    for (var i = 0; i < 10; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+
+    expect(tester.takeException(), isNull);
+    expect(find.text('last-a'), findsNothing);
+    expect(find.text('last-b'), findsNothing);
+    expect(find.text('last-c'), findsOneWidget);
+
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump(const Duration(milliseconds: 300));
+    expect(tester.takeException(), isNull);
+    expect(find.text('last-c'), findsNothing);
+    expect(SmartDialog.config.toast.isExist, isFalse);
+    await disposeSmartDialogApp(tester);
+  });
+
   testWidgets('normal toasts display sequentially', (tester) async {
     await pumpSmartDialogApp(tester);
 
@@ -270,4 +300,13 @@ void main() {
     await tester.pump(const Duration(milliseconds: 200));
     await disposeSmartDialogApp(tester);
   });
+}
+
+void _showLastToast(String msg) {
+  SmartDialog.showToast(
+    msg,
+    displayType: SmartToastType.last,
+    displayTime: const Duration(seconds: 1),
+    animationTime: const Duration(milliseconds: 100),
+  ).ignore();
 }
