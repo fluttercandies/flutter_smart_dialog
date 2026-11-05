@@ -7,6 +7,104 @@ import 'package:material_ui/material_ui.dart';
 import 'test_harness.dart';
 
 void main() {
+  for (final type in [SmartToastType.last, SmartToastType.onlyRefresh]) {
+    testWidgets('$type preserves existence while the old toast closes', (
+      tester,
+    ) async {
+      await pumpSmartDialogApp(tester);
+      try {
+        _showAnimatedToast('visible-old', SmartToastType.normal);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 250));
+
+        _showAnimatedToast('replacement', type);
+        _expectToastExists(true);
+        await tester.pump(const Duration(milliseconds: 50));
+        expect(find.text('visible-old'), findsOneWidget);
+        expect(find.text('replacement'), findsNothing);
+        _expectToastExists(true);
+
+        await tester.pump(const Duration(milliseconds: 200));
+        await tester.pump();
+        expect(find.text('visible-old'), findsNothing);
+        expect(find.text('replacement'), findsOneWidget);
+        _expectToastExists(true);
+
+        await dismissAndPump<void>(tester, status: SmartStatus.allToast);
+        expect(find.text('replacement'), findsNothing);
+        _expectToastExists(false);
+      } finally {
+        await disposeSmartDialogApp(tester);
+      }
+    });
+  }
+
+  testWidgets(
+    'closing a multi toast preserves a detached serial toast existence',
+    (tester) async {
+      await pumpSmartDialogApp(tester);
+      try {
+        _showAnimatedToast('visible-old', SmartToastType.normal);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 250));
+
+        SmartDialog.showToast(
+          'short-multi',
+          displayType: SmartToastType.multi,
+          displayTime: const Duration(milliseconds: 50),
+          useAnimation: false,
+        ).ignore();
+        await tester.pump();
+        _showAnimatedToast('replacement', SmartToastType.last);
+
+        await tester.pump(const Duration(milliseconds: 50));
+        await tester.pump();
+        expect(find.text('short-multi'), findsNothing);
+        expect(find.text('visible-old'), findsOneWidget);
+        expect(find.text('replacement'), findsNothing);
+        _expectToastExists(true);
+      } finally {
+        await disposeSmartDialogApp(tester);
+      }
+    },
+  );
+
+  testWidgets(
+    'allToast waits for a detached toast and cancels its replacement',
+    (tester) async {
+      await pumpSmartDialogApp(tester);
+      try {
+        _showAnimatedToast('visible-old', SmartToastType.normal);
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 250));
+
+        _showAnimatedToast('cancelled-replacement', SmartToastType.last);
+        var dismissCompleted = false;
+        final dismissFuture =
+            SmartDialog.dismiss<void>(status: SmartStatus.allToast).then<void>((
+              _,
+            ) {
+              dismissCompleted = true;
+            });
+
+        await tester.pump(const Duration(milliseconds: 50));
+        expect(find.text('visible-old'), findsOneWidget);
+        expect(find.text('cancelled-replacement'), findsNothing);
+        expect(dismissCompleted, isFalse);
+        _expectToastExists(true);
+
+        await tester.pump(const Duration(milliseconds: 200));
+        await tester.pump();
+        await dismissFuture;
+        expect(find.text('visible-old'), findsNothing);
+        expect(find.text('cancelled-replacement'), findsNothing);
+        _expectToastExists(false);
+      } finally {
+        await disposeSmartDialogApp(tester);
+      }
+    },
+  );
+
   testWidgets('back-to-back last toasts during a close keep only the newest', (
     tester,
   ) async {
@@ -309,4 +407,21 @@ void _showLastToast(String msg) {
     displayTime: const Duration(seconds: 1),
     animationTime: const Duration(milliseconds: 100),
   ).ignore();
+}
+
+void _showAnimatedToast(String msg, SmartToastType type) {
+  SmartDialog.showToast(
+    msg,
+    displayType: type,
+    displayTime: const Duration(seconds: 2),
+    animationTime: const Duration(milliseconds: 200),
+  ).ignore();
+}
+
+void _expectToastExists(bool expected) {
+  expect(SmartDialog.config.toast.isExist, expected);
+  expect(
+    SmartDialog.checkExist(dialogTypes: const {SmartAllDialogType.toast}),
+    expected,
+  );
 }

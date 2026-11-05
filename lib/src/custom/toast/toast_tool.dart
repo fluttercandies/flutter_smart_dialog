@@ -17,6 +17,8 @@ class ToastTool {
 
   final Queue<ToastInfo> toastQueue = ListQueue<ToastInfo>();
   final List<ToastInfo> _multiToasts = <ToastInfo>[];
+  // Includes detached serial toasts until their closing overlays are removed.
+  final Set<ToastInfo> _shownToasts = <ToastInfo>{};
 
   Future<void> show(ToastInfo info) {
     return switch (info.type) {
@@ -115,6 +117,7 @@ class ToastTool {
     if (info.closed || info.shown) return;
     info.shown = true;
     info.onShow();
+    _shownToasts.add(info);
     _syncExist();
   }
 
@@ -142,6 +145,7 @@ class ToastTool {
 
     toastQueue.remove(info);
     _multiToasts.remove(info);
+    _shownToasts.remove(info);
     info
       ..closing = false
       ..closed = true
@@ -185,7 +189,7 @@ class ToastTool {
       _cancelQueued(info);
     }
 
-    final active = <ToastInfo>[?activeSerial, ..._multiToasts];
+    final active = _shownToasts.toList(growable: false);
     await Future.wait<void>(active.map((info) => _close(info)));
     _syncExist();
   }
@@ -205,14 +209,18 @@ class ToastTool {
   }
 
   void _syncExist() {
-    SmartDialog.config.toast.isExist =
-        _activeSerial != null || _multiToasts.any((info) => !info.closed);
+    SmartDialog.config.toast.isExist = _shownToasts.isNotEmpty;
   }
 
   void resetForTest() {
-    final entries = <ToastInfo>{...toastQueue, ..._multiToasts};
+    final entries = <ToastInfo>{
+      ...toastQueue,
+      ..._multiToasts,
+      ..._shownToasts,
+    };
     toastQueue.clear();
     _multiToasts.clear();
+    _shownToasts.clear();
     for (final info in entries) {
       info.timer?.cancel();
       info.mainDialog.resetForTest();
