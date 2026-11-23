@@ -1,3 +1,6 @@
+# [5.3.2]
+* Fix Android predictive back for Overlay dialogs on root and pushed pages ([#279](https://github.com/fluttercandies/flutter_smart_dialog/issues/279))
+
 # [5.3.1]
 * Fix [#296](https://github.com/fluttercandies/flutter_smart_dialog/pull/296): keep only the newest `last`/`onlyRefresh` replacement when calls arrive while the previous toast is closing
 * Avoid reading an empty toast queue when it is cleared during the interval between serial toasts
