@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/services.dart' show PredictiveBackEvent;
 import 'package:flutter_smart_dialog/src/helper/navigator_observer.dart';
 import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 import 'package:flutter_smart_dialog/src/widget/default/notify_alter.dart';
@@ -10,6 +13,7 @@ import 'data/notify_style.dart';
 import 'helper/dialog_proxy.dart';
 import 'helper/pop_monitor/boost_route_monitor.dart';
 import 'helper/pop_monitor/monitor_pop_route.dart';
+import 'helper/route_record.dart';
 import 'widget/default/loading_widget.dart';
 import 'widget/default/notify_success.dart';
 import 'widget/default/notify_warning.dart';
@@ -97,25 +101,31 @@ class FlutterSmartDialog extends StatefulWidget {
   }
 }
 
-class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
+class _FlutterSmartDialogState extends State<FlutterSmartDialog>
+    with WidgetsBindingObserver {
   late FlutterSmartStyleBuilder styleBuilder;
   late Set<SmartInitType> initType;
+  late final bool _supportsPredictiveBack =
+      MonitorPopRoute.supportsPredictiveBack;
+  bool _navigatorHandlesBack = false;
+
+  Widget? get _routingWidget {
+    final child = widget.child;
+    return child is FocusScope ? child.child : child;
+  }
 
   @override
   void initState() {
+    if (_supportsPredictiveBack) {
+      widgetsBinding.addObserver(this);
+      MonitorPopRoute.overlayBlocksBack.addListener(_updateBackNotification);
+    }
+
     ViewUtils.addSafeUse(() {
-      try {
-        BuildContext? context;
-        if (widget.child is Navigator) {
-          context = getNavigatorContext(widget.child as Navigator);
-        } else if (widget.child is FocusScope) {
-          var focusScope = widget.child as FocusScope;
-          if (focusScope.child is Navigator) {
-            context = getNavigatorContext(focusScope.child as Navigator);
-          }
-        }
-        DialogProxy.contextNavigator = context;
-      } catch (_) {}
+      final routing = _routingWidget;
+      DialogProxy.contextNavigator = routing is Navigator
+          ? getNavigatorContext(routing)
+          : null;
     });
 
     // init param
@@ -163,41 +173,123 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return styleBuilder(
-      Overlay(
-        initialEntries: [
-          //main layout
-          OverlayEntry(
-            builder: (BuildContext context) {
-              if (initType.contains(SmartInitType.custom)) {
-                DialogProxy.contextCustom = context;
-              }
+    final overlay = Overlay(
+      initialEntries: [
+        //main layout
+        OverlayEntry(
+          builder: (BuildContext context) {
+            if (initType.contains(SmartInitType.custom)) {
+              DialogProxy.contextCustom = context;
+            }
 
-              if (initType.contains(SmartInitType.attach)) {
-                DialogProxy.contextAttach = context;
-              }
+            if (initType.contains(SmartInitType.attach)) {
+              DialogProxy.contextAttach = context;
+            }
 
-              if (initType.contains(SmartInitType.notify)) {
-                DialogProxy.contextNotify = context;
-              }
+            if (initType.contains(SmartInitType.notify)) {
+              DialogProxy.contextNotify = context;
+            }
 
-              if (initType.contains(SmartInitType.toast)) {
-                DialogProxy.contextToast = context;
-              }
+            if (initType.contains(SmartInitType.toast)) {
+              DialogProxy.contextToast = context;
+            }
 
-              return widget.child ?? Container();
-            },
-          ),
+            return widget.child ?? Container();
+          },
+        ),
 
-          // if (initType.contains(SmartInitType.notify))
-          //   DialogProxy.instance.entryNotify,
+        // if (initType.contains(SmartInitType.notify))
+        //   DialogProxy.instance.entryNotify,
 
-          //provided separately for loading
-          if (initType.contains(SmartInitType.loading))
-            DialogProxy.instance.entryLoading,
-        ],
-      ),
+        //provided separately for loading
+        if (initType.contains(SmartInitType.loading))
+          DialogProxy.instance.entryLoading,
+      ],
     );
+    final content = styleBuilder(overlay);
+    return _supportsPredictiveBack
+        ? NotificationListener<NavigationNotification>(
+            onNotification: _handleNavigationNotification,
+            child: content,
+          )
+        : content;
+  }
+
+  bool _handleNavigationNotification(NavigationNotification notification) {
+    _navigatorHandlesBack = notification.canHandlePop;
+    if (!_navigatorHandlesBack && MonitorPopRoute.overlayBlocksBack.value) {
+      const NavigationNotification(canHandlePop: true).dispatch(context);
+      return true;
+    }
+    return false;
+  }
+
+  void _updateBackNotification() {
+    ViewUtils.addSafeUse(() {
+      if (mounted && !_navigatorHandlesBack) {
+        NavigationNotification(
+          canHandlePop: MonitorPopRoute.overlayBlocksBack.value,
+        ).dispatch(context);
+      }
+    });
+  }
+
+  @override
+  bool handleStartBackGesture(PredictiveBackEvent backEvent) {
+    if (!MonitorPopRoute.overlayBlocksBack.value) return false;
+    if (backEvent.isButtonEvent) return true;
+
+    final navigator = _backNavigator;
+    if (navigator == null) return !_navigatorHandlesBack;
+    // A true predicate inspects the top route without popping it.
+    navigator.popUntil((route) {
+      if (route is ModalRoute<dynamic> && route.popGestureEnabled) {
+        final entry = _OverlayBackGestureEntry();
+        route.registerPopEntry(entry);
+        // Flutter's route observers check popGestureEnabled in the same
+        // dispatch. Release the entry before any subsequent maybePop call.
+        scheduleMicrotask(() {
+          route.unregisterPopEntry(entry);
+          entry.canPopNotifier.dispose();
+        });
+      }
+      return true;
+    });
+    return true;
+  }
+
+  @override
+  void handleCommitBackGesture() {
+    if (mounted) unawaited(MonitorPopRoute.handBackEvent());
+  }
+
+  NavigatorState? get _backNavigator {
+    final routing = _routingWidget;
+    if (routing is Navigator) {
+      final key = routing.key;
+      final state = key is GlobalKey ? key.currentState : null;
+      return state is NavigatorState ? state : null;
+    }
+    if (routing case Router<Object>(
+      routerDelegate: final PopNavigatorRouterDelegateMixin<Object> delegate,
+    )) {
+      final state = delegate.navigatorKey?.currentState;
+      if (state != null) return state;
+    }
+    final observedNavigator = RouteRecord.curRoute?.navigator;
+    if (observedNavigator != null) return observedNavigator;
+    final navigatorContext = DialogProxy.contextNavigator;
+    if (navigatorContext == null || !navigatorContext.mounted) return null;
+    return Navigator.maybeOf(navigatorContext);
+  }
+
+  @override
+  void dispose() {
+    if (_supportsPredictiveBack) {
+      MonitorPopRoute.overlayBlocksBack.removeListener(_updateBackNotification);
+      widgetsBinding.removeObserver(this);
+    }
+    super.dispose();
   }
 
   BuildContext? getNavigatorContext(Navigator navigator) {
@@ -207,4 +299,9 @@ class _FlutterSmartDialogState extends State<FlutterSmartDialog> {
     }
     return context;
   }
+}
+
+class _OverlayBackGestureEntry extends PopEntry<Object?> {
+  @override
+  final ValueNotifier<bool> canPopNotifier = ValueNotifier(false);
 }

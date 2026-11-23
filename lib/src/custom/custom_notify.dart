@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter_smart_dialog/src/data/show_param.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
+import 'package:flutter_smart_dialog/src/helper/pop_monitor/monitor_pop_route.dart';
 import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -140,6 +141,7 @@ class CustomNotify extends BaseDialog {
   void _pushDialog(NotifyInfo notifyInfo) {
     var proxy = DialogProxy.instance;
     proxy.notifyQueue.addLast(notifyInfo);
+    MonitorPopRoute.updateOverlayBackState();
 
     // insert the dialog carrier into the page
     ViewUtils.addSafeUse(() {
@@ -202,6 +204,7 @@ class CustomNotify extends BaseDialog {
     if (proxy.notifyQueue.isEmpty) {
       proxy.config.notify.isExist = false;
     }
+    MonitorPopRoute.updateOverlayBackState();
 
     //perform a real dismiss
     var customDialog = info.dialog;

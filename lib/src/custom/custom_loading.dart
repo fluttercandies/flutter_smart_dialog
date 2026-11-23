@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_smart_dialog/src/data/show_param.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
+import 'package:flutter_smart_dialog/src/helper/pop_monitor/monitor_pop_route.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../config/enum_config.dart';
@@ -27,6 +28,7 @@ class CustomLoading extends BaseDialog {
     }
 
     SmartDialog.config.loading.isExist = true;
+    MonitorPopRoute.updateOverlayBackState();
 
     _canDismiss = false;
     _canDismissCallback = null;
@@ -82,6 +84,7 @@ class CustomLoading extends BaseDialog {
 
   Future<void> _realDismiss({CloseType closeType = CloseType.normal}) async {
     SmartDialog.config.loading.isExist = false;
+    MonitorPopRoute.updateOverlayBackState();
     await mainDialog.dismiss<void>(closeType: closeType);
   }
 
