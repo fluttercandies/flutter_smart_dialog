@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../../flutter_smart_dialog.dart';
+import '../../data/dialog_info.dart';
 import '../../data/smart_tag.dart';
 
 class MonitorPopRoute with WidgetsBindingObserver {
@@ -14,6 +16,32 @@ class MonitorPopRoute with WidgetsBindingObserver {
   static MonitorPopRoute? _instance;
 
   static MonitorPopRoute get instance => _instance ??= MonitorPopRoute._();
+
+  static final overlayBlocksBack = ValueNotifier(false);
+
+  static bool get supportsPredictiveBack =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
+  static void updateOverlayBackState() {
+    if (!supportsPredictiveBack) return;
+    final proxy = DialogProxy.instance;
+    final dialog = proxy.dialogQueue.lastOrNull;
+    overlayBlocksBack.value =
+        (proxy.config.loading.isExist &&
+            _blocksBack(proxy.loadingInfo.backType)) ||
+        (proxy.config.notify.isExist &&
+            proxy.notifyQueue.any((item) => _blocksBack(item.backType))) ||
+        (dialog != null &&
+            !dialog.useSystem &&
+            _canHandleOverlayDialog(dialog) &&
+            _blocksBack(dialog.backType));
+  }
+
+  static bool _blocksBack(SmartBackType? backType) =>
+      backType == SmartBackType.normal || backType == SmartBackType.block;
+
+  static bool _canHandleOverlayDialog(DialogInfo dialog) =>
+      dialog.dialog.mainDialog.visible && !dialog.permanent;
 
   MonitorPopRoute._() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -113,7 +141,7 @@ class MonitorPopRoute with WidgetsBindingObserver {
           }
         } else {
           // deal with bindPage and permanent dialog
-          if (!info.dialog.mainDialog.visible || info.permanent) {
+          if (!_canHandleOverlayDialog(info)) {
             shouldHandle = false;
           }
         }

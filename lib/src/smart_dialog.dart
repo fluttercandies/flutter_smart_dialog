@@ -12,6 +12,7 @@ import 'config/smart_config_toast.dart';
 import 'data/animation_param.dart';
 import 'data/show_param.dart';
 import 'helper/dialog_proxy.dart';
+import 'helper/pop_monitor/monitor_pop_route.dart';
 import 'kit/dialog_kit.dart';
 import 'widget/helper/dialog_scope.dart';
 
@@ -25,6 +26,7 @@ class SmartDialog {
 
   static set config(SmartConfig value) {
     DialogProxy.instance.config = value;
+    MonitorPopRoute.updateOverlayBackState();
   }
 
   /// custom dialog

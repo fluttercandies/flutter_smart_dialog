@@ -6,6 +6,7 @@ import 'package:flutter_smart_dialog/src/data/show_param.dart';
 import 'package:flutter_smart_dialog/src/data/smart_tag.dart';
 import 'package:flutter_smart_dialog/src/helper/dialog_proxy.dart';
 import 'package:flutter_smart_dialog/src/helper/monitor_widget_helper.dart';
+import 'package:flutter_smart_dialog/src/helper/pop_monitor/monitor_pop_route.dart';
 import 'package:flutter_smart_dialog/src/helper/route_record.dart';
 import 'package:flutter_smart_dialog/src/kit/view_utils.dart';
 import 'package:material_ui/material_ui.dart';
@@ -235,6 +236,7 @@ class CustomDialog extends BaseDialog {
     } else {
       proxy.dialogQueue.addLast(dialogInfo);
     }
+    MonitorPopRoute.updateOverlayBackState();
     if (dialogInfo.bindWidget != null) {
       MonitorWidgetHelper.instance.monitorDialogQueue.add(dialogInfo);
     }
@@ -330,6 +332,7 @@ class CustomDialog extends BaseDialog {
     //handle close dialog
     var proxy = DialogProxy.instance;
     proxy.dialogQueue.remove(info);
+    MonitorPopRoute.updateOverlayBackState();
     if (info.bindWidget != null) {
       MonitorWidgetHelper.instance.monitorDialogQueue.remove(info);
     }

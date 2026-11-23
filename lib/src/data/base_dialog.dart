@@ -1,6 +1,7 @@
 import 'package:material_ui/material_ui.dart';
 
 import '../custom/main_dialog.dart';
+import '../helper/pop_monitor/monitor_pop_route.dart';
 import '../widget/helper/smart_overlay_entry.dart';
 
 /// base dialog：encapsulate common logic
@@ -22,6 +23,7 @@ class BaseDialog {
     }
 
     mainDialog.visible = true;
+    MonitorPopRoute.updateOverlayBackState();
     overlayEntry.markNeedsBuild();
   }
 
@@ -30,6 +32,7 @@ class BaseDialog {
       return;
     }
     mainDialog.visible = false;
+    MonitorPopRoute.updateOverlayBackState();
     overlayEntry.markNeedsBuild();
   }
 }
